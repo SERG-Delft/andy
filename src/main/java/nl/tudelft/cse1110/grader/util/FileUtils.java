@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+
 public class FileUtils {
 
     public static List<File> getAllJavaFiles(String sourceDir) {
@@ -35,7 +37,7 @@ public class FileUtils {
 
     public static void moveClass(String sourceDir, String className, String destDir) {
         try {
-            Path result = Files.move(Paths.get(sourceDir, className + ".class"), Paths.get(destDir, className + ".class"));
+            Path result = Files.move(Paths.get(sourceDir, className + ".class"), Paths.get(destDir, className + ".class"), REPLACE_EXISTING);
             if(result==null)
                 throw new RuntimeException("Fail when moving files");
         } catch(Exception e) {

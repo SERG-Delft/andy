@@ -52,4 +52,12 @@ public class ClassUtils {
         return libraries.stream().collect(Collectors.joining(":"));
     }
 
+    public static Class<?> getTestClass(List<String> newClasses) throws ClassNotFoundException {
+        String className = newClasses.stream().filter(c -> c.contains("Test"))
+                    .findFirst()
+                    .get();
+
+        return Class.forName(className);
+    }
+
 }

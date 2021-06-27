@@ -9,6 +9,8 @@ import java.io.StringWriter;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static javax.tools.Diagnostic.Kind.ERROR;
+
 public class ResultBuilder {
 
     private boolean failed;
@@ -18,10 +20,11 @@ public class ResultBuilder {
     public void compilationFail(List<Diagnostic<? extends JavaFileObject>> diagnostics) {
         l("We could not compile your code. See the compilation errors below:");
         for(Diagnostic diagnostic: diagnostics) {
-            l(String.format("- %s in line %d: %s",
-                    diagnostic.getKind(),
-                    diagnostic.getLineNumber(),
-                    diagnostic.getMessage(null)));
+            if(diagnostic.getKind() == ERROR) {
+                l(String.format("- line %d: %s",
+                        diagnostic.getLineNumber(),
+                        diagnostic.getMessage(null)));
+            }
         }
     }
 
