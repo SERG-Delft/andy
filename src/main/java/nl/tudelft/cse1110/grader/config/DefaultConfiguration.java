@@ -8,9 +8,9 @@ public class DefaultConfiguration implements Configuration {
     private final String cpLibraries;
     private List<String> fullClassNames;
 
-    public DefaultConfiguration(String sourceCodeDir, String cpLibraries) {
+    public DefaultConfiguration(String sourceCodeDir, String librariesDir) {
         this.sourceCodeDir = sourceCodeDir;
-        this.cpLibraries = cpLibraries;
+        this.cpLibraries = librariesDir;
     }
 
     @Override
