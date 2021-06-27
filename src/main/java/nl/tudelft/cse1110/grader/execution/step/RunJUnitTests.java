@@ -5,7 +5,7 @@ import nl.tudelft.cse1110.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
 
-public class GenerateResultsStep implements ExecutionStep {
+public class RunJUnitTests implements ExecutionStep {
     @Override
     public void execute(Configuration cfg, ExecutionFlow flow, ResultBuilder result) {
 

@@ -1,16 +1,29 @@
 package nl.tudelft.cse1110.grader.execution.step;
 
-import nl.tudelft.cse1110.grader.execution.Configuration;
+import nl.tudelft.cse1110.grader.config.Configuration;
 import nl.tudelft.cse1110.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
-import nl.tudelft.cse1110.grader.execution.ResultBuilder;
+import nl.tudelft.cse1110.grader.result.ResultBuilder;
 
+import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.RoundEnvironment;
+import javax.annotation.processing.SupportedAnnotationTypes;
+import javax.annotation.processing.SupportedSourceVersion;
+import javax.lang.model.SourceVersion;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.util.ElementScanner9;
 import javax.tools.*;
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
 
+import static nl.tudelft.cse1110.grader.util.ClassUtils.asClassPath;
+import static nl.tudelft.cse1110.grader.util.FileUtils.getAllJavaFiles;
+
+/**
+ * This step compiles the student code and the library code.
+ * It makes use of the Java Compiler API.
+ */
 public class CompilationStep implements ExecutionStep {
     @Override
     public void execute(Configuration cfg, ExecutionFlow flow, ResultBuilder result) {
@@ -27,16 +40,18 @@ public class CompilationStep implements ExecutionStep {
          * Create a compilation task with the list of files to compile.
          * Also pass the classpath with the libraries, e.g., JUnit, JQWik, etc.
          */
-        List<File> listOfFiles = cfg.getFilesToBeCompiled().stream()
-                .map(filePath -> new File(filePath))
-                .collect(Collectors.toList());
+        List<File> listOfFiles = getAllJavaFiles(cfg.getSourceCodeDir());
         Iterable<? extends JavaFileObject > sources =
                 manager.getJavaFileObjectsFromFiles(listOfFiles);
 
+        ClassNameScanner scanner = new ClassNameScanner();
+        ClassNameProcessor processor = new ClassNameProcessor(scanner);
+
         JavaCompiler.CompilationTask task = compiler.getTask(null, manager, diagnostics,
                 Arrays.asList(
-                        new String[] { "-cp", cfg.getLibrariesClasspath()} /* classpath */
+                        new String[] { "-cp", asClassPath(cfg.getLibrariesDir())} /* classpath */
                 ), null, sources);
+        task.setProcessors(Arrays.asList(processor));
 
         /**
          * Compiles. The .class files will be saved in the same directory
@@ -46,8 +61,9 @@ public class CompilationStep implements ExecutionStep {
             boolean compilationResult = task.call();
 
             if(compilationResult) {
-                result.logSuccess(this);
-                flow.next(new LoadGeneratedClassesStep());
+                cfg.setNewClassNames(scanner.getFullClassNames());
+                result.debug(this, String.format("%d classes compiled", cfg.getNewClassNames().size()));
+                flow.next(new OrganizeCompiledClassesStep());
             }
             else {
                 result.compilationFail(diagnostics.getDiagnostics());
@@ -56,8 +72,44 @@ public class CompilationStep implements ExecutionStep {
 
             manager.close();
         } catch(Exception e) {
-            result.genericFailure(e);
+            result.genericFailure(this, e);
             flow.next(new GenerateResultsStep());
         }
     }
+
+    @SupportedSourceVersion(SourceVersion.RELEASE_11)
+    @SupportedAnnotationTypes("*")
+    public class ClassNameProcessor extends AbstractProcessor {
+        private final ClassNameScanner scanner;
+
+        public ClassNameProcessor(ClassNameScanner scanner) {
+            this.scanner = scanner;
+        }
+
+        public boolean process( final Set< ? extends TypeElement> types,
+                                final RoundEnvironment environment ) {
+
+            if( !environment.processingOver() ) {
+                for( final Element element: environment.getRootElements() ) {
+                    scanner.scan(element);
+                }
+            }
+
+            return true;
+        }
+    }
+
+    public class ClassNameScanner extends ElementScanner9< Void, Void > {
+        private List<String> fullClassNames = new ArrayList<>();
+
+        public Void visitType(final TypeElement type, final Void p ) {
+            fullClassNames.add(type.getQualifiedName().toString());
+            return super.visitType( type, p );
+        }
+
+        public List<String> getFullClassNames() {
+            return Collections.unmodifiableList(fullClassNames);
+        }
+    }
+
 }
