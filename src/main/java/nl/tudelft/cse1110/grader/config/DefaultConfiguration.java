@@ -4,25 +4,25 @@ import java.util.List;
 
 public class DefaultConfiguration implements Configuration {
 
-    private final String sourceCodeDir;
-    private final String cpLibraries;
+    private final String workingDir;
+    private final String librariesDir;
     private final String reportsDir;
     private List<String> fullClassNames;
 
-    public DefaultConfiguration(String sourceCodeDir, String librariesDir, String reportsDir) {
-        this.sourceCodeDir = sourceCodeDir;
-        this.cpLibraries = librariesDir;
+    public DefaultConfiguration(String workingDir, String librariesDir, String reportsDir) {
+        this.workingDir = workingDir;
+        this.librariesDir = librariesDir;
         this.reportsDir = reportsDir;
     }
 
     @Override
     public String getWorkingDir() {
-        return this.sourceCodeDir;
+        return this.workingDir;
     }
 
     @Override
     public String getLibrariesDir() {
-        return this.cpLibraries;
+        return this.librariesDir;
     }
 
     public String getReportsDir() {

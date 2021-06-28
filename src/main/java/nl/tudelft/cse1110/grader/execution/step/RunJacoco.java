@@ -8,7 +8,6 @@ import nl.tudelft.cse1110.grader.result.ResultBuilder;
 public class RunJacoco implements ExecutionStep {
     @Override
     public void execute(Configuration cfg, ExecutionFlow flow, ResultBuilder result) {
-
         flow.next(new GenerateResultsStep());
     }
 }
