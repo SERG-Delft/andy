@@ -12,7 +12,7 @@ public class T04_E2021_MakeReservation extends IntegrationTestBase {
 
     @Test
     void solution1_pass() {
-        checkScript.runChecks(new TestUtils().getFixtureFilePath("integration/t04_e2021_makeReservation/Solution1.java"));
+        checkScript.runChecks(new TestUtils().getTestResource("integration/t04_e2021_makeReservation/Solution1.java"));
 
         assertThat(checkScript.generateReport()).isEqualTo(
                 "15\n" +

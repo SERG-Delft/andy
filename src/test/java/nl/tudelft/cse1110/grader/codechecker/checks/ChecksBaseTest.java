@@ -14,7 +14,7 @@ public class ChecksBaseTest {
 //    }
 
     protected void run(String className, Check check) {
-        new JDTParser().run(new TestUtils().getFixtureFilePath(className), check);
+        new JDTParser().run(new TestUtils().getTestResource(className), check);
     }
 
 }

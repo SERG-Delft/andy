@@ -13,7 +13,7 @@ public class T01_M2021_Upvote extends IntegrationTestBase {
     @Test
     void solution1_pass() {
 
-        checkScript.runChecks(new TestUtils().getFixtureFilePath("integration/t01_m2021_upvote/Solution1PassTest.java"));
+        checkScript.runChecks(new TestUtils().getTestResource("integration/t01_m2021_upvote/Solution1PassTest.java"));
 
         assertThat(checkScript.generateReport()).isEqualTo(
                         "18\n" +
@@ -35,7 +35,7 @@ public class T01_M2021_Upvote extends IntegrationTestBase {
 
     @Test
     void solution2_passAfterEach() {
-        checkScript.runChecks(new TestUtils().getFixtureFilePath("integration/t01_m2021_upvote/Solution2VerifyAfterEachTest.java"));
+        checkScript.runChecks(new TestUtils().getTestResource("integration/t01_m2021_upvote/Solution2VerifyAfterEachTest.java"));
 
         assertThat(checkScript.generateReport()).isEqualTo(
                 "18\n" +
@@ -57,7 +57,7 @@ public class T01_M2021_Upvote extends IntegrationTestBase {
 
     @Test
     void solution3_fail_noVerifyForUpdate() {
-        checkScript.runChecks(new TestUtils().getFixtureFilePath("integration/t01_m2021_upvote/Solution3NoVerifyTest.java"));
+        checkScript.runChecks(new TestUtils().getTestResource("integration/t01_m2021_upvote/Solution3NoVerifyTest.java"));
 
         assertThat(checkScript.generateReport()).isEqualTo(
                     "18\n" +
@@ -79,7 +79,7 @@ public class T01_M2021_Upvote extends IntegrationTestBase {
 
     @Test
     void solution4_unnecessaryVerifies() {
-        checkScript.runChecks(new TestUtils().getFixtureFilePath("integration/t01_m2021_upvote/Solution4UnnecessarySetUps.java"));
+        checkScript.runChecks(new TestUtils().getTestResource("integration/t01_m2021_upvote/Solution4UnnecessarySetUps.java"));
 
         assertThat(checkScript.generateReport()).isEqualTo(
                 "18\n" +

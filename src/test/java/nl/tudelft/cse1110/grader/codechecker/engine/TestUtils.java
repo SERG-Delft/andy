@@ -5,8 +5,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class TestUtils {
-    public String getFixtureFilePath(String fixtureName) {
-        return resourcePathRoot() + "../../src/test/java/fixtures/" + fixtureName;
+    public String getTestResource(String fixtureName) {
+        return resourcePathRoot() + "fixtures/" + fixtureName;
     }
 
     private String resourcePathRoot() {
@@ -14,7 +14,7 @@ public class TestUtils {
     }
 
     public CheckScript getYamlConfig(String cfgFile) {
-        String fullYamlPath = resourcePathRoot() + "../../src/test/java/fixtures/" + cfgFile;
+        String fullYamlPath = getTestResource(cfgFile);
         try {
             String yaml = new String(Files.readAllBytes(Paths.get(fullYamlPath)));
             return new ScriptParser().parse(yaml);

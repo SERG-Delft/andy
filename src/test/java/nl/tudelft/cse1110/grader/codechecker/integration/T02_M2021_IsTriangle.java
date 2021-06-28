@@ -12,7 +12,7 @@ public class T02_M2021_IsTriangle extends IntegrationTestBase {
 
     @Test
     void solution1_pass() {
-        checkScript.runChecks(new TestUtils().getFixtureFilePath("integration/t02_m2021_isTriangle/Solution1Pass.java"));
+        checkScript.runChecks(new TestUtils().getTestResource("integration/t02_m2021_isTriangle/Solution1Pass.java"));
 
         assertThat(checkScript.generateReport()).isEqualTo(
                 "10\n" +
@@ -24,7 +24,7 @@ public class T02_M2021_IsTriangle extends IntegrationTestBase {
 
     @Test
     void solution2_fail_completely_empty() {
-        checkScript.runChecks(new TestUtils().getFixtureFilePath("integration/t02_m2021_isTriangle/Solution2Fail.java"));
+        checkScript.runChecks(new TestUtils().getTestResource("integration/t02_m2021_isTriangle/Solution2Fail.java"));
 
         assertThat(checkScript.generateReport()).isEqualTo(
                 "10\n" +
@@ -36,7 +36,7 @@ public class T02_M2021_IsTriangle extends IntegrationTestBase {
 
     @Test
     void solution3_pass() {
-        checkScript.runChecks(new TestUtils().getFixtureFilePath("integration/t02_m2021_isTriangle/Solution3Pass.java"));
+        checkScript.runChecks(new TestUtils().getTestResource("integration/t02_m2021_isTriangle/Solution3Pass.java"));
 
         assertThat(checkScript.generateReport()).isEqualTo(
                 "10\n" +
@@ -49,7 +49,7 @@ public class T02_M2021_IsTriangle extends IntegrationTestBase {
     // this one was crashing weblab, we do not know why. It works here.
     @Test
     void solution4_pass() {
-        checkScript.runChecks(new TestUtils().getFixtureFilePath("integration/t02_m2021_isTriangle/Solution4Pass.java"));
+        checkScript.runChecks(new TestUtils().getTestResource("integration/t02_m2021_isTriangle/Solution4Pass.java"));
 
         assertThat(checkScript.generateReport()).isEqualTo(
                 "10\n" +
