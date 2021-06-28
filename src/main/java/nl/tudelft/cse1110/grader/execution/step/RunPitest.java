@@ -53,7 +53,7 @@ public class RunPitest implements ExecutionStep {
         args.add(cfg.getWorkingDir());
 
         args.add("--verbose");
-        args.add("true");
+        args.add("false");
 
         args.add("--classPath");
         args.add(cfg.getWorkingDir());
