@@ -8,7 +8,7 @@ public class CheckFactory {
 
     public Check build(String check, List<String> params) {
         try {
-            Class<?> aClass = Class.forName("nl.tudelft.cse1110.codechecker.codechecker.checks." + check);
+            Class<?> aClass = Class.forName("nl.tudelft.cse1110.codechecker.checks." + check);
 
             /**
              * If a list of parameters is supplied, we look for the constructor
