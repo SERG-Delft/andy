@@ -29,6 +29,8 @@ public class ResultBuilder {
                         diagnostic.getMessage(null)));
             }
         }
+
+        failed();
     }
 
     public void logFinish(ExecutionStep step) {
@@ -37,6 +39,13 @@ public class ResultBuilder {
 
     public void logStart(ExecutionStep step) {
         d(String.format("%s started at %s", step.getClass().getSimpleName(), now()));
+    }
+    public void logFinish() {
+        d(String.format("Finished at %s", now()));
+    }
+
+    public void logStart() {
+        d(String.format("Started at %s", now()));
     }
 
     public void debug(ExecutionStep step, String msg) {
@@ -47,7 +56,7 @@ public class ResultBuilder {
         l(msg);
         d(msg);
 
-        this.failed = true;
+        failed();
     }
 
     public void genericFailure(ExecutionStep step, Exception e) {
@@ -80,6 +89,13 @@ public class ResultBuilder {
             l(String.format("\n- Test %s failed:", failure.getTestIdentifier().getDisplayName()));
             l(exceptionMessage(failure.getException()));
         }
+
+        if(summary.getTestsSucceededCount() < summary.getTestsFoundCount())
+            failed();
+    }
+
+    private void failed() {
+        this.failed = true;
     }
 
     public String buildEndUserResult() {
@@ -111,5 +127,9 @@ public class ResultBuilder {
         l(String.format("%d/%d killed", stats.getMutationStatistics().getTotalDetectedMutations(), stats.getMutationStatistics().getTotalMutations()));
         if(stats.getMutationStatistics().getTotalDetectedMutations() < stats.getMutationStatistics().getTotalMutations())
             l("See attached report.");
+    }
+
+    public boolean isFailed() {
+        return failed;
     }
 }

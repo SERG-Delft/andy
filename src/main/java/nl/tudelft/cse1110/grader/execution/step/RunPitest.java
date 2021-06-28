@@ -1,7 +1,6 @@
 package nl.tudelft.cse1110.grader.execution.step;
 
 import nl.tudelft.cse1110.grader.config.Configuration;
-import nl.tudelft.cse1110.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
 import org.pitest.mutationtest.commandline.OptionsParser;
@@ -24,21 +23,18 @@ import static nl.tudelft.cse1110.grader.util.ClassUtils.getTestClass;
 
 public class RunPitest implements ExecutionStep {
     @Override
-    public void execute(Configuration cfg, ExecutionFlow flow, ResultBuilder result) {
+    public void execute(Configuration cfg, ResultBuilder result) {
         final PluginServices plugins = PluginServices.makeForContextLoader();
         final OptionsParser parser = new OptionsParser(new PluginFilter(plugins));
         final ParseResult pr = parser.parse(buildArgs(cfg));
 
         if (!pr.isOk()) {
             result.genericFailure(this, pr.getErrorMessage().get());
-            flow.next(new GenerateResultsStep());
         } else {
             final ReportOptions data = pr.getOptions();
             final CombinedStatistics stats = runReport(data, plugins);
 
             result.logPitest(stats);
-
-            flow.next(new RunJacoco());
         }
     }
 

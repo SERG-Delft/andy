@@ -1,7 +1,6 @@
 package nl.tudelft.cse1110.grader.execution.step;
 
 import nl.tudelft.cse1110.grader.config.Configuration;
-import nl.tudelft.cse1110.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
 import org.junit.platform.launcher.Launcher;
@@ -16,7 +15,7 @@ import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass
 
 public class RunJUnitTests implements ExecutionStep {
     @Override
-    public void execute(Configuration cfg, ExecutionFlow flow, ResultBuilder result) {
+    public void execute(Configuration cfg, ResultBuilder result) {
         try {
             SummaryGeneratingListener listener = new SummaryGeneratingListener();
             String testClass = getTestClass(cfg.getNewClassNames());
@@ -31,11 +30,8 @@ public class RunJUnitTests implements ExecutionStep {
 
             TestExecutionSummary summary = listener.getSummary();
             result.logJUnitRun(summary);
-
-            flow.next(new RunPitest());
         } catch (Exception e) {
             result.genericFailure(this, e);
-            flow.next(new GenerateResultsStep());
         }
 
     }
