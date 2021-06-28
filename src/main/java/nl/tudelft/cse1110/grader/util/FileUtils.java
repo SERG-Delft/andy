@@ -1,10 +1,13 @@
 package nl.tudelft.cse1110.grader.util;
 
+import org.apache.commons.io.filefilter.DirectoryFileFilter;
+import org.apache.commons.io.filefilter.RegexFileFilter;
+
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,23 +15,20 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 public class FileUtils {
 
-    public static List<File> asFiles(List<String> files) {
+    public static List<String> filePathsAsString(Collection<File> files) {
         return files.stream()
-                .map(filePath -> new File(filePath))
+                .map(filePath -> filePath.getAbsolutePath())
                 .collect(Collectors.toList());
     }
 
-    public static List<String> getAllJavaFiles(String sourceDir) {
-        List<String> result = new ArrayList<>();
+    public static Collection<File> getAllJavaFiles(String sourceDir) {
+        Collection<File> files = org.apache.commons.io.FileUtils.listFiles(
+                new File(sourceDir),
+                new RegexFileFilter("^.*\\.java$"),
+                DirectoryFileFilter.DIRECTORY
+        );
 
-        File directoryPath = new File(sourceDir);
-        File filesList[] = directoryPath.listFiles();
-        for(File file : filesList) {
-            if(file.getName().endsWith("java"))
-                result.add(file.getAbsolutePath());
-        }
-
-        return result;
+        return files;
     }
 
     public static void createDirIfNeeded(String dir) {
@@ -49,9 +49,9 @@ public class FileUtils {
         }
     }
 
-    public static void copyFile(String sourceFile, String destDir, String destFileName) {
+    public static void moveFile(String sourceFile, String destDir, String destFileName) {
         try {
-            Path result = Files.copy(Paths.get(sourceFile), Paths.get(destDir, destFileName), REPLACE_EXISTING);
+            Path result = Files.move(Paths.get(sourceFile), Paths.get(destDir, destFileName), REPLACE_EXISTING);
             if(result==null)
                 throw new RuntimeException("Fail when moving files");
         } catch(Exception e) {

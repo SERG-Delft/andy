@@ -18,7 +18,6 @@ import java.io.File;
 import java.util.*;
 
 import static nl.tudelft.cse1110.grader.util.ClassUtils.asClassPath;
-import static nl.tudelft.cse1110.grader.util.FileUtils.asFiles;
 import static nl.tudelft.cse1110.grader.util.FileUtils.getAllJavaFiles;
 
 /**
@@ -41,7 +40,7 @@ public class CompilationStep implements ExecutionStep {
          * Create a compilation task with the list of files to compile.
          * Also pass the classpath with the libraries, e.g., JUnit, JQWik, etc.
          */
-        List<File> listOfFiles = asFiles(getAllJavaFiles(cfg.getWorkingDir()));
+        Collection<File> listOfFiles = getAllJavaFiles(cfg.getWorkingDir());
         Iterable<? extends JavaFileObject > sources =
                 manager.getJavaFileObjectsFromFiles(listOfFiles);
 
@@ -64,7 +63,7 @@ public class CompilationStep implements ExecutionStep {
             if(compilationResult) {
                 cfg.setNewClassNames(scanner.getFullClassNames());
                 result.debug(this, String.format("%d classes compiled", cfg.getNewClassNames().size()));
-                flow.next(new OrganizeCompiledClassesStep());
+                flow.next(new ReplaceClassloaderStep());
             }
             else {
                 result.compilationFail(diagnostics.getDiagnostics());

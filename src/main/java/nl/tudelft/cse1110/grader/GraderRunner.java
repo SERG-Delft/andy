@@ -2,7 +2,7 @@ package nl.tudelft.cse1110.grader;
 
 import nl.tudelft.cse1110.grader.config.DefaultConfiguration;
 import nl.tudelft.cse1110.grader.execution.ExecutionFlow;
-import nl.tudelft.cse1110.grader.execution.step.CompilationStep;
+import nl.tudelft.cse1110.grader.execution.step.OrganizeSourceCodeStep;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
 
 public class GraderRunner {
@@ -18,7 +18,7 @@ public class GraderRunner {
 
         ResultBuilder result = new ResultBuilder();
 
-        ExecutionFlow flow = new ExecutionFlow(new CompilationStep(), cfg, result);
+        ExecutionFlow flow = new ExecutionFlow(new OrganizeSourceCodeStep(), cfg, result);
         flow.run();
 
         System.out.println(result.buildDebugResult());

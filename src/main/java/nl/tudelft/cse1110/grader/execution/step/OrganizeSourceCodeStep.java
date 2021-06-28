@@ -18,7 +18,7 @@ public class OrganizeSourceCodeStep implements ExecutionStep {
     @Override
     public void execute(Configuration cfg, ExecutionFlow flow, ResultBuilder result) {
         try {
-            List<String> listOfFiles = getAllJavaFiles(cfg.getWorkingDir());
+            List<String> listOfFiles = filePathsAsString(getAllJavaFiles(cfg.getWorkingDir()));
 
             for(String pathOfJavaClass : listOfFiles) {
                 String content = new String(Files.readAllBytes(Paths.get(pathOfJavaClass)));
@@ -27,10 +27,10 @@ public class OrganizeSourceCodeStep implements ExecutionStep {
                 String directoryName = concatenateDirectories(cfg.getWorkingDir(), packageToDirectory(packageName));
 
                 createDirIfNeeded(directoryName);
-                copyFile(pathOfJavaClass, directoryName, new File(pathOfJavaClass).getName());
+                moveFile(pathOfJavaClass, directoryName, new File(pathOfJavaClass).getName());
             }
 
-            flow.next(new RunPitest());
+            flow.next(new CompilationStep());
         } catch (Exception e) {
             result.genericFailure(this, e);
             flow.next(new GenerateResultsStep());
