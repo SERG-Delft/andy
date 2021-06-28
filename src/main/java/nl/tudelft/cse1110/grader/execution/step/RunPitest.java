@@ -58,7 +58,6 @@ public class RunPitest implements ExecutionStep {
         args.add("--classPath");
         args.add(cfg.getWorkingDir());
 
-        System.out.println(args);
         return args.stream().toArray(String[]::new);
     }
 
