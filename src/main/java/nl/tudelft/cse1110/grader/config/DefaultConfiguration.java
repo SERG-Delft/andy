@@ -6,11 +6,13 @@ public class DefaultConfiguration implements Configuration {
 
     private final String sourceCodeDir;
     private final String cpLibraries;
+    private final String reportsDir;
     private List<String> fullClassNames;
 
-    public DefaultConfiguration(String sourceCodeDir, String librariesDir) {
+    public DefaultConfiguration(String sourceCodeDir, String librariesDir, String reportsDir) {
         this.sourceCodeDir = sourceCodeDir;
         this.cpLibraries = librariesDir;
+        this.reportsDir = reportsDir;
     }
 
     @Override
@@ -23,10 +25,13 @@ public class DefaultConfiguration implements Configuration {
         return this.cpLibraries;
     }
 
+    public String getReportsDir() {
+        return reportsDir;
+    }
+
     @Override
     public void setNewClassNames(List<String> fullClassNames) {
         this.fullClassNames = fullClassNames;
-
     }
 
     @Override

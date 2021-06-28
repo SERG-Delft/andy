@@ -1,10 +1,7 @@
 package nl.tudelft.cse1110.grader.util;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ClassUtils {
@@ -68,6 +65,11 @@ public class ClassUtils {
                     .get();
 
         return className;
+    }
+
+    public static List<String> allClassesButTestingOnes(List<String> newClasses) {
+        return newClasses.stream().filter(c -> !c.contains("Test"))
+                .collect(Collectors.toList());
     }
 
 }

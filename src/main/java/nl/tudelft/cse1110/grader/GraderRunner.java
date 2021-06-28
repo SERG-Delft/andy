@@ -12,7 +12,8 @@ public class GraderRunner {
         // for now, only testing purposes
         DefaultConfiguration cfg = new DefaultConfiguration(
             "/Users/mauricioaniche/education/cse1110/test/code",
-            "/Users/mauricioaniche/education/cse1110/test/libs"
+            "/Users/mauricioaniche/education/cse1110/test/libs",
+            "/Users/mauricioaniche/education/cse1110/test/reports"
         );
 
         ResultBuilder result = new ResultBuilder();

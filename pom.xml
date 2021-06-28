@@ -58,6 +58,28 @@
             <version>1.8.0-M1</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.pitest/pitest -->
+        <dependency>
+            <groupId>org.pitest</groupId>
+            <artifactId>pitest</artifactId>
+            <version>1.6.7</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.pitest/pitest-junit5-plugin -->
+        <dependency>
+            <groupId>org.pitest</groupId>
+            <artifactId>pitest-junit5-plugin</artifactId>
+            <version>0.14</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.pitest/pitest-command-line -->
+        <dependency>
+            <groupId>org.pitest</groupId>
+            <artifactId>pitest-command-line</artifactId>
+            <version>1.6.7</version>
+        </dependency>
+
+
 
     </dependencies>
 
