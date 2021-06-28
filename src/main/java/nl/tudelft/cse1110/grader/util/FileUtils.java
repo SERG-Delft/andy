@@ -62,4 +62,12 @@ public class FileUtils {
     public static String concatenateDirectories(String dir1, String dir2) {
         return dir1 + (dir1.endsWith("/")?"":"/") + dir2;
     }
+
+    public static String findSolution(String workdir) {
+        return getAllJavaFiles(workdir)
+                .stream().filter(x -> x.getAbsolutePath().endsWith("Solution.java"))
+                .map(x -> x.getAbsolutePath())
+                .findFirst()
+                .get();
+    }
 }

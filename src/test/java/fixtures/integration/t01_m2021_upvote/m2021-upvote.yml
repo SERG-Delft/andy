@@ -1,0 +1,57 @@
+checks:
+  - rule: MockClass
+    description: UserRepository should be mocked
+    params: UserRepository
+
+  - rule: MockClass
+    description: Scoring should be mocked
+    params: Scoring
+
+  - rule: MockClass
+    description: StackOverflow should not be mocked
+    params: StackOverflow
+    flip: true
+
+  - rule: MockClass
+    description: Post should not be mocked
+    params: Post
+    flip: true
+
+  - rule: MockitoSpy
+    description: Spies should not be used
+    flip: true
+
+  - rule: MockitoWhen
+    description: pointsForFeaturedPost should be set up
+    params: pointsForFeaturedPost GTE 1
+    weight: 2
+
+  - rule: MockitoWhen
+    description: pointsForNormalPost should be set up
+    params: pointsForNormalPost GTE 1
+    weight: 2
+
+  - rule: MockitoWhen
+    description: set up pointsForFeaturedPost just once
+    params: pointsForFeaturedPost EQ 1
+
+  - rule: MockitoWhen
+    description: set up pointsForNormalPost just once
+    params: pointsForNormalPost EQ 1
+
+  - type: or
+    description: update should be verified in both tests
+    weight: 3
+    checks:
+      - rule: MockitoVerify
+        params: update TEST EQ 2
+      - rule: MockitoVerify
+        params: update AFTEREACH EQ 1
+
+  - rule: TestMethodsHaveAssertions
+    description: tests should have assertions
+
+  - rule: MethodCalledInTestMethod
+    description: getPoints should have an assertion
+    params: getPoints
+    weight: 3

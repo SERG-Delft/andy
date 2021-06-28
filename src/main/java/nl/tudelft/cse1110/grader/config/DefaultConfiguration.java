@@ -1,5 +1,7 @@
 package nl.tudelft.cse1110.grader.config;
 
+import nl.tudelft.cse1110.grader.codechecker.engine.CheckScript;
+
 import java.util.List;
 
 public class DefaultConfiguration implements Configuration {
@@ -7,12 +9,14 @@ public class DefaultConfiguration implements Configuration {
     private final String workingDir;
     private final String librariesDir;
     private final String reportsDir;
+    private final CheckScript codeCheckerScript;
     private List<String> fullClassNames;
 
-    public DefaultConfiguration(String workingDir, String librariesDir, String reportsDir) {
+    public DefaultConfiguration(String workingDir, String librariesDir, String reportsDir, CheckScript codeCheckerScript) {
         this.workingDir = workingDir;
         this.librariesDir = librariesDir;
         this.reportsDir = reportsDir;
+        this.codeCheckerScript = codeCheckerScript;
     }
 
     @Override
@@ -27,6 +31,11 @@ public class DefaultConfiguration implements Configuration {
 
     public String getReportsDir() {
         return reportsDir;
+    }
+
+    @Override
+    public CheckScript getCodeCheckerScript() {
+        return this.codeCheckerScript;
     }
 
     @Override

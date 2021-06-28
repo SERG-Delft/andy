@@ -1,8 +1,8 @@
 package nl.tudelft.cse1110.grader.execution.step;
 
+import nl.tudelft.cse1110.grader.result.ResultBuilder;
 import nl.tudelft.cse1110.grader.config.Configuration;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
-import nl.tudelft.cse1110.grader.result.ResultBuilder;
 
 import java.net.URL;
 import java.net.URLClassLoader;

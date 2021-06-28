@@ -1,5 +1,6 @@
 package nl.tudelft.cse1110.grader.result;
 
+import nl.tudelft.cse1110.grader.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
 import org.jetbrains.annotations.NotNull;
 import org.junit.platform.launcher.listeners.TestExecutionSummary;
@@ -59,7 +60,7 @@ public class ResultBuilder {
         failed();
     }
 
-    public void genericFailure(ExecutionStep step, Exception e) {
+    public void genericFailure(ExecutionStep step, Throwable e) {
 
         StringBuilder failureMsg = new StringBuilder();
 
@@ -131,5 +132,10 @@ public class ResultBuilder {
 
     public boolean isFailed() {
         return failed;
+    }
+
+    public void logCodeChecks(CheckScript script) {
+        l("--- Code checks");
+        l(script.generateReport());
     }
 }

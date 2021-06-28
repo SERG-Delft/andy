@@ -1,8 +1,10 @@
 package nl.tudelft.cse1110.grader.execution.step;
 
+import nl.tudelft.cse1110.grader.result.ResultBuilder;
+import nl.tudelft.cse1110.grader.util.ClassUtils;
+import nl.tudelft.cse1110.grader.util.FileUtils;
 import nl.tudelft.cse1110.grader.config.Configuration;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
-import nl.tudelft.cse1110.grader.result.ResultBuilder;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
@@ -15,9 +17,6 @@ import javax.lang.model.util.ElementScanner9;
 import javax.tools.*;
 import java.io.File;
 import java.util.*;
-
-import static nl.tudelft.cse1110.grader.util.ClassUtils.asClassPath;
-import static nl.tudelft.cse1110.grader.util.FileUtils.getAllJavaFiles;
 
 /**
  * This step compiles the student code and the library code.
@@ -39,7 +38,7 @@ public class CompilationStep implements ExecutionStep {
          * Create a compilation task with the list of files to compile.
          * Also pass the classpath with the libraries, e.g., JUnit, JQWik, etc.
          */
-        Collection<File> listOfFiles = getAllJavaFiles(cfg.getWorkingDir());
+        Collection<File> listOfFiles = FileUtils.getAllJavaFiles(cfg.getWorkingDir());
         Iterable<? extends JavaFileObject > sources =
                 manager.getJavaFileObjectsFromFiles(listOfFiles);
 
@@ -48,7 +47,7 @@ public class CompilationStep implements ExecutionStep {
 
         JavaCompiler.CompilationTask task = compiler.getTask(null, manager, diagnostics,
                 Arrays.asList(
-                        new String[] { "-cp", asClassPath(cfg.getLibrariesDir())} /* classpath */
+                        new String[] { "-cp", ClassUtils.asClassPath(cfg.getLibrariesDir())} /* classpath */
                 ), null, sources);
         task.setProcessors(Arrays.asList(processor));
 

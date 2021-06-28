@@ -1,0 +1,11 @@
+checks:
+  - rule: JQWikProperty
+    params: GTE 2
+    description: should have at least 2 properties
+  - rule: JQWikProvide
+    params: GTE 2
+    description: should have at least 2 provides
+  - rule: JQWikArbitraries
+    params: integers
+    weight: 2
+    description: should make use of Arbitraries.integers()

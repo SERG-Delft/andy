@@ -25,7 +25,11 @@ public class ExecutionFlow {
         do {
             ExecutionStep currentStep = steps.pollFirst();
             result.logStart(currentStep);
-            currentStep.execute(cfg, result);
+            try {
+                currentStep.execute(cfg, result);
+            } catch(Throwable e) {
+                result.genericFailure(currentStep, e);
+            }
             result.logFinish(currentStep);
         } while(!steps.isEmpty() && !result.isFailed());
         result.logFinish();
@@ -37,6 +41,18 @@ public class ExecutionFlow {
                         new RunJUnitTests(),
                         new RunJacoco(),
                         new RunPitest()),
+                cfg,
+                result
+        );
+    }
+
+    public static ExecutionFlow fullMode(Configuration cfg, ResultBuilder result) {
+        return new ExecutionFlow(
+                Arrays.asList(
+                        new RunJUnitTests(),
+                        new RunJacoco(),
+                        new RunPitest(),
+                        new CodeChecksStep()),
                 cfg,
                 result
         );

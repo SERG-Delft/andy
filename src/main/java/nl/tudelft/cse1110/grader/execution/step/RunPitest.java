@@ -1,5 +1,6 @@
 package nl.tudelft.cse1110.grader.execution.step;
 
+import nl.tudelft.cse1110.grader.util.ClassUtils;
 import nl.tudelft.cse1110.grader.config.Configuration;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
@@ -17,9 +18,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static nl.tudelft.cse1110.grader.util.ClassUtils.allClassesButTestingOnes;
-import static nl.tudelft.cse1110.grader.util.ClassUtils.getTestClass;
 
 public class RunPitest implements ExecutionStep {
     @Override
@@ -46,10 +44,10 @@ public class RunPitest implements ExecutionStep {
         args.add(cfg.getReportsDir());
 
         args.add("--targetClasses");
-        args.add(commaSeparated(allClassesButTestingOnes(cfg.getNewClassNames())));
+        args.add(commaSeparated(ClassUtils.allClassesButTestingOnes(cfg.getNewClassNames())));
 
         args.add("--targetTests");
-        args.add(getTestClass(cfg.getNewClassNames()));
+        args.add(ClassUtils.getTestClass(cfg.getNewClassNames()));
 
         args.add("--sourceDirs");
         args.add(cfg.getWorkingDir());

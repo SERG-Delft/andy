@@ -1,0 +1,19 @@
+checks:
+  - type: or
+    description: either use [properties, providers, and arbitrary<ABC>] or [>3 properties and IntRange]
+    checks:
+      - type: and
+        checks:
+          - rule: JQWikProperty
+            params: GTE 1
+          - rule: JQWikProvide
+            params: GTE 1
+          - rule: JQWikArbitrary
+            params: ABC
+      - type: and
+        checks:
+          - rule: JQWikProperty
+            params: GTE 3
+          - rule: JQWikProvide
+            params: EQ 0
+          - rule: JQWikProvideAnnotations
