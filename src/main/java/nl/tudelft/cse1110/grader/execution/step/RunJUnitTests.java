@@ -11,8 +11,6 @@ import org.junit.platform.launcher.core.LauncherFactory;
 import org.junit.platform.launcher.listeners.SummaryGeneratingListener;
 import org.junit.platform.launcher.listeners.TestExecutionSummary;
 
-import java.io.PrintWriter;
-
 import static nl.tudelft.cse1110.grader.util.ClassUtils.getTestClass;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
@@ -21,7 +19,7 @@ public class RunJUnitTests implements ExecutionStep {
     public void execute(Configuration cfg, ExecutionFlow flow, ResultBuilder result) {
         try {
             SummaryGeneratingListener listener = new SummaryGeneratingListener();
-            Class<?> testClass = getTestClass(cfg.getNewClassNames());
+            String testClass = getTestClass(cfg.getNewClassNames());
 
             Launcher launcher = LauncherFactory.create();
             launcher.registerTestExecutionListeners(listener);
@@ -32,7 +30,7 @@ public class RunJUnitTests implements ExecutionStep {
             launcher.execute(request);
 
             TestExecutionSummary summary = listener.getSummary();
-            summary.printTo(new PrintWriter(System.out));
+            result.logJUnitRun(summary);
 
             flow.next(new GenerateResultsStep());
         } catch (Exception e) {

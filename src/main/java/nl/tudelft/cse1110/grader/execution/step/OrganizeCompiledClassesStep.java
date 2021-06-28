@@ -27,7 +27,7 @@ public class OrganizeCompiledClassesStep implements ExecutionStep {
                 moveClass(cfg.getSourceCodeDir(), className, directoryName);
             }
 
-            flow.next(new LoadGeneratedClassesStep());
+            flow.next(new ReplaceClassloaderStep());
         } catch(Exception e) {
             result.genericFailure(this, e);
             flow.next(new GenerateResultsStep());

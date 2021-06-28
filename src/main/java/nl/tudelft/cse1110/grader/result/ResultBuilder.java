@@ -1,6 +1,8 @@
 package nl.tudelft.cse1110.grader.result;
 
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
+import org.jetbrains.annotations.NotNull;
+import org.junit.platform.launcher.listeners.TestExecutionSummary;
 
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
@@ -41,19 +43,51 @@ public class ResultBuilder {
     }
 
     public void genericFailure(ExecutionStep step, Exception e) {
-        l(String.format("Oh, we are facing a failure in %s that we cannot recover from.", step.getClass().getSimpleName()));
-        l("Please, send the message below to the teaching team:");
-        l("---");
 
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        e.printStackTrace(pw);
-        l(sw.toString().trim());
+        StringBuilder failureMsg = new StringBuilder();
 
-        l("---");
+        failureMsg.append(String.format("Oh, we are facing a failure in %s that we cannot recover from.\n", step.getClass().getSimpleName()));
+        failureMsg.append("Please, send the message below to the teaching team:\n");
+        failureMsg.append("---\n");
+
+        String messageToAppend = exceptionMessage(e);
+        failureMsg.append(messageToAppend);
+
+        failureMsg.append("---\n");
+
+        l(failureMsg.toString());
+        d(failureMsg.toString());
 
         this.failed = true;
     }
+
+    @NotNull
+    private String exceptionMessage(Throwable e) {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        String messageToAppend = sw.toString().trim();
+        return messageToAppend;
+    }
+
+    public void logJUnitRun(TestExecutionSummary summary) {
+        l("--- JUnit execution");
+        l(String.format("%d/%d passed", summary.getTestsSucceededCount(), summary.getTestsFoundCount()));
+
+        for (TestExecutionSummary.Failure failure : summary.getFailures()) {
+            l(String.format("\n- Test %s failed:", failure.getTestIdentifier().getDisplayName()));
+            l(exceptionMessage(failure.getException()));
+        }
+    }
+
+    public String buildEndUserResult() {
+        return result.toString();
+    }
+
+    public String buildDebugResult() {
+        return debug.toString() + "\n\n" + result.toString();
+    }
+
 
     private void l(String line) {
         result.append(line);
@@ -65,15 +99,9 @@ public class ResultBuilder {
         debug.append("\n");
     }
 
-    public String buildEndUserResult() {
-        return result.toString();
-    }
-
-    public String buildDebugResult() {
-        return debug.toString() + "\n\n" + result.toString();
-    }
 
     private String now() {
         return LocalDateTime.now().toString();
     }
+
 }

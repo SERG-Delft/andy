@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 public class ClassUtils {
@@ -52,12 +53,21 @@ public class ClassUtils {
         return libraries.stream().collect(Collectors.joining(":"));
     }
 
-    public static Class<?> getTestClass(List<String> newClasses) throws ClassNotFoundException {
+    /**
+     * Finds the test class using simple convention.
+     * Lots to improve here. In particular, what happens if there are two classes
+     * that match?
+     *
+     * @param newClasses the list of classes to find the test class
+     * @return the name of the test class
+     * @throws NoSuchElementException if there are no test classes
+     */
+    public static String getTestClass(List<String> newClasses) {
         String className = newClasses.stream().filter(c -> c.contains("Test"))
                     .findFirst()
                     .get();
 
-        return Class.forName(className);
+        return className;
     }
 
 }
