@@ -49,9 +49,9 @@ public class FileUtils {
         }
     }
 
-    public static void copyFile(String sourceFile, String destFile) {
+    public static void copyFile(String sourceFile, String destDir, String destFileName) {
         try {
-            Path result = Files.copy(Paths.get(sourceFile), Paths.get(destFile), REPLACE_EXISTING);
+            Path result = Files.copy(Paths.get(sourceFile), Paths.get(destDir, destFileName), REPLACE_EXISTING);
             if(result==null)
                 throw new RuntimeException("Fail when moving files");
         } catch(Exception e) {

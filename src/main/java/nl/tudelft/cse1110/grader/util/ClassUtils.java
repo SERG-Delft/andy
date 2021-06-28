@@ -38,7 +38,7 @@ public class ClassUtils {
 
     public static String packageToDirectory(String packageName) {
         // TODO: '/' is OS dependant
-        return packageName.replace("\\.", "/");
+        return packageName.replace(".", "/");
     }
 
     /**

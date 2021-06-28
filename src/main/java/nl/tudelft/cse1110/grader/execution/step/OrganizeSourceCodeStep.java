@@ -5,6 +5,7 @@ import nl.tudelft.cse1110.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -26,7 +27,7 @@ public class OrganizeSourceCodeStep implements ExecutionStep {
                 String directoryName = concatenateDirectories(cfg.getWorkingDir(), packageToDirectory(packageName));
 
                 createDirIfNeeded(directoryName);
-                copyFile(pathOfJavaClass, directoryName);
+                copyFile(pathOfJavaClass, directoryName, new File(pathOfJavaClass).getName());
             }
 
             flow.next(new RunPitest());
