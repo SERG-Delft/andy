@@ -79,6 +79,13 @@
             <version>1.6.7</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.jacoco/org.jacoco.core -->
+        <dependency>
+            <groupId>org.jacoco</groupId>
+            <artifactId>org.jacoco.core</artifactId>
+            <version>0.8.7</version>
+        </dependency>
+
 
 
     </dependencies>

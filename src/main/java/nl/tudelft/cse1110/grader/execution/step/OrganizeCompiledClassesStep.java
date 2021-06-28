@@ -20,11 +20,11 @@ public class OrganizeCompiledClassesStep implements ExecutionStep {
 
         try {
             for (String newClassName : cfg.getNewClassNames()) {
-                String directoryName = concatenateDirectories(cfg.getSourceCodeDir(), extractDirectoryName(newClassName));
+                String directoryName = concatenateDirectories(cfg.getWorkingDir(), extractDirectoryName(newClassName));
                 String className = extractClassName(newClassName);
 
                 createDirIfNeeded(directoryName);
-                moveClass(cfg.getSourceCodeDir(), className, directoryName);
+                moveClass(cfg.getWorkingDir(), className, directoryName);
             }
 
             flow.next(new ReplaceClassloaderStep());

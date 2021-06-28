@@ -20,7 +20,7 @@ public class ReplaceClassloaderStep implements ExecutionStep {
     @Override
     public void execute(Configuration cfg, ExecutionFlow flow, ResultBuilder result) {
         try {
-            String pathToAddToClassloader = cfg.getSourceCodeDir();
+            String pathToAddToClassloader = cfg.getWorkingDir();
             replaceClassloader(pathToAddToClassloader);
 
             flow.next(new RunJUnitTests());

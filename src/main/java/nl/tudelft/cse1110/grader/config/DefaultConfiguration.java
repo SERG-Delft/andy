@@ -16,7 +16,7 @@ public class DefaultConfiguration implements Configuration {
     }
 
     @Override
-    public String getSourceCodeDir() {
+    public String getWorkingDir() {
         return this.sourceCodeDir;
     }
 

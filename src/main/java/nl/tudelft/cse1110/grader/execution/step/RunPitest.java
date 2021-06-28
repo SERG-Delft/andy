@@ -30,17 +30,16 @@ public class RunPitest implements ExecutionStep {
         final ParseResult pr = parser.parse(buildArgs(cfg));
 
         if (!pr.isOk()) {
-            parser.printHelp();
-            System.out.println(">>>> " + pr.getErrorMessage().get());
+            result.genericFailure(this, pr.getErrorMessage().get());
+            flow.next(new GenerateResultsStep());
         } else {
             final ReportOptions data = pr.getOptions();
             final CombinedStatistics stats = runReport(data, plugins);
 
-            System.out.println(stats.getCoverageSummary());
+            result.logPitest(stats);
+
+            flow.next(new RunJacoco());
         }
-
-        flow.next(new GenerateResultsStep());
-
     }
 
     private String[] buildArgs(Configuration cfg) {
@@ -57,8 +56,15 @@ public class RunPitest implements ExecutionStep {
         args.add(getTestClass(cfg.getNewClassNames()));
 
         args.add("--sourceDirs");
-        args.add(cfg.getSourceCodeDir());
+        args.add(cfg.getWorkingDir());
 
+        args.add("--verbose");
+        args.add("true");
+
+        args.add("--classPath");
+        args.add(cfg.getWorkingDir());
+
+        System.out.println(args);
         return args.stream().toArray(String[]::new);
     }
 

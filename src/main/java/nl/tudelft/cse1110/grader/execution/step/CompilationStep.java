@@ -18,6 +18,7 @@ import java.io.File;
 import java.util.*;
 
 import static nl.tudelft.cse1110.grader.util.ClassUtils.asClassPath;
+import static nl.tudelft.cse1110.grader.util.FileUtils.asFiles;
 import static nl.tudelft.cse1110.grader.util.FileUtils.getAllJavaFiles;
 
 /**
@@ -40,7 +41,7 @@ public class CompilationStep implements ExecutionStep {
          * Create a compilation task with the list of files to compile.
          * Also pass the classpath with the libraries, e.g., JUnit, JQWik, etc.
          */
-        List<File> listOfFiles = getAllJavaFiles(cfg.getSourceCodeDir());
+        List<File> listOfFiles = asFiles(getAllJavaFiles(cfg.getWorkingDir()));
         Iterable<? extends JavaFileObject > sources =
                 manager.getJavaFileObjectsFromFiles(listOfFiles);
 
@@ -86,11 +87,11 @@ public class CompilationStep implements ExecutionStep {
             this.scanner = scanner;
         }
 
-        public boolean process( final Set< ? extends TypeElement> types,
-                                final RoundEnvironment environment ) {
+        public boolean process(final Set< ? extends TypeElement> types,
+                                final RoundEnvironment environment) {
 
-            if( !environment.processingOver() ) {
-                for( final Element element: environment.getRootElements() ) {
+            if(!environment.processingOver()) {
+                for(final Element element: environment.getRootElements()) {
                     scanner.scan(element);
                 }
             }
@@ -102,9 +103,9 @@ public class CompilationStep implements ExecutionStep {
     public class ClassNameScanner extends ElementScanner9< Void, Void > {
         private List<String> fullClassNames = new ArrayList<>();
 
-        public Void visitType(final TypeElement type, final Void p ) {
+        public Void visitType(final TypeElement type, final Void p) {
             fullClassNames.add(type.getQualifiedName().toString());
-            return super.visitType( type, p );
+            return super.visitType(type, p);
         }
 
         public List<String> getFullClassNames() {

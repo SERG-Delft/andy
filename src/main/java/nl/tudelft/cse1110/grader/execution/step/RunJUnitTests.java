@@ -32,7 +32,7 @@ public class RunJUnitTests implements ExecutionStep {
             TestExecutionSummary summary = listener.getSummary();
             result.logJUnitRun(summary);
 
-            flow.next(new RunPitest());
+            flow.next(new OrganizeSourceCodeStep());
         } catch (Exception e) {
             result.genericFailure(this, e);
             flow.next(new GenerateResultsStep());

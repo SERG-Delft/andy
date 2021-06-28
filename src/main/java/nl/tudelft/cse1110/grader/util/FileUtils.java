@@ -12,7 +12,13 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 public class FileUtils {
 
-    public static List<File> getAllJavaFiles(String sourceDir) {
+    public static List<File> asFiles(List<String> files) {
+        return files.stream()
+                .map(filePath -> new File(filePath))
+                .collect(Collectors.toList());
+    }
+
+    public static List<String> getAllJavaFiles(String sourceDir) {
         List<String> result = new ArrayList<>();
 
         File directoryPath = new File(sourceDir);
@@ -22,9 +28,7 @@ public class FileUtils {
                 result.add(file.getAbsolutePath());
         }
 
-        return result.stream()
-                .map(filePath -> new File(filePath))
-                .collect(Collectors.toList());
+        return result;
     }
 
     public static void createDirIfNeeded(String dir) {
@@ -38,6 +42,16 @@ public class FileUtils {
     public static void moveClass(String sourceDir, String className, String destDir) {
         try {
             Path result = Files.move(Paths.get(sourceDir, className + ".class"), Paths.get(destDir, className + ".class"), REPLACE_EXISTING);
+            if(result==null)
+                throw new RuntimeException("Fail when moving files");
+        } catch(Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void copyFile(String sourceFile, String destFile) {
+        try {
+            Path result = Files.copy(Paths.get(sourceFile), Paths.get(destFile), REPLACE_EXISTING);
             if(result==null)
                 throw new RuntimeException("Fail when moving files");
         } catch(Exception e) {

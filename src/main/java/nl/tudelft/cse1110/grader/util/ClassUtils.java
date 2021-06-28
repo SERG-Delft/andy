@@ -1,7 +1,12 @@
 package nl.tudelft.cse1110.grader.util;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class ClassUtils {
@@ -31,6 +36,11 @@ public class ClassUtils {
         return packagesAndClass.stream().collect(Collectors.joining("/"));
     }
 
+    public static String packageToDirectory(String packageName) {
+        // TODO: '/' is OS dependant
+        return packageName.replace("\\.", "/");
+    }
+
     /**
      * Receives the directory containing jar libraries, and returns
      * their list in the format that the JVM wants as classpath.
@@ -55,21 +65,45 @@ public class ClassUtils {
      * Lots to improve here. In particular, what happens if there are two classes
      * that match?
      *
-     * @param newClasses the list of classes to find the test class
+     * @param listOfClasses the list of classes to find the test class
      * @return the name of the test class
      * @throws NoSuchElementException if there are no test classes
      */
-    public static String getTestClass(List<String> newClasses) {
-        String className = newClasses.stream().filter(c -> c.contains("Test"))
+    public static String getTestClass(List<String> listOfClasses) {
+        String className = listOfClasses.stream().filter(c -> c.contains("Test"))
                     .findFirst()
                     .get();
 
         return className;
     }
 
-    public static List<String> allClassesButTestingOnes(List<String> newClasses) {
-        return newClasses.stream().filter(c -> !c.contains("Test"))
+    /**
+     * Finds all the classes, but the testing class one.
+     * @param listOfClasses list of classes
+     * @return list of classes without the testing class
+     */
+    public static List<String> allClassesButTestingOnes(List<String> listOfClasses) {
+        return listOfClasses.stream().filter(c -> !c.contains("Test"))
                 .collect(Collectors.toList());
     }
+
+
+    /**
+     * Quite naive way to do it. But it's pretty fast.
+     *
+     * @param content java source code
+     * @return package name
+     */
+    public static String extractPackageName(String content) {
+        Pattern p = Pattern.compile("(package (.*);)");
+        Matcher m = p.matcher(content);
+
+        if(m.find()) {
+            return m.group(2);
+        }
+
+        throw new RuntimeException("Package name not found!");
+    }
+
 
 }
