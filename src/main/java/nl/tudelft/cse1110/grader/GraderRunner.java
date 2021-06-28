@@ -17,7 +17,7 @@ public class GraderRunner {
 
         ResultBuilder result = new ResultBuilder();
 
-        ExecutionFlow flow = ExecutionFlow.examMode(cfg, result);
+        ExecutionFlow flow = ExecutionFlow.justTests(cfg, result);
         flow.run();
 
         System.out.println(result.buildDebugResult());

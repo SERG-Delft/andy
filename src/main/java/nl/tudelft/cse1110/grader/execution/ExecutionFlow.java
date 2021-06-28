@@ -42,6 +42,14 @@ public class ExecutionFlow {
         );
     }
 
+    public static ExecutionFlow justTests(Configuration cfg, ResultBuilder result) {
+        return new ExecutionFlow(
+                Arrays.asList(new RunJUnitTests()),
+                cfg,
+                result
+        );
+    }
+
     private List<ExecutionStep> basicSteps() {
         return Arrays.asList(new OrganizeSourceCodeStep(), new CompilationStep(), new ReplaceClassloaderStep());
     }
