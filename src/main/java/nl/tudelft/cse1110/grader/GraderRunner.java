@@ -1,7 +1,7 @@
 package nl.tudelft.cse1110.grader;
 
-import nl.tudelft.cse1110.grader.codechecker.engine.CheckScript;
-import nl.tudelft.cse1110.grader.codechecker.engine.SingleCheck;
+import nl.tudelft.cse1110.codechecker.engine.CheckScript;
+import nl.tudelft.cse1110.codechecker.engine.SingleCheck;
 import nl.tudelft.cse1110.grader.config.DefaultConfiguration;
 import nl.tudelft.cse1110.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;

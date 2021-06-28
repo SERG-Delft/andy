@@ -1,6 +1,6 @@
 package nl.tudelft.cse1110.grader.result;
 
-import nl.tudelft.cse1110.grader.codechecker.engine.CheckScript;
+import nl.tudelft.cse1110.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
 import org.jetbrains.annotations.NotNull;
 import org.junit.platform.launcher.listeners.TestExecutionSummary;
