@@ -126,7 +126,7 @@ public class ResultBuilder {
         switch (lastSegment.getType()) {
             case "test-template-invocation" -> {
                 String methodName = this.getParameterizedMethodName(failure);
-                l(String.format("\n- Parameterized test \"%s\", argument %s failed:", methodName, lastSegment.getValue()));
+                l(String.format("\n- Parameterized test \"%s\", test case %s failed:", methodName, lastSegment.getValue()));
             }
             case "property" -> {
                 l(String.format("\n- Property test \"%s\" failed (see full output below for more info):", failure.getTestIdentifier().getDisplayName()));
