@@ -24,8 +24,11 @@ public class GraderRunner {
 
         ResultBuilder result = new ResultBuilder();
 
+        result.startCapturingConsole();
+
         ExecutionFlow flow = ExecutionFlow.fullMode(cfg, result);
         flow.run();
+        result.stopCapturingConsole();
 
         System.out.println(result.buildDebugResult());
     }

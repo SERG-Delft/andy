@@ -3,15 +3,20 @@ package nl.tudelft.cse1110.grader.result;
 import nl.tudelft.cse1110.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
 import org.jetbrains.annotations.NotNull;
+import org.junit.platform.engine.TestTag;
+import org.junit.platform.engine.UniqueId;
+import org.junit.platform.engine.reporting.ReportEntry;
+import org.junit.platform.launcher.TestExecutionListener;
 import org.junit.platform.launcher.listeners.TestExecutionSummary;
 import org.pitest.mutationtest.tooling.CombinedStatistics;
 
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
 import java.time.LocalDateTime;
+import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Set;
 
 import static javax.tools.Diagnostic.Kind.ERROR;
 
@@ -20,6 +25,28 @@ public class ResultBuilder {
     private boolean failed;
     private StringBuilder result = new StringBuilder();
     private StringBuilder debug = new StringBuilder();
+    private StringBuilder consoleOutput = new StringBuilder();
+    private OutputStream outputStream;
+    private PrintStream console;
+
+    public ResultBuilder() {
+        this.console = System.out;
+
+        this.outputStream = new OutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+                consoleOutput.append((char)b);
+            }
+        };
+    }
+
+    public void startCapturingConsole() {
+        System.setOut(new PrintStream(this.outputStream));
+    }
+
+    public void stopCapturingConsole() {
+        System.setOut(this.console);
+    }
 
     public void compilationFail(List<Diagnostic<? extends JavaFileObject>> diagnostics) {
         l("We could not compile your code. See the compilation errors below:");
@@ -30,7 +57,6 @@ public class ResultBuilder {
                         diagnostic.getMessage(null)));
             }
         }
-
         failed();
     }
 
@@ -87,12 +113,35 @@ public class ResultBuilder {
         l(String.format("%d/%d passed", summary.getTestsSucceededCount(), summary.getTestsFoundCount()));
 
         for (TestExecutionSummary.Failure failure : summary.getFailures()) {
-            l(String.format("\n- Test %s failed:", failure.getTestIdentifier().getDisplayName()));
-            l(exceptionMessage(failure.getException()));
+            this.logJUnitFailedTest(failure);
         }
 
         if(summary.getTestsSucceededCount() < summary.getTestsFoundCount())
             failed();
+    }
+
+    private void logJUnitFailedTest(TestExecutionSummary.Failure failure) {
+        UniqueId.Segment lastSegment = failure.getTestIdentifier().getUniqueIdObject().getLastSegment();
+
+        switch (lastSegment.getType()) {
+            case "test-template-invocation" -> {
+                String methodName = this.getParameterizedMethodName(failure);
+                l(String.format("\n- Parameterized test \"%s\", test case %s failed:", methodName, lastSegment.getValue()));
+            }
+            case "property" -> {
+                l(String.format("\n- Property test \"%s\" failed (see full output below for more info):", failure.getTestIdentifier().getDisplayName()));
+            }
+            default -> {
+                l(String.format("\n- Test \"%s\" failed:", failure.getTestIdentifier().getDisplayName()));
+            }
+        }
+
+        l(String.format("%s", failure.getException()));
+    }
+
+    private String getParameterizedMethodName(TestExecutionSummary.Failure failure) {
+        int endIndex = failure.getTestIdentifier().getLegacyReportingName().indexOf('(');
+        return failure.getTestIdentifier().getLegacyReportingName().substring(0, endIndex);
     }
 
     private void failed() {
@@ -104,7 +153,7 @@ public class ResultBuilder {
     }
 
     public String buildDebugResult() {
-        return debug.toString() + "\n\n" + result.toString();
+        return debug.toString() + "\n\n" + result.toString() + "\n\n\n\n\n" + this.consoleOutput.toString();
     }
 
 
