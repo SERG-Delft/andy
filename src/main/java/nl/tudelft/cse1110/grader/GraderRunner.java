@@ -16,9 +16,9 @@ public class GraderRunner {
         CheckScript codeCheckerScript = new CheckScript(Arrays.asList(new SingleCheck("TestMethodsHaveAssertions")));
 
         DefaultConfiguration cfg = new DefaultConfiguration(
-            "/Users/mauricioaniche/education/cse1110/test/code",
-            "/Users/mauricioaniche/education/cse1110/test/libs",
-            "/Users/mauricioaniche/education/cse1110/test/reports",
+                "C:/Users/flore/education/cse1100/test/code",
+                "C:/Users/flore/education/cse1100/test/libs",
+                "C:/Users/flore/education/cse1100/test/reports",
                 codeCheckerScript
         );
 

@@ -57,7 +57,7 @@ public class ClassUtils {
             libraries.add(file.getAbsolutePath());
         }
 
-        return libraries.stream().collect(Collectors.joining(":"));
+        return libraries.stream().collect(Collectors.joining(";"));
     }
 
     /**

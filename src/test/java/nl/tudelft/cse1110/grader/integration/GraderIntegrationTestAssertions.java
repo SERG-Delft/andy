@@ -14,7 +14,7 @@ public class GraderIntegrationTestAssertions {
                 String regex = "--- JUnit execution\\n" + numberOfTestsPassing + "\\/\\d+ passed";
                 Pattern pattern = Pattern.compile(regex);
                 Matcher matcher = pattern.matcher(value);
-                return matcher.lookingAt();
+                return matcher.find();
             }
         };
     }
@@ -26,8 +26,9 @@ public class GraderIntegrationTestAssertions {
                 String regex = "--- JUnit execution\\n\\d+\\/" + numberOfTests + " passed";
                 Pattern pattern = Pattern.compile(regex);
                 Matcher matcher = pattern.matcher(value);
-                return matcher.lookingAt();
+                return matcher.find();
             }
         };
     }
+
 }

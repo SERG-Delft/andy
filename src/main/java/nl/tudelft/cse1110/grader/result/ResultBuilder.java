@@ -48,6 +48,10 @@ public class ResultBuilder {
         System.setOut(this.console);
     }
 
+    public void compilationSuccess() {
+        l("--- Compilation\nSuccess");
+    }
+
     public void compilationFail(List<Diagnostic<? extends JavaFileObject>> diagnostics) {
         l("We could not compile your code. See the compilation errors below:");
         for(Diagnostic diagnostic: diagnostics) {
