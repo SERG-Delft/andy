@@ -7,13 +7,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import static nl.tudelft.cse1110.ResourceUtils.resourceFolder;
+
 public class CodeCheckerTestUtils {
     public String getTestResource(String fixtureName) {
-        return resourcePathRoot() + "fixtures/" + fixtureName;
-    }
-
-    private String resourcePathRoot() {
-        return this.getClass().getResource("/codechecker/").getPath();
+        return resourceFolder("/codechecker/fixtures/") + fixtureName;
     }
 
     public CheckScript getYamlConfig(String cfgFile) {

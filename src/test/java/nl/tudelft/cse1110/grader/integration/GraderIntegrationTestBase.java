@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static nl.tudelft.cse1110.ResourceUtils.resourceFolder;
 import static org.apache.commons.io.FileUtils.copyURLToFile;
 
 public abstract class GraderIntegrationTestBase {
@@ -85,7 +86,7 @@ public abstract class GraderIntegrationTestBase {
 
     protected void copyFixture(String fixtureId) {
         try {
-            String dirWithFixture = this.getClass().getResource("/grader/fixtures/" + fixtureId).getPath();
+            String dirWithFixture = resourceFolder("/grader/fixtures/" + fixtureId);
             String dirToCopy = workDir.toString();
 
             FileUtils.copyDirectory(new File(dirWithFixture), new File(dirToCopy));
@@ -95,7 +96,7 @@ public abstract class GraderIntegrationTestBase {
     }
 
     private static String getLibDirectory() {
-        String libPath = GraderIntegrationTestBase.class.getResource("/grader/libs").getPath();
+        String libPath = resourceFolder("/grader/libs");
         downloadLibsIfNeeded(libPath);
         return libPath;
     }
