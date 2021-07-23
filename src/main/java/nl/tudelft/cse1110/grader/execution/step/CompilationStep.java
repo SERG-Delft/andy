@@ -60,7 +60,7 @@ public class CompilationStep implements ExecutionStep {
 
             if(compilationResult) {
                 cfg.setNewClassNames(scanner.getFullClassNames());
-                result.debug(this, String.format("%d classes compiled", cfg.getNewClassNames().size()));
+                result.compilationSuccess();
             }
             else {
                 result.compilationFail(diagnostics.getDiagnostics());
