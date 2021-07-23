@@ -2,6 +2,7 @@ package nl.tudelft.cse1110.grader.result;
 
 import nl.tudelft.cse1110.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
+import nl.tudelft.cse1110.grader.util.ImportUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.platform.engine.TestTag;
 import org.junit.platform.engine.UniqueId;
@@ -14,10 +15,7 @@ import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 import java.io.*;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,7 +29,7 @@ public class ResultBuilder {
     private StringBuilder consoleOutput = new StringBuilder();
     private OutputStream outputStream;
     private PrintStream console;
-    private static HashMap<String, String> importDictionary = new HashMap<>();
+
 
     public ResultBuilder() {
         this.console = System.out;
@@ -53,7 +51,7 @@ public class ResultBuilder {
     }
 
     public void compilationFail(List<Diagnostic<? extends JavaFileObject>> diagnostics) {
-        dictionarySetup();
+        ImportUtils.dictionarySetup();
         l("We could not compile your code. See the compilation errors below:");
         for(Diagnostic diagnostic: diagnostics) {
             if(diagnostic.getKind() == ERROR) {
@@ -61,10 +59,8 @@ public class ResultBuilder {
                         diagnostic.getLineNumber(),
                         diagnostic.getMessage(null)));
 
-                //here go any further compilation failure tips
-                //1. Missing any imports
-                checkMissingImport(diagnostic.getMessage(null));
-                //Further improvements: Typos (Keywords and Variables)
+                Optional<String> importLog = ImportUtils.checkMissingImport(diagnostic.getMessage(null));
+                importLog.ifPresent(this::l);
             }
         }
         failed();
@@ -196,47 +192,5 @@ public class ResultBuilder {
     public void logCodeChecks(CheckScript script) {
         l("--- Code checks");
         l(script.generateReport());
-    }
-
-    //Will remake this as a .txt / .csv file
-    private void dictionarySetup() {
-        importDictionary.put("List", "import java.util.List;");
-        importDictionary.put("Collection", "import java.util.Collection;");
-        importDictionary.put("stream", "import java.util.stream.*;");
-        importDictionary.put("LocalDate", "import java.time.LocalDate;");
-        importDictionary.put("Mockito", "import static org.mockito.Mockito.*;");
-        importDictionary.put("ParameterizedTest", "import org.junit.jupiter.params.ParameterizedTest;");
-        importDictionary.put("Arguments", "import org.junit.jupiter.params.provider.Arguments;");
-        importDictionary.put("MethodSource", "import org.junit.jupiter.params.provider.MethodSource;");
-        importDictionary.put("Stream", "import java.util.stream.Stream;");
-        importDictionary.put("ArrayList", "import java.util.ArrayList;");
-        importDictionary.put("LinkedList", "import java.util.LinkedList;");
-        importDictionary.put("assertThat", "import static org.assertj.core.api.Assertions.assertThat;");
-        importDictionary.put("assertThatThrownBy", "import static org.assertj.core.api.Assertions.assertThatThrownBy;");
-        importDictionary.put("BeforeEach", "import org.junit.jupiter.api.BeforeEach;");
-        importDictionary.put("Test", "import org.junit.jupiter.api.Test;");
-        importDictionary.put("CsvSource", "import org.junit.jupiter.params.provider.CsvSource;");
-        importDictionary.put("ForAll","import net.jqwik.api.ForAll;");
-        importDictionary.put("Property","import net.jqwik.api.Property;");
-        importDictionary.put("IntRange","import net.jqwik.api.constraints.IntRange;");
-        importDictionary.put("Size","import net.jqwik.api.constraints.Size;");
-    }
-
-    private void checkMissingImport(String message) {
-        if(message.startsWith("cannot find symbol")){
-
-            //We parse the diagnostic message and use regex to find the correct token
-            //we search for the first word after first "class" instance
-
-            Pattern p = Pattern.compile("class\\W+(\\w+)");
-            Matcher m = p.matcher(message);
-            String token = m.find() ? m.group(1) : null;
-
-            if(importDictionary.containsKey(token)) {
-                l(String.format("Maybe you missed the import for %s?\nTry adding this: %s\n",
-                        token,
-                        importDictionary.get(token)));
-            }
-        }
     }
 }
