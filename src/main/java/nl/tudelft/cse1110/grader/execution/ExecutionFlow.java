@@ -46,6 +46,10 @@ public class ExecutionFlow {
         );
     }
 
+    public static ExecutionFlow asSteps(List<ExecutionStep> plan, Configuration cfg, ResultBuilder result) {
+        return new ExecutionFlow(plan, cfg, result);
+    }
+
     public static ExecutionFlow fullMode(Configuration cfg, ResultBuilder result) {
         return new ExecutionFlow(
                 Arrays.asList(

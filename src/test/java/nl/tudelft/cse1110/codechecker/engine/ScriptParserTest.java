@@ -1,5 +1,6 @@
 package nl.tudelft.cse1110.codechecker.engine;
 
+import nl.tudelft.cse1110.codechecker.CodeCheckerTestUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -55,7 +56,7 @@ public class ScriptParserTest {
 
     @Test
     void nestedOrsAndAnds_m2021isTriangle() {
-        CheckScript cfg = new TestUtils().getYamlConfig("integration/parser/m2021-isTriangle.yml");
+        CheckScript cfg = new CodeCheckerTestUtils().getYamlConfig("integration/parser/m2021-isTriangle.yml");
 
         assertThat(cfg.getChecks()).containsExactly(
                 new OrCheck(1, "either use [properties, providers, and arbitrary<ABC>] or [>3 properties and IntRange]",

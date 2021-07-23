@@ -1,7 +1,7 @@
 package nl.tudelft.cse1110.codechecker.integration;
 
 import nl.tudelft.cse1110.codechecker.engine.CheckScript;
-import nl.tudelft.cse1110.codechecker.engine.TestUtils;
+import nl.tudelft.cse1110.codechecker.CodeCheckerTestUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -12,7 +12,7 @@ public class T04_E2021_MakeReservation extends IntegrationTestBase {
 
     @Test
     void solution1_pass() {
-        checkScript.runChecks(new TestUtils().getTestResource("integration/t04_e2021_makeReservation/Solution1.java"));
+        checkScript.runChecks(new CodeCheckerTestUtils().getTestResource("integration/t04_e2021_makeReservation/Solution1.java"));
 
         assertThat(checkScript.generateReport()).isEqualTo(
                 "15\n" +

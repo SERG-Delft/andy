@@ -1,7 +1,7 @@
 package nl.tudelft.cse1110.codechecker.integration;
 
 import nl.tudelft.cse1110.codechecker.engine.CheckScript;
-import nl.tudelft.cse1110.codechecker.engine.TestUtils;
+import nl.tudelft.cse1110.codechecker.CodeCheckerTestUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -12,7 +12,7 @@ public class T03_M2021_IsLeapYear extends IntegrationTestBase {
 
     @Test
     void solution1_pass() {
-        checkScript.runChecks(new TestUtils().getTestResource("integration/t03_m2021_isLeapYear/Solution1Pass.java"));
+        checkScript.runChecks(new CodeCheckerTestUtils().getTestResource("integration/t03_m2021_isLeapYear/Solution1Pass.java"));
 
         assertThat(checkScript.generateReport()).isEqualTo(
                 "4\n" +
@@ -25,7 +25,7 @@ public class T03_M2021_IsLeapYear extends IntegrationTestBase {
 
     @Test
     void solution2_fail() {
-        checkScript.runChecks(new TestUtils().getTestResource("integration/t03_m2021_isLeapYear/Solution2Fail.java"));
+        checkScript.runChecks(new CodeCheckerTestUtils().getTestResource("integration/t03_m2021_isLeapYear/Solution2Fail.java"));
 
         assertThat(checkScript.generateReport()).isEqualTo(
                         "4\n" +
