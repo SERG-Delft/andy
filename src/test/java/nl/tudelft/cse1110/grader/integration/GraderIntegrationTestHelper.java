@@ -19,5 +19,9 @@ public class GraderIntegrationTestHelper {
         return new CheckScript(Collections.emptyList());
     }
 
+    public static String[] getSeparateTests(String result) {
+        String[] testCases = result.split("\n- ");
+        return Arrays.copyOfRange(testCases, 1, testCases.length);
+    }
 
 }
