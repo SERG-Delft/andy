@@ -30,4 +30,58 @@ public class GraderIntegrationTestAssertions {
             }
         };
     }
+
+
+    public static Condition<String> failingTestName(String testName) {
+        return new Condition<>() {
+            @Override
+            public boolean matches(String value) {
+                String regex = "- Test " + "\"" + testName + "\\(" + "\\)" + "\"" + " failed:";     // escaped () and " "
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(value);
+                return matcher.find();
+            }
+        };
+    }
+
+
+    public static Condition<String> errorType(String errorType) {
+        return new Condition<>() {
+            @Override
+            public boolean matches(String value) {
+                String regex = "\\w." + errorType + ":";       // \w matches any alphanumeric character from the basic Latin alphabet, including the underscore. Equivalent to [A-Za-z0-9_]
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(value);
+                return matcher.find();
+            }
+        };
+    }
+
+
+
+    public static Condition<String> failingParameterizedTestName(String testName) {
+        return new Condition<>() {
+            @Override
+            public boolean matches(String value) {
+                String regex = "- Parameterized test " + "\"" + testName + "\"" + ",";
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(value);
+                return matcher.find();
+            }
+        };
+    }
+
+
+    public static Condition<String> parameterizedTestCaseNumber(int testCaseNumber) {
+        return new Condition<>() {
+            @Override
+            public boolean matches(String value) {
+                String regex = " test case #" + testCaseNumber + " failed:";
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(value);
+                return matcher.find();
+            }
+        };
+    }
+
 }
