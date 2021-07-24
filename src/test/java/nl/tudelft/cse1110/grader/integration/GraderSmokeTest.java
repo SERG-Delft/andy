@@ -17,4 +17,5 @@ public class GraderSmokeTest extends GraderIntegrationTestBase {
                 .has(numberOfJUnitTestsPassing(31))
                 .has(totalNumberOfJUnitTests(31));
     }
+
 }

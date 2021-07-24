@@ -53,15 +53,15 @@ public class ResultBuilder {
     }
 
     public void compilationFail(List<Diagnostic<? extends JavaFileObject>> diagnostics) {
-        l("We could not compile your code. See the compilation errors below:");
-        for(Diagnostic diagnostic: diagnostics) {
-            if(diagnostic.getKind() == ERROR) {
-                l(String.format("- line %d: %s",
+        l("--- Compilation\nFailure\n\nSee the compilation errors below:");
+        for (Diagnostic diagnostic : diagnostics) {
+            if (diagnostic.getKind() == ERROR) {
+                l(String.format("- line %d:\n  %s",
                         diagnostic.getLineNumber(),
                         diagnostic.getMessage(null)));
             }
+            failed();
         }
-        failed();
     }
 
     public void logFinish(ExecutionStep step) {
