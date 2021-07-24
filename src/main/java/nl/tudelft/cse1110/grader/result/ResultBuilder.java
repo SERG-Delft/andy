@@ -7,6 +7,7 @@ import org.junit.platform.engine.TestTag;
 import org.junit.platform.engine.UniqueId;
 import org.junit.platform.engine.reporting.ReportEntry;
 import org.junit.platform.launcher.TestExecutionListener;
+import org.junit.platform.launcher.TestIdentifier;
 import org.junit.platform.launcher.listeners.TestExecutionSummary;
 import org.pitest.mutationtest.tooling.CombinedStatistics;
 
@@ -14,9 +15,7 @@ import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 import java.io.*;
 import java.time.LocalDateTime;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static javax.tools.Diagnostic.Kind.ERROR;
 
@@ -25,28 +24,7 @@ public class ResultBuilder {
     private boolean failed;
     private StringBuilder result = new StringBuilder();
     private StringBuilder debug = new StringBuilder();
-    private StringBuilder consoleOutput = new StringBuilder();
-    private OutputStream outputStream;
-    private PrintStream console;
-
-    public ResultBuilder() {
-        this.console = System.out;
-
-        this.outputStream = new OutputStream() {
-            @Override
-            public void write(int b) throws IOException {
-                consoleOutput.append((char)b);
-            }
-        };
-    }
-
-    public void startCapturingConsole() {
-        System.setOut(new PrintStream(this.outputStream));
-    }
-
-    public void stopCapturingConsole() {
-        System.setOut(this.console);
-    }
+    private Map<TestIdentifier, ReportEntry> additionalReports = new HashMap<>();
 
     public void compilationFail(List<Diagnostic<? extends JavaFileObject>> diagnostics) {
         l("We could not compile your code. See the compilation errors below:");
@@ -120,6 +98,10 @@ public class ResultBuilder {
             failed();
     }
 
+    public void logAdditionalReport(TestIdentifier testIdentifier, ReportEntry report) {
+        this.additionalReports.put(testIdentifier, report);
+    }
+
     private void logJUnitFailedTest(TestExecutionSummary.Failure failure) {
         UniqueId.Segment lastSegment = failure.getTestIdentifier().getUniqueIdObject().getLastSegment();
 
@@ -127,16 +109,21 @@ public class ResultBuilder {
             case "test-template-invocation" -> {
                 String methodName = this.getParameterizedMethodName(failure);
                 l(String.format("\n- Parameterized test \"%s\", test case %s failed:", methodName, lastSegment.getValue()));
+                l(String.format("%s", failure.getException()));
             }
             case "property" -> {
-                l(String.format("\n- Property test \"%s\" failed (see full output below for more info):", failure.getTestIdentifier().getDisplayName()));
+                l(String.format("\n- Property test \"%s\" failed:", failure.getTestIdentifier().getDisplayName()));
+                l(String.format("%s", failure.getException()));
+
+                if (this.additionalReports.containsKey(failure.getTestIdentifier())) {
+                    l(this.additionalReports.get(failure.getTestIdentifier()).getKeyValuePairs().toString());
+                }
             }
             default -> {
                 l(String.format("\n- Test \"%s\" failed:", failure.getTestIdentifier().getDisplayName()));
+                l(String.format("%s", failure.getException()));
             }
         }
-
-        l(String.format("%s", failure.getException()));
     }
 
     private String getParameterizedMethodName(TestExecutionSummary.Failure failure) {
@@ -153,7 +140,7 @@ public class ResultBuilder {
     }
 
     public String buildDebugResult() {
-        return debug.toString() + "\n\n" + result.toString() + "\n\n\n\n\n" + this.consoleOutput.toString();
+        return debug.toString() + "\n\n" + result.toString();
     }
 
 

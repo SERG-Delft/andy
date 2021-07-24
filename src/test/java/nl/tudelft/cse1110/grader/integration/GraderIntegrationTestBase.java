@@ -76,10 +76,8 @@ public abstract class GraderIntegrationTestBase {
 
         ResultBuilder result = new ResultBuilder();
 
-        result.startCapturingConsole();
         ExecutionFlow flow = ExecutionFlow.asSteps(plan, cfg, result);
         flow.run();
-        result.stopCapturingConsole();
 
         return result.buildEndUserResult();
     }
