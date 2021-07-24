@@ -1,5 +1,7 @@
 package nl.tudelft.cse1110.grader.util;
 
+import org.apache.commons.lang3.SystemUtils;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,6 +10,7 @@ import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
 
 public class ClassUtils {
 
@@ -57,7 +60,15 @@ public class ClassUtils {
             libraries.add(file.getAbsolutePath());
         }
 
-        return libraries.stream().collect(Collectors.joining(";"));
+        String output;
+        
+        if (SystemUtils.IS_OS_WINDOWS) {
+            output = ";";
+        } else {
+            output = ":";
+        }
+
+        return libraries.stream().collect(Collectors.joining(output));
     }
 
     /**
