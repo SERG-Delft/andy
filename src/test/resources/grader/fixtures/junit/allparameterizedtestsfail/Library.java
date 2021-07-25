@@ -1,13 +1,11 @@
 package tudelft.domain;
 
-class PassingGrade {
+class TwoIntegers {
 
-    public boolean passed(float grade) {
-        // this line is not needed since we are allowed to assume
-        // that no invalid grade can be passed as a param
-        if (grade < 1 || grade > 10) throw new IllegalArgumentException();
-
-        return grade >= 5;
+    public int sum(int n, int m) {
+        if (n < 1 || n > 99 || m < 1 || m > 99) {
+            throw new IllegalArgumentException();
+        }
+        return n + m;
     }
-
 }

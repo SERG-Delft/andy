@@ -1,31 +1,25 @@
 package tudelft.domain;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-import tudelft.domain.PassingGrade;
+import org.junit.jupiter.params.provider.CsvSource;
 
-import java.util.stream.Stream;
+// Student accidentally passed the first argument (int result) as 3rd argument, making all tests fail.
+class TwoIntegersTest {
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+    private final TwoIntegers adder = new TwoIntegers();
 
-// in all test cases, the expected booleans should be flipped.
-class PassingGradeTest {
-
-    @ParameterizedTest
-    @MethodSource("generator")
-    void passed(float grade, boolean pass) {
-        boolean result = new PassingGrade().passed(grade);
-        assertEquals(pass, result);
-    }
-
-    private static Stream<Arguments> generator() {
-        return Stream.of(
-                Arguments.of(1.0f, true), // out-point
-                Arguments.of(4.9f, true), // boundary: off-point
-                Arguments.of(5.0f, false), // boundary: on-point
-                Arguments.of(10.0f, false), // boundary: max value
-                Arguments.of(7.5f, false)    // extra in-point (small test suite)
-        );
+    //valid input cases
+    @ParameterizedTest(name = "num1={0}, num2={1}, result={2}")
+    @CsvSource({
+            "50, 50, 100",
+            "1, 50, 51",
+            "99, 50, 149",
+            "50, 50, 100",
+            "50, 1, 51",
+            "50, 99, 149"
+    })
+    void sumValidCases(int result, int num1, int num2) {
+        Assertions.assertEquals(result, adder.sum(num1, num2));
     }
 }
