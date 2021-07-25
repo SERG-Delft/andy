@@ -8,17 +8,36 @@ import static nl.tudelft.cse1110.grader.integration.GraderIntegrationTestHelper.
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
-// This integration test class handles normal @Tests, which all compile.
+// TODO: !!! write down a comment clearly indicating where the error is, so that the next person that opens it, finds it quickly!
+
+// TODO: for the failing test case, maybe ensure that the error message appears correctly.
+//  - What if a test throws an exception, instead of simply failing?
+//  - A parameterized test that fails, do we see which one fails?
+//  - A Mockito error message, does it appear correctly?
+//  - JQWik error message (currently handled by @Jan Warchocki)
+
+
+// TODO: I can also try variations, such as, normal @Tests, @ParameterizedTests, and JQWik tests
+//  maybe even all of them in a single class, to ensure that our engine can handle them all.
+
+
+
+
+// Look at ResultBuilder - logJUnitRun()
+
+// This integration test class handles normal @Tests, which all compile. (the final test combines normal @Tests, parameterized tests and pbt though)
 // See GraderCompilationTest for integration tests for compilation errors.
 public class GraderJUnitTest extends GraderIntegrationTestBase {
 
     @Test
-    void allTestsPassing() {
+    void allTestsPassing() {            // 4/4 normal @Tests passing
 
-        String result = run(justTests(), noScript(), "junit/passing");  // 4/4 normal tests
+        // We only run JUnit tests (no PiTest/JaCoCo) and no checks (SingleCheck, OrCheck, AndCheck...)
+        String result = run(justTests(), noScript(), "junit/passing");
 
         System.out.println(result);
 
+        // in GraderIntegrationTestAssertions we are extending assertJ by creating these custom assertions
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(4))
                 .has(totalNumberOfJUnitTests(4));
@@ -29,9 +48,9 @@ public class GraderJUnitTest extends GraderIntegrationTestBase {
     // TODO: this one might even be another feature, as we probably want to give a better message to the student, e.g., "We do not see tests, are you sure you wrote them?" or something like that.
     // example: student forgets @Test
     @Test
-    void noTests() {
+    void noTests() {        // 0/0 normal @Tests passing
 
-        String result = run(justTests(), noScript(), "junit/noTests");  // 0/0 normal tests
+        String result = run(justTests(), noScript(), "junit/noTests");
 
         System.out.println(result);
 
@@ -41,12 +60,28 @@ public class GraderJUnitTest extends GraderIntegrationTestBase {
     }
 
 
+    // In test 2, assertFalse should be assertTrue.
+    @Test
+    void singleTestFailing() {
+
+        String result = run(justTests(), noScript(), "junit/singleTestFailing");  // 3/4 normal @Tests passing
+
+        System.out.println(result);
+
+        assertThat(result)
+                .has(numberOfJUnitTestsPassing(3))
+                .has(totalNumberOfJUnitTests(4))
+                .has(failingTestName("leapCenturialYears"))
+                .has(errorType("AssertionFailedError"));
+    }
+
+
     // In test 1, the expected int should be 2, instead of 1.
     // In test 2, the expected int should be 1, instead of 2.
     @Test
     void allTestsFailing() {
 
-        String result = run(justTests(), noScript(), "junit/failing");  // 0/2 normal tests
+        String result = run(justTests(), noScript(), "junit/failing");
 
         System.out.println(result);
 
@@ -59,11 +94,32 @@ public class GraderJUnitTest extends GraderIntegrationTestBase {
     }
 
 
+    // In test 1 and 2,  30*3 should be 30+50
+    // In test 3, 30+50 should be 30*3
+    // example: student misinterpreted the source code.
+    @Test
+    void someTestsFailing() {           // 1/4 normal @Tests passing
+
+        String result = run(justTests(), noScript(), "junit/someFailing");
+
+        System.out.println(result);
+
+        assertThat(result)
+                .has(numberOfJUnitTestsPassing(1))
+                .has(totalNumberOfJUnitTests(4))
+                .has(failingTestName("lessPoints"))
+                .has(failingTestName("manyPointsAndManyLives"))
+                .has(failingTestName("manyPointsButLittleLives"))
+                .has(errorType("AssertionFailedError"));
+
+    }
+
+
 
     @Test
     void inappropriateAssertionsShouldPass() {
 
-        String result = run(justTests(), noScript(), "junit/inappropriateAssertions");  // 3/3 normal tests
+        String result = run(justTests(), noScript(), "junit/inappropriateAssertions");  // 3/3 normal @Tests passing
 
         System.out.println(result);
 
@@ -71,6 +127,36 @@ public class GraderJUnitTest extends GraderIntegrationTestBase {
                 .has(numberOfJUnitTestsPassing(3))
                 .has(totalNumberOfJUnitTests(3));
     }
+
+
+    @Test
+    void noAssertionsInTestShouldPass() {
+
+        String result = run(justTests(), noScript(), "junit/noAssertions");  // 3/3 normal @Tests passing
+
+        System.out.println(result);
+
+        assertThat(result)
+                .has(numberOfJUnitTestsPassing(3))
+                .has(totalNumberOfJUnitTests(3));
+
+    }
+
+
+    // test class contains normal @Tests, parameterized tests and pbt.
+    @Test
+    void ThreeDifferentTestTypesUsed() {
+
+        String result = run(justTests(), noScript(), "junit/differentTestTypes");  // 5/5 @Tests passing
+
+        System.out.println(result);
+
+        assertThat(result)
+                .has(numberOfJUnitTestsPassing(5))
+                .has(totalNumberOfJUnitTests(5));
+
+    }
+
 
 
 

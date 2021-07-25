@@ -12,6 +12,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class GraderJUnitParameterizedTest extends GraderIntegrationTestBase {
 
 
+
     // in test case 3, the expected boolean should be flipped.
     @Test
     void singleParameterizedTestFails() {
@@ -72,6 +73,67 @@ public class GraderJUnitParameterizedTest extends GraderIntegrationTestBase {
                 .has(parameterizedTestCaseNumber(6))
                 .has(errorType("AssertionFailedError"))
                 .has(errorType("IllegalArgumentException"));  // method will throw exception (See Library.java)
+    }
+
+
+    @Test
+    void helperMethodInTestShouldPass() {
+
+        String result = run(justTests(), noScript(), "junit/helperMethodInTest");  // 26/26 parameterized test cases
+
+        System.out.println(result);
+
+        assertThat(result)
+                .has(numberOfJUnitTestsPassing(26))
+                .has(totalNumberOfJUnitTests(26));
+    }
+
+
+
+    // student reversed the 2 method names "invalidInputs" and "validInputs",
+    //  raising exceptions since the number of arguments passed is incorrect, and thus making all tests fail.
+    // in "invalidInputs", an exception is expected, whereas this is not being thrown by the method.
+    // in "validInputs", exceptions are raised, whereas this is not expected.
+    @Test
+    void exceptionThrownByTest() {
+
+        String result = run(justTests(), noScript(), "junit/exceptionThrownByTest");  // 0/5 parameterized test cases
+
+        System.out.println(result);
+
+        assertThat(result)
+                .has(numberOfJUnitTestsPassing(0))
+                .has(totalNumberOfJUnitTests(5))
+                .has(failingParameterizedTestName("validInputs"))
+                .has(failingParameterizedTestName("invalidInputs"))
+                .has(parameterizedTestCaseNumber(1))
+                .has(parameterizedTestCaseNumber(2))
+                .has(parameterizedTestCaseNumber(3))
+                .has(errorType("ParameterResolutionException"))
+                .has(errorType("AssertionError"))
+                .has(errorMessage("Expecting code to raise a throwable."));
+    }
+
+
+    @Test
+    void exceptionNotThrownByMethod() {
+
+        String result = run(justTests(), noScript(), "junit/exceptionThrownByTest");  // 0/5 parameterized test cases
+
+        System.out.println(result);
+
+        assertThat(result)
+                .has(numberOfJUnitTestsPassing(0))
+                .has(totalNumberOfJUnitTests(5))
+                .has(failingParameterizedTestName("validInputs"))
+                .has(failingParameterizedTestName("invalidInputs"))
+                .has(parameterizedTestCaseNumber(1))
+                .has(parameterizedTestCaseNumber(2))
+                .has(parameterizedTestCaseNumber(3))
+                .has(errorType("ParameterResolutionException"))
+                .has(errorType("AssertionError"))
+                .has(errorMessage("Expecting code to raise a throwable."));
+
     }
 
 

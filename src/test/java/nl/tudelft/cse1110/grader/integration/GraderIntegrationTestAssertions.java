@@ -96,6 +96,33 @@ public class GraderIntegrationTestAssertions {
     }
 
 
+    public static Condition<String> uninvokedMethod(String uninvokedMethod) {
+        return new Condition<>() {
+            @Override
+            public boolean matches(String value) {
+                String regex = "Wanted but not invoked:\n" + uninvokedMethod;
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(value);
+                return matcher.find();
+            }
+        };
+    }
+
+
+    public static Condition<String> hintAtInteractionFound(String invokedMethod) {
+        return new Condition<>() {
+            @Override
+            public boolean matches(String value) {
+                String regex = "However, there was exactly 1 interaction with this mock:\n" + invokedMethod;
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(value);
+                return matcher.find();
+            }
+        };
+    }
+
+
+
 
 
 

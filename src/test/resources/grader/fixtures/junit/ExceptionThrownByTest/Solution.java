@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-// student reversed the 2 method names "invalidInputs" and "validInputs", making all tests fail.
+// student reversed the 2 method names "invalidInputs" and "validInputs", raising exceptions and thus making all tests fail.
 class MScAdmissionTest {
 
     private final MScAdmission admission = new MScAdmission();
