@@ -8,22 +8,6 @@ import static nl.tudelft.cse1110.grader.integration.GraderIntegrationTestHelper.
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
-// TODO: !!! write down a comment clearly indicating where the error is, so that the next person that opens it, finds it quickly!
-
-// TODO: for the failing test case, maybe ensure that the error message appears correctly.
-//  - What if a test throws an exception, instead of simply failing?
-//  - A parameterized test that fails, do we see which one fails?
-//  - A Mockito error message, does it appear correctly?
-//  - JQWik error message (currently handled by @Jan Warchocki)
-
-
-// TODO: I can also try variations, such as, normal @Tests, @ParameterizedTests, and JQWik tests
-//  maybe even all of them in a single class, to ensure that our engine can handle them all.
-
-
-
-
-// Look at ResultBuilder - logJUnitRun()
 
 // This integration test class handles normal @Tests, which all compile. (the final test combines normal @Tests, parameterized tests and pbt though)
 // See GraderCompilationTest for integration tests for compilation errors.

@@ -5,14 +5,7 @@ import org.assertj.core.api.Condition;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * I created a assertj helper for the assertion. Such helpers are fundamental in this type of code.
- * We return strings, and these strings might change. We don't want to have to change in multiple times if that happens.
- * That's why the assertions happen in the helper methods.
- * If we change the output, all we need to do is to change the assertion helper.
- * And the assertion looks nicer now, e.g., assertThat(result).has(numberOfJUnitTestsPassing(31));
- *
- */
+
 public class GraderIntegrationTestAssertions {
 
 
