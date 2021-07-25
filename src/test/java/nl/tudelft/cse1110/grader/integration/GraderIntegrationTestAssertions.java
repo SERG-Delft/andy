@@ -44,6 +44,19 @@ public class GraderIntegrationTestAssertions {
         };
     }
 
+    public static Condition<String> parameterizedTestFailing(String testName, int testCaseNumber) {
+        return new Condition<>() {
+            @Override
+            public boolean matches(String value) {
+                String regex = "- Parameterized test \"" + testName + "\", test case #" + testCaseNumber + " failed:";
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(value);
+
+                return matcher.find();
+            }
+        };
+    }
+
     public static Condition<String> compilationFailure() {
         return new Condition<>() {
             @Override
@@ -62,19 +75,6 @@ public class GraderIntegrationTestAssertions {
             public boolean matches(String value) {
                 String regex = "--- Compilation\\nSuccess";
                 Pattern pattern = Pattern.compile(regex);
-                Matcher matcher = pattern.matcher(value);
-
-                return matcher.find();
-            }
-        };
-    }
-
-    public static Condition<String> parameterizedTestFailing(String testName, int testCaseNumber) {
-        return new Condition<>() {
-            @Override
-            public boolean matches(String value) {
-                String regex = "- Parameterized test \"" + testName + "\", test case #" + testCaseNumber + " failed:";
-                Pattern pattern = Pattern.compile(regex, Pattern.DOTALL);
                 Matcher matcher = pattern.matcher(value);
 
                 return matcher.find();
