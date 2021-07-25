@@ -20,7 +20,7 @@ public class GraderIntegrationTestAssertions {
         return new Condition<>() {
             @Override
             public boolean matches(String value) {
-                String regex = "--- JUnit execution\\n" + numberOfTestsPassing + "\\/\\d+ passed";  // d+ means anything can match
+                String regex = "--- JUnit execution\\n" + numberOfTestsPassing + "\\/\\d+ passed";
                 Pattern pattern = Pattern.compile(regex);
                 Matcher matcher = pattern.matcher(value);
                 return matcher.lookingAt();
@@ -34,52 +34,14 @@ public class GraderIntegrationTestAssertions {
         return new Condition<>() {
             @Override
             public boolean matches(String value) {
-                String regex = "--- JUnit execution\\n\\d+\\/" + numberOfTests + " passed"; // \d matches any digit
+                String regex = "--- JUnit execution\\n\\d+\\/" + numberOfTests + " passed";
                 Pattern pattern = Pattern.compile(regex);
                 Matcher matcher = pattern.matcher(value);
                 return matcher.lookingAt();
             }
         };
     }
-
-
-    public static Condition<String> compilationFailure() {
-        return new Condition<>() {
-            @Override
-            public boolean matches(String value) {
-                String regex = "--- Compilation\\nFailure\\n\\nSee the compilation errors below:";
-                Pattern pattern = Pattern.compile(regex);
-                Matcher matcher = pattern.matcher(value);
-                return matcher.find();
-            }
-        };
-    }
-
-    public static Condition<String> compilationErrorOnLine(int lineNumber) {
-        return new Condition<>() {
-            @Override
-            public boolean matches(String value) {
-                String regex = "- line " + lineNumber + ":\\s";
-                Pattern pattern = Pattern.compile(regex);
-                Matcher matcher = pattern.matcher(value);
-                return matcher.find();
-            }
-        };
-    }
-
-    public static Condition<String> compilationErrorType(String errorType) {
-        return new Condition<>() {
-            @Override
-            public boolean matches(String value) {
-                String regex = "- line \\d+:\\n  " + errorType;
-                Pattern pattern = Pattern.compile(regex);
-                Matcher matcher = pattern.matcher(value);
-                return matcher.find();
-            }
-        };
-    }
-
-
+    
 
     public static Condition<String> failingTestName(String testName) {
         return new Condition<>() {
