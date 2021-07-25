@@ -43,6 +43,18 @@ public class GraderIntegrationTestAssertions {
         };
     }
 
+    public static Condition<String> compilationSuccess() {
+        return new Condition<>() {
+            @Override
+            public boolean matches(String value) {
+                String regex = "--- Compilation\\nSuccess";
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(value);
+                return matcher.find();
+            }
+        };
+    }
+
     public static Condition<String> compilationErrorOnLine(int lineNumber) {
         return new Condition<>() {
             @Override
@@ -63,6 +75,23 @@ public class GraderIntegrationTestAssertions {
                 Pattern pattern = Pattern.compile(regex);
                 Matcher matcher = pattern.matcher(value);
                 return matcher.find();
+            }
+        };
+    }
+
+    public static Condition<String> compilationErrorMoreTimes(String errorType, int times) {
+        return new Condition<>() {
+            @Override
+            public boolean matches(String value) {
+                String regex = "- line \\d+:\\n  " + errorType;
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(value);
+                int count = 0;
+                while (matcher.find()) {
+                    count++;
+                }
+
+                return count == times;
             }
         };
     }

@@ -9,12 +9,30 @@ public class GraderCompilationTest extends GraderIntegrationTestBase {
 
     @Test
     void compilationFailure() {
-        String result = run(justCompilation(), noScript(), "failure");
+        String result = run(justCompilation(), noScript(), "compilation/failure");
         assertThat(result)
                 .has(GraderIntegrationTestAssertions.compilationFailure())
                 .has(GraderIntegrationTestAssertions.compilationErrorOnLine(29))
                 .has(GraderIntegrationTestAssertions.compilationErrorType("not a statement"))
                 .has(GraderIntegrationTestAssertions.compilationErrorType("';' expected"));
+    }
+
+    @Test
+    void compilationSuccess() {
+        String result = run(justCompilation(), noScript(), "compilation/success");
+        assertThat(result)
+                .has(GraderIntegrationTestAssertions.compilationSuccess());
+    }
+
+    @Test
+    void compilationDifferentFailures() {
+        String result = run(justCompilation(), noScript(), "compilation/differentFailures");
+        assertThat(result)
+                .has(GraderIntegrationTestAssertions.compilationFailure())
+                .has(GraderIntegrationTestAssertions.compilationErrorOnLine(21))
+                .has(GraderIntegrationTestAssertions.compilationErrorOnLine(25))
+                .has(GraderIntegrationTestAssertions.compilationErrorOnLine(33))
+                .has(GraderIntegrationTestAssertions.compilationErrorMoreTimes("cannot find symbol", 3));
     }
 
 }
