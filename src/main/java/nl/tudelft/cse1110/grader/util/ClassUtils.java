@@ -1,5 +1,7 @@
 package nl.tudelft.cse1110.grader.util;
 
+import org.apache.commons.lang3.SystemUtils;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,6 +10,7 @@ import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
 
 public class ClassUtils {
 
@@ -30,7 +33,7 @@ public class ClassUtils {
      */
     public static String extractDirectoryName(String newClassName) {
         List<String> packagesAndClass = new ArrayList<>(Arrays.asList(newClassName.split("\\.")));
-        packagesAndClass.remove(packagesAndClass.size()-1);
+        packagesAndClass.remove(packagesAndClass.size() - 1);
 
         // TODO: '/' is OS dependant
         return packagesAndClass.stream().collect(Collectors.joining("/"));
@@ -57,7 +60,7 @@ public class ClassUtils {
             libraries.add(file.getAbsolutePath());
         }
 
-        return libraries.stream().collect(Collectors.joining(":"));
+        return libraries.stream().collect(Collectors.joining(classSeparator()));
     }
 
     /**
@@ -105,5 +108,18 @@ public class ClassUtils {
         throw new RuntimeException("Package name not found!");
     }
 
+
+    /**
+     * The method determines what class separator should be used depending on the OS.
+     * ";" for Windows or ":" for Mac/Linux.
+     *
+     * @return string for class separator
+     */
+    public static String classSeparator() {
+        if (SystemUtils.IS_OS_WINDOWS) {
+            return ";";
+        }
+        return ":";
+    }
 
 }
