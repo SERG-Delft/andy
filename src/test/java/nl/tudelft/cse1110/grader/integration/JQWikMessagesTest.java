@@ -13,14 +13,14 @@ public class JQWikMessagesTest extends GraderIntegrationTestBase {
 
     @Test
     void testSimplePropertyTest() {
-        String result = run(justTests(), noScript(), "jqwikSimple");
+        String result = run(justTests(), noScript(), "jqwik/jqwikSimple");
         assertThat(result)
                 .has(propertyTestFailing("testNoElementInWholeArray"));
     }
 
     @Test
     void testMultiplePropertyTestsFailing() {
-        String result = run(justTests(), noScript(), "jqwikMultiple");
+        String result = run(justTests(), noScript(), "jqwik/jqwikMultiple");
         assertThat(result)
                 .has(propertyTestFailing("testNoElementInWholeArray"))
                 .has(propertyTestFailing("testValueInArrayUniqueElements"));
@@ -28,7 +28,7 @@ public class JQWikMessagesTest extends GraderIntegrationTestBase {
 
     @Test
     void testMultiplePropertyWithParameterizedTests() {
-        String result = run(justTests(), noScript(), "jqwikWithParameterized");
+        String result = run(justTests(), noScript(), "jqwik/jqwikWithParameterized");
         assertThat(result)
                 .has(propertyTestFailing("testNoElementInWholeArray"))
                 .has(propertyTestFailing("testValueInArrayUniqueElements"))

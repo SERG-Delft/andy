@@ -113,7 +113,6 @@ public class ResultBuilder {
             }
             case "property" -> {
                 l(String.format("\n- Property test \"%s\" failed:", failure.getTestIdentifier().getDisplayName()));
-                l(String.format("%s", failure.getException()));
 
                 if (this.additionalReports.containsKey(failure.getTestIdentifier())) {
                     l(this.additionalReports.get(failure.getTestIdentifier()).getKeyValuePairs().toString());

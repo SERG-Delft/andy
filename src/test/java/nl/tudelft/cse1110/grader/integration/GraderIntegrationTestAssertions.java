@@ -5,8 +5,6 @@ import org.assertj.core.api.Condition;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static nl.tudelft.cse1110.grader.integration.GraderIntegrationTestHelper.getSeparateTests;
-
 public class GraderIntegrationTestAssertions {
 
     public static Condition<String> numberOfJUnitTestsPassing(int numberOfTestsPassing) {
@@ -37,18 +35,11 @@ public class GraderIntegrationTestAssertions {
         return new Condition<>() {
             @Override
             public boolean matches(String value) {
-                String[] testCases = getSeparateTests(value);
+                String regex = "- Property test \"" + testName + "\" failed:\n\\{.*" + testName;
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(value);
 
-                for (String testCase : testCases) {
-                    String regex = "Property test \"" + testName + "\" failed:.*(-)+jqwik(-)+.*";
-                    Pattern pattern = Pattern.compile(regex, Pattern.DOTALL);
-                    Matcher matcher = pattern.matcher(testCase);
-
-                    if (matcher.find()) {
-                        return true;
-                    }
-                }
-                return false;
+                return matcher.find();
             }
         };
     }
