@@ -14,7 +14,7 @@ public class GraderIntegrationTestAssertions {
                 String regex = "--- JUnit execution\\n" + numberOfTestsPassing + "\\/\\d+ passed";
                 Pattern pattern = Pattern.compile(regex);
                 Matcher matcher = pattern.matcher(value);
-                return matcher.lookingAt();
+                return matcher.find();
             }
         };
     }
@@ -26,8 +26,74 @@ public class GraderIntegrationTestAssertions {
                 String regex = "--- JUnit execution\\n\\d+\\/" + numberOfTests + " passed";
                 Pattern pattern = Pattern.compile(regex);
                 Matcher matcher = pattern.matcher(value);
-                return matcher.lookingAt();
+                return matcher.find();
             }
         };
     }
+
+    public static Condition<String> compilationFailure() {
+        return new Condition<>() {
+            @Override
+            public boolean matches(String value) {
+                String regex = "--- Compilation\\nFailure\\n\\nSee the compilation errors below:";
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(value);
+                return matcher.find();
+            }
+        };
+    }
+
+    public static Condition<String> compilationSuccess() {
+        return new Condition<>() {
+            @Override
+            public boolean matches(String value) {
+                String regex = "--- Compilation\\nSuccess";
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(value);
+                return matcher.find();
+            }
+        };
+    }
+
+    public static Condition<String> compilationErrorOnLine(int lineNumber) {
+        return new Condition<>() {
+            @Override
+            public boolean matches(String value) {
+                String regex = "- line " + lineNumber + ":\\s";
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(value);
+                return matcher.find();
+            }
+        };
+    }
+
+    public static Condition<String> compilationErrorType(String errorType) {
+        return new Condition<>() {
+            @Override
+            public boolean matches(String value) {
+                String regex = "- line \\d+:\\n  " + errorType;
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(value);
+                return matcher.find();
+            }
+        };
+    }
+
+    public static Condition<String> compilationErrorMoreTimes(String errorType, int times) {
+        return new Condition<>() {
+            @Override
+            public boolean matches(String value) {
+                String regex = "- line \\d+:\\n  " + errorType;
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(value);
+                int count = 0;
+                while (matcher.find()) {
+                    count++;
+                }
+
+                return count == times;
+            }
+        };
+    }
+
 }
