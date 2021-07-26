@@ -7,16 +7,21 @@ import nl.tudelft.cse1110.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.platform.engine.support.descriptor.DirectorySource;
+import org.pitest.mutationtest.tooling.DirectorySourceLocator;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static nl.tudelft.cse1110.ResourceUtils.resourceFolder;
 import static org.apache.commons.io.FileUtils.copyURLToFile;
@@ -64,8 +69,8 @@ public abstract class GraderIntegrationTestBase {
     }
 
 
-    public String run(List<ExecutionStep> plan, CheckScript codeCheckerScript, String fixtureId) {
-        copyFixture(fixtureId);
+    public String run(List<ExecutionStep> plan, CheckScript codeCheckerScript, String libraryFile, String solutionFile) {
+        copyFiles(libraryFile, solutionFile);
 
         DefaultConfiguration cfg = new DefaultConfiguration(
                 workDir.toString(),
@@ -82,16 +87,24 @@ public abstract class GraderIntegrationTestBase {
         return result.buildEndUserResult();
     }
 
-    protected void copyFixture(String fixtureId) {
+
+    protected void copyFiles(String libraryFile, String solutionFile) {
         try {
-            String dirWithFixture = resourceFolder("/grader/fixtures/" + fixtureId);
+
+            String dirWithLibrary = resourceFolder("/grader/fixtures/Library/");
+            String dirWithSolution = resourceFolder("/grader/fixtures/Solution/");
+            File library = FileUtils.getFile(new File(dirWithLibrary),  libraryFile + ".java");
+            File solution = FileUtils.getFile(new File(dirWithSolution), solutionFile + ".java");
+
             String dirToCopy = workDir.toString();
 
-            FileUtils.copyDirectory(new File(dirWithFixture), new File(dirToCopy));
+            FileUtils.copyFileToDirectory(library, new File(dirToCopy));
+            FileUtils.copyFileToDirectory(solution, new File(dirToCopy));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
+
 
     private static String getLibDirectory() {
         String libPath = resourceFolder("/grader/libs");

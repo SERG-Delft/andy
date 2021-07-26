@@ -10,12 +10,12 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class GraderSmokeTest extends GraderIntegrationTestBase {
 
-    @Test
-    void smoke() {
-        String result = run(justTests(), noScript(), "smoke");
-        assertThat(result)
-                .has(numberOfJUnitTestsPassing(31))
-                .has(totalNumberOfJUnitTests(31));
-    }
+//    @Test
+//    void smoke() {
+//        String result = run(justTests(), noScript(), "smoke");
+//        assertThat(result)
+//                .has(numberOfJUnitTestsPassing(31))
+//                .has(totalNumberOfJUnitTests(31));
+//    }
 
 }
