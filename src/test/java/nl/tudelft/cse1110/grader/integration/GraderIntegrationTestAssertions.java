@@ -31,6 +31,32 @@ public class GraderIntegrationTestAssertions {
         };
     }
 
+    public static Condition<String> propertyTestFailing(String testName) {
+        return new Condition<>() {
+            @Override
+            public boolean matches(String value) {
+                String regex = "- Property test \"" + testName + "\" failed:\n\\{.*" + testName;
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(value);
+
+                return matcher.find();
+            }
+        };
+    }
+
+    public static Condition<String> parameterizedTestFailing(String testName, int testCaseNumber) {
+        return new Condition<>() {
+            @Override
+            public boolean matches(String value) {
+                String regex = "- Parameterized test \"" + testName + "\", test case #" + testCaseNumber + " failed:";
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(value);
+
+                return matcher.find();
+            }
+        };
+    }
+
     public static Condition<String> compilationFailure() {
         return new Condition<>() {
             @Override
@@ -50,6 +76,7 @@ public class GraderIntegrationTestAssertions {
                 String regex = "--- Compilation\\nSuccess";
                 Pattern pattern = Pattern.compile(regex);
                 Matcher matcher = pattern.matcher(value);
+
                 return matcher.find();
             }
         };
@@ -95,5 +122,4 @@ public class GraderIntegrationTestAssertions {
             }
         };
     }
-
 }

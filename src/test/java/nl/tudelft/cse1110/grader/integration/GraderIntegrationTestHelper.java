@@ -22,5 +22,4 @@ public class GraderIntegrationTestHelper {
     public static List<ExecutionStep> justCompilation() {
         return Arrays.asList(new CompilationStep());
     }
-
 }
