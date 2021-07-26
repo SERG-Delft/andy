@@ -8,24 +8,24 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class GraderCompilationTest extends GraderIntegrationTestBase {
 
 
+//    @Test
+//    void compilationFailure() {
+//        String result = run(justCompilation(), noScript(), "ArrayUtilsIsSortedLibrary", "ArrayUtilsIsSortedWithCompilationError");
+//        assertThat(result)
+//                .has(GraderIntegrationTestAssertions.compilationFailure())
+//                .has(GraderIntegrationTestAssertions.compilationErrorOnLine(29))
+//                .has(GraderIntegrationTestAssertions.compilationErrorType("not a statement"))
+//                .has(GraderIntegrationTestAssertions.compilationErrorType("';' expected"));
+//    }
+
+
     @Test
-    void compilationFailure() {
-        String result = run(justCompilation(), noScript(), "ArrayUtilsIsSortedLibrary", "ArrayUtilsIsSortedWithCompilationError");
+    void compilationSuccess() {
+        String result = run(justCompilation(), noScript(), "ListUtilsLibrary", "ListUtilsCompilationSuccess");
         assertThat(result)
-                .has(GraderIntegrationTestAssertions.compilationFailure())
-                .has(GraderIntegrationTestAssertions.compilationErrorOnLine(29))
-                .has(GraderIntegrationTestAssertions.compilationErrorType("not a statement"))
-                .has(GraderIntegrationTestAssertions.compilationErrorType("';' expected"));
+                .has(GraderIntegrationTestAssertions.compilationSuccess());
     }
 
-
-//    @Test
-//    void compilationSuccess() {
-//        String result = run(justCompilation(), noScript(), "compilation/success");
-//        assertThat(result)
-//                .has(GraderIntegrationTestAssertions.compilationSuccess());
-//    }
-//
 //
 //    @Test
 //    void compilationDifferentFailures() {
