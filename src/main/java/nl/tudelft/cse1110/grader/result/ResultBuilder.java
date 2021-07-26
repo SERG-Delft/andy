@@ -2,6 +2,7 @@ package nl.tudelft.cse1110.grader.result;
 
 import nl.tudelft.cse1110.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
+import nl.tudelft.cse1110.grader.util.ImportUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.platform.engine.TestTag;
 import org.junit.platform.engine.UniqueId;
@@ -31,15 +32,19 @@ public class ResultBuilder {
     }
 
     public void compilationFail(List<Diagnostic<? extends JavaFileObject>> diagnostics) {
-        l("--- Compilation\nFailure\n\nSee the compilation errors below:");
-        for (Diagnostic diagnostic : diagnostics) {
-            if (diagnostic.getKind() == ERROR) {
-                l(String.format("- line %d:\n  %s",
+        ImportUtils.dictionarySetup();
+        l("We could not compile your code. See the compilation errors below:");
+        for(Diagnostic diagnostic: diagnostics) {
+            if(diagnostic.getKind() == ERROR) {
+                l(String.format("- line %d: %s",
                         diagnostic.getLineNumber(),
                         diagnostic.getMessage(null)));
+
+                Optional<String> importLog = ImportUtils.checkMissingImport(diagnostic.getMessage(null));
+                importLog.ifPresent(this::l);
             }
-            failed();
         }
+        failed();
     }
 
     public void logFinish(ExecutionStep step) {
