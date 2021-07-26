@@ -17,8 +17,6 @@ public class GraderJUnitMockitoTest extends GraderIntegrationTestBase {
 
         String result = run(justTests(), noScript(), "junit/mockitoMethodNotInvoked");  // 2/3 normal @Tests passing
 
-        System.out.println(result);
-
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(2))
                 .has(totalNumberOfJUnitTests(3))
@@ -34,8 +32,6 @@ public class GraderJUnitMockitoTest extends GraderIntegrationTestBase {
     void stubbingNonMockClass() {
 
         String result = run(justTests(), noScript(), "junit/misusingMockitoStubs");  // 2/3 normal @Tests passing
-
-        System.out.println(result);
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(2))

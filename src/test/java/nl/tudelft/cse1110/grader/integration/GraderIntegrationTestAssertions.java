@@ -62,6 +62,20 @@ public class GraderIntegrationTestAssertions {
     }
 
 
+    public static Condition<String> errorMessage(String errorMessage) {
+        return new Condition<>() {
+            @Override
+            public boolean matches(String value) {
+                String regex = errorMessage;
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(value);
+                return matcher.find();
+            }
+        };
+    }
+
+
+
 
     public static Condition<String> failingParameterizedTestName(String testName) {
         return new Condition<>() {

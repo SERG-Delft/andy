@@ -19,8 +19,6 @@ public class GraderJUnitParameterizedTest extends GraderIntegrationTestBase {
 
         String result = run(justTests(), noScript(), "junit/singleParameterizedTestFails");  // 4/5 parameterized test cases
 
-        System.out.println(result);
-
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(4))
                 .has(totalNumberOfJUnitTests(5))
@@ -37,8 +35,6 @@ public class GraderJUnitParameterizedTest extends GraderIntegrationTestBase {
     void moreParameterizedTestsFail() {
 
         String result = run(justTests(), noScript(), "junit/moreParameterizedTestsFail");  // 11/14 parameterized test cases
-
-        System.out.println(result);
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(11))
@@ -58,8 +54,6 @@ public class GraderJUnitParameterizedTest extends GraderIntegrationTestBase {
     void allParameterizedTestsFail() {
 
         String result = run(justTests(), noScript(), "junit/allParameterizedTestsFail");  // 0/6 parameterized test cases
-
-        System.out.println(result);
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(0))
@@ -81,8 +75,6 @@ public class GraderJUnitParameterizedTest extends GraderIntegrationTestBase {
 
         String result = run(justTests(), noScript(), "junit/helperMethodInTest");  // 26/26 parameterized test cases
 
-        System.out.println(result);
-
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(26))
                 .has(totalNumberOfJUnitTests(26));
@@ -98,8 +90,6 @@ public class GraderJUnitParameterizedTest extends GraderIntegrationTestBase {
     void exceptionThrownByTest() {
 
         String result = run(justTests(), noScript(), "junit/exceptionThrownByTest");  // 0/5 parameterized test cases
-
-        System.out.println(result);
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(0))

@@ -16,12 +16,8 @@ public class GraderJUnitTest extends GraderIntegrationTestBase {
     @Test
     void allTestsPassing() {            // 4/4 normal @Tests passing
 
-        // We only run JUnit tests (no PiTest/JaCoCo) and no checks (SingleCheck, OrCheck, AndCheck...)
         String result = run(justTests(), noScript(), "junit/passing");
 
-        System.out.println(result);
-
-        // in GraderIntegrationTestAssertions we are extending assertJ by creating these custom assertions
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(4))
                 .has(totalNumberOfJUnitTests(4));
@@ -36,8 +32,6 @@ public class GraderJUnitTest extends GraderIntegrationTestBase {
 
         String result = run(justTests(), noScript(), "junit/noTests");
 
-        System.out.println(result);
-
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(0))
                 .has(totalNumberOfJUnitTests(0));
@@ -49,8 +43,6 @@ public class GraderJUnitTest extends GraderIntegrationTestBase {
     void singleTestFailing() {
 
         String result = run(justTests(), noScript(), "junit/singleTestFailing");  // 3/4 normal @Tests passing
-
-        System.out.println(result);
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(3))
@@ -66,8 +58,6 @@ public class GraderJUnitTest extends GraderIntegrationTestBase {
     void allTestsFailing() {
 
         String result = run(justTests(), noScript(), "junit/failing");
-
-        System.out.println(result);
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(0))
@@ -86,8 +76,6 @@ public class GraderJUnitTest extends GraderIntegrationTestBase {
 
         String result = run(justTests(), noScript(), "junit/someFailing");
 
-        System.out.println(result);
-
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(1))
                 .has(totalNumberOfJUnitTests(4))
@@ -100,40 +88,11 @@ public class GraderJUnitTest extends GraderIntegrationTestBase {
 
 
 
-    @Test
-    void inappropriateAssertionsShouldPass() {
-
-        String result = run(justTests(), noScript(), "junit/inappropriateAssertions");  // 3/3 normal @Tests passing
-
-        System.out.println(result);
-
-        assertThat(result)
-                .has(numberOfJUnitTestsPassing(3))
-                .has(totalNumberOfJUnitTests(3));
-    }
-
-
-    @Test
-    void noAssertionsInTestShouldPass() {
-
-        String result = run(justTests(), noScript(), "junit/noAssertions");  // 3/3 normal @Tests passing
-
-        System.out.println(result);
-
-        assertThat(result)
-                .has(numberOfJUnitTestsPassing(3))
-                .has(totalNumberOfJUnitTests(3));
-
-    }
-
-
     // test class contains normal @Tests, parameterized tests and pbt.
     @Test
     void ThreeDifferentTestTypesUsed() {
 
         String result = run(justTests(), noScript(), "junit/differentTestTypes");  // 5/5 @Tests passing
-
-        System.out.println(result);
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(5))
