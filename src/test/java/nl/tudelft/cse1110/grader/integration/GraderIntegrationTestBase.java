@@ -96,6 +96,9 @@ public abstract class GraderIntegrationTestBase {
             File library = FileUtils.getFile(new File(dirWithLibrary),  libraryFile + ".java");
             File solution = FileUtils.getFile(new File(dirWithSolution), solutionFile + ".java");
 
+            library.renameTo(new File("Library.java"));
+            solution.renameTo(new File("Solution.java"));
+
             String dirToCopy = workDir.toString();
 
             FileUtils.copyFileToDirectory(library, new File(dirToCopy));
