@@ -10,12 +10,14 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class GraderJQWikTest extends GraderIntegrationTestBase {
 
+
     @Test
     void testSimplePropertyTest() {
         String result = run(justTests(), noScript(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfSimpleJqwikError");
         assertThat(result)
                 .has(propertyTestFailing("testNoElementInWholeArray"));
     }
+
 
     @Test
     void testMultiplePropertyTestsFailing() {
@@ -24,6 +26,7 @@ public class GraderJQWikTest extends GraderIntegrationTestBase {
                 .has(propertyTestFailing("testNoElementInWholeArray"))
                 .has(propertyTestFailing("testValueInArrayUniqueElements"));
     }
+
 
     @Test
     void testMultiplePropertyWithParameterizedTests() {
@@ -34,11 +37,13 @@ public class GraderJQWikTest extends GraderIntegrationTestBase {
                 .has(parameterizedTestFailing("test", 6));
     }
 
+
     @Test
     void testMessageOtherThanAssertionError() {
         String result = run(justTests(), noScript(), "NumberUtilsAddPositiveLibrary", "NumberUtilsAddPositiveJqwikException");
         assertThat(result)
                 .has(propertyTestFailing("testAddition"));
     }
+
 
 }

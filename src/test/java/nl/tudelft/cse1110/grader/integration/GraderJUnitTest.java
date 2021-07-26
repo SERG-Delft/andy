@@ -8,10 +8,10 @@ import static nl.tudelft.cse1110.grader.integration.GraderIntegrationTestHelper.
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
-
 // This integration test class handles normal @Tests, which all compile. (the final test combines normal @Tests, parameterized tests and pbt though)
 // See GraderCompilationTest for integration tests for compilation errors.
 public class GraderJUnitTest extends GraderIntegrationTestBase {
+
 
     @Test
     void allTestsPassing() {            // 4/4 normal @Tests passing
@@ -85,7 +85,6 @@ public class GraderJUnitTest extends GraderIntegrationTestBase {
                 .has(errorType("AssertionFailedError"));
 
     }
-
 
 
     // test class contains normal @Tests, parameterized tests and pbt.

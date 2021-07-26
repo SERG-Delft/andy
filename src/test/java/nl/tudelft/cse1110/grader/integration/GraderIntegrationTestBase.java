@@ -28,11 +28,13 @@ import static org.apache.commons.io.FileUtils.copyURLToFile;
 
 public abstract class GraderIntegrationTestBase {
 
+
     @TempDir
     protected Path reportDir;
 
     @TempDir
     protected Path workDir;
+
 
     // the URL list of the required libraries
     static Set<String> requiredLibraries = new HashSet<>() {{
@@ -52,6 +54,7 @@ public abstract class GraderIntegrationTestBase {
         add("https://repo1.maven.org/maven2/net/jqwik/jqwik-api/1.5.3/jqwik-api-1.5.3.jar");
         add("https://repo1.maven.org/maven2/net/jqwik/jqwik-engine/1.5.3/jqwik-engine-1.5.3.jar");
     }};
+
 
     private static void downloadLibsIfNeeded(String libDirectory) {
         try {

@@ -10,7 +10,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class GraderJUnitMockitoTest extends GraderIntegrationTestBase {
 
 
-
     // error in @Test1: instead of completeTodo(), addTodo() should be invoked.
     @Test
     void methodVerifiedButNotInvoked() {
@@ -26,7 +25,6 @@ public class GraderJUnitMockitoTest extends GraderIntegrationTestBase {
     }
 
 
-
     // error in @Test 3: student is misusing Mockito stubs in line 48: TheQueue q is not a mock, thus its methods cannot be stubbed!
     @Test
     void stubbingNonMockClass() {
@@ -39,8 +37,6 @@ public class GraderJUnitMockitoTest extends GraderIntegrationTestBase {
                 .has(failingTestName("getNextReturnsFirst"))
                 .has(errorType("mockito.exceptions.misusing"));
     }
-
-
 
 
 }

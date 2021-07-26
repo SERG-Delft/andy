@@ -12,7 +12,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class GraderJUnitParameterizedTest extends GraderIntegrationTestBase {
 
 
-
     // in test case 3, the expected boolean should be flipped.
     @Test
     void singleParameterizedTestFails() {
@@ -26,7 +25,6 @@ public class GraderJUnitParameterizedTest extends GraderIntegrationTestBase {
                 .has(parameterizedTestCaseNumber(3))
                 .has(errorType("AssertionFailedError"));
     }
-
 
 
     // in test cases 1 and 2 of "validTest", 22 and 44 should be numbers in (20, 200) divisible by 20.
@@ -45,7 +43,6 @@ public class GraderJUnitParameterizedTest extends GraderIntegrationTestBase {
                 .has(parameterizedTestCaseNumber(2))
                 .has(errorType("AssertionFailedError"));
     }
-
 
 
 
@@ -81,7 +78,6 @@ public class GraderJUnitParameterizedTest extends GraderIntegrationTestBase {
     }
 
 
-
     // student reversed the 2 method names "invalidInputs" and "validInputs",
     //  raising exceptions since the number of arguments passed is incorrect, and thus making all tests fail.
     // in "invalidInputs", an exception is expected, whereas this is not being thrown by the method.
@@ -103,8 +99,6 @@ public class GraderJUnitParameterizedTest extends GraderIntegrationTestBase {
                 .has(errorType("AssertionError"))
                 .has(errorMessage("Expecting code to raise a throwable."));
     }
-
-
 
 
 }
