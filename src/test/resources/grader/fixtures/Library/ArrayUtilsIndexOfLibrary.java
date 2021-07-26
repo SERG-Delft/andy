@@ -1,8 +1,8 @@
 package delft;
 
-class ArrayUtilsMultiple {
+class ArrayUtils {
 
-    private ArrayUtilsMultiple() {
+    private ArrayUtils() {
         // Empty constructor
     }
 
