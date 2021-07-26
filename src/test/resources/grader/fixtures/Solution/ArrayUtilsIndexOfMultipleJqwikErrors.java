@@ -37,7 +37,7 @@ class ArrayUtilsMultipleTests {
             @ForAll("inexistentElement") int valueToFind) {
 
         int[] arr = convertListToArray(numbers);
-        assertEquals(2, ArrayUtilsMultiple.indexOf(arr, valueToFind, 0));
+        assertEquals(2, ArrayUtils.indexOf(arr, valueToFind, 0));
     }
 
     //test when the element is in the array after or at start, unique elements only
@@ -48,7 +48,7 @@ class ArrayUtilsMultipleTests {
         int index = input.index;
         int start = input.start;
         int[] arr = convertListToArray(numbers);
-        assertEquals(index, ArrayUtilsMultiple.indexOf(arr, numbers.get(index), start));
+        assertEquals(index, ArrayUtils.indexOf(arr, numbers.get(index), start));
     }
 
     @Provide

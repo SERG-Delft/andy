@@ -22,7 +22,6 @@ public class GraderIntegrationTestAssertions {
     }
 
 
-
     public static Condition<String> totalNumberOfJUnitTests(int numberOfTests) {
         return new Condition<>() {
             @Override
@@ -34,6 +33,7 @@ public class GraderIntegrationTestAssertions {
             }
         };
     }
+
 
     public static Condition<String> propertyTestFailing(String testName) {
         return new Condition<>() {
@@ -48,6 +48,7 @@ public class GraderIntegrationTestAssertions {
         };
     }
 
+
     public static Condition<String> parameterizedTestFailing(String testName, int testCaseNumber) {
         return new Condition<>() {
             @Override
@@ -61,6 +62,7 @@ public class GraderIntegrationTestAssertions {
         };
     }
 
+
     public static Condition<String> compilationFailure() {
         return new Condition<>() {
             @Override
@@ -72,6 +74,7 @@ public class GraderIntegrationTestAssertions {
             }
         };
     }
+
 
     public static Condition<String> compilationSuccess() {
         return new Condition<>() {
@@ -86,6 +89,7 @@ public class GraderIntegrationTestAssertions {
         };
     }
 
+
     public static Condition<String> compilationErrorOnLine(int lineNumber) {
         return new Condition<>() {
             @Override
@@ -98,6 +102,7 @@ public class GraderIntegrationTestAssertions {
         };
     }
 
+
     public static Condition<String> compilationErrorType(String errorType) {
         return new Condition<>() {
             @Override
@@ -109,6 +114,7 @@ public class GraderIntegrationTestAssertions {
             }
         };
     }
+
 
     public static Condition<String> compilationErrorMoreTimes(String errorType, int times) {
         return new Condition<>() {
@@ -167,8 +173,6 @@ public class GraderIntegrationTestAssertions {
     }
 
 
-
-
     public static Condition<String> failingParameterizedTestName(String testName) {
         return new Condition<>() {
             @Override
@@ -219,11 +223,5 @@ public class GraderIntegrationTestAssertions {
             }
         };
     }
-
-
-
-
-
-
 
 }

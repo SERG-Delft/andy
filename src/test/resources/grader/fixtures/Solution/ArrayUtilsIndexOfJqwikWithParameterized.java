@@ -37,7 +37,7 @@ class ArrayUtilsTests {
             @ForAll("inexistentElement") int valueToFind) {
 
         int[] arr = convertListToArray(numbers);
-        assertEquals(2, ArrayUtilsWithParameterized.indexOf(arr, valueToFind, 0));
+        assertEquals(2, ArrayUtils.indexOf(arr, valueToFind, 0));
     }
 
     //test when the element is in the array after or at start, unique elements only
@@ -48,7 +48,7 @@ class ArrayUtilsTests {
         int index = input.index;
         int start = input.start;
         int[] arr = convertListToArray(numbers);
-        assertEquals(index, ArrayUtilsWithParameterized.indexOf(arr, numbers.get(index), start));
+        assertEquals(index, ArrayUtils.indexOf(arr, numbers.get(index), start));
     }
 
     @Provide
@@ -71,7 +71,7 @@ class ArrayUtilsTests {
     @ParameterizedTest
     @MethodSource("generator")
     void test(int[] arr, int valueToFind, int startIndex, int expected) {
-        assertEquals(expected, ArrayUtilsWithParameterized.indexOf(arr, valueToFind, startIndex));
+        assertEquals(expected, ArrayUtils.indexOf(arr, valueToFind, startIndex));
     }
 
     static Stream<Arguments> generator() {

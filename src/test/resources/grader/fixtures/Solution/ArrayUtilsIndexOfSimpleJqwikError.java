@@ -29,7 +29,7 @@ class ArrayUtilsSimpleTests {
             @ForAll("inexistentElement") int valueToFind) {
 
         int[] arr = convertListToArray(numbers);
-        assertEquals(2, ArrayUtilsSimple.indexOf(arr, valueToFind, 0));
+        assertEquals(2, ArrayUtils.indexOf(arr, valueToFind, 0));
     }
 
     @Provide

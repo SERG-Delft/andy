@@ -12,12 +12,11 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class GraderJUnitParameterizedTest extends GraderIntegrationTestBase {
 
 
-
     // in test case 3, the expected boolean should be flipped.
     @Test
     void singleParameterizedTestFails() {
 
-        String result = run(justTests(), noScript(), "junit/singleParameterizedTestFails");  // 4/5 parameterized test cases
+        String result = run(justTests(), noScript(), "PassingGradeLibrary", "PassingGradeSingleParameterizedTestFails");  // 4/5 parameterized test cases
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(4))
@@ -28,13 +27,12 @@ public class GraderJUnitParameterizedTest extends GraderIntegrationTestBase {
     }
 
 
-
     // in test cases 1 and 2 of "validTest", 22 and 44 should be numbers in (20, 200) divisible by 20.
     // in test case 1 of "invalidTest", 40 should not be divisible by 20.
     @Test
     void moreParameterizedTestsFail() {
 
-        String result = run(justTests(), noScript(), "junit/moreParameterizedTestsFail");  // 11/14 parameterized test cases
+        String result = run(justTests(), noScript(), "ATMLibrary", "ATMMoreParameterizedTestsFail");  // 11/14 parameterized test cases
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(11))
@@ -48,12 +46,11 @@ public class GraderJUnitParameterizedTest extends GraderIntegrationTestBase {
 
 
 
-
     // Student accidentally passed the first argument (int result) as 3rd argument, making all tests fail.
     @Test
     void allParameterizedTestsFail() {
 
-        String result = run(justTests(), noScript(), "junit/allParameterizedTestsFail");  // 0/6 parameterized test cases
+        String result = run(justTests(), noScript(), "TwoIntegersLibrary", "TwoIntegersAllParameterizedTestsFail");  // 0/6 parameterized test cases
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(0))
@@ -73,13 +70,12 @@ public class GraderJUnitParameterizedTest extends GraderIntegrationTestBase {
     @Test
     void helperMethodInTestShouldPass() {
 
-        String result = run(justTests(), noScript(), "junit/helperMethodInTest");  // 26/26 parameterized test cases
+        String result = run(justTests(), noScript(), "PiecewiseLibrary", "PiecewiseHelperInTest");  // 26/26 parameterized test cases
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(26))
                 .has(totalNumberOfJUnitTests(26));
     }
-
 
 
     // student reversed the 2 method names "invalidInputs" and "validInputs",
@@ -89,7 +85,7 @@ public class GraderJUnitParameterizedTest extends GraderIntegrationTestBase {
     @Test
     void exceptionThrownByTest() {
 
-        String result = run(justTests(), noScript(), "junit/exceptionThrownByTest");  // 0/5 parameterized test cases
+        String result = run(justTests(), noScript(), "MScAdmisisionLibrary", "MScAdmissionParameterizedTestThrowsException");  // 0/5 parameterized test cases
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(0))
@@ -103,29 +99,6 @@ public class GraderJUnitParameterizedTest extends GraderIntegrationTestBase {
                 .has(errorType("AssertionError"))
                 .has(errorMessage("Expecting code to raise a throwable."));
     }
-
-
-    @Test
-    void exceptionNotThrownByMethod() {
-
-        String result = run(justTests(), noScript(), "junit/exceptionThrownByTest");  // 0/5 parameterized test cases
-
-        System.out.println(result);
-
-        assertThat(result)
-                .has(numberOfJUnitTestsPassing(0))
-                .has(totalNumberOfJUnitTests(5))
-                .has(failingParameterizedTestName("validInputs"))
-                .has(failingParameterizedTestName("invalidInputs"))
-                .has(parameterizedTestCaseNumber(1))
-                .has(parameterizedTestCaseNumber(2))
-                .has(parameterizedTestCaseNumber(3))
-                .has(errorType("ParameterResolutionException"))
-                .has(errorType("AssertionError"))
-                .has(errorMessage("Expecting code to raise a throwable."));
-
-    }
-
 
 
 }

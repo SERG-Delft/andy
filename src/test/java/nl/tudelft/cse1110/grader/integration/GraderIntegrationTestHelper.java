@@ -11,15 +11,19 @@ import java.util.List;
 
 public class GraderIntegrationTestHelper {
 
+
     public static List<ExecutionStep> justTests() {
         return Arrays.asList(new RunJUnitTests());
     }
+
 
     public static CheckScript noScript() {
         return new CheckScript(Collections.emptyList());
     }
 
+
     public static List<ExecutionStep> justCompilation() {
         return Arrays.asList(new CompilationStep());
     }
+
 }

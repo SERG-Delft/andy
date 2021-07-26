@@ -12,7 +12,7 @@ public class GraderSmokeTest extends GraderIntegrationTestBase {
 
     @Test
     void smoke() {
-        String result = run(justTests(), noScript(), "smoke");
+        String result = run(justTests(), noScript(), "NumberUtilsAddLibrary", "NumberUtilsAddSmoke");
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(31))
                 .has(totalNumberOfJUnitTests(31));
