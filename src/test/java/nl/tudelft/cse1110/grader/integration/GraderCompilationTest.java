@@ -26,17 +26,17 @@ public class GraderCompilationTest extends GraderIntegrationTestBase {
                 .has(GraderIntegrationTestAssertions.compilationSuccess());
     }
 
-//
-//    @Test
-//    void compilationDifferentFailures() {
-//        String result = run(justCompilation(), noScript(), "compilation/differentFailures");
-//        assertThat(result)
-//                .has(GraderIntegrationTestAssertions.compilationFailure())
-//                .has(GraderIntegrationTestAssertions.compilationErrorOnLine(21))
-//                .has(GraderIntegrationTestAssertions.compilationErrorOnLine(25))
-//                .has(GraderIntegrationTestAssertions.compilationErrorOnLine(33))
-//                .has(GraderIntegrationTestAssertions.compilationErrorMoreTimes("cannot find symbol", 3));
-//    }
+
+    @Test
+    void compilationDifferentFailures() {
+        String result = run(justCompilation(), noScript(), "MathArraysLibrary","MathArraysDifferentCompilationErrors");
+        assertThat(result)
+                .has(GraderIntegrationTestAssertions.compilationFailure())
+                .has(GraderIntegrationTestAssertions.compilationErrorOnLine(21))
+                .has(GraderIntegrationTestAssertions.compilationErrorOnLine(25))
+                .has(GraderIntegrationTestAssertions.compilationErrorOnLine(33))
+                .has(GraderIntegrationTestAssertions.compilationErrorMoreTimes("cannot find symbol", 3));
+    }
 
 
 }
