@@ -17,12 +17,16 @@ import org.jacoco.core.instr.Instrumenter;
 import org.jacoco.core.runtime.IRuntime;
 import org.jacoco.core.runtime.LoggerRuntime;
 import org.jacoco.core.runtime.RuntimeData;
+import org.jacoco.report.DirectorySourceFileLocator;
+import org.jacoco.report.FileMultiReportOutput;
+import org.jacoco.report.IReportVisitor;
 import org.junit.platform.launcher.Launcher;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
 import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
 import org.junit.platform.launcher.core.LauncherFactory;
 import org.junit.platform.launcher.listeners.SummaryGeneratingListener;
 import org.junit.platform.launcher.listeners.TestExecutionSummary;
+import org.jacoco.report.html.HTMLFormatter;
 
 import java.io.*;
 import java.net.URL;
@@ -68,12 +72,7 @@ public class RunJacoco implements ExecutionStep {
             final RuntimeData data = new RuntimeData();
             runtime.startup(data);
 
-            Launcher launcher = LauncherFactory.create();
-
-            LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
-                    .selectors(selectClass(testClass))
-                    .build();
-            launcher.execute(request);
+            this.executeJUnitTests(testClass);
 
             final ExecutionDataStore executionData = new ExecutionDataStore();
             final SessionInfoStore sessionInfos = new SessionInfoStore();
@@ -92,6 +91,8 @@ public class RunJacoco implements ExecutionStep {
             Collection<IClassCoverage> coverages = coverageBuilder.getClasses();
             result.logJacoco(coverages);
 
+            this.generateReport(cfg, testClass, coverageBuilder, executionData, sessionInfos);
+
             Thread.currentThread().setContextClassLoader(oldClassLoader);
         } catch (Exception ex) {
             result.genericFailure(this, ex);
@@ -101,6 +102,31 @@ public class RunJacoco implements ExecutionStep {
     private InputStream getClassAsInputStream(String filepath, String className) throws IOException {
         String pathToClass = filepath + "/" + className.replace('.', '/') + ".class";
         return new FileInputStream(pathToClass);
+    }
+
+    private void executeJUnitTests(String testClass) {
+        Launcher launcher = LauncherFactory.create();
+
+        LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
+                .selectors(selectClass(testClass))
+                .build();
+        launcher.execute(request);
+    }
+
+    private void generateReport(Configuration cfg, String testClass,
+                                CoverageBuilder coverageBuilder, ExecutionDataStore executionData,
+                                SessionInfoStore sessionInfos) throws IOException {
+        final HTMLFormatter htmlFormatter = new HTMLFormatter();
+        final IReportVisitor visitor = htmlFormatter
+                .createVisitor(new FileMultiReportOutput(new File(cfg.getReportsDir())));
+
+        visitor.visitInfo(sessionInfos.getInfos(),
+                executionData.getContents());
+
+        visitor.visitBundle(coverageBuilder.getBundle(testClass),
+                new DirectorySourceFileLocator(new File(cfg.getWorkingDir()), "utf-8", 4));
+
+        visitor.visitEnd();
     }
 
     private static class InstrumentClassLoader extends ClassLoader {
