@@ -41,10 +41,6 @@ public class RunJacoco implements ExecutionStep {
 
     @Override
     public void execute(Configuration cfg, ResultBuilder result) {
-        this.backup(cfg, result);
-    }
-
-    void backup(Configuration cfg, ResultBuilder result) {
         try {
             String testClass = ClassUtils.getTestClass(cfg.getNewClassNames());
             List<String> otherClasses = ClassUtils.allClassesButTestingOnes(cfg.getNewClassNames());
@@ -53,20 +49,11 @@ public class RunJacoco implements ExecutionStep {
 
             final Instrumenter instr = new Instrumenter(runtime);
 
+            ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
             InstrumentClassLoader classLoader = new InstrumentClassLoader();
 
-            InputStream originalSolution = this.getClassAsInputStream(cfg.getWorkingDir(), testClass);
-            classLoader.addDefinition(testClass, originalSolution.readAllBytes());
-            originalSolution.close();
+            this.instrumentAllInDirectory(instr, new File(cfg.getWorkingDir()), classLoader, "");
 
-            for (String libraryClass : otherClasses) {
-                InputStream originalLibrary = this.getClassAsInputStream(cfg.getWorkingDir(), libraryClass);
-                final byte[] instrumentedLibrary = instr.instrument(originalLibrary, libraryClass);
-                originalLibrary.close();
-                classLoader.addDefinition(libraryClass, instrumentedLibrary);
-            }
-
-            ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
             Thread.currentThread().setContextClassLoader(classLoader);
 
             final RuntimeData data = new RuntimeData();
@@ -96,6 +83,27 @@ public class RunJacoco implements ExecutionStep {
             Thread.currentThread().setContextClassLoader(oldClassLoader);
         } catch (Exception ex) {
             result.genericFailure(this, ex);
+        }
+    }
+
+    private void instrumentAllInDirectory(Instrumenter instr, File directory, InstrumentClassLoader classLoader, String start) throws IOException {
+        File[] files = directory.listFiles();
+
+        for (File file : files) {
+            if (file.isFile() && file.getName().endsWith(".class")) {
+                InputStream originalLibrary = new FileInputStream(file.getAbsolutePath());
+                String className = start + "." + file.getName().replace(".class", "").replace('/', '.');
+
+                final byte[] instrumentedLibrary = instr.instrument(originalLibrary, className);
+                originalLibrary.close();
+                classLoader.addDefinition(className, instrumentedLibrary);
+            } else if (file.isDirectory()) {
+                if (!start.equals("")) {
+                    instrumentAllInDirectory(instr, file, classLoader, start + "." + file.getName());
+                } else {
+                    instrumentAllInDirectory(instr, file, classLoader, file.getName());
+                }
+            }
         }
     }
 
