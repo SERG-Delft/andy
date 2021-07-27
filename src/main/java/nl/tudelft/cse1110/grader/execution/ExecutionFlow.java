@@ -21,9 +21,15 @@ public class ExecutionFlow {
     }
 
     public void run() {
+        ReplaceClassloaderStep replaceClassloaderStep = null;
         result.logStart();
         do {
             ExecutionStep currentStep = steps.pollFirst();
+
+            if (currentStep instanceof ReplaceClassloaderStep) {
+                replaceClassloaderStep = (ReplaceClassloaderStep) currentStep;
+            }
+
             result.logStart(currentStep);
             try {
                 currentStep.execute(cfg, result);
@@ -33,6 +39,10 @@ public class ExecutionFlow {
             result.logFinish(currentStep);
         } while(!steps.isEmpty() && !result.isFailed());
         result.logFinish();
+
+        if (replaceClassloaderStep != null) {
+            replaceClassloaderStep.resetClassLoader();
+        }
     }
 
     public static ExecutionFlow examMode(Configuration cfg, ResultBuilder result) {

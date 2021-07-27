@@ -16,6 +16,8 @@ import java.util.List;
  * with the compiled classes.
  */
 public class ReplaceClassloaderStep implements ExecutionStep {
+    private ClassLoader parentClassLoader;
+
     @Override
     public void execute(Configuration cfg, ResultBuilder result) {
         try {
@@ -29,8 +31,8 @@ public class ReplaceClassloaderStep implements ExecutionStep {
     private void replaceClassloader(String pathToAddToClassloader) {
         List<Path> additionalClasspathEntries = Arrays.asList(Paths.get(pathToAddToClassloader));
         URL[] urls = additionalClasspathEntries.stream().map(this::toURL).toArray(URL[]::new);
-        ClassLoader parentClassLoader = Thread.currentThread().getContextClassLoader();
-        ClassLoader customClassLoader = URLClassLoader.newInstance(urls, parentClassLoader);
+        this.parentClassLoader = Thread.currentThread().getContextClassLoader();
+        ClassLoader customClassLoader = URLClassLoader.newInstance(urls, this.parentClassLoader);
 
         Thread.currentThread().setContextClassLoader(customClassLoader);
     }
@@ -42,6 +44,10 @@ public class ReplaceClassloaderStep implements ExecutionStep {
         catch (Exception ex) {
             throw new RuntimeException("Invalid classpath entry: " + path, ex);
         }
+    }
+
+    public void resetClassLoader() {
+        Thread.currentThread().setContextClassLoader(this.parentClassLoader);
     }
 
 
