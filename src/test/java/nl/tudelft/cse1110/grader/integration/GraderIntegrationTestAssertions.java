@@ -224,4 +224,43 @@ public class GraderIntegrationTestAssertions {
         };
     }
 
+    public static Condition<String> linesCovered(int numberOfLinesCovered) {
+        return new Condition<>() {
+
+            @Override
+            public boolean matches(String value) {
+                String regex = "Line coverage: " + numberOfLinesCovered + "/\\d+";
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(value);
+                return matcher.find();
+            }
+        };
+    }
+
+    public static Condition<String> instructionsCovered(int numberOfInstructionsCovered) {
+        return new Condition<>() {
+
+            @Override
+            public boolean matches(String value) {
+                String regex = "Instruction coverage: " + numberOfInstructionsCovered + "/\\d+";
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(value);
+                return matcher.find();
+            }
+        };
+    }
+
+    public static Condition<String> branchesCovered(int numberOfBranchesCovered) {
+        return new Condition<>() {
+
+            @Override
+            public boolean matches(String value) {
+                String regex = "Branch coverage: " + numberOfBranchesCovered + "/\\d+";
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(value);
+                return matcher.find();
+            }
+        };
+    }
+
 }
