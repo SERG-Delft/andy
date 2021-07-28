@@ -42,11 +42,17 @@ public class RunJacoco implements ExecutionStep {
     @Override
     public void execute(Configuration cfg, ResultBuilder result) {
         try {
+            /**Get the names of the test class and the library classes.*/
             String testClass = ClassUtils.getTestClass(cfg.getNewClassNames());
             List<String> otherClasses = ClassUtils.allClassesButTestingOnes(cfg.getNewClassNames());
 
             final IRuntime runtime = new LoggerRuntime();
 
+            /**We need to instrument the SUT to be able to generate a JaCoCo report.
+             * We then override the non-instrumented classes with the instrumented ones using
+             * a custom class loader. For the sake of simplicity we instrument all classes using a custom method.
+             * We also save the old class loader to restore it later.
+             */
             final Instrumenter instr = new Instrumenter(runtime);
 
             ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
@@ -59,8 +65,12 @@ public class RunJacoco implements ExecutionStep {
             final RuntimeData data = new RuntimeData();
             runtime.startup(data);
 
+            /**After instrumenting classes, we need to execute them.*/
             this.executeJUnitTests(testClass);
 
+            /**After instrumenting and running, we can continue to reporting.
+             * This will generate the JaCoCo report.
+             */
             final ExecutionDataStore executionData = new ExecutionDataStore();
             final SessionInfoStore sessionInfos = new SessionInfoStore();
             data.collect(executionData, sessionInfos, false);
@@ -69,6 +79,7 @@ public class RunJacoco implements ExecutionStep {
             final CoverageBuilder coverageBuilder = new CoverageBuilder();
             final Analyzer analyzer = new Analyzer(executionData, coverageBuilder);
 
+            /**We analyze all the library classes. These classes will have a coverage report.*/
             for (String libraryClass : otherClasses) {
                 InputStream originalLibrary = this.getClassAsInputStream(cfg.getWorkingDir(), libraryClass);
                 analyzer.analyzeClass(originalLibrary, libraryClass);
@@ -78,14 +89,17 @@ public class RunJacoco implements ExecutionStep {
             Collection<IClassCoverage> coverages = coverageBuilder.getClasses();
             result.logJacoco(coverages);
 
+            /**Generate an HTML report.*/
             this.generateReport(cfg, testClass, coverageBuilder, executionData, sessionInfos);
 
+            /**Restore the old class loader to get the non-instrumented classes back.*/
             Thread.currentThread().setContextClassLoader(oldClassLoader);
         } catch (Exception ex) {
             result.genericFailure(this, ex);
         }
     }
 
+    /**Instrument all classes in a directory.*/
     private void instrumentAllInDirectory(Instrumenter instr, File directory, InstrumentClassLoader classLoader, String start) throws IOException {
         File[] files = directory.listFiles();
 
@@ -107,11 +121,13 @@ public class RunJacoco implements ExecutionStep {
         }
     }
 
+    /**Get a compiled Java class as an InputStream.*/
     private InputStream getClassAsInputStream(String filepath, String className) throws IOException {
         String pathToClass = filepath + "/" + className.replace('.', '/') + ".class";
         return new FileInputStream(pathToClass);
     }
 
+    /**Run the specified JUnit test file*/
     private void executeJUnitTests(String testClass) {
         Launcher launcher = LauncherFactory.create();
 
@@ -121,6 +137,7 @@ public class RunJacoco implements ExecutionStep {
         launcher.execute(request);
     }
 
+    /**Generate an HTML report from JaCoCo based on the coverage analysis of our classes.*/
     private void generateReport(Configuration cfg, String testClass,
                                 CoverageBuilder coverageBuilder, ExecutionDataStore executionData,
                                 SessionInfoStore sessionInfos) throws IOException {
@@ -137,6 +154,7 @@ public class RunJacoco implements ExecutionStep {
         visitor.visitEnd();
     }
 
+    /**Custom class loader that will contain the instrumented classes.*/
     private static class InstrumentClassLoader extends ClassLoader {
         private final Map<String, byte[]> definitions = new HashMap<>();
 
