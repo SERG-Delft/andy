@@ -45,7 +45,7 @@ public class RunJUnitTests implements ExecutionStep {
 
             TestExecutionSummary summary = listener.getSummary();
 
-            if (!testsCheck(cfg) || summary.getTestsFoundCount() == 0) {
+            if (noTestsCheck(cfg) || summary.getTestsFoundCount() == 0) {
                 result.noTestsFound();
             } else {
                 result.logJUnitRun(summary);
@@ -65,7 +65,7 @@ public class RunJUnitTests implements ExecutionStep {
      * @return false if no tests found, true if test(s) found
      * @throws IOException throws an IOException
      */
-    public boolean testsCheck(Configuration cfg) throws IOException {
+    public boolean noTestsCheck(Configuration cfg) throws IOException {
         List<String> listOfFiles = filePathsAsString(getAllJavaFiles(cfg.getWorkingDir()));
         int count = 0;
 
@@ -82,9 +82,9 @@ public class RunJUnitTests implements ExecutionStep {
         }
 
         if (count == 0) {
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
 }
