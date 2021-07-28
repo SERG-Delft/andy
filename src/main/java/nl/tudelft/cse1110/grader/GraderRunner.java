@@ -15,14 +15,22 @@ public class GraderRunner {
         // for now, only testing purposes
         CheckScript codeCheckerScript = new CheckScript(Arrays.asList(new SingleCheck("TestMethodsHaveAssertions")));
 
+//        DefaultConfiguration cfg = new DefaultConfiguration(
+//            "/Users/mauricioaniche/education/cse1110/test/code",
+//            "/Users/mauricioaniche/education/cse1110/test/libs",
+//            "/Users/mauricioaniche/education/cse1110/test/reports",
+//                codeCheckerScript
+//        );
+
         DefaultConfiguration cfg = new DefaultConfiguration(
-            "/Users/mauricioaniche/education/cse1110/test/code",
-            "/Users/mauricioaniche/education/cse1110/test/libs",
-            "/Users/mauricioaniche/education/cse1110/test/reports",
+                "C:/Users/nadin/education/cse1110/test/code",
+                "C:/Users/nadin/education/cse1110/test/libs",
+                "C:/Users/nadin/education/cse1110/test/reports",
                 codeCheckerScript
         );
 
-        ResultBuilder result = new ResultBuilder();
+        ResultBuilder result = new ResultBuilder(true,
+                0.25f, 0.25f, 0.25f, 0.25f);
 
         ExecutionFlow flow = ExecutionFlow.fullMode(cfg, result);
         flow.run();

@@ -33,6 +33,7 @@ public class ExecutionFlow {
             result.logFinish(currentStep);
         } while(!steps.isEmpty() && !result.isFailed());
         result.logFinish();
+        result.logFinalGrade();
     }
 
     public static ExecutionFlow examMode(Configuration cfg, ResultBuilder result) {

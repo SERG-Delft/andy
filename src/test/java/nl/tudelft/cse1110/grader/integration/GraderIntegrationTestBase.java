@@ -82,7 +82,8 @@ public abstract class GraderIntegrationTestBase {
                 codeCheckerScript
         );
 
-        ResultBuilder result = new ResultBuilder();
+        ResultBuilder result = new ResultBuilder(true,
+                0.25f, 0.25f, 0.25f, 0.25f);
 
         ExecutionFlow flow = ExecutionFlow.asSteps(plan, cfg, result);
         flow.run();

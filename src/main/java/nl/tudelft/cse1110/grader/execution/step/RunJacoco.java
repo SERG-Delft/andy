@@ -7,7 +7,7 @@ import nl.tudelft.cse1110.grader.result.ResultBuilder;
 public class RunJacoco implements ExecutionStep {
     @Override
     public void execute(Configuration cfg, ResultBuilder result) {
-
-
+        result.logJacoco();
+        result.logSpecTests();  // debug purposes for now
     }
 }

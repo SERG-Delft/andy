@@ -2,6 +2,7 @@ package nl.tudelft.cse1110.grader.result;
 
 import nl.tudelft.cse1110.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
+import org.jacoco.core.analysis.IClassCoverage;
 import org.jetbrains.annotations.NotNull;
 import org.junit.platform.engine.TestTag;
 import org.junit.platform.engine.UniqueId;
@@ -25,6 +26,20 @@ public class ResultBuilder {
     private StringBuilder result = new StringBuilder();
     private StringBuilder debug = new StringBuilder();
     private Map<TestIdentifier, ReportEntry> additionalReports = new HashMap<>();
+    private GradeCalculator gradeCalculator;
+    private GradeValues gradeValues;
+
+
+    // these parameters we wanna configure
+    public ResultBuilder(boolean failureGives0, float branchCoverageWeight, float mutationCoverageWeight,
+                  float specTestsWeight, float codeChecksWeight) {
+
+        gradeValues = new GradeValues(failureGives0, branchCoverageWeight,
+                mutationCoverageWeight, specTestsWeight, codeChecksWeight);  // scores are passed as pipeline goes
+        gradeCalculator = new GradeCalculator(gradeValues);
+
+    }
+
 
     public void compilationSuccess() {
         l("--- Compilation\nSuccess");
@@ -136,6 +151,7 @@ public class ResultBuilder {
 
     private void failed() {
         this.failed = true;
+        gradeCalculator.failed();
     }
 
     public String buildEndUserResult() {
@@ -162,19 +178,55 @@ public class ResultBuilder {
         return LocalDateTime.now().toString();
     }
 
+    public void logFinalGrade() {
+
+        String gradeWithDecimals = String.valueOf(gradeCalculator.calculateFinalGrade() * 100);
+        String grade = gradeWithDecimals.split("\\.")[0];
+
+        l("--- Final grade");
+        l(grade + "/100");
+    }
+
     public void logPitest(CombinedStatistics stats) {
         l("--- Mutation testing");
         l(String.format("%d/%d killed", stats.getMutationStatistics().getTotalDetectedMutations(), stats.getMutationStatistics().getTotalMutations()));
+
+        gradeValues.setDetectedMutations((int)(stats.getMutationStatistics().getTotalDetectedMutations()));
+        gradeValues.setTotalMutations((int)(stats.getMutationStatistics().getTotalMutations()));
+
         if(stats.getMutationStatistics().getTotalDetectedMutations() < stats.getMutationStatistics().getTotalMutations())
             l("See attached report.");
+    }
+
+    public void logCodeChecks(CheckScript script) {
+        l("--- Code checks");
+        l(script.generateReport());
+
+        // TODO: are these the right values we wanna pass for checksPassed and totalChecks?
+        int weightedChecks = script.getChecks().stream().mapToInt(check -> check.getFinalResult() ? check.getWeight() : 0).sum();
+        int sumOfWeights =  script.getChecks().stream().mapToInt(c -> c.getWeight()).sum();
+
+        gradeValues.setChecksPassed(weightedChecks);
+        gradeValues.setTotalChecks(sumOfWeights);
+    }
+
+
+    // being implemented by Jan
+    public void logJacoco() {
+        gradeValues.setCoveredBranches(100);
+        gradeValues.setTotalBranches(100);
+    }
+
+
+
+    // TODO: not implemented yet
+    public void logSpecTests() {
+        gradeValues.setSpecTestsPassed(100);
+        gradeValues.setTotalSpecTests(100);
     }
 
     public boolean isFailed() {
         return failed;
     }
 
-    public void logCodeChecks(CheckScript script) {
-        l("--- Code checks");
-        l(script.generateReport());
-    }
 }
