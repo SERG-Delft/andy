@@ -42,6 +42,11 @@ public class ResultBuilder {
         }
     }
 
+    public void noTestsFound() {
+        l("--- Warning\nWe do not see any tests. Are you sure you wrote them?");
+        failed();
+    }
+
     public void logFinish(ExecutionStep step) {
         d(String.format("%s finished at %s", step.getClass().getSimpleName(), now()));
     }
