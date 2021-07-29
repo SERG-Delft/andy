@@ -43,7 +43,7 @@ public class GradeCalculator {
      */
     public float branchCoverageScore(int coveredBranches, int totalBranches) {
         try {
-            return coveredBranches / totalBranches;
+            return (float)coveredBranches / totalBranches;
         } catch (ArithmeticException e) {
             System.out.println(e.getMessage());
             System.out.println("Total number of branches configured is 0!");
@@ -59,7 +59,7 @@ public class GradeCalculator {
      */
     public float mutationCoverageScore(int detectedMutations, int totalMutations) {
         try {
-            return detectedMutations / totalMutations;
+            return (float)detectedMutations / totalMutations;
         } catch (ArithmeticException e) {
             System.out.println(e.getMessage());
             System.out.println("Total number of mutations configured is 0!");
@@ -76,7 +76,7 @@ public class GradeCalculator {
     // TODO: to be implemented, ResultBuilder will pass 100/100 for now when running our program
     public float specTestsScore(int specTestsPassed, int totalSpecTests) {
         try {
-            return specTestsPassed / totalSpecTests;
+            return (float)specTestsPassed / totalSpecTests;
         } catch (ArithmeticException e) {
             System.out.println(e.getMessage());
             System.out.println("Total number of spec tests configured is 0!");
@@ -92,7 +92,7 @@ public class GradeCalculator {
      */
     public float codeChecksScore(int checksPassed, int totalChecks) {
         try {
-            return checksPassed / totalChecks;
+            return (float)checksPassed / totalChecks;
         } catch (ArithmeticException e) {
             System.out.println(e.getMessage());
             System.out.println("Total number of checks configured is 0!");
