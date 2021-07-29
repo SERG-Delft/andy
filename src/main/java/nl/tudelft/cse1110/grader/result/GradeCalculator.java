@@ -17,22 +17,22 @@ public class GradeCalculator {
     }
 
 
-    /** ResultBuilder calls this method, to output final grade to student
-     * @return - final grade between 0 and 1
-     *   * In logFinalGrade(), we round up from 0.5 to output in format 85/100 e.g.
+    /** ResultBuilder calls this method in logFinalGrade(), to output final grade to student in format 85/100 e.g.
+     * @return - final grade as int between 0 and 100
+     *  We round up from 0.5
      */
-    public float calculateFinalGrade() {
+    public int calculateFinalGrade() {
 
         if (gradeValues.getFailureGives0() && failed) {
             return 0;
         }
 
-        float finalGrade = branchCoverageScore(gradeValues.getCoveredBranches(), gradeValues.getTotalBranches()) * gradeValues.getBranchCoverageWeight()
+        float finalDecimalGrade = branchCoverageScore(gradeValues.getCoveredBranches(), gradeValues.getTotalBranches()) * gradeValues.getBranchCoverageWeight()
                 + mutationCoverageScore(gradeValues.getDetectedMutations(), gradeValues.getTotalMutations()) * gradeValues.getMutationCoverageWeight()
                 + specTestsScore(gradeValues.getSpecTestsPassed(), gradeValues.getTotalSpecTests()) * gradeValues.getSpecTestsWeight()
                 + codeChecksScore(gradeValues.getChecksPassed(), gradeValues.getTotalChecks()) * gradeValues.getCodeChecksWeight();
 
-        return finalGrade;
+        return Math.round(finalDecimalGrade * 100);
     }
 
 
@@ -42,13 +42,10 @@ public class GradeCalculator {
      * @return branch coverage score between 0 and 1
      */
     public float branchCoverageScore(int coveredBranches, int totalBranches) {
-        try {
-            return (float)coveredBranches / totalBranches;
-        } catch (ArithmeticException e) {
-            System.out.println(e.getMessage());
-            System.out.println("Total number of branches configured is 0!");
-            return 0;
+        if (totalBranches == 0) {
+            return 1f;   // full points assigned
         }
+        return (float)coveredBranches / totalBranches;
     }
 
 
@@ -58,13 +55,10 @@ public class GradeCalculator {
      * @return mutation coverage score between 0 and 1
      */
     public float mutationCoverageScore(int detectedMutations, int totalMutations) {
-        try {
-            return (float)detectedMutations / totalMutations;
-        } catch (ArithmeticException e) {
-            System.out.println(e.getMessage());
-            System.out.println("Total number of mutations configured is 0!");
-            return 0;
+        if (totalMutations == 0) {
+            return 1f;   // full points assigned
         }
+        return (float)detectedMutations / totalMutations;
     }
 
 
@@ -73,15 +67,12 @@ public class GradeCalculator {
      * @param totalSpecTests - total no. of spec tests
      * @return score based on spec tests
      */
-    // TODO: to be implemented, ResultBuilder will pass 100/100 for now when running our program
+    // TODO: to be implemented
     public float specTestsScore(int specTestsPassed, int totalSpecTests) {
-        try {
-            return (float)specTestsPassed / totalSpecTests;
-        } catch (ArithmeticException e) {
-            System.out.println(e.getMessage());
-            System.out.println("Total number of spec tests configured is 0!");
-            return 0;
+        if (totalSpecTests == 0) {
+            return 1f;   // full points assigned
         }
+        return (float)specTestsPassed / totalSpecTests;
     }
 
 
@@ -91,13 +82,10 @@ public class GradeCalculator {
      * @return score based on code checks
      */
     public float codeChecksScore(int checksPassed, int totalChecks) {
-        try {
-            return (float)checksPassed / totalChecks;
-        } catch (ArithmeticException e) {
-            System.out.println(e.getMessage());
-            System.out.println("Total number of checks configured is 0!");
-            return 0;
+        if (totalChecks == 0) {
+            return 1f;   // full points assigned
         }
+        return (float)checksPassed / totalChecks;
     }
 
 
@@ -106,6 +94,10 @@ public class GradeCalculator {
      */
     public void failed() {
         failed = true;
+    }
+
+    public boolean isFailed() {
+        return failed;
     }
 
 

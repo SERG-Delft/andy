@@ -181,7 +181,7 @@ public class ResultBuilder {
     public void logFinalGrade() {
 
         // rounding up from 0.5...
-        String grade = String.valueOf(Math.round(gradeCalculator.calculateFinalGrade() * 100.0));
+        String grade = String.valueOf(gradeCalculator.calculateFinalGrade());
 
         l("--- Final grade");
         l(grade + "/100");
