@@ -17,7 +17,10 @@ public class GradeCalculator {
     }
 
 
-    // ResultBuilder calls this method, to output final grade to student
+    /** ResultBuilder calls this method, to output final grade to student
+     * @return - final grade between 0 and 1
+     *   * In logFinalGrade(), we round up from 0.5 to output in format 85/100 e.g.
+     */
     public float calculateFinalGrade() {
 
         if (gradeValues.getFailureGives0() && failed) {
@@ -33,27 +36,74 @@ public class GradeCalculator {
     }
 
 
+    /**
+     * @param coveredBranches - no. of branches covered by test class
+     * @param totalBranches - total no. of branches in source code under test
+     * @return branch coverage score between 0 and 1
+     */
     public float branchCoverageScore(int coveredBranches, int totalBranches) {
-        return coveredBranches / totalBranches;
+        try {
+            return coveredBranches / totalBranches;
+        } catch (ArithmeticException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Total number of branches configured is 0!");
+            return 0;
+        }
     }
 
 
+    /**
+     * @param detectedMutations - no. of mutants killed
+     * @param totalMutations - total no. of mutants generated
+     * @return mutation coverage score between 0 and 1
+     */
     public float mutationCoverageScore(int detectedMutations, int totalMutations) {
-        return detectedMutations / totalMutations;
+        try {
+            return detectedMutations / totalMutations;
+        } catch (ArithmeticException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Total number of mutations configured is 0!");
+            return 0;
+        }
     }
 
 
+    /**
+     * @param specTestsPassed - no. of spec tests passed
+     * @param totalSpecTests - total no. of spec tests
+     * @return score based on spec tests
+     */
     // TODO: to be implemented, ResultBuilder will pass 100/100 for now when running our program
     public float specTestsScore(int specTestsPassed, int totalSpecTests) {
-        return specTestsPassed / totalSpecTests;
+        try {
+            return specTestsPassed / totalSpecTests;
+        } catch (ArithmeticException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Total number of spec tests configured is 0!");
+            return 0;
+        }
     }
 
 
+    /**
+     * @param checksPassed - no. of checks passed
+     * @param totalChecks - total no. of checks
+     * @return score based on code checks
+     */
     public float codeChecksScore(int checksPassed, int totalChecks) {
-        return checksPassed/totalChecks;
+        try {
+            return checksPassed / totalChecks;
+        } catch (ArithmeticException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Total number of checks configured is 0!");
+            return 0;
+        }
     }
 
 
+    /**
+     * If one of the test fails, field "failed" is set to true.
+     */
     public void failed() {
         failed = true;
     }

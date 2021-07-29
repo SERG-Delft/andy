@@ -32,7 +32,7 @@ public class ResultBuilder {
 
     // these parameters we wanna configure
     public ResultBuilder(boolean failureGives0, float branchCoverageWeight, float mutationCoverageWeight,
-                  float specTestsWeight, float codeChecksWeight) {
+                         float specTestsWeight, float codeChecksWeight) {
 
         gradeValues = new GradeValues(failureGives0, branchCoverageWeight,
                 mutationCoverageWeight, specTestsWeight, codeChecksWeight);  // scores are passed as pipeline goes
@@ -180,8 +180,8 @@ public class ResultBuilder {
 
     public void logFinalGrade() {
 
-        String gradeWithDecimals = String.valueOf(gradeCalculator.calculateFinalGrade() * 100);
-        String grade = gradeWithDecimals.split("\\.")[0];
+        // rounding up from 0.5...
+        String grade = String.valueOf(Math.round(gradeCalculator.calculateFinalGrade()) * 100.0);
 
         l("--- Final grade");
         l(grade + "/100");
