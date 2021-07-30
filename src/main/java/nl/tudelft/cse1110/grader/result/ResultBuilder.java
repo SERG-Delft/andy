@@ -1,5 +1,7 @@
 package nl.tudelft.cse1110.grader.result;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import nl.tudelft.cse1110.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.grader.util.ImportUtils;
@@ -24,6 +26,7 @@ public class ResultBuilder {
     private StringBuilder result = new StringBuilder();
     private StringBuilder debug = new StringBuilder();
     private Map<TestIdentifier, ReportEntry> additionalReports = new HashMap<>();
+    private static String highlightColour = "red";
 
     public void compilationSuccess() {
         l("--- Compilation\nSuccess");
@@ -42,6 +45,32 @@ public class ResultBuilder {
             }
         }
         failed();
+        generateHighlights(diagnostics);
+    }
+
+    private void generateHighlights(List<Diagnostic<? extends JavaFileObject>> diagnostics) {
+
+        JSONObject obj = new JSONObject();
+        JSONArray errors = new JSONArray();
+        for(Diagnostic diagnostic: diagnostics){
+            if(diagnostic.getKind() == ERROR){
+                JSONObject temp = new JSONObject();
+                temp.put("Line", diagnostic.getLineNumber());
+                temp.put("Color", highlightColour);
+                temp.put("Message", diagnostic.getMessage(null));
+                errors.add(temp);
+            }
+        }
+        obj.put("Error List", errors);
+
+        try{
+            //TEMPORARY JUST TO CHECK
+            FileWriter fw = new FileWriter("highlight.json");
+            fw.write(obj.toJSONString());
+            fw.close();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     public void logFinish(ExecutionStep step) {
