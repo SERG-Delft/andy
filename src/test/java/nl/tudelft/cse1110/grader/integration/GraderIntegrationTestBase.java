@@ -110,7 +110,6 @@ public abstract class GraderIntegrationTestBase {
 
 
     private static String getLibDirectory() {
-        //String libPath = resourceFolder("/grader/libs");
         String libPath = permanentResourceFolder();
         downloadLibsIfNeeded(libPath);
         return libPath;

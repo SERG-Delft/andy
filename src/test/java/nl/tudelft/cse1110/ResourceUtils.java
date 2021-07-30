@@ -1,12 +1,19 @@
 package nl.tudelft.cse1110;
 
+import java.io.File;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class ResourceUtils {
 
-    public static final String LIBS_FOLDER_PATH = "\\grader\\src\\test\\resources\\grader\\libs\\";
+    public static final String LIBS_FOLDER_PATH = File.separator + "grader"
+                                                + File.separator + "src"
+                                                + File.separator + "test"
+                                                + File.separator + "resources"
+                                                + File.separator + "grader"
+                                                + File.separator + "libs"
+                                                + File.separator;
 
     public static String resourceFolder(String path) {
         try {
