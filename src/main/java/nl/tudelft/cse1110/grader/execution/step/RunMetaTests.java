@@ -16,14 +16,11 @@ public class RunMetaTests implements ExecutionStep {
 
     @Override
     public void execute(Configuration cfg, ResultBuilder result) {
-        if (cfg.getMetaDir() == null) {
-            return;
-        }
 
         int score = 0;
 
         try {
-            List<File> metaClasses = FileUtils.getMetaFiles(cfg.getMetaDir());
+            List<File> metaClasses = FileUtils.getMetaFiles(cfg.getWorkingDir());
             String solutionFile = FileUtils.findSolution(cfg.getWorkingDir());
             List<String> failures = new ArrayList<>();
 
@@ -59,7 +56,7 @@ public class RunMetaTests implements ExecutionStep {
                 if (testsSucceeded < testsRan) {
                     score++;
                 } else {
-                    failures.add(metaClass.getName().replace(".java", ""));
+                    failures.add(metaClass.getName().replace(".txt", ""));
                 }
 
                 FileUtils.deleteDirectory(tempDir);

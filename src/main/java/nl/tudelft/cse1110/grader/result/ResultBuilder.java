@@ -214,7 +214,7 @@ public class ResultBuilder {
 
     public void logMetaTests(int score, int totalTests, List<String> failures) {
         l("\n--- Meta tests");
-        l(String.format("%d/%d", score, totalTests));
+        l(String.format("%d/%d passed", score, totalTests));
         for (String failure : failures) {
             l(String.format("Meta test: %s FAILED", failure));
         }

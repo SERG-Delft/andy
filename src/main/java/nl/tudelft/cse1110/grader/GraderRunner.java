@@ -20,7 +20,6 @@ public class GraderRunner {
             "E:\\TUDelft\\CSE1110 Summer\\code",
             "E:\\TUDelft\\CSE1110 Summer\\libs",
             "E:\\TUDelft\\CSE1110 Summer\\reports",
-                "E:\\TUDelft\\CSE1110 Summer\\meta",
                 codeCheckerScript
         );
 

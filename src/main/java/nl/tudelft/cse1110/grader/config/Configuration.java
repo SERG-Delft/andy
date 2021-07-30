@@ -14,6 +14,4 @@ public interface Configuration {
     List<String> getNewClassNames();
 
     String getMainLibraryClass();
-
-    String getMetaDir();
 }
