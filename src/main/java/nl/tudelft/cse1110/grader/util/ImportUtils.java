@@ -10,7 +10,7 @@ public class ImportUtils {
     private static HashMap<String, String> importDictionary = new HashMap<>();
 
     //Will remake this as a .txt / .csv file
-    public static void dictionarySetup() {
+    static {
         importDictionary.put("List", "import java.util.List;");
         importDictionary.put("Collection", "import java.util.Collection;");
         importDictionary.put("stream", "import java.util.stream.*;");

@@ -11,11 +11,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ImportUtilsTest {
 
-    @BeforeEach
-    void init(){
-        ImportUtils.dictionarySetup();
-    }
-
     @Test
     void checkMissingImport_InDictionary() {
         String diagnostic = "cannot find symbol\n" +

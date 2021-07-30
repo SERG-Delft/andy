@@ -4,10 +4,8 @@ import nl.tudelft.cse1110.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.grader.util.ImportUtils;
 import org.jetbrains.annotations.NotNull;
-import org.junit.platform.engine.TestTag;
 import org.junit.platform.engine.UniqueId;
 import org.junit.platform.engine.reporting.ReportEntry;
-import org.junit.platform.launcher.TestExecutionListener;
 import org.junit.platform.launcher.TestIdentifier;
 import org.junit.platform.launcher.listeners.TestExecutionSummary;
 import org.pitest.mutationtest.tooling.CombinedStatistics;
@@ -32,7 +30,6 @@ public class ResultBuilder {
     }
 
     public void compilationFail(List<Diagnostic<? extends JavaFileObject>> diagnostics) {
-        ImportUtils.dictionarySetup();
         l("We could not compile your code. See the compilation errors below:");
         for(Diagnostic diagnostic: diagnostics) {
             if(diagnostic.getKind() == ERROR) {
