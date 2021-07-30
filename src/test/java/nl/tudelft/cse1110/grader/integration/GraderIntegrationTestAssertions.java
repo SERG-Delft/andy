@@ -67,7 +67,7 @@ public class GraderIntegrationTestAssertions {
         return new Condition<>() {
             @Override
             public boolean matches(String value) {
-                String regex = "--- Compilation\\nFailure\\n\\nSee the compilation errors below:";
+                String regex = "We could not compile your code\\. See the compilation errors below:";
                 Pattern pattern = Pattern.compile(regex);
                 Matcher matcher = pattern.matcher(value);
                 return matcher.find();
@@ -107,7 +107,7 @@ public class GraderIntegrationTestAssertions {
         return new Condition<>() {
             @Override
             public boolean matches(String value) {
-                String regex = "- line \\d+:\\n  " + errorType;
+                String regex = "- line \\d+: " + errorType;
                 Pattern pattern = Pattern.compile(regex);
                 Matcher matcher = pattern.matcher(value);
                 return matcher.find();
@@ -120,7 +120,7 @@ public class GraderIntegrationTestAssertions {
         return new Condition<>() {
             @Override
             public boolean matches(String value) {
-                String regex = "- line \\d+:\\n  " + errorType;
+                String regex = "- line \\d+: " + errorType;
                 Pattern pattern = Pattern.compile(regex);
                 Matcher matcher = pattern.matcher(value);
                 int count = 0;
