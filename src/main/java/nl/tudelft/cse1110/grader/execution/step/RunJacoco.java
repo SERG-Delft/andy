@@ -82,7 +82,7 @@ public class RunJacoco implements ExecutionStep {
 
             /**We analyze all the library classes. These classes will have a coverage report.*/
             for (String libraryClass : otherClasses) {
-                InputStream originalLibrary = this.getClassAsInputStream(cfg.getWorkingDir(), libraryClass);
+                InputStream originalLibrary = ClassUtils.getClassAsInputStream(cfg.getWorkingDir(), libraryClass);
                 analyzer.analyzeClass(originalLibrary, libraryClass);
                 originalLibrary.close();
             }
@@ -120,12 +120,6 @@ public class RunJacoco implements ExecutionStep {
                 }
             }
         }
-    }
-
-    /**Get a compiled Java class as an InputStream.*/
-    private InputStream getClassAsInputStream(String filepath, String className) throws IOException {
-        String pathToClass = filepath + "/" + className.replace('.', '/') + ".class";
-        return new FileInputStream(pathToClass);
     }
 
     /**Run the specified JUnit test file*/

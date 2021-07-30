@@ -3,6 +3,9 @@ package nl.tudelft.cse1110.grader.util;
 import org.apache.commons.lang3.SystemUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -108,6 +111,17 @@ public class ClassUtils {
         throw new RuntimeException("Package name not found!");
     }
 
+    /**Returns the wanted class as an input stream.
+     *
+     * @param filepath - the filepath to the folder containing the class
+     * @param className - the name of the class to get as an input stream
+     * @return - the class as an input stream
+     * @throws IOException - if the class cannot be found
+     */
+    public static InputStream getClassAsInputStream(String filepath, String className) throws IOException {
+        String pathToClass = filepath + "/" + className.replace('.', '/') + ".class";
+        return new FileInputStream(pathToClass);
+    }
 
     /**
      * The method determines what class separator should be used depending on the OS.
