@@ -1,5 +1,6 @@
 package nl.tudelft.cse1110.grader.result;
 
+import org.apache.log4j.lf5.util.ResourceUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import nl.tudelft.cse1110.codechecker.engine.CheckScript;
@@ -15,6 +16,8 @@ import org.pitest.mutationtest.tooling.CombinedStatistics;
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 import java.io.*;
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -63,12 +66,12 @@ public class ResultBuilder {
         }
         obj.put("Error List", errors);
 
-        try{
-            //TEMPORARY JUST TO CHECK
-            FileWriter fw = new FileWriter("highlight.json");
+        try {
+            FileWriter fw = new FileWriter("src/main/java/nl/tudelft/cse1110/grader/result/highlight.json");
             fw.write(obj.toJSONString());
             fw.close();
-        } catch (IOException e){
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }
