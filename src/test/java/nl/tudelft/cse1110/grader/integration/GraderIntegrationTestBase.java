@@ -7,7 +7,7 @@ import nl.tudelft.cse1110.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.grader.execution.step.ReplaceClassloaderStep;
 import nl.tudelft.cse1110.grader.execution.step.RunJacoco;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
-import org.apache.commons.io.FileUtils;
+import nl.tudelft.cse1110.grader.util.FileUtils;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.platform.engine.support.descriptor.DirectorySource;
 import org.pitest.mutationtest.tooling.DirectorySourceLocator;
@@ -94,27 +94,38 @@ public abstract class GraderIntegrationTestBase {
         return result.buildEndUserResult();
     }
 
+    public String run(List<ExecutionStep> plan, CheckScript codeCheckerScript, String libraryFile, String solutionFile, String metaDirectory) {
+        this.copyMetaFiles(metaDirectory);
 
-    protected void copyFiles(String libraryFile, String solutionFile) {
-        try {
-
-            String dirWithLibrary = resourceFolder("/grader/fixtures/Library/");
-            String dirWithSolution = resourceFolder("/grader/fixtures/Solution/");
-            File library = FileUtils.getFile(new File(dirWithLibrary),  libraryFile + ".java");
-            File solution = FileUtils.getFile(new File(dirWithSolution), solutionFile + ".java");
-
-            library.renameTo(new File("Library.java"));
-            solution.renameTo(new File("Solution.java"));
-
-            String dirToCopy = workDir.toString();
-
-            FileUtils.copyFileToDirectory(library, new File(dirToCopy));
-            FileUtils.copyFileToDirectory(solution, new File(dirToCopy));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return this.run(plan, codeCheckerScript, libraryFile, solutionFile);
     }
 
+
+    protected void copyFiles(String libraryFile, String solutionFile) {
+        String dirWithLibrary = resourceFolder("/grader/fixtures/Library/");
+        String dirWithSolution = resourceFolder("/grader/fixtures/Solution/");
+        File library = new File(dirWithLibrary +  libraryFile + ".java");
+        File solution = new File(dirWithSolution + solutionFile + ".java");
+
+        String dirToCopy = workDir.toString();
+
+        File copiedLibrary = FileUtils.copyFile(library.getAbsolutePath(), dirToCopy).toFile();
+        File copiedSolution = FileUtils.copyFile(solution.getAbsolutePath(), dirToCopy).toFile();
+
+        copiedLibrary.renameTo(new File(copiedLibrary.getParentFile() + "/Library.java"));
+        copiedSolution.renameTo(new File(copiedSolution.getParentFile() + "/Solution.java"));
+    }
+
+    private void copyMetaFiles(String metaDirectory) {
+        String dirWithMeta = resourceFolder("/grader/fixtures/Meta/");
+
+        File meta = new File(dirWithMeta + metaDirectory);
+        for (File file : meta.listFiles()) {
+            try {
+                FileUtils.copyFile(file.getAbsolutePath(), workDir.toString());
+            } catch (Exception ex) {}
+        }
+    }
 
     private static String getLibDirectory() {
         String libPath = resourceFolder("/grader/libs");
