@@ -125,22 +125,5 @@ public class ClassUtils {
         return ":";
     }
 
-//    public static String resultBuilderFolder(){
-//
-//        Path path = null;
-//        String fs = File.separator;
-//
-//        try {
-//            path = Path.of(Paths.get(ResultBuilder.class.getResource("/").toURI()).toString());
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        path = Paths.get(path.toString(), "../../../");
-//        path = Paths.get(path.toString(), fs + "grader" + fs + "src" + fs + "main" + fs + "java" + fs + "nl.tudelft.cse1110" + fs );
-//
-//        return path.toString();
-//    }
-
 
 }
