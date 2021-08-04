@@ -107,7 +107,7 @@ public class ResultBuilder {
         }
     }
 
-    public void noTestsFound() {
+    private void noTestsFound() {
         l("--- Warning\nWe do not see any tests. Are you sure you wrote them?");
         failed();
     }
