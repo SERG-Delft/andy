@@ -2,11 +2,11 @@ package nl.tudelft.cse1110.grader.result;
 
 import nl.tudelft.cse1110.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
+import org.jacoco.core.analysis.IClassCoverage;
+import nl.tudelft.cse1110.grader.util.ImportUtils;
 import org.jetbrains.annotations.NotNull;
-import org.junit.platform.engine.TestTag;
 import org.junit.platform.engine.UniqueId;
 import org.junit.platform.engine.reporting.ReportEntry;
-import org.junit.platform.launcher.TestExecutionListener;
 import org.junit.platform.launcher.TestIdentifier;
 import org.junit.platform.launcher.listeners.TestExecutionSummary;
 import org.pitest.mutationtest.tooling.CombinedStatistics;
@@ -31,15 +31,18 @@ public class ResultBuilder {
     }
 
     public void compilationFail(List<Diagnostic<? extends JavaFileObject>> diagnostics) {
-        l("--- Compilation\nFailure\n\nSee the compilation errors below:");
-        for (Diagnostic diagnostic : diagnostics) {
-            if (diagnostic.getKind() == ERROR) {
-                l(String.format("- line %d:\n  %s",
+        l("We could not compile your code. See the compilation errors below:");
+        for(Diagnostic diagnostic: diagnostics) {
+            if(diagnostic.getKind() == ERROR) {
+                l(String.format("- line %d: %s",
                         diagnostic.getLineNumber(),
                         diagnostic.getMessage(null)));
+
+                Optional<String> importLog = ImportUtils.checkMissingImport(diagnostic.getMessage(null));
+                importLog.ifPresent(this::l);
             }
-            failed();
         }
+        failed();
     }
 
     public void logFinish(ExecutionStep step) {
@@ -173,7 +176,7 @@ public class ResultBuilder {
     }
 
     public void logPitest(CombinedStatistics stats) {
-        l("--- Mutation testing");
+        l("\n--- Mutation testing");
         l(String.format("%d/%d killed", stats.getMutationStatistics().getTotalDetectedMutations(), stats.getMutationStatistics().getTotalMutations()));
         if(stats.getMutationStatistics().getTotalDetectedMutations() < stats.getMutationStatistics().getTotalMutations())
             l("See attached report.");
@@ -184,7 +187,25 @@ public class ResultBuilder {
     }
 
     public void logCodeChecks(CheckScript script) {
-        l("--- Code checks");
+        l("\n--- Code checks");
         l(script.generateReport());
+    }
+
+    public void logJacoco(Collection<IClassCoverage> coverages) {
+        l("\n--- JaCoCo coverage");
+
+        int totalCoveredLines = coverages.stream().mapToInt(coverage -> coverage.getLineCounter().getCoveredCount()).sum();
+        int totalLines = coverages.stream().mapToInt(coverage -> coverage.getLineCounter().getTotalCount()).sum();
+
+        int totalCoveredInstructions = coverages.stream().mapToInt(coverage -> coverage.getInstructionCounter().getCoveredCount()).sum();
+        int totalInstructions = coverages.stream().mapToInt(coverage -> coverage.getInstructionCounter().getTotalCount()).sum();
+
+        int totalCoveredBranches = coverages.stream().mapToInt(coverage -> coverage.getBranchCounter().getCoveredCount()).sum();
+        int totalBranches = coverages.stream().mapToInt(coverage -> coverage.getBranchCounter().getTotalCount()).sum();
+
+        l(String.format("Line coverage: %d/%d", totalCoveredLines, totalLines));
+        l(String.format("Instruction coverage: %d/%d", totalCoveredInstructions, totalInstructions));
+        l(String.format("Branch coverage: %d/%d", totalCoveredBranches, totalBranches));
+        l("See the attached report.");
     }
 }

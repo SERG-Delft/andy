@@ -67,7 +67,7 @@ public class GraderIntegrationTestAssertions {
         return new Condition<>() {
             @Override
             public boolean matches(String value) {
-                String regex = "--- Compilation\\nFailure\\n\\nSee the compilation errors below:";
+                String regex = "We could not compile your code\\. See the compilation errors below:";
                 Pattern pattern = Pattern.compile(regex);
                 Matcher matcher = pattern.matcher(value);
                 return matcher.find();
@@ -107,7 +107,7 @@ public class GraderIntegrationTestAssertions {
         return new Condition<>() {
             @Override
             public boolean matches(String value) {
-                String regex = "- line \\d+:\\n  " + errorType;
+                String regex = "- line \\d+: " + errorType;
                 Pattern pattern = Pattern.compile(regex);
                 Matcher matcher = pattern.matcher(value);
                 return matcher.find();
@@ -120,7 +120,7 @@ public class GraderIntegrationTestAssertions {
         return new Condition<>() {
             @Override
             public boolean matches(String value) {
-                String regex = "- line \\d+:\\n  " + errorType;
+                String regex = "- line \\d+: " + errorType;
                 Pattern pattern = Pattern.compile(regex);
                 Matcher matcher = pattern.matcher(value);
                 int count = 0;
@@ -217,6 +217,45 @@ public class GraderIntegrationTestAssertions {
             @Override
             public boolean matches(String value) {
                 String regex = "However, there was exactly 1 interaction with this mock:\n" + invokedMethod;
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(value);
+                return matcher.find();
+            }
+        };
+    }
+
+    public static Condition<String> linesCovered(int numberOfLinesCovered) {
+        return new Condition<>() {
+
+            @Override
+            public boolean matches(String value) {
+                String regex = "Line coverage: " + numberOfLinesCovered + "/\\d+";
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(value);
+                return matcher.find();
+            }
+        };
+    }
+
+    public static Condition<String> instructionsCovered(int numberOfInstructionsCovered) {
+        return new Condition<>() {
+
+            @Override
+            public boolean matches(String value) {
+                String regex = "Instruction coverage: " + numberOfInstructionsCovered + "/\\d+";
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(value);
+                return matcher.find();
+            }
+        };
+    }
+
+    public static Condition<String> branchesCovered(int numberOfBranchesCovered) {
+        return new Condition<>() {
+
+            @Override
+            public boolean matches(String value) {
+                String regex = "Branch coverage: " + numberOfBranchesCovered + "/\\d+";
                 Pattern pattern = Pattern.compile(regex);
                 Matcher matcher = pattern.matcher(value);
                 return matcher.find();
