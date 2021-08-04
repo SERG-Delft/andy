@@ -45,10 +45,4 @@ public class ReplaceClassloaderStep implements ExecutionStep {
             throw new RuntimeException("Invalid classpath entry: " + path, ex);
         }
     }
-
-    public void resetClassLoader() {
-        Thread.currentThread().setContextClassLoader(this.parentClassLoader);
-    }
-
-
 }

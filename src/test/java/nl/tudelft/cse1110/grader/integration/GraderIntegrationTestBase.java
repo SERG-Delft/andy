@@ -86,10 +86,12 @@ public abstract class GraderIntegrationTestBase {
 
         ResultBuilder result = new ResultBuilder();
 
+        ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
+
         ExecutionFlow flow = ExecutionFlow.asSteps(plan, cfg, result);
         flow.run();
 
-        flow.resetClassLoader();
+        Thread.currentThread().setContextClassLoader(oldClassLoader);
 
         return result.buildEndUserResult();
     }

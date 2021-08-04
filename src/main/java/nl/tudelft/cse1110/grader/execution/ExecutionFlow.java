@@ -12,25 +12,18 @@ public class ExecutionFlow {
     private final Configuration cfg;
     private final ResultBuilder result;
     private LinkedList<ExecutionStep> steps;
-    private ReplaceClassloaderStep replaceClassloaderStep;
 
     private ExecutionFlow(List<ExecutionStep> plan, Configuration cfg, ResultBuilder result) {
         this.steps = new LinkedList<>(plan);
         steps.addAll(0, basicSteps());
         this.cfg = cfg;
         this.result = result;
-
-        this.replaceClassloaderStep = null;
     }
 
     public void run() {
         result.logStart();
         do {
             ExecutionStep currentStep = steps.pollFirst();
-
-            if (currentStep instanceof ReplaceClassloaderStep) {
-                this.replaceClassloaderStep = (ReplaceClassloaderStep) currentStep;
-            }
 
             result.logStart(currentStep);
             try {
@@ -68,16 +61,6 @@ public class ExecutionFlow {
                 cfg,
                 result
         );
-    }
-
-    /**Reset the class loader - this needs to happen after every test.
-     * Otherwise when testing, the class loaders will be sequentially added on top of each other.
-     * As a result, if two test classes are called the same, the older one will be used, hence the newer test will fail.
-     */
-    public void resetClassLoader() {
-        if (this.replaceClassloaderStep != null) {
-            this.replaceClassloaderStep.resetClassLoader();
-        }
     }
 
     public static ExecutionFlow justTests(Configuration cfg, ResultBuilder result) {
