@@ -94,15 +94,25 @@ public class ResultBuilder {
     }
 
     public void logJUnitRun(TestExecutionSummary summary) {
-        l("\n--- JUnit execution");
-        l(String.format("%d/%d passed", summary.getTestsSucceededCount(), summary.getTestsFoundCount()));
+        if (summary.getTestsFoundCount() == 0) {
+            noTestsFound();
+        } else {
 
-        for (TestExecutionSummary.Failure failure : summary.getFailures()) {
-            this.logJUnitFailedTest(failure);
+            l("--- JUnit execution");
+            l(String.format("%d/%d passed", summary.getTestsSucceededCount(), summary.getTestsFoundCount()));
+
+            for (TestExecutionSummary.Failure failure : summary.getFailures()) {
+                this.logJUnitFailedTest(failure);
+            }
+
+            if (summary.getTestsSucceededCount() < summary.getTestsFoundCount())
+                failed();
         }
+    }
 
-        if(summary.getTestsSucceededCount() < summary.getTestsFoundCount())
-            failed();
+    private void noTestsFound() {
+        l("--- Warning\nWe do not see any tests. Are you sure you wrote them?");
+        failed();
     }
 
     public void logAdditionalReport(TestIdentifier testIdentifier, ReportEntry report) {
