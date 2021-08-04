@@ -1,19 +1,12 @@
 package nl.tudelft.cse1110;
 
-import java.io.File;
+import nl.tudelft.cse1110.grader.util.FileUtils;
+
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class ResourceUtils {
-
-    public static final String LIBS_FOLDER_PATH = File.separator + "grader"
-                                                + File.separator + "src"
-                                                + File.separator + "test"
-                                                + File.separator + "resources"
-                                                + File.separator + "grader"
-                                                + File.separator + "libs"
-                                                + File.separator;
 
     public static String resourceFolder(String path) {
         try {
@@ -27,6 +20,8 @@ public class ResourceUtils {
     //Thus, they need to be downloaded only once
     public static String permanentResourceFolder(){
 
+        String libsPath = FileUtils.pathCombinator("src", "test", "resources", "grader", "libs");
+
         Path path = null;
         try {
             path = Path.of(Paths.get(ResourceUtils.class.getResource("/").toURI()).toString());
@@ -34,8 +29,8 @@ public class ResourceUtils {
             throw new RuntimeException(e);
         }
 
-        path = Paths.get(path.toString(), "../../../");
-        path = Paths.get(path.toString(), LIBS_FOLDER_PATH);
+        path = Paths.get(path.toString(), FileUtils.pathCombinator("..",".."));
+        path = Paths.get(path.toString(), libsPath);
 
         return path.toString();
     }
