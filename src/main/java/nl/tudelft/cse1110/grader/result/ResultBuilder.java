@@ -2,6 +2,7 @@ package nl.tudelft.cse1110.grader.result;
 
 import nl.tudelft.cse1110.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
+import org.jacoco.core.analysis.IClassCoverage;
 import nl.tudelft.cse1110.grader.util.ImportUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.platform.engine.UniqueId;
@@ -93,7 +94,7 @@ public class ResultBuilder {
     }
 
     public void logJUnitRun(TestExecutionSummary summary) {
-        l("--- JUnit execution");
+        l("\n--- JUnit execution");
         l(String.format("%d/%d passed", summary.getTestsSucceededCount(), summary.getTestsFoundCount()));
 
         for (TestExecutionSummary.Failure failure : summary.getFailures()) {
@@ -165,7 +166,7 @@ public class ResultBuilder {
     }
 
     public void logPitest(CombinedStatistics stats) {
-        l("--- Mutation testing");
+        l("\n--- Mutation testing");
         l(String.format("%d/%d killed", stats.getMutationStatistics().getTotalDetectedMutations(), stats.getMutationStatistics().getTotalMutations()));
         if(stats.getMutationStatistics().getTotalDetectedMutations() < stats.getMutationStatistics().getTotalMutations())
             l("See attached report.");
@@ -176,7 +177,25 @@ public class ResultBuilder {
     }
 
     public void logCodeChecks(CheckScript script) {
-        l("--- Code checks");
+        l("\n--- Code checks");
         l(script.generateReport());
+    }
+
+    public void logJacoco(Collection<IClassCoverage> coverages) {
+        l("\n--- JaCoCo coverage");
+
+        int totalCoveredLines = coverages.stream().mapToInt(coverage -> coverage.getLineCounter().getCoveredCount()).sum();
+        int totalLines = coverages.stream().mapToInt(coverage -> coverage.getLineCounter().getTotalCount()).sum();
+
+        int totalCoveredInstructions = coverages.stream().mapToInt(coverage -> coverage.getInstructionCounter().getCoveredCount()).sum();
+        int totalInstructions = coverages.stream().mapToInt(coverage -> coverage.getInstructionCounter().getTotalCount()).sum();
+
+        int totalCoveredBranches = coverages.stream().mapToInt(coverage -> coverage.getBranchCounter().getCoveredCount()).sum();
+        int totalBranches = coverages.stream().mapToInt(coverage -> coverage.getBranchCounter().getTotalCount()).sum();
+
+        l(String.format("Line coverage: %d/%d", totalCoveredLines, totalLines));
+        l(String.format("Instruction coverage: %d/%d", totalCoveredInstructions, totalInstructions));
+        l(String.format("Branch coverage: %d/%d", totalCoveredBranches, totalBranches));
+        l("See the attached report.");
     }
 }

@@ -86,6 +86,12 @@
             <version>0.8.7</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.jacoco/org.jacoco.report -->
+        <dependency>
+            <groupId>org.jacoco</groupId>
+            <artifactId>org.jacoco.report</artifactId>
+            <version>0.8.7</version>
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
         <dependency>

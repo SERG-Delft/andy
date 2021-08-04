@@ -24,6 +24,7 @@ public class ExecutionFlow {
         result.logStart();
         do {
             ExecutionStep currentStep = steps.pollFirst();
+
             result.logStart(currentStep);
             try {
                 currentStep.execute(cfg, result);

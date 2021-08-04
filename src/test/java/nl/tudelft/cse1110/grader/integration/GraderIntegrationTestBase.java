@@ -4,6 +4,8 @@ import nl.tudelft.cse1110.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.grader.config.DefaultConfiguration;
 import nl.tudelft.cse1110.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
+import nl.tudelft.cse1110.grader.execution.step.ReplaceClassloaderStep;
+import nl.tudelft.cse1110.grader.execution.step.RunJacoco;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.io.TempDir;
@@ -81,8 +83,12 @@ public abstract class GraderIntegrationTestBase {
 
         ResultBuilder result = new ResultBuilder();
 
+        ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
+
         ExecutionFlow flow = ExecutionFlow.asSteps(plan, cfg, result);
         flow.run();
+
+        Thread.currentThread().setContextClassLoader(oldClassLoader);
 
         return result.buildEndUserResult();
     }
