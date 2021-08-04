@@ -7,22 +7,19 @@ import nl.tudelft.cse1110.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.io.TempDir;
-import org.junit.platform.engine.support.descriptor.DirectorySource;
-import org.pitest.mutationtest.tooling.DirectorySourceLocator;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.FileSystem;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+import static nl.tudelft.cse1110.ResourceUtils.permanentResourceFolder;
 import static nl.tudelft.cse1110.ResourceUtils.resourceFolder;
 import static org.apache.commons.io.FileUtils.copyURLToFile;
 
@@ -113,7 +110,7 @@ public abstract class GraderIntegrationTestBase {
 
 
     private static String getLibDirectory() {
-        String libPath = resourceFolder("/grader/libs");
+        String libPath = permanentResourceFolder();
         downloadLibsIfNeeded(libPath);
         return libPath;
     }
