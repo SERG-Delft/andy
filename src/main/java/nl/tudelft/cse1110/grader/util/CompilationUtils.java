@@ -1,14 +1,25 @@
 package nl.tudelft.cse1110.grader.util;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+import javax.tools.Diagnostic;
+import javax.tools.JavaFileObject;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ImportUtils {
+import static javax.tools.Diagnostic.Kind.ERROR;
+
+public class CompilationUtils {
 
     private static HashMap<String, String> importDictionary = new HashMap<>();
-
+    //temporary
+    private static String highlightColour = "red";
     //Will remake this as a .txt / .csv file
     static {
         importDictionary.put("List", "import java.util.List;");
@@ -50,5 +61,22 @@ public class ImportUtils {
             }
         }
         return Optional.empty();
+    }
+
+    public static JSONObject generateHighlights(List<Diagnostic<? extends JavaFileObject>> diagnostics) {
+        //errors as JSON root element
+        JSONObject obj = new JSONObject();
+        JSONArray errors = new JSONArray();
+        for(Diagnostic diagnostic: diagnostics) {
+            if (diagnostic.getKind() == ERROR) {
+                JSONObject temp = new JSONObject();
+                temp.put("Line", diagnostic.getLineNumber());
+                temp.put("Color", highlightColour);
+                temp.put("Message", diagnostic.getMessage(null));
+                errors.add(temp);
+            }
+        }
+        obj.put("Error List", errors);
+        return obj;
     }
 }

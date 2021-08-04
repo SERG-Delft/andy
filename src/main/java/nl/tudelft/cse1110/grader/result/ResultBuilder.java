@@ -1,11 +1,9 @@
 package nl.tudelft.cse1110.grader.result;
 
-import org.apache.log4j.lf5.util.ResourceUtils;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import nl.tudelft.cse1110.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
-import nl.tudelft.cse1110.grader.util.ImportUtils;
+import nl.tudelft.cse1110.grader.util.CompilationUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.platform.engine.UniqueId;
 import org.junit.platform.engine.reporting.ReportEntry;
@@ -16,8 +14,6 @@ import org.pitest.mutationtest.tooling.CombinedStatistics;
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 import java.io.*;
-import java.net.URISyntaxException;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -29,7 +25,6 @@ public class ResultBuilder {
     private StringBuilder result = new StringBuilder();
     private StringBuilder debug = new StringBuilder();
     private Map<TestIdentifier, ReportEntry> additionalReports = new HashMap<>();
-    private static String highlightColour = "red";
 
     public void compilationSuccess() {
         l("--- Compilation\nSuccess");
@@ -43,32 +38,20 @@ public class ResultBuilder {
                         diagnostic.getLineNumber(),
                         diagnostic.getMessage(null)));
 
-                Optional<String> importLog = ImportUtils.checkMissingImport(diagnostic.getMessage(null));
+                Optional<String> importLog = CompilationUtils.checkMissingImport(diagnostic.getMessage(null));
                 importLog.ifPresent(this::l);
             }
         }
         failed();
-        generateHighlights(diagnostics);
+        generateHighlightsFile(CompilationUtils.generateHighlights(diagnostics));
     }
 
-    private void generateHighlights(List<Diagnostic<? extends JavaFileObject>> diagnostics) {
-
-        JSONObject obj = new JSONObject();
-        JSONArray errors = new JSONArray();
-        for(Diagnostic diagnostic: diagnostics){
-            if(diagnostic.getKind() == ERROR){
-                JSONObject temp = new JSONObject();
-                temp.put("Line", diagnostic.getLineNumber());
-                temp.put("Color", highlightColour);
-                temp.put("Message", diagnostic.getMessage(null));
-                errors.add(temp);
-            }
-        }
-        obj.put("Error List", errors);
-
+    public void generateHighlightsFile(JSONObject object){
         try {
+            //FileWriter fw = new FileWriter(new File(FileUtils.pathCombinator("..","..","src","main","java","nl","tudelft","cse1110","grader","result"), "highlight.json"));
             FileWriter fw = new FileWriter("src/main/java/nl/tudelft/cse1110/grader/result/highlight.json");
-            fw.write(obj.toJSONString());
+            //FileWriter fw = new FileWriter(FileUtils.pathCombinator("src","main","java","nl","tudelft","cse1110","grader","result","highlight.json"));
+            fw.write(object.toJSONString());
             fw.close();
         }
         catch (IOException e) {
