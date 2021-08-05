@@ -8,7 +8,7 @@ public class GradeValues {
     // together all weights in [0,1] add up to 1
     private float branchCoverageWeight;
     private float mutationCoverageWeight;
-    private float specTestsWeight;                    // we will pass 0 for now when running our program
+    private float metaTestsWeight;
     private float codeChecksWeight;
 
     private int coveredBranches;
@@ -17,18 +17,18 @@ public class GradeValues {
     private int detectedMutations;
     private int totalMutations;
 
-    private int specTestsPassed;
-    private int totalSpecTests;
+    private int metaTestsPassed;
+    private int totalMetaTests;
 
     private int checksPassed;
     private int totalChecks;
 
     public GradeValues(boolean failureGives0,
-                       float branchCoverageWeight, float mutationCoverageWeight, float specTestsWeight, float codeChecksWeight) {
+                       float branchCoverageWeight, float mutationCoverageWeight, float metaTestsWeight, float codeChecksWeight) {
         this.failureGives0 = failureGives0;
         this.branchCoverageWeight = branchCoverageWeight;
         this.mutationCoverageWeight = mutationCoverageWeight;
-        this.specTestsWeight = specTestsWeight;
+        this.metaTestsWeight = metaTestsWeight;
         this.codeChecksWeight = codeChecksWeight;
     }
 
@@ -45,8 +45,8 @@ public class GradeValues {
         return mutationCoverageWeight;
     }
 
-    public float getSpecTestsWeight() {
-        return specTestsWeight;
+    public float getMetaTestsWeight() {
+        return metaTestsWeight;
     }
 
     public float getCodeChecksWeight() {
@@ -69,12 +69,12 @@ public class GradeValues {
         return totalMutations;
     }
 
-    public int getSpecTestsPassed() {
-        return specTestsPassed;
+    public int getMetaTestsPassed() {
+        return metaTestsPassed;
     }
 
-    public int getTotalSpecTests() {
-        return totalSpecTests;
+    public int getTotalMetaTests() {
+        return totalMetaTests;
     }
 
     public int getChecksPassed() {
@@ -85,35 +85,24 @@ public class GradeValues {
         return totalChecks;
     }
 
-    public void setCoveredBranches(int coveredBranches) {
+    public void setBranchGrade(int coveredBranches, int totalBranches) {
         this.coveredBranches = coveredBranches;
-    }
-
-    public void setTotalBranches(int totalBranches) {
         this.totalBranches = totalBranches;
     }
 
-    public void setDetectedMutations(int detectedMutations) {
+    public void setMutationGrade(int detectedMutations, int totalMutations) {
         this.detectedMutations = detectedMutations;
-    }
-
-    public void setTotalMutations(int totalMutations) {
         this.totalMutations = totalMutations;
     }
 
-    public void setSpecTestsPassed(int specTestsPassed) {
-        this.specTestsPassed = specTestsPassed;
+    public void setMetaGrade(int metaTestsPassed, int totalMetaTests) {
+        this.metaTestsPassed = metaTestsPassed;
+        this.totalMetaTests = totalMetaTests;
     }
 
-    public void setTotalSpecTests(int totalSpecTests) {
-        this.totalSpecTests = totalSpecTests;
-    }
-
-    public void setChecksPassed(int checksPassed) {
+    public void setCheckGrade(int checksPassed, int totalChecks) {
         this.checksPassed = checksPassed;
-    }
-
-    public void setTotalChecks(int totalChecks) {
         this.totalChecks = totalChecks;
     }
+
 }

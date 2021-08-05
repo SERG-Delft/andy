@@ -29,16 +29,12 @@ public class GradeCalculatorTest {
     // helper method
     private void setScores(GradeValues gv, int coveredBranches, int totalBranches,
                            int detectedMutations, int totalMutations,
-                           int specTestsPassed, int totalSpecTests,
+                           int metaTestsPassed, int totalMetaTests,
                            int checksPassed, int totalChecks) {
-        gv.setCoveredBranches(coveredBranches);
-        gv.setTotalBranches(totalBranches);
-        gv.setDetectedMutations(detectedMutations);
-        gv.setTotalMutations(totalMutations);
-        gv.setSpecTestsPassed(specTestsPassed);
-        gv.setTotalSpecTests(totalSpecTests);
-        gv.setChecksPassed(checksPassed);
-        gv.setTotalChecks(totalChecks);
+        gv.setBranchGrade(coveredBranches, totalBranches);
+        gv.setMutationGrade(detectedMutations, totalMutations);
+        gv.setMetaGrade(metaTestsPassed, totalMetaTests);
+        gv.setCheckGrade(checksPassed, totalChecks);
     }
 
 

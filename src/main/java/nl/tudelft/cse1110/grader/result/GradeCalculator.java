@@ -1,7 +1,5 @@
 package nl.tudelft.cse1110.grader.result;
 
-//TODO: we wanna write lots of unit tests for this separate class! (so we make it depend on ints only)
-
 import nl.tudelft.cse1110.codechecker.engine.CheckScript;
 import org.junit.platform.launcher.listeners.TestExecutionSummary;
 import org.pitest.mutationtest.tooling.CombinedStatistics;
@@ -27,10 +25,16 @@ public class GradeCalculator {
             return 0;
         }
 
-        float finalDecimalGrade = branchCoverageScore(gradeValues.getCoveredBranches(), gradeValues.getTotalBranches()) * gradeValues.getBranchCoverageWeight()
-                + mutationCoverageScore(gradeValues.getDetectedMutations(), gradeValues.getTotalMutations()) * gradeValues.getMutationCoverageWeight()
-                + specTestsScore(gradeValues.getSpecTestsPassed(), gradeValues.getTotalSpecTests()) * gradeValues.getSpecTestsWeight()
-                + codeChecksScore(gradeValues.getChecksPassed(), gradeValues.getTotalChecks()) * gradeValues.getCodeChecksWeight();
+        float branchScore = branchCoverageScore(gradeValues.getCoveredBranches(), gradeValues.getTotalBranches())
+                * gradeValues.getBranchCoverageWeight();
+        float mutationScore = mutationCoverageScore(gradeValues.getDetectedMutations(), gradeValues.getTotalMutations())
+                * gradeValues.getMutationCoverageWeight();
+        float metaScore = metaTestsScore(gradeValues.getMetaTestsPassed(), gradeValues.getTotalMetaTests())
+                * gradeValues.getMetaTestsWeight();
+        float checkScore = codeChecksScore(gradeValues.getChecksPassed(), gradeValues.getTotalChecks())
+                * gradeValues.getCodeChecksWeight();
+
+        float finalDecimalGrade = branchScore + mutationScore + metaScore + checkScore;
 
         return Math.round(finalDecimalGrade * 100);
     }
@@ -63,16 +67,15 @@ public class GradeCalculator {
 
 
     /**
-     * @param specTestsPassed - no. of spec tests passed
-     * @param totalSpecTests - total no. of spec tests
+     * @param metaTestsPassed - no. of meta tests passed
+     * @param totalMetaTests - total no. of meta tests
      * @return score based on spec tests
      */
-    // TODO: to be implemented
-    public float specTestsScore(int specTestsPassed, int totalSpecTests) {
-        if (totalSpecTests == 0) {
+    public float metaTestsScore(int metaTestsPassed, int totalMetaTests) {
+        if (totalMetaTests == 0) {
             return 1f;   // full points assigned
         }
-        return (float)specTestsPassed / totalSpecTests;
+        return (float)metaTestsPassed / totalMetaTests;
     }
 
 

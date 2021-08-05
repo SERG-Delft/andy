@@ -4,6 +4,7 @@ import nl.tudelft.cse1110.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.grader.config.DefaultConfiguration;
 import nl.tudelft.cse1110.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
+import nl.tudelft.cse1110.grader.result.GradeValues;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.io.TempDir;
@@ -82,8 +83,10 @@ public abstract class GraderIntegrationTestBase {
                 codeCheckerScript
         );
 
-        ResultBuilder result = new ResultBuilder(true,
-                0.25f, 0.25f, 0.25f, 0.25f);
+        GradeValues gradeValues = new GradeValues(true,
+                0.4f, 0.2f, 0.2f, 0.2f);
+
+        ResultBuilder result = new ResultBuilder(gradeValues);
 
         ExecutionFlow flow = ExecutionFlow.asSteps(plan, cfg, result);
         flow.run();

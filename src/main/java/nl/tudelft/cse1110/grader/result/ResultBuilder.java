@@ -31,13 +31,9 @@ public class ResultBuilder {
 
 
     // these parameters we wanna configure
-    public ResultBuilder(boolean failureGives0, float branchCoverageWeight, float mutationCoverageWeight,
-                         float specTestsWeight, float codeChecksWeight) {
-
-        gradeValues = new GradeValues(failureGives0, branchCoverageWeight,
-                mutationCoverageWeight, specTestsWeight, codeChecksWeight);  // scores are passed as pipeline goes
+    public ResultBuilder(GradeValues gradeValues) {
+        this.gradeValues = gradeValues;
         gradeCalculator = new GradeCalculator(gradeValues);
-
     }
 
 
@@ -188,13 +184,16 @@ public class ResultBuilder {
     }
 
     public void logPitest(CombinedStatistics stats) {
+
+        int detectedMutations = (int)(stats.getMutationStatistics().getTotalDetectedMutations());
+        int totalMutations = (int)(stats.getMutationStatistics().getTotalMutations());
+
         l("--- Mutation testing");
-        l(String.format("%d/%d killed", stats.getMutationStatistics().getTotalDetectedMutations(), stats.getMutationStatistics().getTotalMutations()));
+        l(String.format("%d/%d killed", detectedMutations, totalMutations));
 
-        gradeValues.setDetectedMutations((int)(stats.getMutationStatistics().getTotalDetectedMutations()));
-        gradeValues.setTotalMutations((int)(stats.getMutationStatistics().getTotalMutations()));
+        gradeValues.setMutationGrade(detectedMutations, totalMutations);
 
-        if(stats.getMutationStatistics().getTotalDetectedMutations() < stats.getMutationStatistics().getTotalMutations())
+        if(detectedMutations < totalMutations)
             l("See attached report.");
     }
 
@@ -202,27 +201,23 @@ public class ResultBuilder {
         l("--- Code checks");
         l(script.generateReport());
 
-        // TODO: are these the right values we wanna pass for checksPassed and totalChecks?
         int weightedChecks = script.getChecks().stream().mapToInt(check -> check.getFinalResult() ? check.getWeight() : 0).sum();
         int sumOfWeights =  script.getChecks().stream().mapToInt(c -> c.getWeight()).sum();
 
-        gradeValues.setChecksPassed(weightedChecks);
-        gradeValues.setTotalChecks(sumOfWeights);
+        gradeValues.setCheckGrade(weightedChecks, sumOfWeights);
+
     }
 
 
-    // being implemented by Jan
+    // TODO: merge with Jans method
     public void logJacoco() {
-        gradeValues.setCoveredBranches(100);
-        gradeValues.setTotalBranches(100);
+        gradeValues.setMutationGrade(100, 100);
     }
 
 
-
-    // TODO: not implemented yet
-    public void logSpecTests() {
-        gradeValues.setSpecTestsPassed(100);
-        gradeValues.setTotalSpecTests(100);
+    // TODO: merge with Jans method
+    public void logMetaTests() {
+        gradeValues.setMetaGrade(100, 100);
     }
 
     public boolean isFailed() {
