@@ -4,6 +4,7 @@ import nl.tudelft.cse1110.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.grader.execution.step.CompilationStep;
 import nl.tudelft.cse1110.grader.execution.step.RunJUnitTests;
+import nl.tudelft.cse1110.grader.execution.step.RunJacoco;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,6 +25,10 @@ public class GraderIntegrationTestHelper {
 
     public static List<ExecutionStep> justCompilation() {
         return Arrays.asList(new CompilationStep());
+    }
+
+    public static List<ExecutionStep> withJacoco() {
+        return Arrays.asList(new RunJacoco());
     }
 
 }

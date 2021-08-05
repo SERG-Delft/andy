@@ -70,4 +70,12 @@ public class FileUtils {
                 .findFirst()
                 .get();
     }
+
+    public static String pathCombinator(String ...args){
+        String path = "";
+        for(String a : args)
+            path += File.separator + a;
+
+        return path;
+    }
 }
