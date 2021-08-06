@@ -41,7 +41,7 @@ public class ExecutionFlow {
                 Arrays.asList(
                         new RunJUnitTests(),
                         new RunJacoco(),
-                        new RunPitest()),
+                        new RunPitest(), new CalculateFinalGradeStep()),
                 cfg,
                 result
         );
@@ -58,7 +58,8 @@ public class ExecutionFlow {
                         new RunJacoco(),
                         new RunPitest(),
                         new CodeChecksStep(),
-                        new RunMetaTests()),
+                        new RunMetaTests(),
+                        new CalculateFinalGradeStep()),
                 cfg,
                 result
         );
@@ -66,7 +67,7 @@ public class ExecutionFlow {
 
     public static ExecutionFlow justTests(Configuration cfg, ResultBuilder result) {
         return new ExecutionFlow(
-                Arrays.asList(new RunJUnitTests()),
+                Arrays.asList(new RunJUnitTests(), new CalculateFinalGradeStep()),
                 cfg,
                 result
         );

@@ -299,4 +299,16 @@ public class GraderIntegrationTestAssertions {
         };
     }
 
+    public static Condition<String> noJUnitTests() {
+        return new Condition<>() {
+            @Override
+            public boolean matches(String value) {
+                String regex = "We do not see any tests. Are you sure you wrote them?";
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(value);
+                return matcher.find();
+            }
+        };
+    }
+
 }

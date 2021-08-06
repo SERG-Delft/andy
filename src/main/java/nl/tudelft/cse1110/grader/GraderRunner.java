@@ -4,6 +4,7 @@ import nl.tudelft.cse1110.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.codechecker.engine.SingleCheck;
 import nl.tudelft.cse1110.grader.config.DefaultConfiguration;
 import nl.tudelft.cse1110.grader.execution.ExecutionFlow;
+import nl.tudelft.cse1110.grader.result.GradeValues;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
 
 import java.util.Arrays;
@@ -15,6 +16,14 @@ public class GraderRunner {
         // for now, only testing purposes
         CheckScript codeCheckerScript = new CheckScript(Arrays.asList(new SingleCheck("TestMethodsHaveAssertions")));
 
+//        DefaultConfiguration cfg = new DefaultConfiguration(
+//            "delft.NumberUtils",
+//            "/Users/mauricioaniche/education/cse1110/test/code",
+//            "/Users/mauricioaniche/education/cse1110/test/libs",
+//            "/Users/mauricioaniche/education/cse1110/test/reports",
+//                codeCheckerScript
+//        );
+
         DefaultConfiguration cfg = new DefaultConfiguration(
                 "delft.NumberUtils",
                 "E:\\TUDelft\\CSE1110 Summer\\code",
@@ -23,7 +32,10 @@ public class GraderRunner {
                 codeCheckerScript
         );
 
-        ResultBuilder result = new ResultBuilder();
+        GradeValues gradeValues = new GradeValues(true,
+                0.4f, 0.2f, 0.2f, 0.2f);
+
+        ResultBuilder result = new ResultBuilder(gradeValues);
 
         ExecutionFlow flow = ExecutionFlow.fullMode(cfg, result);
         flow.run();

@@ -5,6 +5,7 @@ import nl.tudelft.cse1110.grader.config.DefaultConfiguration;
 import nl.tudelft.cse1110.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.grader.execution.FromBytesClassLoader;
+import nl.tudelft.cse1110.grader.result.GradeValues;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
 import nl.tudelft.cse1110.grader.util.FileUtils;
 
@@ -41,7 +42,7 @@ public class RunMetaTests implements ExecutionStep {
                         cfg.getCodeCheckerScript()
                 );
 
-                ResultBuilder metaResult = new ResultBuilder();
+                ResultBuilder metaResult = new ResultBuilder(new GradeValues(false, 0, 0, 0, 0));
 
                 ExecutionFlow flow = ExecutionFlow.justTests(metaCfg, metaResult);
 

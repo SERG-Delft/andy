@@ -25,8 +25,20 @@ public class ResultBuilder {
     private StringBuilder result = new StringBuilder();
     private StringBuilder debug = new StringBuilder();
     private Map<TestIdentifier, ReportEntry> additionalReports = new HashMap<>();
+
     private int testsRan = 0;
     private int testsSucceeded = 0;
+
+    private GradeCalculator gradeCalculator;
+    private GradeValues gradeValues;
+
+
+    // these parameters we wanna configure
+    public ResultBuilder(GradeValues gradeValues) {
+        this.gradeValues = gradeValues;
+        gradeCalculator = new GradeCalculator(gradeValues);
+    }
+
 
     public void compilationSuccess() {
         l("--- Compilation\nSuccess");
@@ -96,18 +108,28 @@ public class ResultBuilder {
     }
 
     public void logJUnitRun(TestExecutionSummary summary) {
-        l("\n--- JUnit execution");
-        l(String.format("%d/%d passed", summary.getTestsSucceededCount(), summary.getTestsFoundCount()));
+        if (summary.getTestsFoundCount() == 0) {
+            noTestsFound();
+        } else {
 
-        for (TestExecutionSummary.Failure failure : summary.getFailures()) {
-            this.logJUnitFailedTest(failure);
+            l("--- JUnit execution");
+            l(String.format("%d/%d passed", summary.getTestsSucceededCount(), summary.getTestsFoundCount()));
+
+            for (TestExecutionSummary.Failure failure : summary.getFailures()) {
+                this.logJUnitFailedTest(failure);
+            }
+
+            this.testsRan = (int) summary.getTestsStartedCount();
+            this.testsSucceeded = (int) summary.getTestsSucceededCount();
+
+            if(summary.getTestsSucceededCount() < summary.getTestsFoundCount())
+                failed();
         }
+    }
 
-        this.testsRan = (int) summary.getTestsStartedCount();
-        this.testsSucceeded = (int) summary.getTestsSucceededCount();
-
-        if(summary.getTestsSucceededCount() < summary.getTestsFoundCount())
-            failed();
+    private void noTestsFound() {
+        l("--- Warning\nWe do not see any tests. Are you sure you wrote them?");
+        failed();
     }
 
     public int getTestsRan() {
@@ -152,6 +174,7 @@ public class ResultBuilder {
 
     private void failed() {
         this.failed = true;
+        gradeCalculator.failed();
     }
 
     public String buildEndUserResult() {
@@ -178,21 +201,41 @@ public class ResultBuilder {
         return LocalDateTime.now().toString();
     }
 
+    public void logFinalGrade() {
+
+        // rounding up from 0.5...
+        String grade = String.valueOf(gradeCalculator.calculateFinalGrade());
+
+        l("--- Final grade");
+        l(grade + "/100");
+    }
+
     public void logPitest(CombinedStatistics stats) {
+
+        int detectedMutations = (int)(stats.getMutationStatistics().getTotalDetectedMutations());
+        int totalMutations = (int)(stats.getMutationStatistics().getTotalMutations());
+
         l("\n--- Mutation testing");
-        l(String.format("%d/%d killed", stats.getMutationStatistics().getTotalDetectedMutations(), stats.getMutationStatistics().getTotalMutations()));
-        if(stats.getMutationStatistics().getTotalDetectedMutations() < stats.getMutationStatistics().getTotalMutations())
+        l(String.format("%d/%d killed", detectedMutations, totalMutations));
+
+        gradeValues.setMutationGrade(detectedMutations, totalMutations);
+
+        if(detectedMutations < totalMutations)
             l("See attached report.");
     }
 
-    public boolean isFailed() {
-        return failed;
-    }
 
     public void logCodeChecks(CheckScript script) {
         l("\n--- Code checks");
         l(script.generateReport());
+
+        int weightedChecks = script.getChecks().stream().mapToInt(check -> check.getFinalResult() ? check.getWeight() : 0).sum();
+        int sumOfWeights =  script.getChecks().stream().mapToInt(c -> c.getWeight()).sum();
+
+        gradeValues.setCheckGrade(weightedChecks, sumOfWeights);
+
     }
+
 
     public void logJacoco(Collection<IClassCoverage> coverages) {
         l("\n--- JaCoCo coverage");
@@ -210,6 +253,7 @@ public class ResultBuilder {
         l(String.format("Instruction coverage: %d/%d", totalCoveredInstructions, totalInstructions));
         l(String.format("Branch coverage: %d/%d", totalCoveredBranches, totalBranches));
         l("See the attached report.");
+        gradeValues.setMutationGrade(totalCoveredBranches, totalBranches);
     }
 
     public void logMetaTests(int score, int totalTests, List<String> failures) {
@@ -218,5 +262,14 @@ public class ResultBuilder {
         for (String failure : failures) {
             l(String.format("Meta test: %s FAILED", failure));
         }
+    }
+
+    // TODO: merge with Jans method
+    public void logMetaTests() {
+        gradeValues.setMetaGrade(100, 100);
+    }
+
+    public boolean isFailed() {
+        return failed;
     }
 }

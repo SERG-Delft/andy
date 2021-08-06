@@ -33,8 +33,7 @@ public class GraderJUnitTest extends GraderIntegrationTestBase {
         String result = run(justTests(), noScript(), "NumberUtilsAddLibrary", "NumberUtilsNoTests");
 
         assertThat(result)
-                .has(numberOfJUnitTestsPassing(0))
-                .has(totalNumberOfJUnitTests(0));
+                .has(noJUnitTests());
     }
 
 

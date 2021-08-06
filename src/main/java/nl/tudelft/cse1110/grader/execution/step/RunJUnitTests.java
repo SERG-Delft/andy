@@ -12,12 +12,22 @@ import org.junit.platform.launcher.core.LauncherFactory;
 import org.junit.platform.launcher.listeners.SummaryGeneratingListener;
 import org.junit.platform.launcher.listeners.TestExecutionSummary;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static nl.tudelft.cse1110.grader.util.FileUtils.filePathsAsString;
+import static nl.tudelft.cse1110.grader.util.FileUtils.getAllJavaFiles;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
 public class RunJUnitTests implements ExecutionStep {
     @Override
     public void execute(Configuration cfg, ResultBuilder result) {
         try {
+
             SummaryGeneratingListener listener = new SummaryGeneratingListener();
             AdditionalReportJUnitListener additionalReportJUnitListener = new AdditionalReportJUnitListener(result);
 
@@ -34,6 +44,7 @@ public class RunJUnitTests implements ExecutionStep {
             launcher.execute(request);
 
             TestExecutionSummary summary = listener.getSummary();
+
             result.logJUnitRun(summary);
         } catch (Exception e) {
             result.genericFailure(this, e);
@@ -41,3 +52,5 @@ public class RunJUnitTests implements ExecutionStep {
 
     }
 }
+
+
