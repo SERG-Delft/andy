@@ -10,6 +10,14 @@ public class FromBytesClassLoader extends ClassLoader {
         definitions.put(name, bytes);
     }
 
+    /**Method that is called by Java when it looks for a class. If the class is one that we added in the code
+     * it will load it from the bytes we supplied. Otherwise it will search in Java itself for the class.
+     *
+     * @param name - the name of the class to find
+     * @param resolve - some boolean
+     * @return - the loaded class
+     * @throws ClassNotFoundException - if the class was not found anywhere
+     */
     @Override
     protected Class<?> loadClass(final String name, final boolean resolve)
             throws ClassNotFoundException {
