@@ -7,6 +7,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,6 +37,18 @@ public class FileUtils {
         File theDir = new File(dir);
         if (!theDir.exists()){
             theDir.mkdirs();
+        }
+    }
+
+    public static Path copyFile(String sourceFile, String destDir) {
+        File file = new File(sourceFile);
+        try {
+            Path result = Files.copy(Paths.get(sourceFile), Paths.get(destDir, file.getName()), REPLACE_EXISTING);
+            if (result == null)
+                throw new RuntimeException("Fail when copying files");
+            return result;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -69,6 +82,49 @@ public class FileUtils {
                 .map(x -> x.getAbsolutePath())
                 .findFirst()
                 .get();
+    }
+
+    public static List<File> getMetaFiles(String workingDir) {
+        File[] files = new File(workingDir).listFiles();
+
+        List<File> metaFiles = new ArrayList<>();
+        for (File file : files) {
+            if (file.isFile() && file.getName().contains("Meta")) {
+                metaFiles.add(file);
+            }
+        }
+        return metaFiles;
+    }
+
+
+    public static Path createTemporaryDirectory(String prefix) {
+        try {
+            Path result = Files.createTempDirectory(prefix);
+            if (result == null)
+                throw new RuntimeException("Fail when copying files");
+            return result;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void deleteFile(File file) {
+        try {
+            Files.deleteIfExists(file.toPath());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void deleteDirectory(File directory) {
+        for (File file : directory.listFiles()) {
+            if (file.isFile()) {
+                deleteFile(file);
+            } else if (file.isDirectory()) {
+                deleteDirectory(file);
+            }
+        }
+        deleteFile(directory);
     }
 
     public static String pathCombinator(String ...args){

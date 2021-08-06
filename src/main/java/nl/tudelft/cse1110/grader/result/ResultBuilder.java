@@ -25,6 +25,8 @@ public class ResultBuilder {
     private StringBuilder result = new StringBuilder();
     private StringBuilder debug = new StringBuilder();
     private Map<TestIdentifier, ReportEntry> additionalReports = new HashMap<>();
+    private int testsRan = 0;
+    private int testsSucceeded = 0;
 
     public void compilationSuccess() {
         l("--- Compilation\nSuccess");
@@ -101,8 +103,19 @@ public class ResultBuilder {
             this.logJUnitFailedTest(failure);
         }
 
+        this.testsRan = (int) summary.getTestsStartedCount();
+        this.testsSucceeded = (int) summary.getTestsSucceededCount();
+
         if(summary.getTestsSucceededCount() < summary.getTestsFoundCount())
             failed();
+    }
+
+    public int getTestsRan() {
+        return this.testsRan;
+    }
+
+    public int getTestsSucceeded() {
+        return this.testsSucceeded;
     }
 
     public void logAdditionalReport(TestIdentifier testIdentifier, ReportEntry report) {
@@ -197,5 +210,13 @@ public class ResultBuilder {
         l(String.format("Instruction coverage: %d/%d", totalCoveredInstructions, totalInstructions));
         l(String.format("Branch coverage: %d/%d", totalCoveredBranches, totalBranches));
         l("See the attached report.");
+    }
+
+    public void logMetaTests(int score, int totalTests, List<String> failures) {
+        l("\n--- Meta tests");
+        l(String.format("%d/%d passed", score, totalTests));
+        for (String failure : failures) {
+            l(String.format("Meta test: %s FAILED", failure));
+        }
     }
 }

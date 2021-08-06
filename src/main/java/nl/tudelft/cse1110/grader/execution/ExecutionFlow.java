@@ -57,7 +57,8 @@ public class ExecutionFlow {
                         new RunJUnitTests(),
                         new RunJacoco(),
                         new RunPitest(),
-                        new CodeChecksStep()),
+                        new CodeChecksStep(),
+                        new RunMetaTests()),
                 cfg,
                 result
         );

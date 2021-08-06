@@ -12,4 +12,6 @@ public interface Configuration {
 
     void setNewClassNames(List<String> fullClassNames);
     List<String> getNewClassNames();
+
+    String getMainLibraryClass();
 }
