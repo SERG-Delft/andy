@@ -2,6 +2,8 @@ package nl.tudelft.cse1110.grader.integration;
 
 import org.junit.jupiter.api.Test;
 
+import static nl.tudelft.cse1110.grader.integration.GraderIntegrationTestAssertions.numberOfJUnitTestsPassing;
+import static nl.tudelft.cse1110.grader.integration.GraderIntegrationTestAssertions.totalNumberOfJUnitTests;
 import static nl.tudelft.cse1110.grader.integration.GraderIntegrationTestHelper.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -37,6 +39,5 @@ public class GraderCompilationTest extends GraderIntegrationTestBase {
                 .has(GraderIntegrationTestAssertions.compilationErrorOnLine(33))
                 .has(GraderIntegrationTestAssertions.compilationErrorMoreTimes("cannot find symbol", 3));
     }
-
 
 }
