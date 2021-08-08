@@ -33,4 +33,12 @@ public class MockitoVerifyTest extends ChecksBaseTest {
         assertThat(check.result()).isTrue();
     }
 
+    @ParameterizedTest
+    @CsvSource({"isEmpty", "clear"})
+    void times0IsTheSameAsNever(String methodWeExpectAVerify) {
+        Check check = new MockitoVerify(Arrays.asList(methodWeExpectAVerify, "TEST", "EQ", "1", "true"));
+        run("MockitoVerifyNeverCalls.java", check);
+        assertThat(check.result()).isTrue();
+    }
+
 }

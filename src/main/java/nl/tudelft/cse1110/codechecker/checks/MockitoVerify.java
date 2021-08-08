@@ -1,6 +1,7 @@
 package nl.tudelft.cse1110.codechecker.checks;
 
 import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.NumberLiteral;
 
 import java.util.*;
 
@@ -13,6 +14,7 @@ import java.util.*;
  * - The method type (TEST or AFTEREACH) to look for the verify() called.
  * - The comparator (LT, LTE, GT, GTE, EQ)
  * - The number of expected times the verify() should be called.
+ *  * - (optional) A boolean indicating whether to expect a verify "never"
  *
  * Output: returns true if verify() is called for the specific method, the specific
  * number of times.
@@ -67,7 +69,17 @@ public class MockitoVerify extends WithinAnnotatedMethod {
             String methodName = mi.getName().toString();
 
             boolean mockitoVerifyCalled = "verify".equals(methodName);
+
+
+            /**
+             * checks whether the verify is about the method
+             * never being called.
+             * This happens with either a never() or times(0) invocation.
+             */
             boolean neverCalled = "never".equals(methodName);
+            boolean timesZeroCalled = "times".equals(methodName) && zeroIsPassedToTheMethod(mi);
+            boolean neverOrTimesZeroCalled = neverCalled || timesZeroCalled;
+
             boolean lastMethodCalledWasTheExpectedOne = methodToVerify.equals(lastMethodCalled);
 
             if (mockitoVerifyCalled && lastMethodCalledWasTheExpectedOne) {
@@ -75,7 +87,7 @@ public class MockitoVerify extends WithinAnnotatedMethod {
                     numberOfCallsToVerify++;
                 }
                 else waitingForNever = true;
-            } else if(neverCalled && waitingForNever) {
+            } else if(neverOrTimesZeroCalled && waitingForNever) {
                 numberOfCallsToVerify++;
                 waitingForNever = false;
             } else {
@@ -85,6 +97,10 @@ public class MockitoVerify extends WithinAnnotatedMethod {
         }
 
         return super.visit(mi);
+    }
+
+    private boolean zeroIsPassedToTheMethod(MethodInvocation mi) {
+        return mi.arguments() != null && mi.arguments().size() == 1 && mi.arguments().get(0) instanceof NumberLiteral && ((NumberLiteral) mi.arguments().get(0)).getToken().equals("0");
     }
 
 
