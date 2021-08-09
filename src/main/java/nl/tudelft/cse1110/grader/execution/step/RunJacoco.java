@@ -2,6 +2,7 @@ package nl.tudelft.cse1110.grader.execution.step;
 
 import nl.tudelft.cse1110.grader.config.Configuration;
 import nl.tudelft.cse1110.grader.config.DirectoryConfiguration;
+import nl.tudelft.cse1110.grader.config.RunConfiguration;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
 import nl.tudelft.cse1110.grader.util.ClassUtils;
@@ -34,6 +35,7 @@ public class RunJacoco implements ExecutionStep {
     @Override
     public void execute(Configuration cfg, ResultBuilder result) {
         DirectoryConfiguration dirCfg = cfg.getDirectoryConfiguration();
+        RunConfiguration runCfg = cfg.getRunConfiguration();
 
         try {
             /**Get the names of the test class and the library classes.*/
@@ -73,8 +75,10 @@ public class RunJacoco implements ExecutionStep {
             final CoverageBuilder coverageBuilder = new CoverageBuilder();
             final Analyzer analyzer = new Analyzer(executionData, coverageBuilder);
 
-            /**We analyze all the library classes. These classes will have a coverage report.*/
-            for (String libraryClass : otherClasses) {
+            /**We analyze the library files that have been specified in the config.
+             * These classes will have a coverage report.
+             */
+            for (String libraryClass : runCfg.classesUnderTest()) {
                 InputStream originalLibrary = this.getClassAsInputStream(dirCfg.getWorkingDir(), libraryClass);
                 analyzer.analyzeClass(originalLibrary, libraryClass);
                 originalLibrary.close();

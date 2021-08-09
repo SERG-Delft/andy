@@ -3,11 +3,10 @@ package nl.tudelft.cse1110.grader.config;
 import kotlin.DeepRecursiveFunction;
 import nl.tudelft.cse1110.grader.util.ClassUtils;
 
+import java.util.HashMap;
 import java.util.List;
 
-public class RunConfiguration {
-
-    private DirectoryConfiguration dirCfg;
+public abstract class RunConfiguration {
 
     protected static final List<String> OLD_DEFAULTS = List.of("CONDITIONALS_BOUNDARY", "INCREMENTS", "INVERT_NEGS", "MATH",
             "NEGATE_CONDITIONALS", "RETURN_VALS", "VOID_METHOD_CALLS");
@@ -27,13 +26,7 @@ public class RunConfiguration {
             "EXPERIMENTAL_BIG_INTEGER", "EXPERIMENTAL_NAKED_RECEIVER", "EXPERIMENTAL_MEMBER_VARIABLE", "ABS",
             "AOR", "AOD", "CRCR", "OBBN", "ROR", "UOI");
 
-    public RunConfiguration(DirectoryConfiguration dirCfg) {
-        this.dirCfg = dirCfg;
-    }
-
-    public List<String> classesUnderTest() {
-        return ClassUtils.allClassesButTestingAndConfigOnes(this.dirCfg.getNewClassNames());
-    }
+    public abstract List<String> classesUnderTest();
 
     public List<String> listOfMutants() {
         return DEFAULTS;

@@ -1,6 +1,7 @@
 package nl.tudelft.cse1110.grader.execution.step;
 
 import nl.tudelft.cse1110.grader.config.Configuration;
+import nl.tudelft.cse1110.grader.config.DefaultRunConfiguration;
 import nl.tudelft.cse1110.grader.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.grader.config.RunConfiguration;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
@@ -19,11 +20,11 @@ public class GetRunConfigurationStep implements ExecutionStep {
             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
             Class<?> runConfigurationClass = Class.forName(ClassUtils.getConfigurationClass(dirCfg.getNewClassNames()), false, classLoader);
-            RunConfiguration runConfiguration = (RunConfiguration) runConfigurationClass.getDeclaredConstructor(DirectoryConfiguration.class).newInstance(dirCfg);
+            RunConfiguration runConfiguration = (RunConfiguration) runConfigurationClass.getDeclaredConstructor().newInstance();
 
             cfg.setRunConfiguration(runConfiguration);
         } catch (NoSuchElementException ex) {
-           cfg.setRunConfiguration(new RunConfiguration(cfg.getDirectoryConfiguration()));
+           cfg.setRunConfiguration(new DefaultRunConfiguration(cfg.getDirectoryConfiguration()));
         } catch (Exception ex) {
             result.genericFailure(this, ex);
         }
