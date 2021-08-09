@@ -21,19 +21,24 @@ public class RunMetaTests implements ExecutionStep {
         int score = 0;
 
         try {
+            /**Get the required files - meta classes and the solution*/
             List<File> metaClasses = FileUtils.getMetaFiles(cfg.getWorkingDir());
             String solutionFile = FileUtils.findSolution(cfg.getWorkingDir());
             List<String> failures = new ArrayList<>();
 
             for (File metaClass : metaClasses) {
+                /**Save the current class loader and create a new one. Otherwise Java will not use the meta classes.*/
                 ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
                 ClassLoader classLoader = new FromBytesClassLoader();
                 Thread.currentThread().setContextClassLoader(classLoader);
 
+                /**Create a new directory to run the meta tests in.*/
                 File tempDir = FileUtils.createTemporaryDirectory("metaWorkplace").toFile();
 
+                /**Copy the solution file to the temporary directory.*/
                 FileUtils.copyFile(solutionFile, tempDir.getAbsolutePath());
 
+                /**Prepare an execution flow for the meta class.*/
                 Configuration metaCfg = new DefaultConfiguration(
                         cfg.getMainLibraryClass(),
                         tempDir.toString(),
@@ -46,22 +51,30 @@ public class RunMetaTests implements ExecutionStep {
 
                 ExecutionFlow flow = ExecutionFlow.justTests(metaCfg, metaResult);
 
+                /**Copy the meta class to the temporary directory and, since the meta classes are in .txt files,
+                 * rename the meta class to a .java file.
+                 */
                 File newMetaFile = FileUtils.copyFile(metaClass.getAbsolutePath(), tempDir.getAbsolutePath()).toFile();
                 newMetaFile.renameTo(new File(newMetaFile.getParentFile() + "/Library.java"));
 
+                /**Run the flow for the meta class.*/
                 flow.run();
 
+                /**Check if some tests failed. If they did, we increase the score, otherwise we show which test failed.*/
                 int testsRan = metaResult.getTestsRan();
                 int testsSucceeded = metaResult.getTestsSucceeded();
 
                 if (testsSucceeded < testsRan) {
                     score++;
                 } else {
-                    failures.add(metaClass.getName().replace(".txt", ""));
+                    String metaName = metaClass.getName().replace(".txt", "");
+                    failures.add(metaName);
                 }
 
+                /**Delete the temporary meta working directory after execution.*/
                 FileUtils.deleteDirectory(tempDir);
 
+                /**Restore the old class loader.*/
                 Thread.currentThread().setContextClassLoader(oldClassLoader);
             }
 
