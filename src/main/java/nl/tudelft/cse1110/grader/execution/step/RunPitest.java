@@ -1,7 +1,8 @@
 package nl.tudelft.cse1110.grader.execution.step;
 
-import nl.tudelft.cse1110.grader.util.ClassUtils;
 import nl.tudelft.cse1110.grader.config.Configuration;
+import nl.tudelft.cse1110.grader.config.DirectoryConfiguration;
+import nl.tudelft.cse1110.grader.util.ClassUtils;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
 import org.pitest.mutationtest.commandline.OptionsParser;
@@ -37,26 +38,27 @@ public class RunPitest implements ExecutionStep {
     }
 
     private String[] buildArgs(Configuration cfg) {
+        DirectoryConfiguration dirCfg = cfg.getDirectoryConfiguration();
 
         List<String> args = new ArrayList<>();
 
         args.add("--reportDir");
-        args.add(cfg.getReportsDir());
+        args.add(dirCfg.getReportsDir());
 
         args.add("--targetClasses");
-        args.add(commaSeparated(ClassUtils.allClassesButTestingOnes(cfg.getNewClassNames())));
+        args.add(commaSeparated(ClassUtils.allClassesButTestingOnes(dirCfg.getNewClassNames())));
 
         args.add("--targetTests");
-        args.add(ClassUtils.getTestClass(cfg.getNewClassNames()));
+        args.add(ClassUtils.getTestClass(dirCfg.getNewClassNames()));
 
         args.add("--sourceDirs");
-        args.add(cfg.getWorkingDir());
+        args.add(dirCfg.getWorkingDir());
 
         args.add("--verbose");
         args.add("false");
 
         args.add("--classPath");
-        args.add(cfg.getWorkingDir());
+        args.add(dirCfg.getWorkingDir());
 
         return args.stream().toArray(String[]::new);
     }

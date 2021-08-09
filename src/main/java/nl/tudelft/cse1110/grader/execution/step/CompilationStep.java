@@ -1,9 +1,10 @@
 package nl.tudelft.cse1110.grader.execution.step;
 
+import nl.tudelft.cse1110.grader.config.Configuration;
+import nl.tudelft.cse1110.grader.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
 import nl.tudelft.cse1110.grader.util.ClassUtils;
 import nl.tudelft.cse1110.grader.util.FileUtils;
-import nl.tudelft.cse1110.grader.config.Configuration;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -23,8 +24,11 @@ import java.util.*;
  * It makes use of the Java Compiler API.
  */
 public class CompilationStep implements ExecutionStep {
+
     @Override
     public void execute(Configuration cfg, ResultBuilder result) {
+        DirectoryConfiguration dirCfg = cfg.getDirectoryConfiguration();
+
         /**
          * creates the java compiler and diagnostic collector object
          * using just the standard configuration. Nothing to optimize here, I believe.
@@ -38,7 +42,7 @@ public class CompilationStep implements ExecutionStep {
          * Create a compilation task with the list of files to compile.
          * Also pass the classpath with the libraries, e.g., JUnit, JQWik, etc.
          */
-        Collection<File> listOfFiles = FileUtils.getAllJavaFiles(cfg.getWorkingDir());
+        Collection<File> listOfFiles = FileUtils.getAllJavaFiles(dirCfg.getWorkingDir());
         Iterable<? extends JavaFileObject > sources =
                 manager.getJavaFileObjectsFromFiles(listOfFiles);
 
@@ -47,8 +51,10 @@ public class CompilationStep implements ExecutionStep {
 
         JavaCompiler.CompilationTask task = compiler.getTask(null, manager, diagnostics,
                 Arrays.asList(
-                        new String[] { "-cp", ClassUtils.asClassPath(cfg.getLibrariesDir())} /* classpath */
-                ), null, sources);
+                        /* classpath */
+                        "-cp", ClassUtils.asClassPath(dirCfg.getLibrariesDir()) +
+                                ClassUtils.classSeparator() +
+                                System.getProperty("java.class.path")), null, sources);
         task.setProcessors(Arrays.asList(processor));
 
         /**
@@ -59,7 +65,7 @@ public class CompilationStep implements ExecutionStep {
             boolean compilationResult = task.call();
 
             if(compilationResult) {
-                cfg.setNewClassNames(scanner.getFullClassNames());
+                dirCfg.setNewClassNames(scanner.getFullClassNames());
                 result.compilationSuccess();
             }
             else {

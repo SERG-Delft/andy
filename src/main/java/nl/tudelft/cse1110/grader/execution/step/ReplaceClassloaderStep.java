@@ -1,7 +1,8 @@
 package nl.tudelft.cse1110.grader.execution.step;
 
-import nl.tudelft.cse1110.grader.result.ResultBuilder;
 import nl.tudelft.cse1110.grader.config.Configuration;
+import nl.tudelft.cse1110.grader.config.DirectoryConfiguration;
+import nl.tudelft.cse1110.grader.result.ResultBuilder;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
 
 import java.net.URL;
@@ -19,8 +20,10 @@ public class ReplaceClassloaderStep implements ExecutionStep {
 
     @Override
     public void execute(Configuration cfg, ResultBuilder result) {
+        DirectoryConfiguration dirCfg = cfg.getDirectoryConfiguration();
+
         try {
-            String pathToAddToClassloader = cfg.getWorkingDir();
+            String pathToAddToClassloader = dirCfg.getWorkingDir();
             replaceClassloader(pathToAddToClassloader);
         } catch (Exception e) {
             result.genericFailure(this, e);

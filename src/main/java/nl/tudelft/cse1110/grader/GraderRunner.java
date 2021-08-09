@@ -2,7 +2,8 @@ package nl.tudelft.cse1110.grader;
 
 import nl.tudelft.cse1110.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.codechecker.engine.SingleCheck;
-import nl.tudelft.cse1110.grader.config.DefaultConfiguration;
+import nl.tudelft.cse1110.grader.config.Configuration;
+import nl.tudelft.cse1110.grader.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.grader.result.GradeValues;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
@@ -22,13 +23,16 @@ public class GraderRunner {
 //            "/Users/mauricioaniche/education/cse1110/test/reports",
 //                codeCheckerScript
 //        );
+        Configuration cfg = new Configuration();
 
-        DefaultConfiguration cfg = new DefaultConfiguration(
-                "C:/Users/nadin/education/cse1110/test/code",
-                "C:/Users/nadin/education/cse1110/test/libs",
-                "C:/Users/nadin/education/cse1110/test/reports",
+        DirectoryConfiguration dirCfg = new DirectoryConfiguration(
+                "E:\\TUDelft\\CSE1110 Summer\\code",
+                "E:\\TUDelft\\CSE1110 Summer\\libs",
+                "E:\\TUDelft\\CSE1110 Summer\\reports",
                 codeCheckerScript
         );
+
+        cfg.setDirectoryConfiguration(dirCfg);
 
         GradeValues gradeValues = new GradeValues(true,
                 0.4f, 0.2f, 0.2f, 0.2f);

@@ -1,7 +1,8 @@
 package nl.tudelft.cse1110.grader.execution.step;
 
-import nl.tudelft.cse1110.grader.util.ClassUtils;
 import nl.tudelft.cse1110.grader.config.Configuration;
+import nl.tudelft.cse1110.grader.config.DirectoryConfiguration;
+import nl.tudelft.cse1110.grader.util.ClassUtils;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
 import nl.tudelft.cse1110.grader.execution.AdditionalReportJUnitListener;
@@ -12,26 +13,20 @@ import org.junit.platform.launcher.core.LauncherFactory;
 import org.junit.platform.launcher.listeners.SummaryGeneratingListener;
 import org.junit.platform.launcher.listeners.TestExecutionSummary;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static nl.tudelft.cse1110.grader.util.FileUtils.filePathsAsString;
-import static nl.tudelft.cse1110.grader.util.FileUtils.getAllJavaFiles;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
 public class RunJUnitTests implements ExecutionStep {
+
     @Override
     public void execute(Configuration cfg, ResultBuilder result) {
+        DirectoryConfiguration dirCfg = cfg.getDirectoryConfiguration();
+
         try {
 
             SummaryGeneratingListener listener = new SummaryGeneratingListener();
             AdditionalReportJUnitListener additionalReportJUnitListener = new AdditionalReportJUnitListener(result);
 
-            String testClass = ClassUtils.getTestClass(cfg.getNewClassNames());
+            String testClass = ClassUtils.getTestClass(dirCfg.getNewClassNames());
 
             Launcher launcher = LauncherFactory.create();
             launcher.registerTestExecutionListeners(listener);

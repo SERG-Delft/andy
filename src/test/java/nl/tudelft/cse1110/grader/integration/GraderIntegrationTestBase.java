@@ -1,11 +1,10 @@
 package nl.tudelft.cse1110.grader.integration;
 
 import nl.tudelft.cse1110.codechecker.engine.CheckScript;
-import nl.tudelft.cse1110.grader.config.DefaultConfiguration;
+import nl.tudelft.cse1110.grader.config.Configuration;
+import nl.tudelft.cse1110.grader.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
-import nl.tudelft.cse1110.grader.execution.step.ReplaceClassloaderStep;
-import nl.tudelft.cse1110.grader.execution.step.RunJacoco;
 import nl.tudelft.cse1110.grader.result.GradeValues;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
 import org.apache.commons.io.FileUtils;
@@ -75,12 +74,16 @@ public abstract class GraderIntegrationTestBase {
     public String run(List<ExecutionStep> plan, CheckScript codeCheckerScript, String libraryFile, String solutionFile) {
         copyFiles(libraryFile, solutionFile);
 
-        DefaultConfiguration cfg = new DefaultConfiguration(
+        Configuration cfg = new Configuration();
+
+        DirectoryConfiguration dirCfg = new DirectoryConfiguration(
                 workDir.toString(),
                 getLibDirectory(),
                 reportDir.toString(),
                 codeCheckerScript
         );
+
+        cfg.setDirectoryConfiguration(dirCfg);
 
         GradeValues gradeValues = new GradeValues(true,
                 0.4f, 0.2f, 0.2f, 0.2f);
