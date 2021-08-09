@@ -112,7 +112,7 @@ public class ResultBuilder {
             noTestsFound();
         } else {
 
-            l("--- JUnit execution");
+            l("\n--- JUnit execution");
             l(String.format("%d/%d passed", summary.getTestsSucceededCount(), summary.getTestsFoundCount()));
 
             for (TestExecutionSummary.Failure failure : summary.getFailures()) {
@@ -206,7 +206,7 @@ public class ResultBuilder {
         // rounding up from 0.5...
         String grade = String.valueOf(gradeCalculator.calculateFinalGrade());
 
-        l("--- Final grade");
+        l("\n--- Final grade");
         l(grade + "/100");
     }
 
@@ -262,11 +262,8 @@ public class ResultBuilder {
         for (String failure : failures) {
             l(String.format("Meta test: %s FAILED", failure));
         }
-    }
 
-    // TODO: merge with Jans method
-    public void logMetaTests() {
-        gradeValues.setMetaGrade(100, 100);
+        gradeValues.setMetaGrade(score, totalTests);
     }
 
     public boolean isFailed() {
