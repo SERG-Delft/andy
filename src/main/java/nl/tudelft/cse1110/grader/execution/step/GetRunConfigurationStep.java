@@ -7,6 +7,8 @@ import nl.tudelft.cse1110.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
 import nl.tudelft.cse1110.grader.util.ClassUtils;
 
+import java.util.NoSuchElementException;
+
 public class GetRunConfigurationStep implements ExecutionStep {
 
     @Override
@@ -17,9 +19,11 @@ public class GetRunConfigurationStep implements ExecutionStep {
             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
             Class<?> runConfigurationClass = Class.forName(ClassUtils.getConfigurationClass(dirCfg.getNewClassNames()), false, classLoader);
-            RunConfiguration runConfiguration = (RunConfiguration) runConfigurationClass.getDeclaredConstructor().newInstance();
+            RunConfiguration runConfiguration = (RunConfiguration) runConfigurationClass.getDeclaredConstructor(DirectoryConfiguration.class).newInstance(dirCfg);
 
             cfg.setRunConfiguration(runConfiguration);
+        } catch (NoSuchElementException ex) {
+           cfg.setRunConfiguration(new RunConfiguration(cfg.getDirectoryConfiguration()));
         } catch (Exception ex) {
             result.genericFailure(this, ex);
         }

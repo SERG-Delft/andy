@@ -98,8 +98,8 @@ public class ClassUtils {
      * @param listOfClasses list of classes
      * @return list of classes without the testing class
      */
-    public static List<String> allClassesButTestingOnes(List<String> listOfClasses) {
-        return listOfClasses.stream().filter(c -> !c.contains("Test"))
+    public static List<String> allClassesButTestingAndConfigOnes(List<String> listOfClasses) {
+        return listOfClasses.stream().filter(c -> !c.contains("Test") && !c.contains("Config"))
                 .collect(Collectors.toList());
     }
 

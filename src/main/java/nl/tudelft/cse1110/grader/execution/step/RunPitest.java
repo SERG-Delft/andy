@@ -2,6 +2,7 @@ package nl.tudelft.cse1110.grader.execution.step;
 
 import nl.tudelft.cse1110.grader.config.Configuration;
 import nl.tudelft.cse1110.grader.config.DirectoryConfiguration;
+import nl.tudelft.cse1110.grader.config.RunConfiguration;
 import nl.tudelft.cse1110.grader.util.ClassUtils;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
@@ -39,6 +40,7 @@ public class RunPitest implements ExecutionStep {
 
     private String[] buildArgs(Configuration cfg) {
         DirectoryConfiguration dirCfg = cfg.getDirectoryConfiguration();
+        RunConfiguration runCfg = cfg.getRunConfiguration();
 
         List<String> args = new ArrayList<>();
 
@@ -46,7 +48,7 @@ public class RunPitest implements ExecutionStep {
         args.add(dirCfg.getReportsDir());
 
         args.add("--targetClasses");
-        args.add(commaSeparated(ClassUtils.allClassesButTestingOnes(dirCfg.getNewClassNames())));
+        args.add(commaSeparated(runCfg.classesUnderTest()));
 
         args.add("--targetTests");
         args.add(ClassUtils.getTestClass(dirCfg.getNewClassNames()));
@@ -59,6 +61,9 @@ public class RunPitest implements ExecutionStep {
 
         args.add("--classPath");
         args.add(dirCfg.getWorkingDir());
+
+        args.add("--mutators");
+        args.add(commaSeparated(runCfg.listOfMutants()));
 
         return args.stream().toArray(String[]::new);
     }

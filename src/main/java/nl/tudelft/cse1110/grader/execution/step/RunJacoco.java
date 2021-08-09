@@ -38,7 +38,7 @@ public class RunJacoco implements ExecutionStep {
         try {
             /**Get the names of the test class and the library classes.*/
             String testClass = ClassUtils.getTestClass(dirCfg.getNewClassNames());
-            List<String> otherClasses = ClassUtils.allClassesButTestingOnes(dirCfg.getNewClassNames());
+            List<String> otherClasses = ClassUtils.allClassesButTestingAndConfigOnes(dirCfg.getNewClassNames());
 
             final IRuntime runtime = new LoggerRuntime();
 
