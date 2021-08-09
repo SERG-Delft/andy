@@ -80,6 +80,19 @@ public class ClassUtils {
         return className;
     }
 
+    /**Finds the configuration class.
+     *
+     * @param listOfClasses - the list of classes to search in
+     * @return - the name of the class
+     */
+    public static String getConfigurationClass(List<String> listOfClasses) {
+        String className = listOfClasses.stream().filter(c -> c.contains("Config"))
+                .findFirst()
+                .get();
+
+        return className;
+    }
+
     /**
      * Finds all the classes, but the testing class one.
      * @param listOfClasses list of classes
@@ -107,7 +120,6 @@ public class ClassUtils {
 
         throw new RuntimeException("Package name not found!");
     }
-
 
     /**
      * The method determines what class separator should be used depending on the OS.
