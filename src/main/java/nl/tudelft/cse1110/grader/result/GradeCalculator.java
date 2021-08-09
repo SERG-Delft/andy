@@ -10,10 +10,15 @@ public class GradeCalculator {
     private boolean failed;
 
 
+    public GradeCalculator() {}
+
     public GradeCalculator(GradeValues gradeValues) {
         this.gradeValues = gradeValues;
     }
 
+    public void setGradeValues(GradeValues gradeValues) {
+        this.gradeValues = gradeValues;
+    }
 
     /** ResultBuilder calls this method in logFinalGrade(), to output final grade to student in format 85/100 e.g.
      * @return - final grade as int between 0 and 100

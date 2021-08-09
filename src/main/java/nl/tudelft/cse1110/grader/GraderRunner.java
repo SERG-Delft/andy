@@ -34,10 +34,7 @@ public class GraderRunner {
 
         cfg.setDirectoryConfiguration(dirCfg);
 
-        GradeValues gradeValues = new GradeValues(true,
-                0.4f, 0.2f, 0.2f, 0.2f);
-
-        ResultBuilder result = new ResultBuilder(gradeValues);
+        ResultBuilder result = new ResultBuilder();
 
         ExecutionFlow flow = ExecutionFlow.fullMode(cfg, result);
         flow.run();

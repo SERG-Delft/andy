@@ -5,6 +5,7 @@ import nl.tudelft.cse1110.grader.util.ClassUtils;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class RunConfiguration {
 
@@ -27,6 +28,12 @@ public abstract class RunConfiguration {
             "AOR", "AOD", "CRCR", "OBBN", "ROR", "UOI");
 
     public abstract List<String> classesUnderTest();
+
+    public abstract Map<String, Float> weights();
+
+    public boolean failureGivesZero() {
+        return true;
+    }
 
     public List<String> listOfMutants() {
         return DEFAULTS;
