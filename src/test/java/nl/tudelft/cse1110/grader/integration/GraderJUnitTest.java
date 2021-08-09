@@ -24,19 +24,6 @@ public class GraderJUnitTest extends GraderIntegrationTestBase {
 
     }
 
-
-    // TODO: this one might even be another feature, as we probably want to give a better message to the student, e.g., "We do not see tests, are you sure you wrote them?" or something like that.
-    // example: student forgets @Test
-    @Test
-    void noTests() {        // 0/0 normal @Tests passing
-
-        String result = run(justTests(), noScript(), "NumberUtilsAddLibrary", "NumberUtilsNoTests");
-
-        assertThat(result)
-                .has(noJUnitTests());
-    }
-
-
     // In test 2, assertFalse should be assertTrue.
     @Test
     void singleTestFailing() {
@@ -97,6 +84,18 @@ public class GraderJUnitTest extends GraderIntegrationTestBase {
                 .has(totalNumberOfJUnitTests(5));
 
     }
+
+
+    // example: student forgets @Test
+    @Test
+    void noTests() {        // 0/0 normal @Tests passing
+
+        String result = run(justTests(), noScript(), "NumberUtilsAddLibrary", "NumberUtilsNoTests");
+
+        assertThat(result)
+                .has(errorMessage("We do not see any tests. Are you sure you wrote them?"));
+    }
+
 
 
 }
