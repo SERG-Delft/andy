@@ -24,7 +24,6 @@ public class GraderJUnitTest extends GraderIntegrationTestBase {
 
     }
 
-
     // In test 2, assertFalse should be assertTrue.
     @Test
     void singleTestFailing() {

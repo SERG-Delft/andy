@@ -17,6 +17,7 @@ public class GraderRunner {
         CheckScript codeCheckerScript = new CheckScript(Arrays.asList(new SingleCheck("TestMethodsHaveAssertions")));
 
 //        DefaultConfiguration cfg = new DefaultConfiguration(
+//            "delft.NumberUtils",
 //            "/Users/mauricioaniche/education/cse1110/test/code",
 //            "/Users/mauricioaniche/education/cse1110/test/libs",
 //            "/Users/mauricioaniche/education/cse1110/test/reports",
@@ -24,9 +25,10 @@ public class GraderRunner {
 //        );
 
         DefaultConfiguration cfg = new DefaultConfiguration(
-                "C:/Users/nadin/education/cse1110/test/code",
-                "C:/Users/nadin/education/cse1110/test/libs",
-                "C:/Users/nadin/education/cse1110/test/reports",
+                "delft.NumberUtils",
+                "E:\\TUDelft\\CSE1110 Summer\\code",
+                "E:\\TUDelft\\CSE1110 Summer\\libs",
+                "E:\\TUDelft\\CSE1110 Summer\\reports",
                 codeCheckerScript
         );
 

@@ -25,6 +25,10 @@ public class ResultBuilder {
     private StringBuilder result = new StringBuilder();
     private StringBuilder debug = new StringBuilder();
     private Map<TestIdentifier, ReportEntry> additionalReports = new HashMap<>();
+
+    private int testsRan = 0;
+    private int testsSucceeded = 0;
+
     private GradeCalculator gradeCalculator;
     private GradeValues gradeValues;
 
@@ -108,14 +112,17 @@ public class ResultBuilder {
             noTestsFound();
         } else {
 
-            l("--- JUnit execution");
+            l("\n--- JUnit execution");
             l(String.format("%d/%d passed", summary.getTestsSucceededCount(), summary.getTestsFoundCount()));
 
             for (TestExecutionSummary.Failure failure : summary.getFailures()) {
                 this.logJUnitFailedTest(failure);
             }
 
-            if (summary.getTestsSucceededCount() < summary.getTestsFoundCount())
+            this.testsRan = (int) summary.getTestsStartedCount();
+            this.testsSucceeded = (int) summary.getTestsSucceededCount();
+
+            if(summary.getTestsSucceededCount() < summary.getTestsFoundCount())
                 failed();
         }
     }
@@ -123,6 +130,14 @@ public class ResultBuilder {
     private void noTestsFound() {
         l("--- Warning\nWe do not see any tests. Are you sure you wrote them?");
         failed();
+    }
+
+    public int getTestsRan() {
+        return this.testsRan;
+    }
+
+    public int getTestsSucceeded() {
+        return this.testsSucceeded;
     }
 
     public void logAdditionalReport(TestIdentifier testIdentifier, ReportEntry report) {
@@ -191,7 +206,7 @@ public class ResultBuilder {
         // rounding up from 0.5...
         String grade = String.valueOf(gradeCalculator.calculateFinalGrade());
 
-        l("--- Final grade");
+        l("\n--- Final grade");
         l(grade + "/100");
     }
 
@@ -241,14 +256,17 @@ public class ResultBuilder {
         gradeValues.setMutationGrade(totalCoveredBranches, totalBranches);
     }
 
+    public void logMetaTests(int score, int totalTests, List<String> failures) {
+        l("\n--- Meta tests");
+        l(String.format("%d/%d passed", score, totalTests));
+        for (String failure : failures) {
+            l(String.format("Meta test: %s FAILED", failure));
+        }
 
-    // TODO: merge with Jans method
-    public void logMetaTests() {
-        gradeValues.setMetaGrade(100, 100);
+        gradeValues.setMetaGrade(score, totalTests);
     }
 
     public boolean isFailed() {
         return failed;
     }
-
 }

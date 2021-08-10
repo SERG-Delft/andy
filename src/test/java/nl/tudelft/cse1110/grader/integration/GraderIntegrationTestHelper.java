@@ -5,6 +5,7 @@ import nl.tudelft.cse1110.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.grader.execution.step.CompilationStep;
 import nl.tudelft.cse1110.grader.execution.step.RunJUnitTests;
 import nl.tudelft.cse1110.grader.execution.step.RunJacoco;
+import nl.tudelft.cse1110.grader.execution.step.RunMetaTests;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -29,6 +30,10 @@ public class GraderIntegrationTestHelper {
 
     public static List<ExecutionStep> withJacoco() {
         return Arrays.asList(new RunJacoco());
+    }
+
+    public static List<ExecutionStep> withMeta() {
+        return Arrays.asList(new RunMetaTests());
     }
 
 }
