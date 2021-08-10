@@ -1,6 +1,7 @@
 package nl.tudelft.cse1110.grader.config;
 
 import kotlin.DeepRecursiveFunction;
+import nl.tudelft.cse1110.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.grader.util.ClassUtils;
 
 import java.util.HashMap;
@@ -30,6 +31,8 @@ public abstract class RunConfiguration {
     public abstract List<String> classesUnderTest();
 
     public abstract Map<String, Float> weights();
+
+    public abstract CheckScript checkScript();
 
     public boolean failureGivesZero() {
         return true;

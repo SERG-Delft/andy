@@ -16,7 +16,7 @@ public class GraderJUnitTest extends GraderIntegrationTestBase {
     @Test
     void allTestsPassing() {            // 4/4 normal @Tests passing
 
-        String result = run(justTests(), noScript(), "NumberUtilsAddLibrary", "NUmberUtilsAddAllTestsPass");
+        String result = run(justTests(), "NumberUtilsAddLibrary", "NUmberUtilsAddAllTestsPass");
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(4))
@@ -28,7 +28,7 @@ public class GraderJUnitTest extends GraderIntegrationTestBase {
     @Test
     void singleTestFailing() {
 
-        String result = run(justTests(), noScript(), "LeapYearLibrary", "LeapYearSingleTestFails");  // 3/4 normal @Tests passing
+        String result = run(justTests(), "LeapYearLibrary", "LeapYearSingleTestFails");  // 3/4 normal @Tests passing
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(3))
@@ -43,7 +43,7 @@ public class GraderJUnitTest extends GraderIntegrationTestBase {
     @Test
     void allTestsFailing() {
 
-        String result = run(justTests(), noScript(), "CountLettersLibrary", "CountLettersAllTestsFail");
+        String result = run(justTests(), "CountLettersLibrary", "CountLettersAllTestsFail");
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(0))
@@ -60,7 +60,7 @@ public class GraderJUnitTest extends GraderIntegrationTestBase {
     @Test
     void someTestsFailing() {           // 1/4 normal @Tests passing
 
-        String result = run(justTests(), noScript(), "PlayerPointsLibrary", "PlayerPointsSomeTestsFail");
+        String result = run(justTests(), "PlayerPointsLibrary", "PlayerPointsSomeTestsFail");
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(1))
@@ -77,7 +77,7 @@ public class GraderJUnitTest extends GraderIntegrationTestBase {
     @Test
     void ThreeDifferentTestTypesUsed() {
 
-        String result = run(justTests(), noScript(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfDifferentTestTypes");  // 5/5 @Tests passing
+        String result = run(justTests(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfDifferentTestTypes");  // 5/5 @Tests passing
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(5))
@@ -90,7 +90,7 @@ public class GraderJUnitTest extends GraderIntegrationTestBase {
     @Test
     void noTests() {        // 0/0 normal @Tests passing
 
-        String result = run(justTests(), noScript(), "NumberUtilsAddLibrary", "NumberUtilsNoTests");
+        String result = run(justTests(), "NumberUtilsAddLibrary", "NumberUtilsNoTests");
 
         assertThat(result)
                 .has(errorMessage("We do not see any tests. Are you sure you wrote them?"));

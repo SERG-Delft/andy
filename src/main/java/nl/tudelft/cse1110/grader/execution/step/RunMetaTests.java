@@ -42,8 +42,7 @@ public class RunMetaTests implements ExecutionStep {
                 DirectoryConfiguration metaDirCfg = new DirectoryConfiguration(
                         tempDir.toString(),
                         dirCfg.getLibrariesDir(),
-                        dirCfg.getReportsDir(),
-                        dirCfg.getCodeCheckerScript()
+                        dirCfg.getReportsDir()
                 );
 
                 Configuration metaCfg = new Configuration();

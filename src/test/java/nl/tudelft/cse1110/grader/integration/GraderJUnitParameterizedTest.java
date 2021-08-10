@@ -16,7 +16,7 @@ public class GraderJUnitParameterizedTest extends GraderIntegrationTestBase {
     @Test
     void singleParameterizedTestFails() {
 
-        String result = run(justTests(), noScript(), "PassingGradeLibrary", "PassingGradeSingleParameterizedTestFails");  // 4/5 parameterized test cases
+        String result = run(justTests(), "PassingGradeLibrary", "PassingGradeSingleParameterizedTestFails");  // 4/5 parameterized test cases
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(4))
@@ -32,7 +32,7 @@ public class GraderJUnitParameterizedTest extends GraderIntegrationTestBase {
     @Test
     void moreParameterizedTestsFail() {
 
-        String result = run(justTests(), noScript(), "ATMLibrary", "ATMMoreParameterizedTestsFail");  // 11/14 parameterized test cases
+        String result = run(justTests(), "ATMLibrary", "ATMMoreParameterizedTestsFail");  // 11/14 parameterized test cases
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(11))
@@ -50,7 +50,7 @@ public class GraderJUnitParameterizedTest extends GraderIntegrationTestBase {
     @Test
     void allParameterizedTestsFail() {
 
-        String result = run(justTests(), noScript(), "TwoIntegersLibrary", "TwoIntegersAllParameterizedTestsFail");  // 0/6 parameterized test cases
+        String result = run(justTests(), "TwoIntegersLibrary", "TwoIntegersAllParameterizedTestsFail");  // 0/6 parameterized test cases
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(0))
@@ -70,7 +70,7 @@ public class GraderJUnitParameterizedTest extends GraderIntegrationTestBase {
     @Test
     void helperMethodInTestShouldPass() {
 
-        String result = run(justTests(), noScript(), "PiecewiseLibrary", "PiecewiseHelperInTest");  // 26/26 parameterized test cases
+        String result = run(justTests(), "PiecewiseLibrary", "PiecewiseHelperInTest");  // 26/26 parameterized test cases
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(26))
@@ -85,7 +85,7 @@ public class GraderJUnitParameterizedTest extends GraderIntegrationTestBase {
     @Test
     void exceptionThrownByTest() {
 
-        String result = run(justTests(), noScript(), "MScAdmisisionLibrary", "MScAdmissionParameterizedTestThrowsException");  // 0/5 parameterized test cases
+        String result = run(justTests(), "MScAdmisisionLibrary", "MScAdmissionParameterizedTestThrowsException");  // 0/5 parameterized test cases
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(0))

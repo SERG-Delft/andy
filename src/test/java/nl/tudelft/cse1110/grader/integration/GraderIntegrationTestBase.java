@@ -71,7 +71,7 @@ public abstract class GraderIntegrationTestBase {
     }
 
 
-    public String run(List<ExecutionStep> plan, CheckScript codeCheckerScript, String libraryFile, String solutionFile) {
+    public String run(List<ExecutionStep> plan, String libraryFile, String solutionFile) {
         copyFiles(libraryFile, solutionFile);
 
         Configuration cfg = new Configuration();
@@ -79,8 +79,7 @@ public abstract class GraderIntegrationTestBase {
         DirectoryConfiguration dirCfg = new DirectoryConfiguration(
                 workDir.toString(),
                 getLibDirectory(),
-                reportDir.toString(),
-                codeCheckerScript
+                reportDir.toString()
         );
 
         cfg.setDirectoryConfiguration(dirCfg);
@@ -97,10 +96,10 @@ public abstract class GraderIntegrationTestBase {
         return result.buildEndUserResult();
     }
 
-    public String run(List<ExecutionStep> plan, CheckScript codeCheckerScript, String libraryFile, String solutionFile, String metaDirectory) {
+    public String run(List<ExecutionStep> plan, String libraryFile, String solutionFile, String metaDirectory) {
         this.copyMetaFiles(metaDirectory);
 
-        return this.run(plan, codeCheckerScript, libraryFile, solutionFile);
+        return this.run(plan, libraryFile, solutionFile);
     }
 
 

@@ -13,7 +13,7 @@ public class GraderJQWikTest extends GraderIntegrationTestBase {
 
     @Test
     void testSimplePropertyTest() {
-        String result = run(justTests(), noScript(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfSimpleJqwikError");
+        String result = run(justTests(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfSimpleJqwikError");
         assertThat(result)
                 .has(propertyTestFailing("testNoElementInWholeArray"));
     }
@@ -21,7 +21,7 @@ public class GraderJQWikTest extends GraderIntegrationTestBase {
 
     @Test
     void testMultiplePropertyTestsFailing() {
-        String result = run(justTests(), noScript(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfMultipleJqwikErrors");
+        String result = run(justTests(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfMultipleJqwikErrors");
         assertThat(result)
                 .has(propertyTestFailing("testNoElementInWholeArray"))
                 .has(propertyTestFailing("testValueInArrayUniqueElements"));
@@ -30,7 +30,7 @@ public class GraderJQWikTest extends GraderIntegrationTestBase {
 
     @Test
     void testMultiplePropertyWithParameterizedTests() {
-        String result = run(justTests(), noScript(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfJqwikWithParameterized");
+        String result = run(justTests(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfJqwikWithParameterized");
         assertThat(result)
                 .has(propertyTestFailing("testNoElementInWholeArray"))
                 .has(propertyTestFailing("testValueInArrayUniqueElements"))
@@ -40,7 +40,7 @@ public class GraderJQWikTest extends GraderIntegrationTestBase {
 
     @Test
     void testMessageOtherThanAssertionError() {
-        String result = run(justTests(), noScript(), "NumberUtilsAddPositiveLibrary", "NumberUtilsAddPositiveJqwikException");
+        String result = run(justTests(), "NumberUtilsAddPositiveLibrary", "NumberUtilsAddPositiveJqwikException");
         assertThat(result)
                 .has(propertyTestFailing("testAddition"));
     }

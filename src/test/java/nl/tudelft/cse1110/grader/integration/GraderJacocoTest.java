@@ -16,7 +16,7 @@ public class GraderJacocoTest extends GraderIntegrationTestBase {
     @ParameterizedTest
     @MethodSource("generator")
     void test(String library, String solution, int lines, int instructions, int branches) {
-        String result = run(withJacoco(), noScript(), library, solution);
+        String result = run(withJacoco(), library, solution);
 
         assertThat(result)
                 .has(linesCovered(lines))

@@ -9,14 +9,13 @@ public class DirectoryConfiguration {
     private final String workingDir;
     private final String librariesDir;
     private final String reportsDir;
-    private final CheckScript codeCheckerScript;
+    private CheckScript codeCheckerScript;
     private List<String> fullClassNames;
 
-    public DirectoryConfiguration(String workingDir, String librariesDir, String reportsDir, CheckScript codeCheckerScript) {
+    public DirectoryConfiguration(String workingDir, String librariesDir, String reportsDir) {
         this.workingDir = workingDir;
         this.librariesDir = librariesDir;
         this.reportsDir = reportsDir;
-        this.codeCheckerScript = codeCheckerScript;
     }
 
     public String getWorkingDir() {
@@ -33,6 +32,10 @@ public class DirectoryConfiguration {
 
     public CheckScript getCodeCheckerScript() {
         return this.codeCheckerScript;
+    }
+
+    public void setCodeCheckerScript(CheckScript codeCheckerScript) {
+        this.codeCheckerScript = codeCheckerScript;
     }
 
     public void setNewClassNames(List<String> fullClassNames) {

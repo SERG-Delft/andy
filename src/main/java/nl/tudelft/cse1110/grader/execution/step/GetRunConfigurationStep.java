@@ -26,10 +26,15 @@ public class GetRunConfigurationStep implements ExecutionStep {
             cfg.setRunConfiguration(runConfiguration);
 
             this.setGradeValues(runConfiguration, result);
+
+            dirCfg.setCodeCheckerScript(runConfiguration.checkScript());
         } catch (NoSuchElementException ex) {
             RunConfiguration runConfiguration = new DefaultRunConfiguration(cfg.getDirectoryConfiguration());
             cfg.setRunConfiguration(runConfiguration);
+
             this.setGradeValues(runConfiguration, result);
+
+            dirCfg.setCodeCheckerScript(runConfiguration.checkScript());
         } catch (Exception ex) {
             result.genericFailure(this, ex);
         }

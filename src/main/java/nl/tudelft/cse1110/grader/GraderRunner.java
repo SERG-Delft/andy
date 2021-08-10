@@ -15,7 +15,6 @@ public class GraderRunner {
     public static void main(String[] args) {
 
         // for now, only testing purposes
-        CheckScript codeCheckerScript = new CheckScript(Arrays.asList(new SingleCheck("TestMethodsHaveAssertions")));
 
 //        DefaultConfiguration cfg = new DefaultConfiguration(
 //            "delft.NumberUtils",
@@ -29,8 +28,7 @@ public class GraderRunner {
         DirectoryConfiguration dirCfg = new DirectoryConfiguration(
                 "E:\\TUDelft\\CSE1110 Summer\\code",
                 "E:\\TUDelft\\CSE1110 Summer\\libs",
-                "E:\\TUDelft\\CSE1110 Summer\\reports",
-                codeCheckerScript
+                "E:\\TUDelft\\CSE1110 Summer\\reports"
         );
 
         cfg.setDirectoryConfiguration(dirCfg);
