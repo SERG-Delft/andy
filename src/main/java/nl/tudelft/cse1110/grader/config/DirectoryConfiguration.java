@@ -9,7 +9,6 @@ public class DirectoryConfiguration {
     private final String workingDir;
     private final String librariesDir;
     private final String reportsDir;
-    private CheckScript codeCheckerScript;
     private List<String> fullClassNames;
 
     public DirectoryConfiguration(String workingDir, String librariesDir, String reportsDir) {
@@ -28,14 +27,6 @@ public class DirectoryConfiguration {
 
     public String getReportsDir() {
         return reportsDir;
-    }
-
-    public CheckScript getCodeCheckerScript() {
-        return this.codeCheckerScript;
-    }
-
-    public void setCodeCheckerScript(CheckScript codeCheckerScript) {
-        this.codeCheckerScript = codeCheckerScript;
     }
 
     public void setNewClassNames(List<String> fullClassNames) {
