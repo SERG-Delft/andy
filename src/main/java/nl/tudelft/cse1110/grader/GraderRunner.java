@@ -13,31 +13,46 @@ import java.util.Arrays;
 public class GraderRunner {
 
     public static void main(String[] args) {
-
-        // for now, only testing purposes
-
-//        DefaultConfiguration cfg = new DefaultConfiguration(
-//            "delft.NumberUtils",
-//            "/Users/mauricioaniche/education/cse1110/test/code",
-//            "/Users/mauricioaniche/education/cse1110/test/libs",
-//            "/Users/mauricioaniche/education/cse1110/test/reports",
-//                codeCheckerScript
-//        );
         Configuration cfg = new Configuration();
 
+//        DirectoryConfiguration dirCfg = new DirectoryConfiguration(
+//                "E:\\TUDelft\\CSE1110 Summer\\code",
+//                "E:\\TUDelft\\CSE1110 Summer\\libs",
+//                "E:\\TUDelft\\CSE1110 Summer\\reports"
+//        );
+
         DirectoryConfiguration dirCfg = new DirectoryConfiguration(
-                "E:\\TUDelft\\CSE1110 Summer\\code",
-                "E:\\TUDelft\\CSE1110 Summer\\libs",
-                "E:\\TUDelft\\CSE1110 Summer\\reports"
+                System.getenv("WORKING_DIR"),
+                System.getenv("LIBS_DIR"),
+                System.getenv("REPORTS_DIR")
         );
 
         cfg.setDirectoryConfiguration(dirCfg);
 
         ResultBuilder result = new ResultBuilder();
 
-        ExecutionFlow flow = ExecutionFlow.fullMode(cfg, result);
-        flow.run();
+//        ExecutionFlow flow = ExecutionFlow.fullMode(cfg, result);
+//        flow.run();
+//
+//        System.out.println(result.buildDebugResult());
 
-        System.out.println(result.buildDebugResult());
+        String mode = System.getenv("MODE");
+
+        ExecutionFlow flow = null;
+        if (mode.equals("FULL")) {
+            flow = ExecutionFlow.fullMode(cfg, result);
+        } else if (mode.equals("EXAM")) {
+            flow = ExecutionFlow.examMode(cfg, result);
+        } else if (mode.equals("TESTS")) {
+            flow = ExecutionFlow.justTests(cfg, result);
+        }
+
+        if (flow != null) {
+            flow.run();
+
+            System.out.println(result.buildDebugResult());
+        } else {
+            System.out.println("Unknown mode");
+        }
     }
 }
