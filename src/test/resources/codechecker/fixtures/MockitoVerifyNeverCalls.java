@@ -34,4 +34,12 @@ public class MockitoVerifyNeverCalls {
         Mockito.verify(mockedList, Mockito.never()).get(any(Integer.class));
     }
 
+    @Test
+    void t5() {
+        List<String> mockedList = mock(List.class);
+
+        Mockito.verify(mockedList, Mockito.times(0)).isEmpty();
+        Mockito.verify(mockedList, times(0)).clear();
+    }
+
 }
