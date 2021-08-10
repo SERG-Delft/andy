@@ -4,6 +4,7 @@ import nl.tudelft.cse1110.grader.config.Configuration;
 import nl.tudelft.cse1110.grader.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.grader.config.RunConfiguration;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
+import nl.tudelft.cse1110.grader.execution.FromBytesClassLoader;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
 import nl.tudelft.cse1110.grader.util.ClassUtils;
 
@@ -52,7 +53,7 @@ public class RunJacoco implements ExecutionStep {
             final Instrumenter instr = new Instrumenter(runtime);
 
             ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
-            InstrumentClassLoader classLoader = new InstrumentClassLoader();
+            FromBytesClassLoader classLoader = new FromBytesClassLoader();
 
             this.instrumentAllInDirectory(instr, new File(dirCfg.getWorkingDir()), classLoader, "");
 
@@ -98,7 +99,7 @@ public class RunJacoco implements ExecutionStep {
     }
 
     /**Instrument all classes in a directory.*/
-    private void instrumentAllInDirectory(Instrumenter instr, File directory, InstrumentClassLoader classLoader, String start) throws IOException {
+    private void instrumentAllInDirectory(Instrumenter instr, File directory, FromBytesClassLoader classLoader, String start) throws IOException {
         File[] files = directory.listFiles();
 
         for (File file : files) {
@@ -150,24 +151,5 @@ public class RunJacoco implements ExecutionStep {
                 new DirectorySourceFileLocator(new File(dirCfg.getWorkingDir()), "utf-8", 4));
 
         visitor.visitEnd();
-    }
-
-    /**Custom class loader that will contain the instrumented classes.*/
-    private static class InstrumentClassLoader extends ClassLoader {
-        private final Map<String, byte[]> definitions = new HashMap<>();
-
-        public void addDefinition(final String name, final byte[] bytes) {
-            definitions.put(name, bytes);
-        }
-
-        @Override
-        protected Class<?> loadClass(final String name, final boolean resolve)
-                throws ClassNotFoundException {
-            final byte[] bytes = definitions.get(name);
-            if (bytes != null) {
-                return defineClass(name, bytes, 0, bytes.length);
-            }
-            return super.loadClass(name, resolve);
-        }
     }
 }

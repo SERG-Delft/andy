@@ -18,6 +18,7 @@ public class GraderRunner {
         CheckScript codeCheckerScript = new CheckScript(Arrays.asList(new SingleCheck("TestMethodsHaveAssertions")));
 
 //        DefaultConfiguration cfg = new DefaultConfiguration(
+//            "delft.NumberUtils",
 //            "/Users/mauricioaniche/education/cse1110/test/code",
 //            "/Users/mauricioaniche/education/cse1110/test/libs",
 //            "/Users/mauricioaniche/education/cse1110/test/reports",
