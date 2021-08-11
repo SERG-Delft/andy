@@ -299,11 +299,23 @@ public class GraderIntegrationTestAssertions {
         };
     }
 
-    public static Condition<String> noJUnitTests() {
+    public static Condition<String> finalGrade(int score) {
         return new Condition<>() {
             @Override
             public boolean matches(String value) {
-                String regex = "We do not see any tests. Are you sure you wrote them?";
+                String regex = "--- Final grade\n" + score + "/100";
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(value);
+                return matcher.find();
+            }
+        };
+    }
+
+    public static Condition<String> mutationScore(int mutantsKilled, int totalMutants) {
+        return new Condition<>() {
+            @Override
+            public boolean matches(String value) {
+                String regex = "--- Mutation testing\n" + mutantsKilled + "/" + totalMutants;
                 Pattern pattern = Pattern.compile(regex);
                 Matcher matcher = pattern.matcher(value);
                 return matcher.find();

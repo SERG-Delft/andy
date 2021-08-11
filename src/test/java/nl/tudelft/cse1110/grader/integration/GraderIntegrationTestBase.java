@@ -102,6 +102,17 @@ public abstract class GraderIntegrationTestBase {
         return this.run(plan, libraryFile, solutionFile);
     }
 
+    public String run(List<ExecutionStep> plan, String libraryFile, String solutionFile, String metaDirectory, String configurationFile) {
+        this.copyConfigurationFile(configurationFile);
+
+        return this.run(plan, libraryFile, solutionFile, metaDirectory);
+    }
+
+    public String runWithConfigNoMeta(List<ExecutionStep> plan, String libraryFile, String solutionFile, String configurationFile) {
+        this.copyConfigurationFile(configurationFile);
+
+        return this.run(plan, libraryFile, solutionFile);
+    }
 
     protected void copyFiles(String libraryFile, String solutionFile) {
         String dirWithLibrary = resourceFolder("/grader/fixtures/Library/");
@@ -118,6 +129,14 @@ public abstract class GraderIntegrationTestBase {
         copiedSolution.renameTo(new File(copiedSolution.getParentFile() + "/Solution.java"));
     }
 
+    protected void copyConfigurationFile(String configurationFile) {
+        String dirWithConfiguration = resourceFolder("/grader/fixtures/Config/");
+
+        File config = new File(dirWithConfiguration + configurationFile + ".java");
+        File copied = FileUtils.copyFile(config.getAbsolutePath(), workDir.toString()).toFile();
+
+        copied.renameTo(new File(copied.getParentFile() + "/Configuration.java"));
+    }
 
     private static String getLibDirectory() {
         String libPath = permanentResourceFolder();
@@ -130,9 +149,7 @@ public abstract class GraderIntegrationTestBase {
 
         File meta = new File(dirWithMeta + metaDirectory);
         for (File file : meta.listFiles()) {
-            try {
-                FileUtils.copyFile(file.getAbsolutePath(), workDir.toString());
-            } catch (Exception ex) {}
+            FileUtils.copyFile(file.getAbsolutePath(), workDir.toString());
         }
     }
 
