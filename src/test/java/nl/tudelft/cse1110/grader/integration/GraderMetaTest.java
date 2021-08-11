@@ -11,7 +11,7 @@ public class GraderMetaTest extends GraderIntegrationTestBase {
 
     @Test
     void testAllMetaTestsPassing() {
-        String result = run(withMeta(), noScript(), "NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution", "NumberUtilsAdd");
+        String result = run(withMeta(), "NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution", "NumberUtilsAdd");
 
         assertThat(result)
                 .has(metaTests(4))
@@ -20,7 +20,7 @@ public class GraderMetaTest extends GraderIntegrationTestBase {
 
     @Test
     void testSomeMetaTestFailing() {
-        String result = run(withMeta(), noScript(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAdd");
+        String result = run(withMeta(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAdd");
 
         assertThat(result)
                 .has(metaTests(4))
@@ -32,7 +32,7 @@ public class GraderMetaTest extends GraderIntegrationTestBase {
 
     @Test
     void testAllMetaTestsFailing() {
-        String result = run(withMeta(), noScript(), "NumberUtilsAddLibrary", "NumberUtilsNoTests", "NumberUtilsAdd");
+        String result = run(withMeta(), "NumberUtilsAddLibrary", "NumberUtilsNoTests", "NumberUtilsAdd");
 
         assertThat(result)
                 .has(metaTests(4))
@@ -45,7 +45,7 @@ public class GraderMetaTest extends GraderIntegrationTestBase {
 
     @Test
     void testMetaWhenMultipleClassesInLibrary() {
-        String result = run(withMeta(), noScript(), "SoftwhereLibrary", "SoftwhereMissingTests", "Softwhere");
+        String result = run(withMeta(), "SoftwhereLibrary", "SoftwhereMissingTests", "Softwhere");
 
         assertThat(result)
                 .has(metaTests(4))
@@ -55,7 +55,7 @@ public class GraderMetaTest extends GraderIntegrationTestBase {
 
     @Test
     void testMetaWhenMultipleClassesInSolution() {
-        String result = run(withMeta(), noScript(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfJQWikPassing", "ArrayUtilsIndexOf");
+        String result = run(withMeta(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfJQWikPassing", "ArrayUtilsIndexOf");
 
         assertThat(result)
                 .has(metaTests(3))

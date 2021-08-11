@@ -1,7 +1,7 @@
 package nl.tudelft.cse1110.grader.execution.step;
 
 import nl.tudelft.cse1110.grader.config.Configuration;
-import nl.tudelft.cse1110.grader.config.DefaultConfiguration;
+import nl.tudelft.cse1110.grader.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.grader.execution.FromBytesClassLoader;
@@ -17,13 +17,13 @@ public class RunMetaTests implements ExecutionStep {
 
     @Override
     public void execute(Configuration cfg, ResultBuilder result) {
-
+        DirectoryConfiguration dirCfg = cfg.getDirectoryConfiguration();
         int score = 0;
 
         try {
             /**Get the required files - meta classes and the solution*/
-            List<File> metaClasses = FileUtils.getMetaFiles(cfg.getWorkingDir());
-            String solutionFile = FileUtils.findSolution(cfg.getWorkingDir());
+            List<File> metaClasses = FileUtils.getMetaFiles(dirCfg.getWorkingDir());
+            String solutionFile = FileUtils.findSolution(dirCfg.getWorkingDir());
             List<String> failures = new ArrayList<>();
 
             for (File metaClass : metaClasses) {
@@ -39,15 +39,16 @@ public class RunMetaTests implements ExecutionStep {
                 FileUtils.copyFile(solutionFile, tempDir.getAbsolutePath());
 
                 /**Prepare an execution flow for the meta class.*/
-                Configuration metaCfg = new DefaultConfiguration(
-                        cfg.getMainLibraryClass(),
+                DirectoryConfiguration metaDirCfg = new DirectoryConfiguration(
                         tempDir.toString(),
-                        cfg.getLibrariesDir(),
-                        cfg.getReportsDir(),
-                        cfg.getCodeCheckerScript()
+                        dirCfg.getLibrariesDir(),
+                        dirCfg.getReportsDir()
                 );
 
-                ResultBuilder metaResult = new ResultBuilder(new GradeValues(false, 0, 0, 0, 0));
+                Configuration metaCfg = new Configuration();
+                metaCfg.setDirectoryConfiguration(metaDirCfg);
+
+                ResultBuilder metaResult = new ResultBuilder();
 
                 ExecutionFlow flow = ExecutionFlow.justTests(metaCfg, metaResult);
 

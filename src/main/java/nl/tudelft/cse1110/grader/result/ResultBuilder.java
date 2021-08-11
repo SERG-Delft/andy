@@ -32,13 +32,14 @@ public class ResultBuilder {
     private GradeCalculator gradeCalculator;
     private GradeValues gradeValues;
 
-
-    // these parameters we wanna configure
-    public ResultBuilder(GradeValues gradeValues) {
-        this.gradeValues = gradeValues;
-        gradeCalculator = new GradeCalculator(gradeValues);
+    public ResultBuilder() {
+        this.gradeCalculator = new GradeCalculator();
     }
 
+    public void setGradeValues(GradeValues gradeValues) {
+        this.gradeValues = gradeValues;
+        this.gradeCalculator.setGradeValues(gradeValues);
+    }
 
     public void compilationSuccess() {
         l("--- Compilation\nSuccess");

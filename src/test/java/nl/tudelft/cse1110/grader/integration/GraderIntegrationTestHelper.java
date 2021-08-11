@@ -2,10 +2,7 @@ package nl.tudelft.cse1110.grader.integration;
 
 import nl.tudelft.cse1110.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
-import nl.tudelft.cse1110.grader.execution.step.CompilationStep;
-import nl.tudelft.cse1110.grader.execution.step.RunJUnitTests;
-import nl.tudelft.cse1110.grader.execution.step.RunJacoco;
-import nl.tudelft.cse1110.grader.execution.step.RunMetaTests;
+import nl.tudelft.cse1110.grader.execution.step.*;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -23,6 +20,9 @@ public class GraderIntegrationTestHelper {
         return new CheckScript(Collections.emptyList());
     }
 
+    public static List<ExecutionStep> withPiTest() {
+        return Arrays.asList(new RunPitest());
+    }
 
     public static List<ExecutionStep> justCompilation() {
         return Arrays.asList(new CompilationStep());
@@ -34,6 +34,22 @@ public class GraderIntegrationTestHelper {
 
     public static List<ExecutionStep> withMeta() {
         return Arrays.asList(new RunMetaTests());
+    }
+
+    public static List<ExecutionStep> fullMode() {
+        return Arrays.asList(new RunJUnitTests(),
+                new RunJacoco(),
+                new RunPitest(),
+                new CodeChecksStep(),
+                new RunMetaTests(),
+                new CalculateFinalGradeStep());
+    }
+
+    public static List<ExecutionStep> examMode() {
+        return Arrays.asList(new RunJUnitTests(),
+                new RunJacoco(),
+                new RunPitest(),
+                new CalculateFinalGradeStep());
     }
 
 }

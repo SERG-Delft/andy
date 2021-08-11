@@ -2,7 +2,8 @@ package nl.tudelft.cse1110.grader;
 
 import nl.tudelft.cse1110.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.codechecker.engine.SingleCheck;
-import nl.tudelft.cse1110.grader.config.DefaultConfiguration;
+import nl.tudelft.cse1110.grader.config.Configuration;
+import nl.tudelft.cse1110.grader.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.grader.result.GradeValues;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
@@ -12,34 +13,46 @@ import java.util.Arrays;
 public class GraderRunner {
 
     public static void main(String[] args) {
+        Configuration cfg = new Configuration();
 
-        // for now, only testing purposes
-        CheckScript codeCheckerScript = new CheckScript(Arrays.asList(new SingleCheck("TestMethodsHaveAssertions")));
-
-//        DefaultConfiguration cfg = new DefaultConfiguration(
-//            "delft.NumberUtils",
-//            "/Users/mauricioaniche/education/cse1110/test/code",
-//            "/Users/mauricioaniche/education/cse1110/test/libs",
-//            "/Users/mauricioaniche/education/cse1110/test/reports",
-//                codeCheckerScript
+//        DirectoryConfiguration dirCfg = new DirectoryConfiguration(
+//                "E:\\TUDelft\\CSE1110 Summer\\code",
+//                "E:\\TUDelft\\CSE1110 Summer\\libs",
+//                "E:\\TUDelft\\CSE1110 Summer\\reports"
 //        );
 
-        DefaultConfiguration cfg = new DefaultConfiguration(
-                "delft.NumberUtils",
-                "E:\\TUDelft\\CSE1110 Summer\\code",
-                "E:\\TUDelft\\CSE1110 Summer\\libs",
-                "E:\\TUDelft\\CSE1110 Summer\\reports",
-                codeCheckerScript
+        DirectoryConfiguration dirCfg = new DirectoryConfiguration(
+                System.getenv("WORKING_DIR"),
+                System.getenv("LIBS_DIR"),
+                System.getenv("REPORTS_DIR")
         );
 
-        GradeValues gradeValues = new GradeValues(true,
-                0.4f, 0.2f, 0.2f, 0.2f);
+        cfg.setDirectoryConfiguration(dirCfg);
 
-        ResultBuilder result = new ResultBuilder(gradeValues);
+        ResultBuilder result = new ResultBuilder();
 
-        ExecutionFlow flow = ExecutionFlow.fullMode(cfg, result);
-        flow.run();
+//        ExecutionFlow flow = ExecutionFlow.fullMode(cfg, result);
+//        flow.run();
+//
+//        System.out.println(result.buildDebugResult());
 
-        System.out.println(result.buildDebugResult());
+        String mode = System.getenv("MODE");
+
+        ExecutionFlow flow = null;
+        if (mode.equals("FULL")) {
+            flow = ExecutionFlow.fullMode(cfg, result);
+        } else if (mode.equals("EXAM")) {
+            flow = ExecutionFlow.examMode(cfg, result);
+        } else if (mode.equals("TESTS")) {
+            flow = ExecutionFlow.justTests(cfg, result);
+        }
+
+        if (flow != null) {
+            flow.run();
+
+            System.out.println(result.buildDebugResult());
+        } else {
+            System.out.println("Unknown mode");
+        }
     }
 }

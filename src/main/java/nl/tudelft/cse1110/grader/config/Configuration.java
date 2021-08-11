@@ -1,17 +1,23 @@
 package nl.tudelft.cse1110.grader.config;
 
-import nl.tudelft.cse1110.codechecker.engine.CheckScript;
+public class Configuration {
 
-import java.util.List;
+    private DirectoryConfiguration directoryConfiguration = null;
+    private RunConfiguration runConfiguration = null;
 
-public interface Configuration {
-    String getWorkingDir();
-    String getLibrariesDir();
-    String getReportsDir();
-    CheckScript getCodeCheckerScript();
+    public DirectoryConfiguration getDirectoryConfiguration() {
+        return directoryConfiguration;
+    }
 
-    void setNewClassNames(List<String> fullClassNames);
-    List<String> getNewClassNames();
+    public RunConfiguration getRunConfiguration() {
+        return runConfiguration;
+    }
 
-    String getMainLibraryClass();
+    public void setDirectoryConfiguration(DirectoryConfiguration directoryConfiguration) {
+        this.directoryConfiguration = directoryConfiguration;
+    }
+
+    public void setRunConfiguration(RunConfiguration runConfiguration) {
+        this.runConfiguration = runConfiguration;
+    }
 }

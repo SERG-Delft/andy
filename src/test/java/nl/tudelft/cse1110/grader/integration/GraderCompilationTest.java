@@ -12,7 +12,7 @@ public class GraderCompilationTest extends GraderIntegrationTestBase {
 
     @Test
     void compilationFailure() {
-        String result = run(justCompilation(), noScript(), "ArrayUtilsIsSortedLibrary", "ArrayUtilsIsSortedWithCompilationError");
+        String result = run(justCompilation(), "ArrayUtilsIsSortedLibrary", "ArrayUtilsIsSortedWithCompilationError");
         assertThat(result)
                 .has(GraderIntegrationTestAssertions.compilationFailure())
                 .has(GraderIntegrationTestAssertions.compilationErrorOnLine(29))
@@ -23,7 +23,7 @@ public class GraderCompilationTest extends GraderIntegrationTestBase {
 
     @Test
     void compilationSuccess() {
-        String result = run(justCompilation(), noScript(), "ListUtilsLibrary", "ListUtilsCompilationSuccess");
+        String result = run(justCompilation(),  "ListUtilsLibrary", "ListUtilsCompilationSuccess");
         assertThat(result)
                 .has(GraderIntegrationTestAssertions.compilationSuccess());
     }
@@ -31,7 +31,7 @@ public class GraderCompilationTest extends GraderIntegrationTestBase {
 
     @Test
     void compilationDifferentFailures() {
-        String result = run(justCompilation(), noScript(), "MathArraysLibrary","MathArraysDifferentCompilationErrors");
+        String result = run(justCompilation(), "MathArraysLibrary","MathArraysDifferentCompilationErrors");
         assertThat(result)
                 .has(GraderIntegrationTestAssertions.compilationFailure())
                 .has(GraderIntegrationTestAssertions.compilationErrorOnLine(21))

@@ -1,11 +1,10 @@
 package nl.tudelft.cse1110.grader.integration;
 
 import nl.tudelft.cse1110.codechecker.engine.CheckScript;
-import nl.tudelft.cse1110.grader.config.DefaultConfiguration;
+import nl.tudelft.cse1110.grader.config.Configuration;
+import nl.tudelft.cse1110.grader.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
-import nl.tudelft.cse1110.grader.execution.step.ReplaceClassloaderStep;
-import nl.tudelft.cse1110.grader.execution.step.RunJacoco;
 import nl.tudelft.cse1110.grader.result.GradeValues;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
 import nl.tudelft.cse1110.grader.util.FileUtils;
@@ -72,20 +71,20 @@ public abstract class GraderIntegrationTestBase {
     }
 
 
-    public String run(List<ExecutionStep> plan, CheckScript codeCheckerScript, String libraryFile, String solutionFile) {
+    public String run(List<ExecutionStep> plan, String libraryFile, String solutionFile) {
         copyFiles(libraryFile, solutionFile);
 
-        DefaultConfiguration cfg = new DefaultConfiguration(
+        Configuration cfg = new Configuration();
+
+        DirectoryConfiguration dirCfg = new DirectoryConfiguration(
                 workDir.toString(),
                 getLibDirectory(),
-                reportDir.toString(),
-                codeCheckerScript
+                reportDir.toString()
         );
 
-        GradeValues gradeValues = new GradeValues(true,
-                0.4f, 0.2f, 0.2f, 0.2f);
+        cfg.setDirectoryConfiguration(dirCfg);
 
-        ResultBuilder result = new ResultBuilder(gradeValues);
+        ResultBuilder result = new ResultBuilder();
 
         ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
 
@@ -97,12 +96,23 @@ public abstract class GraderIntegrationTestBase {
         return result.buildEndUserResult();
     }
 
-    public String run(List<ExecutionStep> plan, CheckScript codeCheckerScript, String libraryFile, String solutionFile, String metaDirectory) {
+    public String run(List<ExecutionStep> plan, String libraryFile, String solutionFile, String metaDirectory) {
         this.copyMetaFiles(metaDirectory);
 
-        return this.run(plan, codeCheckerScript, libraryFile, solutionFile);
+        return this.run(plan, libraryFile, solutionFile);
     }
 
+    public String run(List<ExecutionStep> plan, String libraryFile, String solutionFile, String metaDirectory, String configurationFile) {
+        this.copyConfigurationFile(configurationFile);
+
+        return this.run(plan, libraryFile, solutionFile, metaDirectory);
+    }
+
+    public String runWithConfigNoMeta(List<ExecutionStep> plan, String libraryFile, String solutionFile, String configurationFile) {
+        this.copyConfigurationFile(configurationFile);
+
+        return this.run(plan, libraryFile, solutionFile);
+    }
 
     protected void copyFiles(String libraryFile, String solutionFile) {
         String dirWithLibrary = resourceFolder("/grader/fixtures/Library/");
@@ -119,6 +129,14 @@ public abstract class GraderIntegrationTestBase {
         copiedSolution.renameTo(new File(copiedSolution.getParentFile() + "/Solution.java"));
     }
 
+    protected void copyConfigurationFile(String configurationFile) {
+        String dirWithConfiguration = resourceFolder("/grader/fixtures/Config/");
+
+        File config = new File(dirWithConfiguration + configurationFile + ".java");
+        File copied = FileUtils.copyFile(config.getAbsolutePath(), workDir.toString()).toFile();
+
+        copied.renameTo(new File(copied.getParentFile() + "/Configuration.java"));
+    }
 
     private static String getLibDirectory() {
         String libPath = permanentResourceFolder();
@@ -131,9 +149,7 @@ public abstract class GraderIntegrationTestBase {
 
         File meta = new File(dirWithMeta + metaDirectory);
         for (File file : meta.listFiles()) {
-            try {
-                FileUtils.copyFile(file.getAbsolutePath(), workDir.toString());
-            } catch (Exception ex) {}
+            FileUtils.copyFile(file.getAbsolutePath(), workDir.toString());
         }
     }
 
