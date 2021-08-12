@@ -67,9 +67,13 @@ public class CompilationStep implements ExecutionStep {
             if(compilationResult) {
                 dirCfg.setNewClassNames(scanner.getFullClassNames());
                 result.compilationSuccess();
+                ExportHighlightsStep.compilationPassed = true;
             }
             else {
                 result.compilationFail(diagnostics.getDiagnostics());
+                ExportHighlightsStep.compilationPassed = false;
+                ExportHighlightsStep.diagnostics = diagnostics.getDiagnostics();
+
             }
 
             manager.close();

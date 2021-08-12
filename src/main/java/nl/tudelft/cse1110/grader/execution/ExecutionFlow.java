@@ -74,7 +74,8 @@ public class ExecutionFlow {
     }
 
     private List<ExecutionStep> basicSteps() {
-        return Arrays.asList(new OrganizeSourceCodeStep(), new CompilationStep(), new ReplaceClassloaderStep(), new GetRunConfigurationStep());
+        return Arrays.asList(new OrganizeSourceCodeStep(), new CompilationStep(), new ExportHighlightsStep(), new ReplaceClassloaderStep(), new GetRunConfigurationStep());
     }
+
 
 }
