@@ -2,6 +2,7 @@ package domain.addingnumbers;
 
 import nl.tudelft.cse1110.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.grader.config.RunConfiguration;
+import nl.tudelft.cse1110.grader.execution.MetaTest;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,5 +28,108 @@ public class Configuration extends RunConfiguration {
     @Override
     public List<String> classesUnderTest() {
         return List.of("domain.addingnumbers.NumberUtils");
+    }
+
+    @Override
+    public List<MetaTest> metaTests() {
+        return List.of(
+            new MetaTest("AppliesMultipleCarriesWrongly",
+                """
+                int sum = leftDigit + rightDigit + carry;
+
+                result.addFirst(sum % 10);
+                carry = sum / 10;
+                """,
+                """
+                int sum;
+
+                if (leftDigit + rightDigit >= 10) {
+                    sum = leftDigit + rightDigit;
+                    carry = 1;
+                }
+                else {
+                    sum = leftDigit + rightDigit + carry;
+                    carry = 0;
+                }
+                result.addFirst(sum % 10);
+                """),
+            new MetaTest("DoesNotApplyCarryAtAll",
+                """
+                int carry = 0;
+                for (int i = 0; i < Math.max(reversedLeft.size(), reversedRight.size()); i++) {
+                    int leftDigit = reversedLeft.size() > i ? reversedLeft.get(i) : 0;
+                    int rightDigit = reversedRight.size() > i ? reversedRight.get(i) : 0;
+
+                    if (leftDigit < 0 || leftDigit > 9 || rightDigit < 0 || rightDigit > 9)
+                        throw new IllegalArgumentException();
+
+                    int sum = leftDigit + rightDigit + carry;
+
+                    result.addFirst(sum % 10);
+                    carry = sum / 10;
+                }
+
+                // add leftover carry
+                result.addFirst(carry);
+
+                // remove leading zeroes from the result
+                while (result.size() > 1 && result.get(0) == 0)
+                    result.remove(0);
+
+                return result;
+                """,
+                """
+                for (int i = 0; i < Math.max(reversedLeft.size(), reversedRight.size()); i++) {
+
+                    int leftDigit = reversedLeft.size() > i ? reversedLeft.get(i) : 0;
+                    int rightDigit = reversedRight.size() > i ? reversedRight.get(i) : 0;
+
+                    if (leftDigit < 0 || leftDigit > 9 || rightDigit < 0 || rightDigit > 9)
+                        throw new IllegalArgumentException();
+
+                    int sum = leftDigit + rightDigit;
+
+                    result.addFirst(sum % 10);
+                }
+
+                // remove leading zeroes from the result
+                while (result.size() > 1 && result.get(0) == 0)
+                    result.remove(0);
+
+                if (result.isEmpty()) {
+                    result.addFirst(0);
+                }
+
+                return result;
+                """),
+            new MetaTest("DoesNotApplyLastCarry",
+                """
+                // add leftover carry
+                result.addFirst(carry);
+
+                // remove leading zeroes from the result
+                while (result.size() > 1 && result.get(0) == 0)
+                    result.remove(0);
+
+                return result;
+                """,
+                """
+                // remove leading zeroes from the result
+                while (result.size() > 1 && result.get(0) == 0)
+                    result.remove(0);
+
+                if (result.isEmpty()) {
+                    result.addFirst(0);
+                }
+
+                return result;
+                """),
+            new MetaTest("DoesNotCheckNumbersOutOfRange",
+                """
+                if (leftDigit < 0 || leftDigit > 9 || rightDigit < 0 || rightDigit > 9)
+                    throw new IllegalArgumentException();
+                """,
+                "")
+        );
     }
 }

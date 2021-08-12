@@ -31,7 +31,7 @@ public class RunMetaTests implements ExecutionStep {
             String solutionFile = FileUtils.findSolution(dirCfg.getWorkingDir());
             List<String> failures = new ArrayList<>();
 
-            for (MetaTest metaClass : metaTests) {
+            for (MetaTest metaTest : metaTests) {
                 /**Save the current class loader and create a new one. Otherwise Java will not use the meta classes.*/
                 ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
                 ClassLoader classLoader = new FromBytesClassLoader();
@@ -45,8 +45,14 @@ public class RunMetaTests implements ExecutionStep {
 
                 /**Create the meta file in the temporary directory and put the content corresponding to this meta test.*/
                 File libraryFile = new File(FileUtils.findLibrary(dirCfg.getWorkingDir()));
-                String originalLibraryContent = FileUtils.readFile(libraryFile);
-                String metaFileContent = originalLibraryContent.replace(metaClass.getOld(), metaClass.getReplacement());
+                String originalLibraryContent = FileUtils.readFile(libraryFile).replaceAll("(?m)^\\s+", "");
+                String old = metaTest.getOld().replaceAll("(?m)^\\s+", "");
+                String metaFileContent = originalLibraryContent.replace(old, metaTest.getReplacement());
+
+                if (metaFileContent.equals(originalLibraryContent)) {
+                    throw new RuntimeException("Meta test " + metaTest.getName() + " failed to replace code.");
+                }
+
                 File metaFile = new File(tempWorkingDir + "/Library.java");
                 if (!metaFile.createNewFile()) {
                     throw new RuntimeException("Could not create a library file for meta testing.");
@@ -77,7 +83,7 @@ public class RunMetaTests implements ExecutionStep {
                 if (testsSucceeded < testsRan) {
                     score++;
                 } else {
-                    String metaName = metaClass.getName();
+                    String metaName = metaTest.getName();
                     failures.add(metaName);
                 }
 

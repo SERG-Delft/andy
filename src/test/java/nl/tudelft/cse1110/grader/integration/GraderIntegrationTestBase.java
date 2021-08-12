@@ -96,23 +96,12 @@ public abstract class GraderIntegrationTestBase {
         return result.buildEndUserResult();
     }
 
-    public String run(List<ExecutionStep> plan, String libraryFile, String solutionFile, String metaDirectory) {
-        this.copyMetaFiles(metaDirectory);
-
-        return this.run(plan, libraryFile, solutionFile);
-    }
-
-    public String run(List<ExecutionStep> plan, String libraryFile, String solutionFile, String metaDirectory, String configurationFile) {
-        this.copyConfigurationFile(configurationFile);
-
-        return this.run(plan, libraryFile, solutionFile, metaDirectory);
-    }
-
-    public String runWithConfigNoMeta(List<ExecutionStep> plan, String libraryFile, String solutionFile, String configurationFile) {
+    public String run(List<ExecutionStep> plan, String libraryFile, String solutionFile, String configurationFile) {
         this.copyConfigurationFile(configurationFile);
 
         return this.run(plan, libraryFile, solutionFile);
     }
+
 
     protected void copyFiles(String libraryFile, String solutionFile) {
         String dirWithLibrary = resourceFolder("/grader/fixtures/Library/");
@@ -143,15 +132,4 @@ public abstract class GraderIntegrationTestBase {
         downloadLibsIfNeeded(libPath);
         return libPath;
     }
-
-    private void copyMetaFiles(String metaDirectory) {
-        String dirWithMeta = resourceFolder("/grader/fixtures/Meta/");
-
-        File meta = new File(dirWithMeta + metaDirectory);
-        for (File file : meta.listFiles()) {
-            FileUtils.copyFile(file.getAbsolutePath(), workDir.toString());
-        }
-    }
-
-
 }

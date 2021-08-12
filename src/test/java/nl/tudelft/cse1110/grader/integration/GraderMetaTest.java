@@ -11,7 +11,7 @@ public class GraderMetaTest extends GraderIntegrationTestBase {
 
     @Test
     void testAllMetaTestsPassing() {
-        String result = run(withMeta(), "NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution", "NumberUtilsAdd");
+        String result = run(withMeta(), "NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution", "NumberUtilsAddConfiguration");
 
         assertThat(result)
                 .has(metaTests(4))
@@ -20,42 +20,42 @@ public class GraderMetaTest extends GraderIntegrationTestBase {
 
     @Test
     void testSomeMetaTestFailing() {
-        String result = run(withMeta(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAdd");
+        String result = run(withMeta(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddConfiguration");
 
         assertThat(result)
                 .has(metaTests(4))
                 .has(metaTestsPassing(1))
-                .has(metaTestFailing("AppliesMultipleCarriesWronglyMeta"))
-                .has(metaTestFailing("DoesNotApplyCarryAtAllMeta"))
-                .has(metaTestFailing("DoesNotApplyLastCarryMeta"));
+                .has(metaTestFailing("AppliesMultipleCarriesWrongly"))
+                .has(metaTestFailing("DoesNotApplyCarryAtAll"))
+                .has(metaTestFailing("DoesNotApplyLastCarry"));
     }
 
     @Test
     void testAllMetaTestsFailing() {
-        String result = run(withMeta(), "NumberUtilsAddLibrary", "NumberUtilsNoTests", "NumberUtilsAdd");
+        String result = run(withMeta(), "NumberUtilsAddLibrary", "NumberUtilsNoTests", "NumberUtilsAddConfiguration");
 
         assertThat(result)
                 .has(metaTests(4))
                 .has(metaTestsPassing(0))
-                .has(metaTestFailing("AppliesMultipleCarriesWronglyMeta"))
-                .has(metaTestFailing("DoesNotApplyCarryAtAllMeta"))
-                .has(metaTestFailing("DoesNotApplyLastCarryMeta"))
-                .has(metaTestFailing("DoesNotCheckNumbersOutOfRangeMeta"));
+                .has(metaTestFailing("AppliesMultipleCarriesWrongly"))
+                .has(metaTestFailing("DoesNotApplyCarryAtAll"))
+                .has(metaTestFailing("DoesNotApplyLastCarry"))
+                .has(metaTestFailing("DoesNotCheckNumbersOutOfRange"));
     }
 
     @Test
     void testMetaWhenMultipleClassesInLibrary() {
-        String result = run(withMeta(), "SoftwhereLibrary", "SoftwhereMissingTests", "Softwhere");
+        String result = run(withMeta(), "SoftwhereLibrary", "SoftwhereMissingTests", "SoftwhereConfig");
 
         assertThat(result)
                 .has(metaTests(4))
                 .has(metaTestsPassing(3))
-                .has(metaTestFailing("DoesNotCheckInvalidTripIdMeta"));
+                .has(metaTestFailing("DoesNotCheckInvalidTripId"));
     }
 
     @Test
     void testMetaWhenMultipleClassesInSolution() {
-        String result = run(withMeta(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfJQWikPassing", "ArrayUtilsIndexOf");
+        String result = run(withMeta(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfJQWikPassing", "ArrayUtilsIndexOfJQWikConfig");
 
         assertThat(result)
                 .has(metaTests(3))
