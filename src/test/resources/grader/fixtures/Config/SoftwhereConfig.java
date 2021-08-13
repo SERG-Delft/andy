@@ -33,7 +33,7 @@ public class Configuration extends RunConfiguration {
     @Override
     public List<MetaTest> metaTests() {
         return List.of(
-            new MetaTest("BoundaryCheck",
+            MetaTest.withStringReplacement("BoundaryCheck",
                 """
                 if (capacityLeft(trip) < people.size())
                     return false;
@@ -42,23 +42,12 @@ public class Configuration extends RunConfiguration {
                 if (capacityLeft(trip) <= people.size())
                     return false;
                 """),
-            new MetaTest("DoesNotCheckCapacity",
+            MetaTest.withStringReplacement("DoesNotCheckCapacity",
                 """
                 if (capacityLeft(trip) < people.size())
                     return false;
                 """,""),
-            new MetaTest("DoesNotCheckInvalidTripId",
-                """
-                try {
-                    Trip trip = tRepository.getTripById(tripId);
-                    if (capacityLeft(trip) < people.size())
-                        return false;
-                    rRepository.save(new Reservation(trip, people));
-                    return true;
-                } catch (ElementNotFoundException e) {
-                    return false;
-                }
-                """,
+            MetaTest.withLineReplacement("DoesNotCheckInvalidTripId", 150, 159,
                 """
                 try {
                     Trip trip = tRepository.getTripById(tripId);
@@ -69,10 +58,7 @@ public class Configuration extends RunConfiguration {
                     throw new RuntimeException("killed the mutant");
                 }
                 """),
-                new MetaTest("DoesNotCheckSave",
-                """
-                rRepository.save(new Reservation(trip, people));
-                """, "")
+            MetaTest.withLineReplacement("DoesNotCheckSave", 154, 155, "")
         );
     }
 }

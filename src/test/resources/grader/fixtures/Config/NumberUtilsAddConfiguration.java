@@ -33,7 +33,7 @@ public class Configuration extends RunConfiguration {
     @Override
     public List<MetaTest> metaTests() {
         return List.of(
-            new MetaTest("AppliesMultipleCarriesWrongly",
+            MetaTest.withStringReplacement("AppliesMultipleCarriesWrongly",
                 """
                 int sum = leftDigit + rightDigit + carry;
 
@@ -53,31 +53,7 @@ public class Configuration extends RunConfiguration {
                 }
                 result.addFirst(sum % 10);
                 """),
-            new MetaTest("DoesNotApplyCarryAtAll",
-                """
-                int carry = 0;
-                for (int i = 0; i < Math.max(reversedLeft.size(), reversedRight.size()); i++) {
-                    int leftDigit = reversedLeft.size() > i ? reversedLeft.get(i) : 0;
-                    int rightDigit = reversedRight.size() > i ? reversedRight.get(i) : 0;
-
-                    if (leftDigit < 0 || leftDigit > 9 || rightDigit < 0 || rightDigit > 9)
-                        throw new IllegalArgumentException();
-
-                    int sum = leftDigit + rightDigit + carry;
-
-                    result.addFirst(sum % 10);
-                    carry = sum / 10;
-                }
-
-                // add leftover carry
-                result.addFirst(carry);
-
-                // remove leading zeroes from the result
-                while (result.size() > 1 && result.get(0) == 0)
-                    result.remove(0);
-
-                return result;
-                """,
+            MetaTest.withLineReplacement("DoesNotApplyCarryAtAll", 47, 69,
                 """
                 for (int i = 0; i < Math.max(reversedLeft.size(), reversedRight.size()); i++) {
 
@@ -102,7 +78,7 @@ public class Configuration extends RunConfiguration {
 
                 return result;
                 """),
-            new MetaTest("DoesNotApplyLastCarry",
+            MetaTest.withStringReplacement("DoesNotApplyLastCarry",
                 """
                 // add leftover carry
                 result.addFirst(carry);
@@ -124,12 +100,7 @@ public class Configuration extends RunConfiguration {
 
                 return result;
                 """),
-            new MetaTest("DoesNotCheckNumbersOutOfRange",
-                """
-                if (leftDigit < 0 || leftDigit > 9 || rightDigit < 0 || rightDigit > 9)
-                    throw new IllegalArgumentException();
-                """,
-                "")
+            MetaTest.withLineReplacement("DoesNotCheckNumbersOutOfRange", 52, 54, "")
         );
     }
 }

@@ -45,9 +45,8 @@ public class RunMetaTests implements ExecutionStep {
 
                 /**Create the meta file in the temporary directory and put the content corresponding to this meta test.*/
                 File libraryFile = new File(FileUtils.findLibrary(dirCfg.getWorkingDir()));
-                String originalLibraryContent = FileUtils.readFile(libraryFile).replaceAll("(?m)^\\s+", "");
-                String old = metaTest.getOld().replaceAll("(?m)^\\s+", "");
-                String metaFileContent = originalLibraryContent.replace(old, metaTest.getReplacement());
+                String originalLibraryContent = FileUtils.readFile(libraryFile);
+                String metaFileContent = metaTest.evaluate(originalLibraryContent);
 
                 if (metaFileContent.equals(originalLibraryContent)) {
                     throw new RuntimeException("Meta test " + metaTest.getName() + " failed to replace code.");

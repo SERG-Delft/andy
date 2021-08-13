@@ -33,39 +33,9 @@ public class Configuration extends RunConfiguration {
     @Override
     public List<MetaTest> metaTests() {
         return List.of(
-            new MetaTest("AlwaysReturnsNotFound",
-                """
-                if (array == null) {
-                    return INDEX_NOT_FOUND;
-                }
-                if (startIndex < 0) {
-                    startIndex = 0;
-                }
-                for (int i = startIndex; i < array.length; i++) {
-                    if (valueToFind == array[i]) {
-                        return i;
-                    }
-                }
-                """, ""),
-            new MetaTest("AlwaysReturnsStartIndex",
-                """
-                if (array == null) {
-                    return INDEX_NOT_FOUND;
-                }
-                if (startIndex < 0) {
-                    startIndex = 0;
-                }
-                for (int i = startIndex; i < array.length; i++) {
-                    if (valueToFind == array[i]) {
-                        return i;
-                    }
-                }
-                return INDEX_NOT_FOUND;
-                """,
-                """
-                return startIndex;
-                """),
-            new MetaTest("DoesNotUseStartIndex",
+            MetaTest.withLineReplacement("AlwaysReturnsNotFound", 38, 49, ""),
+            MetaTest.withLineReplacement("AlwaysReturnsStartIndex", 38, 50, "return startIndex;"),
+            MetaTest.withStringReplacement("DoesNotUseStartIndex",
                 """
                 if (startIndex < 0) {
                     startIndex = 0;
