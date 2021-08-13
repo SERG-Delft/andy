@@ -2,6 +2,7 @@ package nl.tudelft.cse1110.grader.config;
 
 import nl.tudelft.cse1110.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.codechecker.engine.SingleCheck;
+import nl.tudelft.cse1110.grader.execution.MetaTest;
 import nl.tudelft.cse1110.grader.util.ClassUtils;
 
 import java.util.Arrays;
@@ -35,5 +36,10 @@ public class DefaultRunConfiguration extends RunConfiguration {
     @Override
     public CheckScript checkScript() {
         return new CheckScript(Arrays.asList());
+    }
+
+    @Override
+    public List<MetaTest> metaTests() {
+        return List.of();
     }
 }

@@ -2,6 +2,7 @@ package domain.addingnumbers;
 
 import nl.tudelft.cse1110.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.grader.config.RunConfiguration;
+import nl.tudelft.cse1110.grader.execution.MetaTest;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,5 +33,10 @@ public class Configuration extends RunConfiguration {
     @Override
     public List<String> listOfMutants() {
         return STRONGER;
+    }
+
+    @Override
+    public List<MetaTest> metaTests() {
+        return List.of();
     }
 }

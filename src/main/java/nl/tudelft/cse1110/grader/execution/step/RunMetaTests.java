@@ -2,87 +2,112 @@ package nl.tudelft.cse1110.grader.execution.step;
 
 import nl.tudelft.cse1110.grader.config.Configuration;
 import nl.tudelft.cse1110.grader.config.DirectoryConfiguration;
+import nl.tudelft.cse1110.grader.config.RunConfiguration;
 import nl.tudelft.cse1110.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.grader.execution.FromBytesClassLoader;
+import nl.tudelft.cse1110.grader.execution.MetaTest;
 import nl.tudelft.cse1110.grader.result.GradeValues;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
 import nl.tudelft.cse1110.grader.util.FileUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class RunMetaTests implements ExecutionStep {
 
     @Override
     public void execute(Configuration cfg, ResultBuilder result) {
         DirectoryConfiguration dirCfg = cfg.getDirectoryConfiguration();
+        RunConfiguration runCfg = cfg.getRunConfiguration();
+
         int score = 0;
 
         try {
-            /**Get the required files - meta classes and the solution*/
-            List<File> metaClasses = FileUtils.getMetaFiles(dirCfg.getWorkingDir());
+            List<MetaTest> metaTests = runCfg.metaTests();
             String solutionFile = FileUtils.findSolution(dirCfg.getWorkingDir());
             List<String> failures = new ArrayList<>();
 
-            for (File metaClass : metaClasses) {
-                /**Save the current class loader and create a new one. Otherwise Java will not use the meta classes.*/
-                ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
-                ClassLoader classLoader = new FromBytesClassLoader();
-                Thread.currentThread().setContextClassLoader(classLoader);
+            for (MetaTest metaTest : metaTests) {
+                ClassLoader oldClassLoader = changeClassLoader();
 
-                /**Create a new directory to run the meta tests in.*/
-                File tempDir = FileUtils.createTemporaryDirectory("metaWorkplace").toFile();
+                File metaWorkingDir = FileUtils.createTemporaryDirectory("metaWorkplace").toFile();
 
-                /**Copy the solution file to the temporary directory.*/
-                FileUtils.copyFile(solutionFile, tempDir.getAbsolutePath());
+                FileUtils.copyFile(solutionFile, metaWorkingDir.getAbsolutePath());
 
-                /**Prepare an execution flow for the meta class.*/
-                DirectoryConfiguration metaDirCfg = new DirectoryConfiguration(
-                        tempDir.toString(),
-                        dirCfg.getLibrariesDir(),
-                        dirCfg.getReportsDir()
-                );
+                String metaFileContent = generateMetaFileContent(metaTest, dirCfg);
 
-                Configuration metaCfg = new Configuration();
-                metaCfg.setDirectoryConfiguration(metaDirCfg);
+                createMetaTestFile(metaWorkingDir, metaFileContent);
 
-                ResultBuilder metaResult = new ResultBuilder();
+                ResultBuilder metaResult = runMetaTest(dirCfg, metaWorkingDir);
 
-                ExecutionFlow flow = ExecutionFlow.justTests(metaCfg, metaResult);
-
-                /**Copy the meta class to the temporary directory and, since the meta classes are in .txt files,
-                 * rename the meta class to a .java file.
-                 */
-                File newMetaFile = FileUtils.copyFile(metaClass.getAbsolutePath(), tempDir.getAbsolutePath()).toFile();
-                newMetaFile.renameTo(new File(newMetaFile.getParentFile() + "/Library.java"));
-
-                /**Run the flow for the meta class.*/
-                flow.run();
-
-                /**Check if some tests failed. If they did, we increase the score, otherwise we show which test failed.*/
                 int testsRan = metaResult.getTestsRan();
                 int testsSucceeded = metaResult.getTestsSucceeded();
 
                 if (testsSucceeded < testsRan) {
                     score++;
                 } else {
-                    String metaName = metaClass.getName().replace(".txt", "");
+                    String metaName = metaTest.getName();
                     failures.add(metaName);
                 }
 
-                /**Delete the temporary meta working directory after execution.*/
-                FileUtils.deleteDirectory(tempDir);
+                FileUtils.deleteDirectory(metaWorkingDir);
 
-                /**Restore the old class loader.*/
                 Thread.currentThread().setContextClassLoader(oldClassLoader);
             }
 
-            result.logMetaTests(score, metaClasses.size(), failures);
+            result.logMetaTests(score, metaTests.size(), failures);
         } catch (Exception ex) {
             result.genericFailure(this, ex);
         }
     }
 
+    private ClassLoader changeClassLoader() {
+        ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
+        ClassLoader classLoader = new FromBytesClassLoader();
+        Thread.currentThread().setContextClassLoader(classLoader);
+        return oldClassLoader;
+    }
+
+    private String generateMetaFileContent(MetaTest metaTest, DirectoryConfiguration dirCfg) {
+        File libraryFile = new File(FileUtils.findLibrary(dirCfg.getWorkingDir()));
+        String originalLibraryContent = FileUtils.readFile(libraryFile);
+        String metaFileContent = metaTest.evaluate(originalLibraryContent);
+
+        if (metaFileContent.equals(originalLibraryContent)) {
+            throw new RuntimeException("Meta test " + metaTest.getName() + " failed to replace code.");
+        }
+
+        return metaFileContent;
+    }
+
+    private void createMetaTestFile(File metaWorkingDir, String metaFileContent) throws Exception {
+        File metaFile = new File(metaWorkingDir + "/Library.java");
+        if (!metaFile.createNewFile()) {
+            throw new IOException("Failed to create a meta file.");
+        }
+        FileUtils.writeToFile(metaFile, metaFileContent);
+    }
+
+    private ResultBuilder runMetaTest(DirectoryConfiguration dirCfg, File metaWorkingDir) {
+        DirectoryConfiguration metaDirCfg = new DirectoryConfiguration(
+                metaWorkingDir.toString(),
+                dirCfg.getLibrariesDir(),
+                dirCfg.getReportsDir()
+        );
+
+        Configuration metaCfg = new Configuration();
+        metaCfg.setDirectoryConfiguration(metaDirCfg);
+
+        ResultBuilder metaResult = new ResultBuilder();
+
+        ExecutionFlow flow = ExecutionFlow.justTests(metaCfg, metaResult);
+
+        flow.run();
+
+        return metaResult;
+    }
 }

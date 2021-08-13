@@ -13,7 +13,7 @@ public class GraderConfigurationTest extends GraderIntegrationTestBase {
 
     @Test
     void testSpecifyingClass() {
-        String result = runWithConfigNoMeta(withJacoco(), "SoftwhereLibrary", "SoftwhereTests", "SoftwhereConfig");
+        String result = run(withJacoco(), "SoftwhereLibrary", "SoftwhereTests", "SoftwhereConfig");
 
         assertThat(result).has(linesCovered(13))
                 .has(instructionsCovered(58))
@@ -22,14 +22,14 @@ public class GraderConfigurationTest extends GraderIntegrationTestBase {
 
     @Test
     void testPiTestConfiguration() {
-        String result = runWithConfigNoMeta(withPiTest(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddPiTestStrongerConfiguration");
+        String result = run(withPiTest(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddPiTestStrongerConfiguration");
 
         assertThat(result).has(mutationScore(7, 33));
     }
 
     @Test
     void testGradeConfiguration() {
-        String result = run(fullMode(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAdd", "NumberUtilsAddConfiguration");
+        String result = run(fullMode(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddConfiguration");
 
         assertThat(result).has(finalGrade(46));
     }

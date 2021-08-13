@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
@@ -84,6 +85,14 @@ public class FileUtils {
                 .get();
     }
 
+    public static String findLibrary(String workdir) {
+        return getAllJavaFiles(workdir)
+                .stream().filter(x -> x.getAbsolutePath().endsWith("Library.java"))
+                .map(x -> x.getAbsolutePath())
+                .findFirst()
+                .get();
+    }
+
     public static List<File> getMetaFiles(String workingDir) {
         File[] files = new File(workingDir).listFiles();
 
@@ -133,5 +142,23 @@ public class FileUtils {
             path += File.separator + a;
 
         return path;
+    }
+
+    public static String readFile(File fileToRead) {
+        try {
+            return Files.readAllLines(fileToRead.toPath()).stream().collect(Collectors.joining("\n"));
+        } catch (Exception ex) {
+            throw new RuntimeException();
+        }
+
+    }
+
+    public static void writeToFile(File destinationFile, String content) {
+        try {
+            Files.writeString(destinationFile.toPath(), content);
+        } catch (Exception ex) {
+            throw new RuntimeException();
+        }
+
     }
 }
