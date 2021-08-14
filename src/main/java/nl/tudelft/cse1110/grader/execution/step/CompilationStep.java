@@ -6,6 +6,8 @@ import nl.tudelft.cse1110.grader.result.ResultBuilder;
 import nl.tudelft.cse1110.grader.util.ClassUtils;
 import nl.tudelft.cse1110.grader.util.FileUtils;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
@@ -17,13 +19,19 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.ElementScanner9;
 import javax.tools.*;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
+
+import static javax.tools.Diagnostic.Kind.ERROR;
 
 /**
  * This step compiles the student code and the library code.
  * It makes use of the Java Compiler API.
  */
 public class CompilationStep implements ExecutionStep {
+
+    public static String highlightColour = "red";
 
     @Override
     public void execute(Configuration cfg, ResultBuilder result) {
@@ -67,18 +75,41 @@ public class CompilationStep implements ExecutionStep {
             if(compilationResult) {
                 dirCfg.setNewClassNames(scanner.getFullClassNames());
                 result.compilationSuccess();
-                ExportHighlightsStep.compilationPassed = true;
             }
             else {
                 result.compilationFail(diagnostics.getDiagnostics());
-                ExportHighlightsStep.compilationPassed = false;
-                ExportHighlightsStep.diagnostics = diagnostics.getDiagnostics();
-
             }
 
             manager.close();
         } catch(Exception e) {
             result.genericFailure(this, e);
+        }
+    }
+
+    public void compilationErrorExporter(List<Diagnostic<? extends JavaFileObject>> diagnostics){
+
+        //--Creating the JSON Object-----
+        JSONObject obj = new JSONObject();
+        JSONArray errors = new JSONArray();
+        for (Diagnostic diagnostic : diagnostics) {
+            if (diagnostic.getKind() == ERROR) {
+                JSONObject temp = new JSONObject();
+                temp.put("Line", diagnostic.getLineNumber());
+                temp.put("Color", highlightColour);
+                temp.put("Message", diagnostic.getMessage(null));
+                errors.add(temp);
+            }
+        }
+        obj.put("Error List", errors);
+
+        //----Creating JSON file-------
+        try {
+            FileWriter fw = new FileWriter("src/main/java/nl/tudelft/cse1110/grader/result/highlight.json");
+            fw.write(obj.toJSONString());
+            fw.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

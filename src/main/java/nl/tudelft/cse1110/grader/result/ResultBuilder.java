@@ -57,6 +57,7 @@ public class ResultBuilder {
                 importLog.ifPresent(this::l);
             }
         }
+        failed();
     }
 
     public void logFinish(ExecutionStep step) {
