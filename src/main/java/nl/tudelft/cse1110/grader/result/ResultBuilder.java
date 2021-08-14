@@ -202,6 +202,12 @@ public class ResultBuilder {
         return LocalDateTime.now().toString();
     }
 
+    public int getFinalScore(){
+        if(!isFailed())
+            return gradeCalculator.calculateFinalGrade();
+        return -1;
+    }
+
     public void logFinalGrade() {
 
         // rounding up from 0.5...
