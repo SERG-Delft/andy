@@ -41,6 +41,14 @@ public class FileUtils {
         }
     }
 
+    /** Creates parent directories if necessary. Then returns file */
+    // same as above method but returns the file
+    public static File fileWithParentDirCreated(String directory, String filename) {
+        File dir = new File(directory);
+        if (!dir.exists()) dir.mkdirs();
+        return new File(directory + "/" + filename);
+    }
+
     public static Path copyFile(String sourceFile, String destDir) {
         File file = new File(sourceFile);
         try {
