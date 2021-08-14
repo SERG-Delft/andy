@@ -78,6 +78,7 @@ public class CompilationStep implements ExecutionStep {
             }
             else {
                 result.compilationFail(diagnostics.getDiagnostics());
+                compilationErrorExporter(diagnostics.getDiagnostics());
             }
 
             manager.close();
