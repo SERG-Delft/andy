@@ -27,10 +27,9 @@ import static org.apache.commons.io.FileUtils.copyURLToFile;
 
 public abstract class GraderIntegrationTestBase {
 
-    // for each test class, we reuse these temp dirs!
 
     @TempDir
-    protected Path reportDir;       // library, solutions, meta files, config files...
+    protected Path reportDir;     
 
     @TempDir
     protected Path workDir;
