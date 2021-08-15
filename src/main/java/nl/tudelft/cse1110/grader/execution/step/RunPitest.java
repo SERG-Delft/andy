@@ -51,9 +51,12 @@ public class RunPitest implements ExecutionStep {
         List<String> args = new ArrayList<>();
 
         args.add("--reportDir");
+        // Create new directory ".../output/pitest"
+        // Here, the PiTest report folder in format "year-month-day-time" will be written
         String outputPitestDir = FileUtils.concatenateDirectories(dirCfg.getOutputDir(), "pitest");
         FileUtils.createDirIfNeeded(outputPitestDir);
         args.add(outputPitestDir);
+        // We "skip" this folder and instead keep its contents
         extractAndRemoveReportFolder(outputPitestDir);
 
         args.add("--targetClasses");
@@ -104,8 +107,10 @@ public class RunPitest implements ExecutionStep {
         try {
             File[] contentsOfPitestOutputDir = FileUtils.getAllFiles(new File(outputPitestDir));
 
-            if (contentsOfPitestOutputDir.length != 0) {
+            if (contentsOfPitestOutputDir.length != 0) {        // in case report is not being written
 
+                // The report folder "year-month-day-time" will be the only file in .../output/pitest,
+                // as every WebLab submission gets a “clean” image.
                 File reportFolderToSkip = contentsOfPitestOutputDir[0];
 
                 File[] pitestReportFiles = FileUtils.getAllFiles(new File(reportFolderToSkip.getAbsolutePath()));
