@@ -7,10 +7,8 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
@@ -39,14 +37,6 @@ public class FileUtils {
         if (!theDir.exists()){
             theDir.mkdirs();
         }
-    }
-
-    /** Creates parent directories if necessary. Then returns file */
-    // same as above method but returns the file
-    public static File fileWithParentDirCreated(String directory, String filename) {
-        File dir = new File(directory);
-        if (!dir.exists()) dir.mkdirs();
-        return new File(directory + "/" + filename);
     }
 
     public static Path copyFile(String sourceFile, String destDir) {
