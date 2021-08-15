@@ -2,32 +2,37 @@ package nl.tudelft.cse1110.grader.integration;
 
 import org.junit.jupiter.api.Test;
 
+<<<<<<< HEAD
 import java.io.File;
 
 import static nl.tudelft.cse1110.grader.integration.GraderIntegrationTestAssertions.compilationErrorMoreTimes;
 import static nl.tudelft.cse1110.grader.integration.GraderIntegrationTestHelper.justCompilation;
 import static nl.tudelft.cse1110.grader.util.FileUtils.concatenateDirectories;
+=======
+import static nl.tudelft.cse1110.grader.integration.GraderIntegrationTestAssertions.*;
+import static nl.tudelft.cse1110.grader.integration.GraderIntegrationTestHelper.justCompilation;
+>>>>>>> main
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class GraderCompilationTest extends GraderIntegrationTestBase {
 
     @Test
-    void compilationFailure() {
+    void compilationFails() {
         String result = run(justCompilation(), "ArrayUtilsIsSortedLibrary", "ArrayUtilsIsSortedWithCompilationError");
         assertThat(result)
-                .has(GraderIntegrationTestAssertions.compilationFailure())
-                .has(GraderIntegrationTestAssertions.compilationErrorOnLine(29))
-                .has(GraderIntegrationTestAssertions.compilationErrorType("not a statement"))
-                .has(GraderIntegrationTestAssertions.compilationErrorType("';' expected"))
+                .has(compilationFailure())
+                .has(compilationErrorOnLine(29))
+                .has(compilationErrorType("not a statement"))
+                .has(compilationErrorType("';' expected"))
                 .doesNotHave(compilationErrorMoreTimes("cannot find symbol", 2));;
     }
 
 
     @Test
-    void compilationSuccess() {
+    void compilationOk() {
         String result = run(justCompilation(),  "ListUtilsLibrary", "ListUtilsCompilationSuccess");
         assertThat(result)
-                .has(GraderIntegrationTestAssertions.compilationSuccess());
+                .has(compilationSuccess());
     }
 
 
@@ -35,10 +40,10 @@ public class GraderCompilationTest extends GraderIntegrationTestBase {
     void compilationDifferentFailures() {
         String result = run(justCompilation(), "MathArraysLibrary","MathArraysDifferentCompilationErrors");
         assertThat(result)
-                .has(GraderIntegrationTestAssertions.compilationFailure())
-                .has(GraderIntegrationTestAssertions.compilationErrorOnLine(21))
-                .has(GraderIntegrationTestAssertions.compilationErrorOnLine(25))
-                .has(GraderIntegrationTestAssertions.compilationErrorOnLine(33))
+                .has(compilationFailure())
+                .has(compilationErrorOnLine(21))
+                .has(compilationErrorOnLine(25))
+                .has(compilationErrorOnLine(33))
                 .has(GraderIntegrationTestAssertions.compilationErrorMoreTimes("cannot find symbol", 3));
     }
 
