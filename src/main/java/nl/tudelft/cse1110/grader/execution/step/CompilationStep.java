@@ -78,7 +78,7 @@ public class CompilationStep implements ExecutionStep {
             }
             else {
                 result.compilationFail(diagnostics.getDiagnostics());
-                compilationErrorExporter(diagnostics.getDiagnostics());
+                exportCompilationErrors(diagnostics.getDiagnostics());
             }
 
             manager.close();
@@ -87,8 +87,7 @@ public class CompilationStep implements ExecutionStep {
         }
     }
 
-    public void compilationErrorExporter(List<Diagnostic<? extends JavaFileObject>> diagnostics){
-
+    private void exportCompilationErrors(List<Diagnostic<? extends JavaFileObject>> diagnostics){
         //--Creating the JSON Object-----
         JSONObject obj = new JSONObject();
         JSONArray errors = new JSONArray();
