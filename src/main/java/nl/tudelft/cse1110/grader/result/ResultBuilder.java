@@ -48,7 +48,7 @@ public class ResultBuilder {
     public void compilationFail(List<Diagnostic<? extends JavaFileObject>> diagnostics) {
         l("We could not compile your code. See the compilation errors below:");
         for(Diagnostic diagnostic: diagnostics) {
-            if(diagnostic.getKind() == ERROR) {
+            if (diagnostic.getKind() == ERROR) {
                 l(String.format("- line %d: %s",
                         diagnostic.getLineNumber(),
                         diagnostic.getMessage(null)));
@@ -173,12 +173,6 @@ public class ResultBuilder {
         return failure.getTestIdentifier().getLegacyReportingName().substring(0, endIndex);
     }
 
-    private void failed() {
-        this.failed = true;
-        gradeCalculator.failed();
-
-    }
-
     public String buildEndUserResult() {
         return result.toString();
     }
@@ -270,5 +264,10 @@ public class ResultBuilder {
 
     public boolean isFailed() {
         return failed;
+    }
+
+    public void failed() {
+        this.failed = true;
+        gradeCalculator.failed();
     }
 }
