@@ -2,16 +2,11 @@ package nl.tudelft.cse1110.grader.integration;
 
 import org.junit.jupiter.api.Test;
 
-<<<<<<< HEAD
 import java.io.File;
 
-import static nl.tudelft.cse1110.grader.integration.GraderIntegrationTestAssertions.compilationErrorMoreTimes;
 import static nl.tudelft.cse1110.grader.integration.GraderIntegrationTestHelper.justCompilation;
 import static nl.tudelft.cse1110.grader.util.FileUtils.concatenateDirectories;
-=======
 import static nl.tudelft.cse1110.grader.integration.GraderIntegrationTestAssertions.*;
-import static nl.tudelft.cse1110.grader.integration.GraderIntegrationTestHelper.justCompilation;
->>>>>>> main
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class GraderCompilationTest extends GraderIntegrationTestBase {
