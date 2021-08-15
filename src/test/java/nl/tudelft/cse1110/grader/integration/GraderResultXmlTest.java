@@ -1,6 +1,5 @@
 package nl.tudelft.cse1110.grader.integration;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -17,27 +16,31 @@ public class GraderResultXmlTest extends GraderIntegrationTestBase{
         run(fullMode(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfImportListCommented");
 
         File xmlFile = new File(concatenateDirectories(workDir.toString(), "results.xml"));
-        File expected = new File(resourceFolder("/grader/fixtures/Output/results_indexof_listcommented_fail.xml"));
+        File expected = new File(resourceFolder("/grader/fixtures/Output/resultsIndexOfListCommentedFail.xml"));
 
         assertThat(xmlFile).exists().isFile();
         assertThat(xmlFile).hasSameTextualContentAs(expected);
     }
 
-    // TEO: This one is breaking
-    @Test @Disabled
+    @Test
     void resultsXmlWithFullGrade() {
-        run(fullMode(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfImportListCommented");
+        run(fullMode(), "MathArraysLibrary", "MathArrays100score");
 
         File xmlFile = new File(concatenateDirectories(workDir.toString(), "results.xml"));
-        File expected = new File(resourceFolder("/grader/fixtures/Output/results_indexof_listcommented_success.xml"));
+        File expected = new File(resourceFolder("/grader/fixtures/Output/resultsMathArraysSuccess.xml"));
 
         assertThat(xmlFile).exists().isFile();
         assertThat(xmlFile).hasSameTextualContentAs(expected);
     }
 
-    // TEO: Add one more here, for a grade that's not 100/100
-    @Test @Disabled
+    @Test
     void resultsXmlWithPartialGrade() {
+        run(fullMode(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass");
 
+        File xmlFile = new File(concatenateDirectories(workDir.toString(), "results.xml"));
+        File expected = new File(resourceFolder("/grader/fixtures/Output/resultsNumberUtilsPartial.xml"));
+
+        assertThat(xmlFile).exists().isFile();
+        assertThat(xmlFile).hasSameTextualContentAs(expected);
     }
 }

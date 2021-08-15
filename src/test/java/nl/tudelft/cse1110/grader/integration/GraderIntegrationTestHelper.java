@@ -48,16 +48,6 @@ public class GraderIntegrationTestHelper {
                 new CalculateFinalGradeStep());
     }
 
-    public static List<ExecutionStep> fullfullMode() {
-        return Arrays.asList(new CompilationStep(),
-                new RunJUnitTests(),
-                new RunJacoco(),
-                new RunPitest(),
-                new CodeChecksStep(),
-                new RunMetaTests(),
-                new CalculateFinalGradeStep());
-    }
-
     public static List<ExecutionStep> examMode() {
         return Arrays.asList(new RunJUnitTests(),
                 new RunJacoco(),
