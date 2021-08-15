@@ -1,15 +1,12 @@
 package nl.tudelft.cse1110.grader.integration;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.io.FileReader;
 
 import static nl.tudelft.cse1110.grader.integration.GraderIntegrationTestAssertions.compilationErrorMoreTimes;
 import static nl.tudelft.cse1110.grader.integration.GraderIntegrationTestHelper.justCompilation;
+import static nl.tudelft.cse1110.grader.util.FileUtils.concatenateDirectories;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class GraderCompilationTest extends GraderIntegrationTestBase {
@@ -46,29 +43,13 @@ public class GraderCompilationTest extends GraderIntegrationTestBase {
     }
 
     @Test
-    void compilationFailureJSONfileCreatedSuccesfully(){
-        String result = run(justCompilation(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfImportListCommented");
-        File highlights = new File("src/main/java/nl/tudelft/cse1110/grader/result/highlight.json");
-        assertThat(highlights.exists() && highlights.isFile()).isTrue();
+    void highlightsGeneratedWhenCompilationFails(){
+        run(justCompilation(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfImportListCommented");
 
-        String output = "";
+        File highlights = new File(concatenateDirectories(workDir.toString(), "highlights.json"));
+        assertThat(highlights).exists().isFile();
+
         String expected = "{\"Error List\":[{\"Line\":40,\"Message\":\"cannot find symbol\\n  symbol:   class List\\n  location: class delft.ArrayUtilsTests\",\"Color\":\"red\"},{\"Line\":69,\"Message\":\"cannot find symbol\\n  symbol:   class List\\n  location: class delft.ArrayUtilsTests\",\"Color\":\"red\"}]}";
-
-        try (FileReader reader = new FileReader(highlights))
-        {
-            JSONParser jsonParser = new JSONParser();
-            Object obj = jsonParser.parse(reader);
-            JSONObject errorList = (JSONObject) obj;
-            output = errorList.toJSONString();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        assertThat(output).isEqualTo(expected);
-    }
-
-    @Test @Disabled
-    void generateHighlightsFile() {
-
+        assertThat(highlights).hasContent(expected);
     }
 }
