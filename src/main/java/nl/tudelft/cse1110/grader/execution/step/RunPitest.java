@@ -51,13 +51,9 @@ public class RunPitest implements ExecutionStep {
         List<String> args = new ArrayList<>();
 
         args.add("--reportDir");
-//        String outputPitestDir = FileUtils.concatenateDirectories(dirCfg.getOutputDir(), "pitest");
-        String outputPitestDir = dirCfg.getOutputDir() + "\\pitest";
+        String outputPitestDir = FileUtils.concatenateDirectories(dirCfg.getOutputDir(), "pitest");
         FileUtils.createDirIfNeeded(outputPitestDir);
         args.add(outputPitestDir);
-
-        System.out.println(outputPitestDir);
-
         extractAndRemoveReportFolder(outputPitestDir);
 
         args.add("--targetClasses");
