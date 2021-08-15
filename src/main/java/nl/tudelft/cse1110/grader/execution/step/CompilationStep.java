@@ -2,10 +2,9 @@ package nl.tudelft.cse1110.grader.execution.step;
 
 import nl.tudelft.cse1110.grader.config.Configuration;
 import nl.tudelft.cse1110.grader.config.DirectoryConfiguration;
-import nl.tudelft.cse1110.grader.result.ResultBuilder;
-import nl.tudelft.cse1110.grader.util.ClassUtils;
-import nl.tudelft.cse1110.grader.util.FileUtils;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
+import nl.tudelft.cse1110.grader.result.ResultBuilder;
+import nl.tudelft.cse1110.grader.util.FileUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -57,12 +56,7 @@ public class CompilationStep implements ExecutionStep {
         ClassNameScanner scanner = new ClassNameScanner();
         ClassNameProcessor processor = new ClassNameProcessor(scanner);
 
-        JavaCompiler.CompilationTask task = compiler.getTask(null, manager, diagnostics,
-                Arrays.asList(
-                        /* classpath */
-                        "-cp", ClassUtils.asClassPath(dirCfg.getLibrariesDir()) +
-                                ClassUtils.classSeparator() +
-                                System.getProperty("java.class.path")), null, sources);
+        JavaCompiler.CompilationTask task = compiler.getTask(null, manager, diagnostics, null, null, sources);
         task.setProcessors(Arrays.asList(processor));
 
         /**

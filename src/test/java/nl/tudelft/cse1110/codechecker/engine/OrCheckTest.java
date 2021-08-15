@@ -50,4 +50,31 @@ public class OrCheckTest {
         verify(check1).runCheck(unit);
         verify(check2).runCheck(unit);
     }
+
+
+    @Test
+    void testSameObjectEquals() {
+
+        boolean result = orCheck.equals(orCheck);
+
+        assertThat(result).isTrue();
+    }
+
+
+    @Test
+    void testNotEqualsNull() {
+
+        boolean result = orCheck.equals(null);
+
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    void testNotEqualsAnotherClass() {
+
+        boolean result = orCheck.equals(AndCheck.class);
+
+        assertThat(result).isFalse();
+    }
+
 }

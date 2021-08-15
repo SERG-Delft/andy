@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
@@ -52,16 +53,6 @@ public class FileUtils {
         }
     }
 
-    public static void moveClass(String sourceDir, String className, String destDir) {
-        try {
-            Path result = Files.move(Paths.get(sourceDir, className + ".class"), Paths.get(destDir, className + ".class"), REPLACE_EXISTING);
-            if(result==null)
-                throw new RuntimeException("Fail when moving files");
-        } catch(Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public static void moveFile(String sourceFile, String destDir, String destFileName) {
         try {
             Path result = Files.move(Paths.get(sourceFile), Paths.get(destDir, destFileName), REPLACE_EXISTING);
@@ -84,16 +75,12 @@ public class FileUtils {
                 .get();
     }
 
-    public static List<File> getMetaFiles(String workingDir) {
-        File[] files = new File(workingDir).listFiles();
-
-        List<File> metaFiles = new ArrayList<>();
-        for (File file : files) {
-            if (file.isFile() && file.getName().contains("Meta")) {
-                metaFiles.add(file);
-            }
-        }
-        return metaFiles;
+    public static String findLibrary(String workdir) {
+        return getAllJavaFiles(workdir)
+                .stream().filter(x -> x.getAbsolutePath().endsWith("Library.java"))
+                .map(x -> x.getAbsolutePath())
+                .findFirst()
+                .get();
     }
 
 
@@ -133,5 +120,23 @@ public class FileUtils {
             path += File.separator + a;
 
         return path;
+    }
+
+    public static String readFile(File fileToRead) {
+        try {
+            return Files.readAllLines(fileToRead.toPath()).stream().collect(Collectors.joining("\n"));
+        } catch (Exception ex) {
+            throw new RuntimeException();
+        }
+
+    }
+
+    public static void writeToFile(File destinationFile, String content) {
+        try {
+            Files.writeString(destinationFile.toPath(), content);
+        } catch (Exception ex) {
+            throw new RuntimeException();
+        }
+
     }
 }
