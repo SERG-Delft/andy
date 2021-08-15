@@ -1,14 +1,9 @@
 package nl.tudelft.cse1110.grader;
 
-import nl.tudelft.cse1110.codechecker.engine.CheckScript;
-import nl.tudelft.cse1110.codechecker.engine.SingleCheck;
 import nl.tudelft.cse1110.grader.config.Configuration;
 import nl.tudelft.cse1110.grader.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.grader.execution.ExecutionFlow;
-import nl.tudelft.cse1110.grader.result.GradeValues;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
-
-import java.util.Arrays;
 
 public class GraderRunner {
 
@@ -23,8 +18,7 @@ public class GraderRunner {
 
         DirectoryConfiguration dirCfg = new DirectoryConfiguration(
                 System.getenv("WORKING_DIR"),
-                System.getenv("LIBS_DIR"),
-                System.getenv("REPORTS_DIR")
+                System.getenv("OUTPUT_DIR")
         );
 
         cfg.setDirectoryConfiguration(dirCfg);

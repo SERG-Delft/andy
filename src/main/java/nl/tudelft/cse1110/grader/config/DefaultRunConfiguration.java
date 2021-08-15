@@ -1,14 +1,10 @@
 package nl.tudelft.cse1110.grader.config;
 
 import nl.tudelft.cse1110.codechecker.engine.CheckScript;
-import nl.tudelft.cse1110.codechecker.engine.SingleCheck;
 import nl.tudelft.cse1110.grader.execution.MetaTest;
 import nl.tudelft.cse1110.grader.util.ClassUtils;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DefaultRunConfiguration extends RunConfiguration {
 
@@ -40,6 +36,6 @@ public class DefaultRunConfiguration extends RunConfiguration {
 
     @Override
     public List<MetaTest> metaTests() {
-        return List.of();
+        return Collections.emptyList();
     }
 }

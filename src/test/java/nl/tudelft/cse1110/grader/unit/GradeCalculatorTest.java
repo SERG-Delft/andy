@@ -101,6 +101,7 @@ public class GradeCalculatorTest {
         int finalGrade = gradeCalculator1.calculateFinalGrade();
         gradeCalculator1.failed();
         assertThat(finalGrade).isEqualTo(98);
+        assertThat(gradeCalculator1.isFailed()).isTrue();
     }
 
 
@@ -111,6 +112,7 @@ public class GradeCalculatorTest {
         gradeCalculator2.failed();
         int finalGrade = gradeCalculator2.calculateFinalGrade();
         assertThat(finalGrade).isEqualTo(0);
+        assertThat(gradeCalculator2.isFailed()).isTrue();
     }
 
 

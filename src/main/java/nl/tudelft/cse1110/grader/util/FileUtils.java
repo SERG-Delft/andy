@@ -61,16 +61,6 @@ public class FileUtils {
         }
     }
 
-    public static void moveClass(String sourceDir, String className, String destDir) {
-        try {
-            Path result = Files.move(Paths.get(sourceDir, className + ".class"), Paths.get(destDir, className + ".class"), REPLACE_EXISTING);
-            if(result==null)
-                throw new RuntimeException("Fail when moving files");
-        } catch(Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public static void moveFile(String sourceFile, String destDir, String destFileName) {
         try {
             Path result = Files.move(Paths.get(sourceFile), Paths.get(destDir, destFileName), REPLACE_EXISTING);
@@ -99,18 +89,6 @@ public class FileUtils {
                 .map(x -> x.getAbsolutePath())
                 .findFirst()
                 .get();
-    }
-
-    public static List<File> getMetaFiles(String workingDir) {
-        File[] files = new File(workingDir).listFiles();
-
-        List<File> metaFiles = new ArrayList<>();
-        for (File file : files) {
-            if (file.isFile() && file.getName().contains("Meta")) {
-                metaFiles.add(file);
-            }
-        }
-        return metaFiles;
     }
 
 
