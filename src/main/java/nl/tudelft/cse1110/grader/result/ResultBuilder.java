@@ -176,6 +176,7 @@ public class ResultBuilder {
     private void failed() {
         this.failed = true;
         gradeCalculator.failed();
+
     }
 
     public String buildEndUserResult() {

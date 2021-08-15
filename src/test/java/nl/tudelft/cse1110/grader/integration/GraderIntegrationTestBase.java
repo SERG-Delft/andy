@@ -29,7 +29,7 @@ public abstract class GraderIntegrationTestBase {
 
 
     @TempDir
-    protected Path reportDir;
+    protected Path reportDir;     
 
     @TempDir
     protected Path workDir;

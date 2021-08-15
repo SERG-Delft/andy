@@ -31,4 +31,14 @@ class ImportUtilsTest {
         Optional<String> output = ImportUtils.checkMissingImport(diagnostic);
         assertThat(output).isEmpty();
     }
+
+
+    @Test
+    void checkMissingImport_NoMatch() {
+        String diagnostic = "cannot find symbol\n" +
+                "   symbol:   method Indexof(java.lang.String)\n";
+
+        Optional<String> output = ImportUtils.checkMissingImport(diagnostic);
+        assertThat(output).isEmpty();
+    }
 }
