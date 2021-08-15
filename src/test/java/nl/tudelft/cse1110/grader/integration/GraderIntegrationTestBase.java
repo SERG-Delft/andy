@@ -78,7 +78,6 @@ public abstract class GraderIntegrationTestBase {
 
         DirectoryConfiguration dirCfg = new DirectoryConfiguration(
                 workDir.toString(),
-                getLibDirectory(),
                 reportDir.toString()
         );
 

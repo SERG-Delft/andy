@@ -1,0 +1,26 @@
+--- Compilation
+Success
+
+--- JUnit execution
+5/5 passed
+
+--- JaCoCo coverage
+Line coverage: 8/8
+Instruction coverage: 25/25
+Branch coverage: 8/8
+See the attached report.
+
+--- Mutation testing
+8/9 killed
+See attached report.
+
+--- Code checks
+0
+0
+
+
+--- Meta tests
+0/0 passed
+
+--- Final grade
+97/100

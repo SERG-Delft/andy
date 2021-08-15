@@ -1,43 +1,28 @@
-package nl.tudelft.cse1110.grader.execution.step;
+package nl.tudelft.cse1110.grader.execution.output;
 
 import nl.tudelft.cse1110.grader.config.Configuration;
-import nl.tudelft.cse1110.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
 import nl.tudelft.cse1110.grader.util.FileUtils;
 
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class GenerateOutputStep implements ExecutionStep {
+public class OutputGenerator {
 
-    @Override
-    public void execute(Configuration cfg, ResultBuilder result){
-        writeOutputFile(result);
-        writeXLMFile(result);
-    }
-
-    private void writeOutputFile(ResultBuilder result) {
-        try{
-            FileWriter fw = new FileWriter(FileUtils.fileWithParentDirCreated(
-                    "src/main/java/nl/tudelft/cse1110/grader/output", "stdout.txt"));
-
+    public static void writeOutputFile(Configuration cfg, ResultBuilder result) {
+        try(FileWriter fw = new FileWriter(FileUtils.fileWithParentDirCreated(
+                cfg.getDirectoryConfiguration().getReportsDir(), "stdout.txt"))){
             fw.write(result.buildEndUserResult());
-            fw.close();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void writeXLMFile(ResultBuilder result) {
-        try{
-            FileWriter fw = new FileWriter(FileUtils.fileWithParentDirCreated(
-                    "src/main/java/nl/tudelft/cse1110/grader/output", "results.xml"));
+    public static void writeXLMFile(Configuration cfg, ResultBuilder result) {
+        try(FileWriter fw = new FileWriter(FileUtils.fileWithParentDirCreated(
+                cfg.getDirectoryConfiguration().getReportsDir(), "results.xml"))){
 
             fw.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<testsuites>\n\t<testsuite>\n");
-
-            //At the moment, a compilation failure will result in a score of 0
-            //but the file will be created normally as if "100 tests failed"
 
             int score = result.getFinalScore();
             String failed = "\t\t<testcase><failure></failure></testcase>\n";
@@ -52,11 +37,9 @@ public class GenerateOutputStep implements ExecutionStep {
             }
 
             fw.write("\t</testsuite>\n</testsuites>\n");
-            fw.close();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 }

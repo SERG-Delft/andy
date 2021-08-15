@@ -1,0 +1,13 @@
+We could not compile your code. See the compilation errors below:
+- line 40: cannot find symbol
+  symbol:   class List
+  location: class delft.ArrayUtilsTests
+Maybe you missed the import for List?
+Try adding this: import java.util.List;
+
+- line 69: cannot find symbol
+  symbol:   class List
+  location: class delft.ArrayUtilsTests
+Maybe you missed the import for List?
+Try adding this: import java.util.List;
+

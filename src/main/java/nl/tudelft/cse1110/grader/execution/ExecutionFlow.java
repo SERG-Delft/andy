@@ -1,6 +1,7 @@
 package nl.tudelft.cse1110.grader.execution;
 
 import nl.tudelft.cse1110.grader.config.Configuration;
+import nl.tudelft.cse1110.grader.execution.output.OutputGenerator;
 import nl.tudelft.cse1110.grader.execution.step.*;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
 
@@ -34,20 +35,12 @@ public class ExecutionFlow {
             result.logFinish(currentStep);
         } while(!steps.isEmpty() && !result.isFailed());
         result.logFinish();
+        generateOutput();
+    }
 
-        //We always need to run this step, however with the current implementation
-        //A compilation error discards all remaining steps in the Linked List
-        //Thus, it's better to run the Generate Output step here, outside the do while loop
-        ExecutionStep finalStep = new GenerateOutputStep();
-        result.logStart(finalStep);
-        try {
-            finalStep.execute(cfg, result);
-        } catch(Throwable e) {
-            result.genericFailure(finalStep, e);
-        }
-        result.logFinish(finalStep);
-        result.logFinish();
-
+    private void generateOutput() {
+        OutputGenerator.writeOutputFile(cfg, result);
+        OutputGenerator.writeXLMFile(cfg, result);
     }
 
     public static ExecutionFlow examMode(Configuration cfg, ResultBuilder result) {

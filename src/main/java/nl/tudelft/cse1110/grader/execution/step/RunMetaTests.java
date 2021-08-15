@@ -95,7 +95,6 @@ public class RunMetaTests implements ExecutionStep {
     private ResultBuilder runMetaTest(DirectoryConfiguration dirCfg, File metaWorkingDir) {
         DirectoryConfiguration metaDirCfg = new DirectoryConfiguration(
                 metaWorkingDir.toString(),
-                dirCfg.getLibrariesDir(),
                 dirCfg.getReportsDir()
         );
 

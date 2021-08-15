@@ -9,7 +9,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class GraderCompilationTest extends GraderIntegrationTestBase {
 
-
     @Test
     void compilationFailure() {
         String result = run(justCompilation(), "ArrayUtilsIsSortedLibrary", "ArrayUtilsIsSortedWithCompilationError");

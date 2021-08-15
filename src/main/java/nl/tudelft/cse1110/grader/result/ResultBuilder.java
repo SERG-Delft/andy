@@ -203,9 +203,7 @@ public class ResultBuilder {
     }
 
     public int getFinalScore(){
-        if(!isFailed())
-            return gradeCalculator.calculateFinalGrade();
-        return -1;
+        return isFailed() ? -1 : gradeCalculator.calculateFinalGrade();
     }
 
     public void logFinalGrade() {
