@@ -33,6 +33,12 @@ public class FileUtils {
         return files;
     }
 
+    public static File[] getAllFiles(File directoryPath) {
+        File[] files = directoryPath.listFiles();
+        return files;
+    }
+
+
     public static void createDirIfNeeded(String dir) {
         // inspired by: https://stackoverflow.com/questions/3634853/how-to-create-a-directory-in-java
         File theDir = new File(dir);

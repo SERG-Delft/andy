@@ -6,6 +6,7 @@ import nl.tudelft.cse1110.grader.config.RunConfiguration;
 import nl.tudelft.cse1110.grader.util.ClassUtils;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
+import nl.tudelft.cse1110.grader.util.FileUtils;
 import org.pitest.mutationtest.commandline.OptionsParser;
 import org.pitest.mutationtest.commandline.ParseResult;
 import org.pitest.mutationtest.commandline.PluginFilter;
@@ -16,12 +17,17 @@ import org.pitest.mutationtest.tooling.CombinedStatistics;
 import org.pitest.mutationtest.tooling.EntryPoint;
 import org.pitest.util.Unchecked;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class RunPitest implements ExecutionStep {
+
+
     @Override
     public void execute(Configuration cfg, ResultBuilder result) {
         final PluginServices plugins = PluginServices.makeForContextLoader();
@@ -45,7 +51,14 @@ public class RunPitest implements ExecutionStep {
         List<String> args = new ArrayList<>();
 
         args.add("--reportDir");
-        args.add(dirCfg.getReportsDir());
+//        String outputPitestDir = FileUtils.concatenateDirectories(dirCfg.getOutputDir(), "pitest");
+        String outputPitestDir = dirCfg.getOutputDir() + "\\pitest";
+        FileUtils.createDirIfNeeded(outputPitestDir);
+        args.add(outputPitestDir);
+
+        System.out.println(outputPitestDir);
+
+        extractAndRemoveReportFolder(outputPitestDir);
 
         args.add("--targetClasses");
         args.add(commaSeparated(runCfg.classesUnderTest()));
@@ -84,4 +97,33 @@ public class RunPitest implements ExecutionStep {
         return result.getStatistics().get();
 
     }
+
+    /**
+     * @param outputPitestDir - .../output/pitest, which will contain a folder "202108151457" e.g.
+     *                        This folder will be skipped,
+     *                        and instead its contents will be directly in .../output/pitest
+     */
+    private void extractAndRemoveReportFolder(String outputPitestDir) {
+
+        try {
+            File[] contentsOfPitestOutputDir = FileUtils.getAllFiles(new File(outputPitestDir));
+
+            if (contentsOfPitestOutputDir.length != 0) {
+
+                File reportFolderToSkip = contentsOfPitestOutputDir[0];
+
+                File[] pitestReportFiles = FileUtils.getAllFiles(new File(reportFolderToSkip.getAbsolutePath()));
+                for (File f : pitestReportFiles) {
+                    FileUtils.copyFile(f.getAbsolutePath(), outputPitestDir);
+                }
+                FileUtils.deleteDirectory(reportFolderToSkip);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+
+    }
+
 }
