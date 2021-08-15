@@ -15,7 +15,7 @@ public class GraderIntegrationTestHelper {
         return Arrays.asList(new RunJUnitTests());
     }
 
-    public static List<ExecutionStep> justFinalGrade() {
+    public static List<ExecutionStep> testsAndFinalGrade() {
         return Arrays.asList(new RunJUnitTests(), new CalculateFinalGradeStep());
     }
 
