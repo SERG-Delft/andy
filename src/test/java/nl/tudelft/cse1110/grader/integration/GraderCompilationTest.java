@@ -1,17 +1,15 @@
 package nl.tudelft.cse1110.grader.integration;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
-import static nl.tudelft.cse1110.grader.integration.GraderIntegrationTestAssertions.*;
-import static nl.tudelft.cse1110.grader.integration.GraderIntegrationTestHelper.*;
+
+import static nl.tudelft.cse1110.grader.integration.GraderIntegrationTestAssertions.compilationErrorMoreTimes;
+import static nl.tudelft.cse1110.grader.integration.GraderIntegrationTestHelper.justCompilation;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class GraderCompilationTest extends GraderIntegrationTestBase {
@@ -67,5 +65,10 @@ public class GraderCompilationTest extends GraderIntegrationTestBase {
         }
 
         assertThat(output).isEqualTo(expected);
+    }
+
+    @Test @Disabled
+    void generateHighlightsFile() {
+
     }
 }

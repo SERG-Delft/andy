@@ -1,13 +1,14 @@
 package nl.tudelft.cse1110.grader.execution;
 
 import nl.tudelft.cse1110.grader.config.Configuration;
-import nl.tudelft.cse1110.grader.execution.output.OutputGenerator;
 import nl.tudelft.cse1110.grader.execution.step.*;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+
+import static nl.tudelft.cse1110.grader.result.OutputGenerator.*;
 
 public class ExecutionFlow {
     private final Configuration cfg;
@@ -39,8 +40,11 @@ public class ExecutionFlow {
     }
 
     private void generateOutput() {
-        OutputGenerator.writeOutputFile(cfg, result);
-        OutputGenerator.writeXLMFile(cfg, result);
+        exportOutputFile(cfg, result);
+        exportXMLFile(cfg, result);
+        if(result.containsCompilationErrors()) {
+            exportCompilationHighlights(cfg, result.getCompilationErrors());
+        }
     }
 
     public static ExecutionFlow examMode(Configuration cfg, ResultBuilder result) {
