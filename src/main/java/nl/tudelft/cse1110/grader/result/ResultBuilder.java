@@ -176,6 +176,12 @@ public class ResultBuilder {
     private void failed() {
         this.failed = true;
         gradeCalculator.failed();
+
+        // if gradeValues == null, there has been a compilation error
+        if (gradeValues != null && gradeValues.getFailureGives0()) {
+            l("\n--- Final grade");     // allows student to still see grade, since ExecutionFlow will stop whenever a single test fails
+            l("0/100");
+        }
     }
 
     public String buildEndUserResult() {

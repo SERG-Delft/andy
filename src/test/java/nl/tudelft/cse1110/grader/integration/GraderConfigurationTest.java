@@ -34,4 +34,14 @@ public class GraderConfigurationTest extends GraderIntegrationTestBase {
         assertThat(result).has(finalGrade(46));
     }
 
+
+    @Test
+    void testFailureGivesZero() {
+
+        String result = run(justFinalGrade(), "LeapYearLibrary", "LeapYearSingleTestFails", "LeapYearFailureGivesZeroConfig");
+
+        assertThat(result).has(finalGrade(0));
+    }
+
+
 }
