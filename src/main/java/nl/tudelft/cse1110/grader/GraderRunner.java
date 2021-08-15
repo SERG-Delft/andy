@@ -18,7 +18,7 @@ public class GraderRunner {
 
         DirectoryConfiguration dirCfg = new DirectoryConfiguration(
                 System.getenv("WORKING_DIR"),
-                System.getenv("REPORTS_DIR")
+                System.getenv("OUTPUT_DIR")
         );
 
         cfg.setDirectoryConfiguration(dirCfg);
