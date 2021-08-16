@@ -7,6 +7,7 @@ import nl.tudelft.cse1110.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.grader.execution.FromBytesClassLoader;
 import nl.tudelft.cse1110.grader.execution.MetaTest;
+import nl.tudelft.cse1110.grader.result.GradeValues;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
 import nl.tudelft.cse1110.grader.util.FileUtils;
 
@@ -14,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class RunMetaTests implements ExecutionStep {
 
@@ -93,7 +95,7 @@ public class RunMetaTests implements ExecutionStep {
     private ResultBuilder runMetaTest(DirectoryConfiguration dirCfg, File metaWorkingDir) {
         DirectoryConfiguration metaDirCfg = new DirectoryConfiguration(
                 metaWorkingDir.toString(),
-                dirCfg.getReportsDir()
+                dirCfg.getOutputDir()
         );
 
         Configuration metaCfg = new Configuration();

@@ -20,12 +20,6 @@ public class GraderConfigurationTest extends GraderIntegrationTestBase {
                 .has(branchesCovered(2));
     }
 
-    @Test
-    void testPiTestConfiguration() {
-        String result = run(withPiTest(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddPiTestStrongerConfiguration");
-
-        assertThat(result).has(mutationScore(7, 33));
-    }
 
     @Test
     void testGradeConfiguration() {

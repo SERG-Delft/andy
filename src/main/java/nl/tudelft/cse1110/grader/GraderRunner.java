@@ -12,8 +12,7 @@ public class GraderRunner {
 
 //        DirectoryConfiguration dirCfg = new DirectoryConfiguration(
 //                "E:\\TUDelft\\CSE1110 Summer\\code",
-//                "E:\\TUDelft\\CSE1110 Summer\\libs",
-//                "E:\\TUDelft\\CSE1110 Summer\\reports"
+//                "E:\\TUDelft\\CSE1110 Summer\\output"
 //        );
 
         DirectoryConfiguration dirCfg = new DirectoryConfiguration(
