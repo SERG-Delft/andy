@@ -16,7 +16,7 @@ public class GraderJUnitTest extends GraderIntegrationTestBase {
     @Test
     void allTestsPassing() {            // 4/4 normal @Tests passing
 
-        String result = run(justTests(), "NumberUtilsAddLibrary", "NUmberUtilsAddAllTestsPass");
+        String result = run(justTests(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass");
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(4))
