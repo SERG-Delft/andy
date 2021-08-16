@@ -107,7 +107,7 @@ public class RunPitest implements ExecutionStep {
         try {
             File[] contentsOfPitestOutputDir = FileUtils.getAllFiles(new File(outputPitestDir));
 
-            if (contentsOfPitestOutputDir.length != 0) {        // in case report is not being written
+            if (contentsOfPitestOutputDir.length != 0) {
 
                 // The report folder "year-month-day-time" will be the only file in .../output/pitest,
                 // as every WebLab submission gets a “clean” image.
@@ -118,6 +118,8 @@ public class RunPitest implements ExecutionStep {
                     FileUtils.copyFile(f.getAbsolutePath(), outputPitestDir);
                 }
                 FileUtils.deleteDirectory(reportFolderToSkip);
+            } else {
+//                throw new RuntimeException("PiTest report was not written to .../output/pitest!");
             }
 
         } catch (Exception e) {

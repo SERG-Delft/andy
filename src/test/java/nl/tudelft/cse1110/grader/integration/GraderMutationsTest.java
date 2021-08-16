@@ -11,16 +11,24 @@ public class GraderMutationsTest extends GraderIntegrationTestBase {
 
 
     @Test
-    void testAllMutationsKilled() {
+    void testPiTestConfiguration() {
+        String result = run(withPiTest(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddPiTestStrongerConfiguration");
 
-        // TODO: we should be able to configure/override the total number of mutants for this (equivalent mutants...)
+        assertThat(result).has(mutationScore(7, 33));
+    }
 
-        String result = run(withPiTest(), "NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution", "NumberUtilsSubtractPiTestOldDefaults");
 
+    //    @Test
+//    void testAllMutationsKilled() {
+//
+//        // TODO: we should be able to configure/override the total number of mutants for this (equivalent mutants...)
+//
+//        String result = run(withPiTest(), "NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution", "NumberUtilsSubtractPiTestOldDefaults");
+//
 //        System.out.println(result);
-
+//
 //        assertThat(result)
 //                .has(mutationScore(100, 100));
-    }
+//    }
 
 }
