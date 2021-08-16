@@ -24,7 +24,7 @@ public class GraderResultXmlTest extends GraderIntegrationTestBase{
 
     @Test
     void resultsXmlWithFullGrade() {
-        run(fullMode(), "MathArraysLibrary", "MathArrays100score");
+        run(fullMode(), "MathArraysLibrary", "MathArrays100Score");
 
         File xmlFile = new File(concatenateDirectories(workDir.toString(), "results.xml"));
         File expected = new File(resourceFolder("/grader/fixtures/Output/resultsMathArraysSuccess.xml"));

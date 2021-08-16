@@ -13,7 +13,7 @@ public class GraderConfigurationTest extends GraderIntegrationTestBase {
 
     @Test
     void testSpecifyingClass() {
-        String result = run(withJacoco(), "SoftwhereLibrary", "SoftwhereTests", "SoftwhereConfig");
+        String result = run(withJacoco(), "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfig");
 
         assertThat(result).has(linesCovered(13))
                 .has(instructionsCovered(58))

@@ -27,7 +27,7 @@ public class Configuration extends RunConfiguration {
 
     @Override
     public List<String> classesUnderTest() {
-        return List.of("delft.Softwhere");
+        return List.of("delft.SoftWhere");
     }
 
     @Override
