@@ -31,6 +31,7 @@ public class ResultBuilder {
 
     private GradeCalculator gradeCalculator;
     private GradeValues gradeValues;
+    private List<Diagnostic<? extends JavaFileObject>> compilationErrors;
 
     public ResultBuilder() {
         this.gradeCalculator = new GradeCalculator();
@@ -45,9 +46,11 @@ public class ResultBuilder {
         l("--- Compilation\nSuccess");
     }
 
-    public void compilationFail(List<Diagnostic<? extends JavaFileObject>> diagnostics) {
+    public void compilationFail(List<Diagnostic<? extends JavaFileObject>> compilationErrors) {
+        this.compilationErrors = compilationErrors;
+
         l("We could not compile your code. See the compilation errors below:");
-        for(Diagnostic diagnostic: diagnostics) {
+        for(Diagnostic diagnostic: compilationErrors) {
             if (diagnostic.getKind() == ERROR) {
                 l(String.format("- line %d: %s",
                         diagnostic.getLineNumber(),
@@ -197,6 +200,10 @@ public class ResultBuilder {
         return LocalDateTime.now().toString();
     }
 
+    public int getFinalScore(){
+        return isFailed() ? -1 : gradeCalculator.calculateFinalGrade();
+    }
+
     public void logFinalGrade() {
 
         // rounding up from 0.5...
@@ -269,5 +276,13 @@ public class ResultBuilder {
     public void failed() {
         this.failed = true;
         gradeCalculator.failed();
+    }
+
+    public boolean containsCompilationErrors() {
+        return compilationErrors!=null;
+    }
+
+    public List<Diagnostic<? extends JavaFileObject>> getCompilationErrors() {
+        return compilationErrors;
     }
 }

@@ -2,12 +2,14 @@ package nl.tudelft.cse1110.grader.integration;
 
 import org.junit.jupiter.api.Test;
 
-import static nl.tudelft.cse1110.grader.integration.GraderIntegrationTestAssertions.*;
+import java.io.File;
+
 import static nl.tudelft.cse1110.grader.integration.GraderIntegrationTestHelper.justCompilation;
+import static nl.tudelft.cse1110.grader.util.FileUtils.concatenateDirectories;
+import static nl.tudelft.cse1110.grader.integration.GraderIntegrationTestAssertions.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class GraderCompilationTest extends GraderIntegrationTestBase {
-
 
     @Test
     void compilationFails() {
@@ -40,4 +42,14 @@ public class GraderCompilationTest extends GraderIntegrationTestBase {
                 .has(GraderIntegrationTestAssertions.compilationErrorMoreTimes("cannot find symbol", 3));
     }
 
+    @Test
+    void highlightsGeneratedWhenCompilationFails(){
+        run(justCompilation(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfImportListCommented");
+
+        File highlights = new File(concatenateDirectories(workDir.toString(), "highlights.json"));
+        assertThat(highlights).exists().isFile();
+
+        String expected = "{\"Error List\":[{\"Line\":40,\"Message\":\"cannot find symbol\\n  symbol:   class List\\n  location: class delft.ArrayUtilsTests\",\"Color\":\"red\"},{\"Line\":69,\"Message\":\"cannot find symbol\\n  symbol:   class List\\n  location: class delft.ArrayUtilsTests\",\"Color\":\"red\"}]}";
+        assertThat(highlights).hasContent(expected);
+    }
 }

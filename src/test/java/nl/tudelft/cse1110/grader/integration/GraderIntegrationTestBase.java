@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 import static nl.tudelft.cse1110.ResourceUtils.resourceFolder;
+import static nl.tudelft.cse1110.grader.util.FileUtils.concatenateDirectories;
 
 public abstract class GraderIntegrationTestBase {
 
@@ -44,7 +45,11 @@ public abstract class GraderIntegrationTestBase {
 
         Thread.currentThread().setContextClassLoader(oldClassLoader);
 
-        return result.buildEndUserResult();
+        return readStdOut();
+    }
+
+    private String readStdOut() {
+        return FileUtils.readFile(new File(concatenateDirectories(workDir.toString(), "stdout.txt")));
     }
 
     public String run(List<ExecutionStep> plan, String libraryFile, String solutionFile, String configurationFile) {

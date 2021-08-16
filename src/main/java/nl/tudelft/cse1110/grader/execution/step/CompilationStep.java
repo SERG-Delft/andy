@@ -5,8 +5,6 @@ import nl.tudelft.cse1110.grader.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
 import nl.tudelft.cse1110.grader.util.FileUtils;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
@@ -18,11 +16,7 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.ElementScanner9;
 import javax.tools.*;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.*;
-
-import static javax.tools.Diagnostic.Kind.ERROR;
 
 /**
  * This step compiles the student code and the library code.
@@ -30,13 +24,12 @@ import static javax.tools.Diagnostic.Kind.ERROR;
  */
 public class CompilationStep implements ExecutionStep {
 
-    public static String highlightColour = "red";
 
     @Override
     public void execute(Configuration cfg, ResultBuilder result) {
         DirectoryConfiguration dirCfg = cfg.getDirectoryConfiguration();
 
-        /**
+        /*
          * creates the java compiler and diagnostic collector object
          * using just the standard configuration. Nothing to optimize here, I believe.
          */
@@ -45,7 +38,7 @@ public class CompilationStep implements ExecutionStep {
         StandardJavaFileManager manager = compiler.getStandardFileManager(
                 diagnostics, null, null );
 
-        /**
+        /*
          * Create a compilation task with the list of files to compile.
          * Also pass the classpath with the libraries, e.g., JUnit, JQWik, etc.
          */
@@ -59,7 +52,7 @@ public class CompilationStep implements ExecutionStep {
         JavaCompiler.CompilationTask task = compiler.getTask(null, manager, diagnostics, null, null, sources);
         task.setProcessors(Arrays.asList(processor));
 
-        /**
+        /*
          * Compiles. The .class files will be saved in the same directory
          * as the java files.
          */
@@ -72,38 +65,11 @@ public class CompilationStep implements ExecutionStep {
             }
             else {
                 result.compilationFail(diagnostics.getDiagnostics());
-                exportCompilationErrors(diagnostics.getDiagnostics());
             }
 
             manager.close();
         } catch(Exception e) {
             result.genericFailure(this, e);
-        }
-    }
-
-    private void exportCompilationErrors(List<Diagnostic<? extends JavaFileObject>> diagnostics){
-        //--Creating the JSON Object-----
-        JSONObject obj = new JSONObject();
-        JSONArray errors = new JSONArray();
-        for (Diagnostic diagnostic : diagnostics) {
-            if (diagnostic.getKind() == ERROR) {
-                JSONObject temp = new JSONObject();
-                temp.put("Line", diagnostic.getLineNumber());
-                temp.put("Color", highlightColour);
-                temp.put("Message", diagnostic.getMessage(null));
-                errors.add(temp);
-            }
-        }
-        obj.put("Error List", errors);
-
-        //----Creating JSON file-------
-        try {
-            FileWriter fw = new FileWriter("src/main/java/nl/tudelft/cse1110/grader/result/highlight.json");
-            fw.write(obj.toJSONString());
-            fw.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -117,7 +83,7 @@ public class CompilationStep implements ExecutionStep {
         }
 
         public boolean process(final Set< ? extends TypeElement> types,
-                                final RoundEnvironment environment) {
+                               final RoundEnvironment environment) {
 
             if(!environment.processingOver()) {
                 for(final Element element: environment.getRootElements()) {

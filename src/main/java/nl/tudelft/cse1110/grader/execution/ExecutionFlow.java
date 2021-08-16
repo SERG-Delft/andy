@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import static nl.tudelft.cse1110.grader.result.OutputGenerator.*;
+
 public class ExecutionFlow {
     private final Configuration cfg;
     private final ResultBuilder result;
@@ -34,6 +36,15 @@ public class ExecutionFlow {
             result.logFinish(currentStep);
         } while(!steps.isEmpty() && !result.isFailed());
         result.logFinish();
+        generateOutput();
+    }
+
+    private void generateOutput() {
+        exportOutputFile(cfg, result);
+        exportXMLFile(cfg, result);
+        if(result.containsCompilationErrors()) {
+            exportCompilationHighlights(cfg, result.getCompilationErrors());
+        }
     }
 
     public static ExecutionFlow examMode(Configuration cfg, ResultBuilder result) {
@@ -41,7 +52,8 @@ public class ExecutionFlow {
                 Arrays.asList(
                         new RunJUnitTests(),
                         new RunJacoco(),
-                        new RunPitest(), new CalculateFinalGradeStep()),
+                        new RunPitest(),
+                        new CalculateFinalGradeStep()),
                 cfg,
                 result
         );
