@@ -18,14 +18,14 @@ public class OutputGenerator {
     private static final String highlightColour = "red";
 
     public static void exportOutputFile(Configuration cfg, ResultBuilder result) {
-        File stdoutTxt = new File(concatenateDirectories(cfg.getDirectoryConfiguration().getReportsDir(), "stdout.txt"));
+        File stdoutTxt = new File(concatenateDirectories(cfg.getDirectoryConfiguration().getOutputDir(), "stdout.txt"));
         writeToFile(stdoutTxt, result.buildEndUserResult());
     }
 
     public static void exportXMLFile(Configuration cfg, ResultBuilder result) {
         String xml = buildResultsXml(result);
 
-        File resultsXml = new File(concatenateDirectories(cfg.getDirectoryConfiguration().getReportsDir(), "results.xml"));
+        File resultsXml = new File(concatenateDirectories(cfg.getDirectoryConfiguration().getOutputDir(), "results.xml"));
         writeToFile(resultsXml, xml);
     }
 
@@ -63,7 +63,7 @@ public class OutputGenerator {
         }
         obj.put("Error List", errors);
 
-        File highlightsJson = new File(concatenateDirectories(cfg.getDirectoryConfiguration().getReportsDir(), "highlights.json"));
+        File highlightsJson = new File(concatenateDirectories(cfg.getDirectoryConfiguration().getOutputDir(), "highlights.json"));
         writeToFile(highlightsJson, obj.toJSONString());
     }
 }
