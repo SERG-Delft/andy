@@ -45,7 +45,7 @@ public class GraderMetaTest extends GraderIntegrationTestBase {
 
     @Test
     void testMetaWhenMultipleClassesInLibrary() {
-        String result = run(withMeta(), "SoftwhereLibrary", "SoftwhereMissingTests", "SoftwhereConfig");
+        String result = run(withMeta(), "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfig");
 
         assertThat(result)
                 .has(metaTests(4))

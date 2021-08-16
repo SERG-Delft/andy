@@ -36,7 +36,7 @@ public class GraderJacocoTest extends GraderIntegrationTestBase {
                 Arguments.of("NumberUtilsAddLibrary", "NumberUtilsNoTests", 0, 0, 0),
 
                 //test multiple classes in the library
-                Arguments.of("SoftwhereLibrary", "SoftwhereTests", 45, 183, 10),
+                Arguments.of("SoftWhereLibrary", "SoftWhereTests", 45, 183, 10),
 
                 //test multiple classes in the solution
                 Arguments.of("ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfJQWikPassing", 8, 25, 8)
