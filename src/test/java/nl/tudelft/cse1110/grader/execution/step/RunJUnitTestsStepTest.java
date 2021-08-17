@@ -5,7 +5,7 @@ import nl.tudelft.cse1110.IntegrationTestBase;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static nl.tudelft.cse1110.ExecutionStepHelper.justTests;
+import static nl.tudelft.cse1110.ExecutionStepHelper.onlyJUnitTests;
 import static nl.tudelft.cse1110.ResultTestAssertions.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -18,7 +18,7 @@ public class RunJUnitTestsStepTest {
         @Test
         void allTestsPassing() {
 
-            String result = run(justTests(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass");
+            String result = run(onlyJUnitTests(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass");
 
             assertThat(result)
                     .has(numberOfJUnitTestsPassing(4))
@@ -30,7 +30,7 @@ public class RunJUnitTestsStepTest {
         @Test
         void singleTestFailing() {
 
-            String result = run(justTests(), "LeapYearLibrary", "LeapYearSingleTestFails");  // 3/4 normal @Tests passing
+            String result = run(onlyJUnitTests(), "LeapYearLibrary", "LeapYearSingleTestFails");  // 3/4 normal @Tests passing
 
             assertThat(result)
                     .has(numberOfJUnitTestsPassing(3))
@@ -45,7 +45,7 @@ public class RunJUnitTestsStepTest {
         @Test
         void allTestsFailing() {
 
-            String result = run(justTests(), "CountLettersLibrary", "CountLettersAllTestsFail");
+            String result = run(onlyJUnitTests(), "CountLettersLibrary", "CountLettersAllTestsFail");
 
             assertThat(result)
                     .has(numberOfJUnitTestsPassing(0))
@@ -63,7 +63,7 @@ public class RunJUnitTestsStepTest {
         @Test
         void someTestsFailing() {
 
-            String result = run(justTests(), "PlayerPointsLibrary", "PlayerPointsSomeTestsFail");
+            String result = run(onlyJUnitTests(), "PlayerPointsLibrary", "PlayerPointsSomeTestsFail");
 
             assertThat(result)
                     .has(numberOfJUnitTestsPassing(1))
@@ -80,7 +80,7 @@ public class RunJUnitTestsStepTest {
         @Test
         void threeDifferentTestTypesUsed() {
 
-            String result = run(justTests(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfDifferentTestTypes");  // 5/5 @Tests passing
+            String result = run(onlyJUnitTests(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfDifferentTestTypes");  // 5/5 @Tests passing
 
             assertThat(result)
                     .has(numberOfJUnitTestsPassing(5))
@@ -93,7 +93,7 @@ public class RunJUnitTestsStepTest {
         // 0/0 normal @Tests passing
         @Test
         void noTests() {
-            String result = run(justTests(), "NumberUtilsAddLibrary", "NumberUtilsNoTests");
+            String result = run(onlyJUnitTests(), "NumberUtilsAddLibrary", "NumberUtilsNoTests");
             assertThat(result)
                     .has(errorMessage("We do not see any tests. Are you sure you wrote them?"));
         }
@@ -106,7 +106,7 @@ public class RunJUnitTestsStepTest {
         @Test
         void methodVerifiedButNotInvoked() {
 
-            String result = run(ExecutionStepHelper.justTests(), "TodoApplicationLibrary", "TodoApplicationMockitoMethodNotInvoked");  // 2/3 normal @Tests passing
+            String result = run(ExecutionStepHelper.onlyJUnitTests(), "TodoApplicationLibrary", "TodoApplicationMockitoMethodNotInvoked");  // 2/3 normal @Tests passing
 
             assertThat(result)
                     .has(numberOfJUnitTestsPassing(2))
@@ -120,7 +120,7 @@ public class RunJUnitTestsStepTest {
         @Test
         void stubbingNonMockClass() {
 
-            String result = run(ExecutionStepHelper.justTests(), "TheQueueLibrary", "TheQueueMisusingMockitoStub");  // 2/3 normal @Tests passing
+            String result = run(ExecutionStepHelper.onlyJUnitTests(), "TheQueueLibrary", "TheQueueMisusingMockitoStub");  // 2/3 normal @Tests passing
 
             assertThat(result)
                     .has(numberOfJUnitTestsPassing(2))
@@ -139,7 +139,7 @@ public class RunJUnitTestsStepTest {
         @Test
         void singleParameterizedTestFails() {
 
-            String result = run(justTests(), "PassingGradeLibrary", "PassingGradeSingleParameterizedTestFails");  // 4/5 parameterized test cases
+            String result = run(onlyJUnitTests(), "PassingGradeLibrary", "PassingGradeSingleParameterizedTestFails");  // 4/5 parameterized test cases
 
             assertThat(result)
                     .has(numberOfJUnitTestsPassing(4))
@@ -155,7 +155,7 @@ public class RunJUnitTestsStepTest {
         @Test
         void moreParameterizedTestsFail() {
 
-            String result = run(justTests(), "ATMLibrary", "ATMMoreParameterizedTestsFail");  // 11/14 parameterized test cases
+            String result = run(onlyJUnitTests(), "ATMLibrary", "ATMMoreParameterizedTestsFail");  // 11/14 parameterized test cases
 
             assertThat(result)
                     .has(numberOfJUnitTestsPassing(11))
@@ -173,7 +173,7 @@ public class RunJUnitTestsStepTest {
         @Test
         void allParameterizedTestsFail() {
 
-            String result = run(justTests(), "TwoIntegersLibrary", "TwoIntegersAllParameterizedTestsFail");  // 0/6 parameterized test cases
+            String result = run(onlyJUnitTests(), "TwoIntegersLibrary", "TwoIntegersAllParameterizedTestsFail");  // 0/6 parameterized test cases
 
             assertThat(result)
                     .has(numberOfJUnitTestsPassing(0))
@@ -193,7 +193,7 @@ public class RunJUnitTestsStepTest {
         @Test
         void helperMethodInTestShouldPass() {
 
-            String result = run(justTests(), "PiecewiseLibrary", "PiecewiseHelperInTest");  // 26/26 parameterized test cases
+            String result = run(onlyJUnitTests(), "PiecewiseLibrary", "PiecewiseHelperInTest");  // 26/26 parameterized test cases
 
             assertThat(result)
                     .has(numberOfJUnitTestsPassing(26))
@@ -208,7 +208,7 @@ public class RunJUnitTestsStepTest {
         @Test
         void exceptionThrownByTest() {
 
-            String result = run(justTests(), "MScAdmisisionLibrary", "MScAdmissionParameterizedTestThrowsException");  // 0/5 parameterized test cases
+            String result = run(onlyJUnitTests(), "MScAdmisisionLibrary", "MScAdmissionParameterizedTestThrowsException");  // 0/5 parameterized test cases
 
             assertThat(result)
                     .has(numberOfJUnitTestsPassing(0))
@@ -232,7 +232,7 @@ public class RunJUnitTestsStepTest {
 
         @Test
         void testSimplePropertyTest() {
-            String result = run(justTests(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfSimpleJqwikError");
+            String result = run(onlyJUnitTests(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfSimpleJqwikError");
             assertThat(result)
                     .has(propertyTestFailing("testNoElementInWholeArray"));
         }
@@ -240,7 +240,7 @@ public class RunJUnitTestsStepTest {
 
         @Test
         void testMultiplePropertyTestsFailing() {
-            String result = run(justTests(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfMultipleJqwikErrors");
+            String result = run(onlyJUnitTests(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfMultipleJqwikErrors");
             assertThat(result)
                     .has(propertyTestFailing("testNoElementInWholeArray"))
                     .has(propertyTestFailing("testValueInArrayUniqueElements"));
@@ -249,7 +249,7 @@ public class RunJUnitTestsStepTest {
 
         @Test
         void testMultiplePropertyWithParameterizedTests() {
-            String result = run(justTests(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfJqwikWithParameterized");
+            String result = run(onlyJUnitTests(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfJqwikWithParameterized");
             assertThat(result)
                     .has(propertyTestFailing("testNoElementInWholeArray"))
                     .has(propertyTestFailing("testValueInArrayUniqueElements"))
@@ -259,7 +259,7 @@ public class RunJUnitTestsStepTest {
 
         @Test
         void testMessageOtherThanAssertionError() {
-            String result = run(justTests(), "NumberUtilsAddPositiveLibrary", "NumberUtilsAddPositiveJqwikException");
+            String result = run(onlyJUnitTests(), "NumberUtilsAddPositiveLibrary", "NumberUtilsAddPositiveJqwikException");
             assertThat(result)
                     .has(propertyTestFailing("testAddition"));
         }

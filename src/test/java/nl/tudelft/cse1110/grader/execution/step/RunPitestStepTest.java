@@ -12,7 +12,7 @@ public class RunPitestStepTest extends IntegrationTestBase {
 
     @Test
     void mutantsSurvived() {
-        String result = run(ExecutionStepHelper.withPiTest(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddPiTestStrongerConfiguration");
+        String result = run(ExecutionStepHelper.onlyMutationCoverage(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddPiTestStrongerConfiguration");
 
         assertThat(result).has(mutationScore(7, 33));
     }

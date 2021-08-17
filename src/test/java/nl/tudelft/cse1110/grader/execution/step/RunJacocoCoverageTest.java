@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-import static nl.tudelft.cse1110.ExecutionStepHelper.withJacoco;
+import static nl.tudelft.cse1110.ExecutionStepHelper.onlyBranchCoverage;
 import static nl.tudelft.cse1110.ResultTestAssertions.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -17,7 +17,7 @@ public class RunJacocoCoverageTest extends IntegrationTestBase {
     @ParameterizedTest
     @MethodSource("generator")
     void test(String library, String solution, int lines, int instructions, int branches) {
-        String result = run(withJacoco(), library, solution);
+        String result = run(onlyBranchCoverage(), library, solution);
 
         assertThat(result)
                 .has(linesCovered(lines))
@@ -47,7 +47,7 @@ public class RunJacocoCoverageTest extends IntegrationTestBase {
     // not really needed, as this was meant to exercise the configuration, but let's keep it for now
     @Test
     void specifyingConfigClass() {
-        String result = run(withJacoco(), "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfig");
+        String result = run(onlyBranchCoverage(), "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfig");
 
         assertThat(result).has(linesCovered(13))
                 .has(instructionsCovered(58))

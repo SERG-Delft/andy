@@ -3,7 +3,7 @@ package nl.tudelft.cse1110.grader.execution.step;
 import nl.tudelft.cse1110.IntegrationTestBase;
 import org.junit.jupiter.api.Test;
 
-import static nl.tudelft.cse1110.ExecutionStepHelper.justCodeChecks;
+import static nl.tudelft.cse1110.ExecutionStepHelper.onlyCodeChecks;
 import static nl.tudelft.cse1110.ResultTestAssertions.codeCheck;
 import static nl.tudelft.cse1110.ResultTestAssertions.scoreOfCodeChecks;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -12,7 +12,7 @@ public class RunCodeChecksStepTest extends IntegrationTestBase {
 
     @Test
     void allChecksPass() {
-        String result = run(justCodeChecks(), "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfigWithCodeChecks");
+        String result = run(onlyCodeChecks(), "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfigWithCodeChecks");
 
         assertThat(result)
                 .has(scoreOfCodeChecks(3,3))
@@ -23,7 +23,7 @@ public class RunCodeChecksStepTest extends IntegrationTestBase {
 
     @Test
     void someChecksFail() {
-        String result = run(justCodeChecks(), "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfigWithCodeChecks2");
+        String result = run(onlyCodeChecks(), "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfigWithCodeChecks2");
 
         assertThat(result)
                 .has(scoreOfCodeChecks(2,5))

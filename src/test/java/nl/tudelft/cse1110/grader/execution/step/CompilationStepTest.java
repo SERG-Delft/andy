@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
-import static nl.tudelft.cse1110.ExecutionStepHelper.justCompilation;
+import static nl.tudelft.cse1110.ExecutionStepHelper.onlyCompilation;
 import static nl.tudelft.cse1110.grader.util.FileUtils.concatenateDirectories;
 import static nl.tudelft.cse1110.ResultTestAssertions.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -14,7 +14,7 @@ public class CompilationStepTest extends IntegrationTestBase {
 
     @Test
     void compilationFails() {
-        String result = run(justCompilation(), "ArrayUtilsIsSortedLibrary", "ArrayUtilsIsSortedWithCompilationError");
+        String result = run(onlyCompilation(), "ArrayUtilsIsSortedLibrary", "ArrayUtilsIsSortedWithCompilationError");
         assertThat(result)
                 .has(compilationFailure())
                 .has(compilationErrorOnLine(29))
@@ -26,7 +26,7 @@ public class CompilationStepTest extends IntegrationTestBase {
 
     @Test
     void compilationOk() {
-        String result = run(justCompilation(),  "ListUtilsLibrary", "ListUtilsCompilationSuccess");
+        String result = run(onlyCompilation(),  "ListUtilsLibrary", "ListUtilsCompilationSuccess");
         assertThat(result)
                 .has(compilationSuccess());
     }
@@ -34,7 +34,7 @@ public class CompilationStepTest extends IntegrationTestBase {
 
     @Test
     void compilationDifferentFailures() {
-        String result = run(justCompilation(), "MathArraysLibrary","MathArraysDifferentCompilationErrors");
+        String result = run(onlyCompilation(), "MathArraysLibrary","MathArraysDifferentCompilationErrors");
         assertThat(result)
                 .has(compilationFailure())
                 .has(compilationErrorOnLine(21))
@@ -45,7 +45,7 @@ public class CompilationStepTest extends IntegrationTestBase {
 
     @Test
     void highlightsGeneratedWhenCompilationFails(){
-        run(justCompilation(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfImportListCommented");
+        run(onlyCompilation(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfImportListCommented");
 
         File highlights = new File(concatenateDirectories(workDir.toString(), "highlights.json"));
         assertThat(highlights).exists().isFile();

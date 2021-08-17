@@ -1,45 +1,34 @@
 package nl.tudelft.cse1110;
 
-import nl.tudelft.cse1110.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.grader.execution.step.*;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class ExecutionStepHelper {
 
-
-    public static List<ExecutionStep> justTests() {
+    public static List<ExecutionStep> onlyJUnitTests() {
         return Arrays.asList(new RunJUnitTestsStep());
     }
 
-    public static List<ExecutionStep> testsAndFinalGrade() {
-        return Arrays.asList(new RunJUnitTestsStep(), new CalculateFinalGradeStep());
-    }
-
-    public static CheckScript noScript() {
-        return new CheckScript(Collections.emptyList());
-    }
-
-    public static List<ExecutionStep> withPiTest() {
+    public static List<ExecutionStep> onlyMutationCoverage() {
         return Arrays.asList(new RunPitestStep());
     }
 
-    public static List<ExecutionStep> justCompilation() {
+    public static List<ExecutionStep> onlyCompilation() {
         return Arrays.asList(new CompilationStep());
     }
 
-    public static List<ExecutionStep> justCodeChecks() {
+    public static List<ExecutionStep> onlyCodeChecks() {
         return Arrays.asList(new RunCodeChecksStep());
     }
 
-    public static List<ExecutionStep> withJacoco() {
+    public static List<ExecutionStep> onlyBranchCoverage() {
         return Arrays.asList(new RunJacocoCoverageStep());
     }
 
-    public static List<ExecutionStep> withMeta() {
+    public static List<ExecutionStep> onlyMetaTests() {
         return Arrays.asList(new RunMetaTestsStep());
     }
 
@@ -52,11 +41,5 @@ public class ExecutionStepHelper {
                 new CalculateFinalGradeStep());
     }
 
-    public static List<ExecutionStep> examMode() {
-        return Arrays.asList(new RunJUnitTestsStep(),
-                new RunJacocoCoverageStep(),
-                new RunPitestStep(),
-                new CalculateFinalGradeStep());
-    }
 
 }

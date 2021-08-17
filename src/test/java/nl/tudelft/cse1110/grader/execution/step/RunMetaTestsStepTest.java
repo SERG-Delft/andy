@@ -12,7 +12,7 @@ public class RunMetaTestsStepTest extends IntegrationTestBase {
 
     @Test
     void testAllMetaTestsPassing() {
-        String result = run(withMeta(), "NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution", "NumberUtilsAddConfiguration");
+        String result = run(onlyMetaTests(), "NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution", "NumberUtilsAddConfiguration");
 
         assertThat(result)
                 .has(metaTests(4))
@@ -21,7 +21,7 @@ public class RunMetaTestsStepTest extends IntegrationTestBase {
 
     @Test
     void testSomeMetaTestFailing() {
-        String result = run(withMeta(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddConfiguration");
+        String result = run(onlyMetaTests(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddConfiguration");
 
         assertThat(result)
                 .has(metaTests(4))
@@ -33,7 +33,7 @@ public class RunMetaTestsStepTest extends IntegrationTestBase {
 
     @Test
     void testAllMetaTestsFailing() {
-        String result = run(withMeta(), "NumberUtilsAddLibrary", "NumberUtilsNoTests", "NumberUtilsAddConfiguration");
+        String result = run(onlyMetaTests(), "NumberUtilsAddLibrary", "NumberUtilsNoTests", "NumberUtilsAddConfiguration");
 
         assertThat(result)
                 .has(metaTests(4))
@@ -46,7 +46,7 @@ public class RunMetaTestsStepTest extends IntegrationTestBase {
 
     @Test
     void testMetaWhenMultipleClassesInLibrary() {
-        String result = run(withMeta(), "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfig");
+        String result = run(onlyMetaTests(), "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfig");
 
         assertThat(result)
                 .has(metaTests(4))
@@ -56,7 +56,7 @@ public class RunMetaTestsStepTest extends IntegrationTestBase {
 
     @Test
     void testMetaWhenMultipleClassesInSolution() {
-        String result = run(withMeta(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfJQWikPassing", "ArrayUtilsIndexOfJQWikConfig");
+        String result = run(onlyMetaTests(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfJQWikPassing", "ArrayUtilsIndexOfJQWikConfig");
 
         assertThat(result)
                 .has(metaTests(3))
