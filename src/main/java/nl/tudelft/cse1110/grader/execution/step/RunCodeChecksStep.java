@@ -9,7 +9,7 @@ import nl.tudelft.cse1110.grader.result.ResultBuilder;
 
 import static nl.tudelft.cse1110.grader.util.FileUtils.findSolution;
 
-public class CodeChecksStep implements ExecutionStep {
+public class RunCodeChecksStep implements ExecutionStep {
     @Override
     public void execute(Configuration cfg, ResultBuilder result) {
         DirectoryConfiguration dirCfg = cfg.getDirectoryConfiguration();

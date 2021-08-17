@@ -43,7 +43,7 @@ public class ExecutionStepHelper {
         return Arrays.asList(new RunJUnitTestsStep(),
                 new RunJacocoCoverageStep(),
                 new RunPitestStep(),
-                new CodeChecksStep(),
+                new RunCodeChecksStep(),
                 new RunMetaTestsStep(),
                 new CalculateFinalGradeStep());
     }

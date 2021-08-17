@@ -69,7 +69,7 @@ public class ExecutionFlow {
                         new RunJUnitTestsStep(),
                         new RunJacocoCoverageStep(),
                         new RunPitestStep(),
-                        new CodeChecksStep(),
+                        new RunCodeChecksStep(),
                         new RunMetaTestsStep(),
                         new CalculateFinalGradeStep()),
                 cfg,
