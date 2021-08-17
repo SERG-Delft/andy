@@ -1,4 +1,4 @@
-package nl.tudelft.cse1110.grader.execution;
+package nl.tudelft.cse1110.grader.execution.step.helper;
 
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
 import org.junit.platform.engine.reporting.ReportEntry;
