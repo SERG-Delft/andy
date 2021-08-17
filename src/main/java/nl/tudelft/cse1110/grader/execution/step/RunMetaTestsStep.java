@@ -15,6 +15,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static nl.tudelft.cse1110.grader.util.FileUtils.createTemporaryDirectory;
+import static nl.tudelft.cse1110.grader.util.FileUtils.deleteDirectory;
+
 public class RunMetaTestsStep implements ExecutionStep {
 
     @Override
@@ -29,31 +32,39 @@ public class RunMetaTestsStep implements ExecutionStep {
             String solutionFile = FileUtils.findSolution(dirCfg.getWorkingDir());
             List<String> failures = new ArrayList<>();
 
+            /*
+             * For each meta test, we basically perform a string replace in the
+             * original library code, recompile it, and run the tests.
+             * If there's a failing test, the meta test is killed.
+             *
+             * We reuse our execution framework to run the code with the meta test.
+             */
             for (MetaTest metaTest : metaTests) {
                 ClassLoader oldClassLoader = changeClassLoader();
 
-                File metaWorkingDir = FileUtils.createTemporaryDirectory("metaWorkplace").toFile();
-
+                /* Copy the library and replace the library by the meta test */
+                File metaWorkingDir = createTemporaryDirectory("metaWorkplace").toFile();
                 FileUtils.copyFile(solutionFile, metaWorkingDir.getAbsolutePath());
-
                 String metaFileContent = generateMetaFileContent(metaTest, dirCfg);
-
                 createMetaTestFile(metaWorkingDir, metaFileContent);
 
+                /* We then run the meta test, using our infrastructure */
                 ResultBuilder metaResult = runMetaTest(dirCfg, metaWorkingDir);
 
+                /* And check the result. If there's a failing test, the test suite is good! */
                 int testsRan = metaResult.getTestsRan();
                 int testsSucceeded = metaResult.getTestsSucceeded();
+                boolean passesTheMetaTest = testsSucceeded < testsRan;
 
-                if (testsSucceeded < testsRan) {
+                if (passesTheMetaTest) {
                     score++;
                 } else {
                     String metaName = metaTest.getName();
                     failures.add(metaName);
                 }
 
-                FileUtils.deleteDirectory(metaWorkingDir);
-
+                /* Clean up and put the original classloader back */
+                deleteDirectory(metaWorkingDir);
                 Thread.currentThread().setContextClassLoader(oldClassLoader);
             }
 

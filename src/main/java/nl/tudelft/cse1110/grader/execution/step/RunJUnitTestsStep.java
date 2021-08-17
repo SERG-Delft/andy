@@ -2,9 +2,8 @@ package nl.tudelft.cse1110.grader.execution.step;
 
 import nl.tudelft.cse1110.grader.config.Configuration;
 import nl.tudelft.cse1110.grader.config.DirectoryConfiguration;
-import nl.tudelft.cse1110.grader.execution.step.helper.AdditionalReportJUnitListener;
-import nl.tudelft.cse1110.grader.util.ClassUtils;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
+import nl.tudelft.cse1110.grader.execution.step.helper.AdditionalReportJUnitListener;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
 import org.junit.platform.launcher.Launcher;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
@@ -13,6 +12,7 @@ import org.junit.platform.launcher.core.LauncherFactory;
 import org.junit.platform.launcher.listeners.SummaryGeneratingListener;
 import org.junit.platform.launcher.listeners.TestExecutionSummary;
 
+import static nl.tudelft.cse1110.grader.util.ClassUtils.getTestClass;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
 public class RunJUnitTestsStep implements ExecutionStep {
@@ -26,7 +26,7 @@ public class RunJUnitTestsStep implements ExecutionStep {
             SummaryGeneratingListener listener = new SummaryGeneratingListener();
             AdditionalReportJUnitListener additionalReportJUnitListener = new AdditionalReportJUnitListener(result);
 
-            String testClass = ClassUtils.getTestClass(dirCfg.getNewClassNames());
+            String testClass = getTestClass(dirCfg.getNewClassNames());
 
             Launcher launcher = LauncherFactory.create();
             launcher.registerTestExecutionListeners(listener);

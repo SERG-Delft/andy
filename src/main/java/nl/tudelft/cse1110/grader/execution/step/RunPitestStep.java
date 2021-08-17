@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static nl.tudelft.cse1110.grader.util.FileUtils.concatenateDirectories;
+import static nl.tudelft.cse1110.grader.util.FileUtils.createDirIfNeeded;
 
 public class RunPitestStep implements ExecutionStep {
 
@@ -43,8 +44,6 @@ public class RunPitestStep implements ExecutionStep {
             final ReportOptions data = pr.getOptions();
             final CombinedStatistics stats = runReport(data, plugins);
 
-            // We "skip" this folder and instead keep its contents
-
             extractAndRemoveReportFolder(outputPitestDir);
 
             result.logPitest(stats);
@@ -53,10 +52,8 @@ public class RunPitestStep implements ExecutionStep {
 
     @NotNull
     private String createDirectoryForPitest(Configuration cfg) {
-        // Create new directory ".../output/pitest"
-        // Here, the PiTest report folder in format "year-month-day-time" will be written
         String outputPitestDir = concatenateDirectories(cfg.getDirectoryConfiguration().getOutputDir(), "pitest");
-        FileUtils.createDirIfNeeded(outputPitestDir);
+        createDirIfNeeded(outputPitestDir);
         return outputPitestDir;
     }
 
@@ -107,20 +104,16 @@ public class RunPitestStep implements ExecutionStep {
 
     }
 
-    /**
-     * @param outputPitestDir - .../output/pitest, which will contain a folder "202108151457" e.g.
-     *                        This folder will be skipped,
-     *                        and instead its contents will be directly in .../output/pitest
-     */
     private void extractAndRemoveReportFolder(String outputPitestDir) {
-
+        /*
+         * Pitest creates a subdir with the timestamp, which we want to remove.
+         * The report folder "year-month-day-time" will be the only file in .../output/pitest,
+         * as every WebLab submission gets a "clean" image.
+         */
         try {
             File[] contentsOfPitestOutputDir = FileUtils.getAllFiles(new File(outputPitestDir));
 
             if (contentsOfPitestOutputDir.length != 0) {
-
-                // The report folder "year-month-day-time" will be the only file in .../output/pitest,
-                // as every WebLab submission gets a “clean” image.
                 File reportFolderToSkip = contentsOfPitestOutputDir[0];
 
                 File[] pitestReportFiles = FileUtils.getAllFiles(new File(reportFolderToSkip.getAbsolutePath()));

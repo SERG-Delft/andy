@@ -40,7 +40,8 @@ public class CompilationStep implements ExecutionStep {
 
         /*
          * Create a compilation task with the list of files to compile.
-         * Also pass the classpath with the libraries, e.g., JUnit, JQWik, etc.
+         * The compiler uses the classpath of the current JVM.
+         * So, all the libraries available (JUnit, etc) will be reused here
          */
         Collection<File> listOfFiles = FileUtils.getAllJavaFiles(dirCfg.getWorkingDir());
         Iterable<? extends JavaFileObject > sources =

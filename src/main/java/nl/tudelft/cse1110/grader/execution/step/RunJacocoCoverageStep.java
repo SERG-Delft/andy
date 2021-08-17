@@ -40,13 +40,14 @@ public class RunJacocoCoverageStep implements ExecutionStep {
         RunConfiguration runCfg = cfg.getRunConfiguration();
 
         try {
-            /**Get the names of the test class and the library classes.*/
+            /* Get the names of the test class and the library classes.*/
             String testClass = ClassUtils.getTestClass(dirCfg.getNewClassNames());
             List<String> otherClasses = ClassUtils.allClassesButTestingAndConfigOnes(dirCfg.getNewClassNames());
 
             final IRuntime runtime = new LoggerRuntime();
 
-            /**We need to instrument the SUT to be able to generate a JaCoCo report.
+            /*
+             * We need to instrument the SUT to be able to generate a JaCoCo report.
              * We then override the non-instrumented classes with the instrumented ones using
              * a custom class loader. For the sake of simplicity we instrument all classes using a custom method.
              * We also save the old class loader to restore it later.
@@ -63,10 +64,11 @@ public class RunJacocoCoverageStep implements ExecutionStep {
             final RuntimeData data = new RuntimeData();
             runtime.startup(data);
 
-            /**After instrumenting classes, we need to execute them.*/
+            /* After instrumenting classes, we need to execute them.*/
             this.executeJUnitTests(testClass);
 
-            /**After instrumenting and running, we can continue to reporting.
+            /*
+             * After instrumenting and running, we can continue to reporting.
              * This will generate the JaCoCo report.
              */
             final ExecutionDataStore executionData = new ExecutionDataStore();
@@ -77,7 +79,8 @@ public class RunJacocoCoverageStep implements ExecutionStep {
             final CoverageBuilder coverageBuilder = new CoverageBuilder();
             final Analyzer analyzer = new Analyzer(executionData, coverageBuilder);
 
-            /**We analyze the library files that have been specified in the config.
+            /*
+             * We analyze the library files that have been specified in the config.
              * These classes will have a coverage report.
              */
             for (String libraryClass : runCfg.classesUnderTest()) {
@@ -89,10 +92,10 @@ public class RunJacocoCoverageStep implements ExecutionStep {
             Collection<IClassCoverage> coverages = coverageBuilder.getClasses();
             result.logJacoco(coverages);
 
-            /**Generate an HTML report.*/
+            /* Generate an HTML report.*/
             this.generateReport(dirCfg, testClass, coverageBuilder, executionData, sessionInfos);
 
-            /**Restore the old class loader to get the non-instrumented classes back.*/
+            /* Restore the old class loader to get the non-instrumented classes back.*/
             Thread.currentThread().setContextClassLoader(oldClassLoader);
         } catch (Exception ex) {
             result.genericFailure(this, ex);
@@ -121,13 +124,13 @@ public class RunJacocoCoverageStep implements ExecutionStep {
         }
     }
 
-    /**Get a compiled Java class as an InputStream.*/
+    /* Get a compiled Java class as an InputStream. */
     private InputStream getClassAsInputStream(String filepath, String className) throws IOException {
         String pathToClass = filepath + "/" + className.replace('.', '/') + ".class";
         return new FileInputStream(pathToClass);
     }
 
-    /**Run the specified JUnit test file*/
+    /* Run the specified JUnit test file */
     private void executeJUnitTests(String testClass) {
         Launcher launcher = LauncherFactory.create();
 
@@ -137,7 +140,7 @@ public class RunJacocoCoverageStep implements ExecutionStep {
         launcher.execute(request);
     }
 
-    /**Generate an HTML report from JaCoCo based on the coverage analysis of our classes.*/
+    /* Generate an HTML report from JaCoCo based on the coverage analysis of our classes. */
     private void generateReport(DirectoryConfiguration dirCfg, String testClass,
                                 CoverageBuilder coverageBuilder, ExecutionDataStore executionData,
                                 SessionInfoStore sessionInfos) throws IOException {

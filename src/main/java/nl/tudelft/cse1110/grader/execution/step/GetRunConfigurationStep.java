@@ -7,9 +7,10 @@ import nl.tudelft.cse1110.grader.config.RunConfiguration;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.grader.result.GradeValues;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
-import nl.tudelft.cse1110.grader.util.ClassUtils;
 
 import java.util.NoSuchElementException;
+
+import static nl.tudelft.cse1110.grader.util.ClassUtils.getConfigurationClass;
 
 public class GetRunConfigurationStep implements ExecutionStep {
 
@@ -20,23 +21,24 @@ public class GetRunConfigurationStep implements ExecutionStep {
         try {
             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
-            Class<?> runConfigurationClass = Class.forName(ClassUtils.getConfigurationClass(dirCfg.getNewClassNames()), false, classLoader);
+            Class<?> runConfigurationClass = Class.forName(getConfigurationClass(dirCfg.getNewClassNames()), false, classLoader);
             RunConfiguration runConfiguration = (RunConfiguration) runConfigurationClass.getDeclaredConstructor().newInstance();
 
             cfg.setRunConfiguration(runConfiguration);
 
-            this.setGradeValues(runConfiguration, result);
+            this.buildGradeValues(runConfiguration, result);
         } catch (NoSuchElementException ex) {
+            // There's no configuration set. We put a default one!
             RunConfiguration runConfiguration = new DefaultRunConfiguration(cfg.getDirectoryConfiguration());
             cfg.setRunConfiguration(runConfiguration);
 
-            this.setGradeValues(runConfiguration, result);
+            this.buildGradeValues(runConfiguration, result);
         } catch (Exception ex) {
             result.genericFailure(this, ex);
         }
     }
 
-    private void setGradeValues(RunConfiguration runCfg, ResultBuilder result) {
+    private void buildGradeValues(RunConfiguration runCfg, ResultBuilder result) {
         boolean failureGivesZero = runCfg.failureGivesZero();
         float coverage = runCfg.weights().get("coverage");
         float mutation = runCfg.weights().get("mutation");
