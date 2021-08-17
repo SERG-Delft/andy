@@ -1,14 +1,25 @@
 package nl.tudelft.cse1110.codechecker.integration;
 
-import nl.tudelft.cse1110.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.codechecker.CodeCheckerTestUtils;
+import nl.tudelft.cse1110.codechecker.checks.Comparison;
+import nl.tudelft.cse1110.codechecker.checks.JQWikArbitraries;
+import nl.tudelft.cse1110.codechecker.checks.JQWikProperty;
+import nl.tudelft.cse1110.codechecker.checks.JQWikProvide;
+import nl.tudelft.cse1110.codechecker.engine.CheckScript;
+import nl.tudelft.cse1110.codechecker.engine.SingleCheck;
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class T03_M2021_IsLeapYear extends CodeCheckerIntegrationTestBase {
+public class T03_M2021_IsLeapYear {
 
-    private final CheckScript checkScript = script("integration/t03_m2021_isLeapYear/m2021-isLeapYear.yml");
+    private final CheckScript checkScript = new CheckScript(Arrays.asList(
+            new SingleCheck("should have at least 2 properties", new JQWikProperty(Comparison.GTE, 2)),
+            new SingleCheck("should have at least 2 provides", new JQWikProvide(Comparison.GTE, 2)),
+            new SingleCheck(2, "should make use of Arbitraries.integers()", new JQWikArbitraries("integers"))
+    ));
 
     @Test
     void solution1_pass() {

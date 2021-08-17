@@ -12,14 +12,11 @@ import java.util.Map;
 
 public class CheckScript {
 
-    private List<CheckType> checks;
+    private final List<CheckType> checks;
 
     public CheckScript(List<CheckType> checks) {
         this.checks = checks;
     }
-
-    @Deprecated // for jackson
-    public CheckScript() {}
 
     public List<CheckType> getChecks() {
         return Collections.unmodifiableList(checks);

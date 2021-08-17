@@ -31,26 +31,25 @@ public class MockitoVerify extends WithinAnnotatedMethod {
     private int numberOfCallsToVerify = 0;
     private String lastMethodCalled = null;
 
-
-
     private static Map<String, Set<String>> METHOD_TYPES = new HashMap<>() {{
        put("TEST", WithinTestMethod.TEST_ANNOTATIONS);
        put("AFTEREACH", WithinAfterEach.AFTEREACH_ANNOTATION);
     }};
     private boolean waitingForNever;
 
-    public MockitoVerify(List<String> params) {
-        assert params!=null;
-        assert params.size() == 4 || params.size() == 5;
-
-        this.methodToVerify = params.get(0);
-        this.methodType = params.get(1);
+    public MockitoVerify(String methodToVerify, String methodType, Comparison comparison, int expectedNumberOfOccurrences, boolean never) {
+        this.methodToVerify = methodToVerify;
+        this.methodType = methodType;
         assert METHOD_TYPES.containsKey(this.methodType);
 
-        this.comparison = ComparisonFactory.build(params.get(2));
-        this.expectedNumberOfOccurrences = Integer.parseInt(params.get(3));
+        this.comparison = comparison;
+        this.expectedNumberOfOccurrences = expectedNumberOfOccurrences;
 
-        this.never = params.size() == 5 ? Boolean.parseBoolean(params.get(4)) : false;
+        this.never = never;
+    }
+
+    public MockitoVerify(String methodToVerify, String methodType, Comparison comparison, int expectedNumberOfOccurrences) {
+        this(methodToVerify, methodType, comparison, expectedNumberOfOccurrences, false);
     }
 
     @Override

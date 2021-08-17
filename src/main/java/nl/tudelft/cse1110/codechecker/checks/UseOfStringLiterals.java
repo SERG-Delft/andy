@@ -3,7 +3,6 @@ package nl.tudelft.cse1110.codechecker.checks;
 import org.eclipse.jdt.core.dom.StringLiteral;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -35,11 +34,8 @@ public class UseOfStringLiterals extends WithinAnnotatedMethod {
     private boolean literalFound = false;
     private int length;
 
-    public UseOfStringLiterals(List<String> params) {
-        assert params!=null;
-        assert params.size() == 1;
-
-        this.length = Integer.parseInt(params.get(0));
+    public UseOfStringLiterals(int length) {
+        this.length = length;
     }
 
     public boolean visit(StringLiteral node) {

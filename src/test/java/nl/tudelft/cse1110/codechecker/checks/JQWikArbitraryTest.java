@@ -3,8 +3,6 @@ package nl.tudelft.cse1110.codechecker.checks;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import java.util.Arrays;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class JQWikArbitraryTest extends ChecksBaseTest {
@@ -16,7 +14,7 @@ public class JQWikArbitraryTest extends ChecksBaseTest {
             "ManyJQWikTests,ABC,false"
     })
     void returnArbitraries(String fixtureName, String arbitraryName, boolean expectation) {
-        Check check = new JQWikArbitrary(Arrays.asList(arbitraryName));
+        Check check = new JQWikArbitrary(arbitraryName);
 
         run( fixtureName + ".java", check);
         assertThat(check.result()).isEqualTo(expectation);

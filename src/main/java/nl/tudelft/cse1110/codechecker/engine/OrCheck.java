@@ -15,11 +15,6 @@ public class OrCheck extends CheckType {
         this.checks = checks;
     }
 
-    @Deprecated // Jackson only
-    public OrCheck() {
-        super(1, null);
-    }
-
     @Override
     public boolean getFinalResult() {
         assert hasExecuted : "You have to run the check first";

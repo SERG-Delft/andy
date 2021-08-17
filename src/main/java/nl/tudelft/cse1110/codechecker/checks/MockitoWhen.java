@@ -2,8 +2,6 @@ package nl.tudelft.cse1110.codechecker.checks;
 
 import org.eclipse.jdt.core.dom.MethodInvocation;
 
-import java.util.List;
-
 /**
  * Checks for calls to Mockito's when(), for a specific method name
  * and a specific number of times.
@@ -24,13 +22,10 @@ public class MockitoWhen extends Check {
     private int numberOfCallsToWhen = 0;
     private boolean inWhenMode = false;
 
-    public MockitoWhen(List<String> params) {
-        assert params!=null;
-        assert params.size() == 3;
-
-        this.methodToSetUp = params.get(0);
-        this.comparison = ComparisonFactory.build(params.get(1));
-        this.expectedNumberOfOccurrences = Integer.parseInt(params.get(2));
+    public MockitoWhen(String methodToSetUp, Comparison comparison, int expectedNumberOfOccurrences) {
+        this.methodToSetUp = methodToSetUp;
+        this.comparison = comparison;
+        this.expectedNumberOfOccurrences = expectedNumberOfOccurrences;
     }
 
     @Override

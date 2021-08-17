@@ -5,14 +5,6 @@ import nl.tudelft.cse1110.codechecker.CodeCheckerTestUtils;
 
 public class ChecksBaseTest {
 
-//    private String filePathFor(String className) {
-//        try {
-//            return new File(this.getClass().getResource("/").getPath() + "../../src/test/java/fixtures/" + className).getCanonicalPath();
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-
     protected void run(String className, Check check) {
         new JDTParser().run(new CodeCheckerTestUtils().getTestResource(className), check);
     }

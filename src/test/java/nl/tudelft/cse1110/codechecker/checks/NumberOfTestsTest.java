@@ -4,8 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import java.util.Arrays;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class NumberOfTestsTest extends ChecksBaseTest {
@@ -17,15 +15,15 @@ public class NumberOfTestsTest extends ChecksBaseTest {
             "3, true",
             "4, false",
     })
-    void classWithTests(String minimumNumberOfTests, boolean expectation) {
-        Check check = new NumberOfTests(Arrays.asList("GTE", minimumNumberOfTests));
+    void classWithTests(int minimumNumberOfTests, boolean expectation) {
+        Check check = new NumberOfTests(Comparison.GTE, minimumNumberOfTests);
         run("ManyTests.java", check);
         assertThat(check.result()).isEqualTo(expectation);
     }
 
     @Test
     void classWithoutTests() {
-        Check check = new NumberOfTests(Arrays.asList("GTE", "1"));
+        Check check = new NumberOfTests(Comparison.GTE, 1);
         run("NoTests.java", check);
         assertThat(check.result()).isFalse();
     }

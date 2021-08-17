@@ -15,9 +15,8 @@ public class AndCheck extends CheckType {
         this.checks = checks;
     }
 
-    @Deprecated // Jackson only
-    public AndCheck() {
-        super(1, null);
+    public AndCheck(List<SingleCheck> checks) {
+        this(1, null, checks);
     }
 
     @Override

@@ -1,7 +1,5 @@
 package nl.tudelft.cse1110.codechecker.checks;
 
-import java.util.List;
-
 /**
  * Counts the number of JQWik's @Property.
  *
@@ -13,8 +11,8 @@ import java.util.List;
  */
 public class JQWikProperty extends UsageOfAnAnnotationTemplate {
 
-    public JQWikProperty(List<String> params) {
-        super(params);
+    public JQWikProperty(Comparison comparison, int minimumNumberOfUsage) {
+        super(comparison, minimumNumberOfUsage);
     }
 
     @Override

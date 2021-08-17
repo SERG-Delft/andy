@@ -16,7 +16,20 @@ public class ComparisonTest {
             "EQ,1,2,false","EQ,1,1,true"
     })
     void comparison(String operator, int actual, int expected, boolean result) {
-        assertThat(ComparisonFactory.build(operator).compare(actual, expected))
+        // TODO: make this better.
+        Comparison comparison = null;
+        if(operator.equals("LT"))
+            comparison = Comparison.LT;
+        if(operator.equals("LTE"))
+            comparison = Comparison.LTE;
+        if(operator.equals("GT"))
+            comparison = Comparison.GT;
+        if(operator.equals("GTE"))
+            comparison = Comparison.GTE;
+        if(operator.equals("EQ"))
+            comparison = Comparison.EQ;
+
+        assertThat(comparison.compare(actual, expected))
                 .isEqualTo(result);
     }
 }

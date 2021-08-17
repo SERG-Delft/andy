@@ -2,8 +2,6 @@ package nl.tudelft.cse1110.codechecker.checks;
 
 import org.eclipse.jdt.core.dom.MethodInvocation;
 
-import java.util.List;
-
 /**
  * Checks whether a method was invoked in a test method.
  *
@@ -19,11 +17,8 @@ public class MethodCalledInTestMethod extends WithinTestMethod {
     private final String methodToBeCalled;
     private boolean methodWasCalled = false;
 
-    public MethodCalledInTestMethod(List<String> params) {
-        assert params!=null;
-        assert params.size() == 1;
-
-        this.methodToBeCalled = params.get(0);
+    public MethodCalledInTestMethod(String methodToBeCalled) {
+        this.methodToBeCalled = methodToBeCalled;
     }
 
     @Override

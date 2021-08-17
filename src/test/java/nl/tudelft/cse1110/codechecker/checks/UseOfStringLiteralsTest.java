@@ -3,8 +3,6 @@ package nl.tudelft.cse1110.codechecker.checks;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import java.util.Arrays;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UseOfStringLiteralsTest extends ChecksBaseTest {
@@ -17,8 +15,8 @@ public class UseOfStringLiteralsTest extends ChecksBaseTest {
             "StringLiterals,10,false", // do not look at the string outside the test
             "ManyTests,1,false"
     })
-    void stringLiterals(String file, String length, boolean expectation) {
-        Check check = new UseOfStringLiterals(Arrays.asList(length));
+    void stringLiterals(String file, int length, boolean expectation) {
+        Check check = new UseOfStringLiterals(length);
         run(file + ".java", check);
         assertThat(check.result()).isEqualTo(expectation);
     }

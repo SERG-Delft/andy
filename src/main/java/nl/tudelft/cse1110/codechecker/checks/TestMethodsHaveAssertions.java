@@ -24,7 +24,6 @@ public class TestMethodsHaveAssertions extends WithinTestMethod {
     private boolean containsATestWithoutAssertion = false;
     private boolean currentMethodContainsAssertion = false;
 
-
     /**
      * This is, for now, a non-exhaustive list.
      */

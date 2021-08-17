@@ -2,7 +2,6 @@ package nl.tudelft.cse1110.codechecker.checks;
 
 import org.eclipse.jdt.core.dom.MethodInvocation;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -19,9 +18,8 @@ public class JQWikArbitraries extends WithinAnnotatedMethod {
     private final String arbitraryMethodToLookFor;
     private boolean arbitrariesIsUsed = false;
 
-    public JQWikArbitraries(List<String> params) {
-        assert params.size() == 1;
-        this.arbitraryMethodToLookFor = params.get(0);
+    public JQWikArbitraries(String arbitraryMethodToLookFor) {
+        this.arbitraryMethodToLookFor = arbitraryMethodToLookFor;
     }
 
     @Override

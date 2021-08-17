@@ -1,7 +1,5 @@
 package nl.tudelft.cse1110.codechecker.checks;
 
-import java.util.List;
-
 /**
  * Counts the number of JUnit tests in a file
  * More specifically, it counts the number of
@@ -15,8 +13,8 @@ import java.util.List;
  */
 public class NumberOfTests extends UsageOfAnAnnotationTemplate {
 
-    public NumberOfTests(List<String> params) {
-        super(params);
+    public NumberOfTests(Comparison comparison, int minimumNumberOfUsage) {
+        super(comparison, minimumNumberOfUsage);
     }
 
     @Override

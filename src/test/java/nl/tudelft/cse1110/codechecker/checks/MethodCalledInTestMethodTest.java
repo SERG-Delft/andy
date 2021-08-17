@@ -3,8 +3,6 @@ package nl.tudelft.cse1110.codechecker.checks;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import java.util.Arrays;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class MethodCalledInTestMethodTest extends ChecksBaseTest {
@@ -17,7 +15,7 @@ public class MethodCalledInTestMethodTest extends ChecksBaseTest {
             "retrieve, false"
     })
     void methodInvocationsInTestMethod(String methodName, boolean expectation) {
-        Check check = new MethodCalledInTestMethod(Arrays.asList(methodName));
+        Check check = new MethodCalledInTestMethod(methodName);
         run("MethodCalled.java", check);
         assertThat(check.result()).isEqualTo(expectation);
     }

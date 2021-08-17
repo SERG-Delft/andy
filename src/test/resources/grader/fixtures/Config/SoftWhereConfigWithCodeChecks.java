@@ -1,9 +1,12 @@
 package domain.addingnumbers;
 
+import nl.tudelft.cse1110.codechecker.checks.Comparison;
+import nl.tudelft.cse1110.codechecker.checks.MockClass;
+import nl.tudelft.cse1110.codechecker.checks.MockitoWhen;
 import nl.tudelft.cse1110.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.codechecker.engine.SingleCheck;
 import nl.tudelft.cse1110.grader.config.RunConfiguration;
-import nl.tudelft.cse1110.grader.config.MetaTest;
+import nl.tudelft.cse1110.codechecker.checks.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,9 +32,9 @@ public class Configuration extends RunConfiguration {
     @Override
     public CheckScript checkScript() {
         return new CheckScript(List.of(
-            new SingleCheck(1, "MockClass", "Trip Repository should be mocked", false, "TripRepository"),
-            new SingleCheck(1, "MockClass", "Trip should not be mocked", true, "Trip"),
-            new SingleCheck(1, "MockitoWhen", "getTripById should be set up", false, "getTripById GTE 1")
+            new SingleCheck("Trip Repository should be mocked", new MockClass("TripRepository")),
+            new SingleCheck( "Trip should not be mocked", true, new MockClass("Trip")),
+            new SingleCheck( "getTripById should be set up", new MockitoWhen("getTripById", Comparison.GTE, 1))
         ));
     }
 

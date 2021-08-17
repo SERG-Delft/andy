@@ -2,8 +2,6 @@ package nl.tudelft.cse1110.codechecker.checks;
 
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 
-import java.util.List;
-
 /**
  * Checks whether a specific Arbitrary is defined.
  * Looks for method returns of Arbitrary<X>
@@ -20,10 +18,8 @@ public class JQWikArbitrary extends Check {
     private final boolean specificType;
     private boolean arbitraryIsReturned = false;
 
-    public JQWikArbitrary(List<String> params) {
-        assert params.size() == 1;
-
-        this.type = params.get(0);
+    public JQWikArbitrary(String type) {
+        this.type = type;
         this.specificType = true;
     }
 

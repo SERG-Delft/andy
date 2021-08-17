@@ -2,8 +2,6 @@ package nl.tudelft.cse1110.codechecker.checks;
 
 import org.eclipse.jdt.core.dom.MethodInvocation;
 
-import java.util.List;
-
 /**
  * Checks whether the class was mocked via Mockito.mock(..).
  *
@@ -18,11 +16,8 @@ public class MockClass extends Check {
     private final String classToBeMocked;
     private boolean classWasMocked = false;
 
-    public MockClass(List<String> params) {
-        assert params != null;
-        assert params.size() == 1;
-
-        this.classToBeMocked = params.get(0);
+    public MockClass(String classToBeMocked) {
+        this.classToBeMocked = classToBeMocked;
     }
 
     @Override
