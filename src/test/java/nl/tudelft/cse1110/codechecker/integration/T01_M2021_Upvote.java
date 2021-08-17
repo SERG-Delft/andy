@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
+import static nl.tudelft.cse1110.codechecker.checks.MockitoVerify.MethodType.AFTEREACH;
+import static nl.tudelft.cse1110.codechecker.checks.MockitoVerify.MethodType.TEST;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class T01_M2021_Upvote {
@@ -24,8 +26,8 @@ public class T01_M2021_Upvote {
             new SingleCheck("set up pointsForFeaturedPost just once", new MockitoWhen("pointsForFeaturedPost", Comparison.EQ, 1)),
             new SingleCheck("set up pointsForNormalPost just once", new MockitoWhen("pointsForFeaturedPost", Comparison.EQ, 1)),
             new OrCheck(3, "update should be verified in both tests", Arrays.asList(
-                    new SingleCheck(new MockitoVerify("update", "TEST", Comparison.EQ, 2)),
-                    new SingleCheck(new MockitoVerify("update", "AFTEREACH", Comparison.EQ, 1))
+                    new SingleCheck(new MockitoVerify("update", TEST, Comparison.EQ, 2)),
+                    new SingleCheck(new MockitoVerify("update", AFTEREACH, Comparison.EQ, 1))
             )),
             new SingleCheck("tests should have assertions", new TestMethodsHaveAssertions()),
             new SingleCheck(3, "getPoints should have an assertion", new MethodCalledInTestMethod("getPoints"))

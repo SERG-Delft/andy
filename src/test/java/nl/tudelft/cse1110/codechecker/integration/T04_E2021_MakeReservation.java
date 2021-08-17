@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
+import static nl.tudelft.cse1110.codechecker.checks.MockitoVerify.MethodType.TEST;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class T04_E2021_MakeReservation {
@@ -21,10 +22,10 @@ public class T04_E2021_MakeReservation {
             new SingleCheck("getTripById should be set up", new MockitoWhen("getTripById", Comparison.GTE, 1)),
             new SingleCheck("getAllReservationsByTrip should be set up", new MockitoWhen("getAllReservationsByTrip", Comparison.GTE, 1)),
             new SingleCheck("update should not be set up", true, new MockitoWhen("update", Comparison.GTE, 1)),
-            new SingleCheck("save should be verified", new MockitoVerify("save", "TEST", Comparison.GTE, 1)),
-            new SingleCheck("save should be verified (with never) once", new MockitoVerify("save", "TEST", Comparison.EQ, 1, true)),
-            new SingleCheck("getAllReservationsByTrip should not be verified", true, new MockitoVerify("getAllReservationsByTrip", "TEST", Comparison.GTE, 1)),
-            new SingleCheck("getTripById should not be verified", true, new MockitoVerify("getTripById", "TEST", Comparison.GTE, 1)),
+            new SingleCheck("save should be verified", new MockitoVerify("save", TEST, Comparison.GTE, 1)),
+            new SingleCheck("save should be verified (with never) once", new MockitoVerify("save", TEST, Comparison.EQ, 1, true)),
+            new SingleCheck("getAllReservationsByTrip should not be verified", true, new MockitoVerify("getAllReservationsByTrip", TEST, Comparison.GTE, 1)),
+            new SingleCheck("getTripById should not be verified", true, new MockitoVerify("getTripById", TEST, Comparison.GTE, 1)),
             new SingleCheck("assertDoesNotThrow is not called (no need for it)", true, new MethodCalledInTestMethod("assertDoesNotThrow")),
             new SingleCheck("getCapacity is not called in the tests", true, new MethodCalledInTestMethod("getCapacity")),
             new SingleCheck("tests should have assertions", new TestMethodsHaveAssertions())

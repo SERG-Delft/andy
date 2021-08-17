@@ -24,23 +24,33 @@ public class MockitoVerify extends WithinAnnotatedMethod {
     private final String methodToVerify;
     private final int expectedNumberOfOccurrences;
     private final Comparison comparison;
-    private final String methodType;
+    private final MethodType methodType;
 
     private final boolean never;
 
     private int numberOfCallsToVerify = 0;
     private String lastMethodCalled = null;
 
-    private static Map<String, Set<String>> METHOD_TYPES = new HashMap<>() {{
-       put("TEST", WithinTestMethod.TEST_ANNOTATIONS);
-       put("AFTEREACH", WithinAfterEach.AFTEREACH_ANNOTATION);
-    }};
+    public enum MethodType {
+        TEST(WithinTestMethod.TEST_ANNOTATIONS),
+        AFTEREACH(WithinAfterEach.AFTEREACH_ANNOTATION);
+
+        private final Set<String> annotations;
+
+        MethodType(Set<String> annotations) {
+            this.annotations = annotations;
+        }
+
+        public Set<String> getAnnotations() {
+            return annotations;
+        }
+    }
+
     private boolean waitingForNever;
 
-    public MockitoVerify(String methodToVerify, String methodType, Comparison comparison, int expectedNumberOfOccurrences, boolean never) {
+    public MockitoVerify(String methodToVerify, MethodType methodType, Comparison comparison, int expectedNumberOfOccurrences, boolean never) {
         this.methodToVerify = methodToVerify;
         this.methodType = methodType;
-        assert METHOD_TYPES.containsKey(this.methodType);
 
         this.comparison = comparison;
         this.expectedNumberOfOccurrences = expectedNumberOfOccurrences;
@@ -48,7 +58,7 @@ public class MockitoVerify extends WithinAnnotatedMethod {
         this.never = never;
     }
 
-    public MockitoVerify(String methodToVerify, String methodType, Comparison comparison, int expectedNumberOfOccurrences) {
+    public MockitoVerify(String methodToVerify, MethodType methodType, Comparison comparison, int expectedNumberOfOccurrences) {
         this(methodToVerify, methodType, comparison, expectedNumberOfOccurrences, false);
     }
 
@@ -110,6 +120,6 @@ public class MockitoVerify extends WithinAnnotatedMethod {
 
     @Override
     protected Set<String> annotations() {
-        return METHOD_TYPES.get(methodType);
+        return methodType.getAnnotations();
     }
 }
