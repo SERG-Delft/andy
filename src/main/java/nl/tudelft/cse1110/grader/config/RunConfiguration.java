@@ -1,7 +1,6 @@
 package nl.tudelft.cse1110.grader.config;
 
 import nl.tudelft.cse1110.codechecker.engine.CheckScript;
-import nl.tudelft.cse1110.grader.MetaTest;
 
 import java.util.Collections;
 import java.util.List;

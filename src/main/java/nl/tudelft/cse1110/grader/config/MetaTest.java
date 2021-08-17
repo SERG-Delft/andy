@@ -1,4 +1,4 @@
-package nl.tudelft.cse1110.grader;
+package nl.tudelft.cse1110.grader.config;
 
 import java.util.ArrayList;
 import java.util.List;

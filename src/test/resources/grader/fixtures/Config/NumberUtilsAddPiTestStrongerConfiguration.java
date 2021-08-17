@@ -2,7 +2,7 @@ package domain.addingnumbers;
 
 import nl.tudelft.cse1110.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.grader.config.RunConfiguration;
-import nl.tudelft.cse1110.grader.MetaTest;
+import nl.tudelft.cse1110.grader.config.MetaTest;
 
 import java.util.HashMap;
 import java.util.List;
