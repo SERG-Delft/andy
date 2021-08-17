@@ -165,4 +165,8 @@ public class ResultTestAssertions {
         return containsString(expectedCheck);
     }
 
+    public static Condition<String> codeCheckScores() {
+        return containsRegex("Code checks score: \\d*/\\d*");
+    }
+
 }

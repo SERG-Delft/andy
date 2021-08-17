@@ -235,14 +235,18 @@ public class ResultBuilder {
 
 
     public void logCodeChecks(CheckScript script) {
-        l("\n--- Code checks");
-        l(script.generateReportOFailedChecks().trim());
 
-        int weightedChecks = script.weightedChecks();
-        int sumOfWeights = script.weights();
-        l(String.format("\nCode checks score: %d/%d", weightedChecks, sumOfWeights));
+        if(script.hasChecks()) {
 
-        grades.setCheckGrade(weightedChecks, sumOfWeights);
+            l("\n--- Code checks");
+            l(script.generateReportOFailedChecks().trim());
+
+            int weightedChecks = script.weightedChecks();
+            int sumOfWeights = script.weights();
+            l(String.format("\nCode checks score: %d/%d", weightedChecks, sumOfWeights));
+
+            grades.setCheckGrade(weightedChecks, sumOfWeights);
+        }
 
     }
 

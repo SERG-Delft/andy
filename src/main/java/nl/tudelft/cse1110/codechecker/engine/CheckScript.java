@@ -80,4 +80,7 @@ public class CheckScript {
         }, null);
     }
 
+    public boolean hasChecks() {
+        return !checks.isEmpty();
+    }
 }
