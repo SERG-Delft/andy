@@ -29,13 +29,4 @@ public class DefaultRunConfiguration extends RunConfiguration {
         return ClassUtils.allClassesButTestingAndConfigOnes(this.dirCfg.getNewClassNames());
     }
 
-    @Override
-    public CheckScript checkScript() {
-        return new CheckScript(Arrays.asList());
-    }
-
-    @Override
-    public List<MetaTest> metaTests() {
-        return Collections.emptyList();
-    }
 }

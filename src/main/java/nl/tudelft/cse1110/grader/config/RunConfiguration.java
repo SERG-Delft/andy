@@ -3,6 +3,8 @@ package nl.tudelft.cse1110.grader.config;
 import nl.tudelft.cse1110.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.grader.MetaTest;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -30,9 +32,13 @@ public abstract class RunConfiguration {
 
     public abstract Map<String, Float> weights();
 
-    public abstract CheckScript checkScript();
+    public CheckScript checkScript() {
+        return new CheckScript(Arrays.asList());
+    }
 
-    public abstract List<MetaTest> metaTests();
+    public List<MetaTest> metaTests() {
+        return Collections.emptyList();
+    }
 
     public boolean failureGivesZero() {
         return true;
