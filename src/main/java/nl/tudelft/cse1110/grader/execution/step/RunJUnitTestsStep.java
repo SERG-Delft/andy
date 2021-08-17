@@ -15,7 +15,7 @@ import org.junit.platform.launcher.listeners.TestExecutionSummary;
 
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
-public class RunJUnitTests implements ExecutionStep {
+public class RunJUnitTestsStep implements ExecutionStep {
 
     @Override
     public void execute(Configuration cfg, ResultBuilder result) {

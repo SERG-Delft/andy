@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 import static nl.tudelft.cse1110.grader.util.FileUtils.concatenateDirectories;
 
-public class RunPitest implements ExecutionStep {
+public class RunPitestStep implements ExecutionStep {
 
 
     @Override

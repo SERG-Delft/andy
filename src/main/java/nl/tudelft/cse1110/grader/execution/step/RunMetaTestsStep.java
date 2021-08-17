@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class RunMetaTests implements ExecutionStep {
+public class RunMetaTestsStep implements ExecutionStep {
 
     @Override
     public void execute(Configuration cfg, ResultBuilder result) {

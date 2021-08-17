@@ -32,7 +32,7 @@ import java.util.*;
 
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
-public class RunJacoco implements ExecutionStep {
+public class RunJacocoCoverageStep implements ExecutionStep {
 
     @Override
     public void execute(Configuration cfg, ResultBuilder result) {

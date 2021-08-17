@@ -50,9 +50,9 @@ public class ExecutionFlow {
     public static ExecutionFlow examMode(Configuration cfg, ResultBuilder result) {
         return new ExecutionFlow(
                 Arrays.asList(
-                        new RunJUnitTests(),
-                        new RunJacoco(),
-                        new RunPitest(),
+                        new RunJUnitTestsStep(),
+                        new RunJacocoCoverageStep(),
+                        new RunPitestStep(),
                         new CalculateFinalGradeStep()),
                 cfg,
                 result
@@ -66,11 +66,11 @@ public class ExecutionFlow {
     public static ExecutionFlow fullMode(Configuration cfg, ResultBuilder result) {
         return new ExecutionFlow(
                 Arrays.asList(
-                        new RunJUnitTests(),
-                        new RunJacoco(),
-                        new RunPitest(),
+                        new RunJUnitTestsStep(),
+                        new RunJacocoCoverageStep(),
+                        new RunPitestStep(),
                         new CodeChecksStep(),
-                        new RunMetaTests(),
+                        new RunMetaTestsStep(),
                         new CalculateFinalGradeStep()),
                 cfg,
                 result
@@ -79,7 +79,7 @@ public class ExecutionFlow {
 
     public static ExecutionFlow justTests(Configuration cfg, ResultBuilder result) {
         return new ExecutionFlow(
-                Arrays.asList(new RunJUnitTests(), new CalculateFinalGradeStep()),
+                Arrays.asList(new RunJUnitTestsStep(), new CalculateFinalGradeStep()),
                 cfg,
                 result
         );

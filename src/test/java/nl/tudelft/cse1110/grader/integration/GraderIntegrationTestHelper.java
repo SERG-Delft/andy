@@ -12,11 +12,11 @@ public class GraderIntegrationTestHelper {
 
 
     public static List<ExecutionStep> justTests() {
-        return Arrays.asList(new RunJUnitTests());
+        return Arrays.asList(new RunJUnitTestsStep());
     }
 
     public static List<ExecutionStep> testsAndFinalGrade() {
-        return Arrays.asList(new RunJUnitTests(), new CalculateFinalGradeStep());
+        return Arrays.asList(new RunJUnitTestsStep(), new CalculateFinalGradeStep());
     }
 
     public static CheckScript noScript() {
@@ -24,7 +24,7 @@ public class GraderIntegrationTestHelper {
     }
 
     public static List<ExecutionStep> withPiTest() {
-        return Arrays.asList(new RunPitest());
+        return Arrays.asList(new RunPitestStep());
     }
 
     public static List<ExecutionStep> justCompilation() {
@@ -32,26 +32,26 @@ public class GraderIntegrationTestHelper {
     }
 
     public static List<ExecutionStep> withJacoco() {
-        return Arrays.asList(new RunJacoco());
+        return Arrays.asList(new RunJacocoCoverageStep());
     }
 
     public static List<ExecutionStep> withMeta() {
-        return Arrays.asList(new RunMetaTests());
+        return Arrays.asList(new RunMetaTestsStep());
     }
 
     public static List<ExecutionStep> fullMode() {
-        return Arrays.asList(new RunJUnitTests(),
-                new RunJacoco(),
-                new RunPitest(),
+        return Arrays.asList(new RunJUnitTestsStep(),
+                new RunJacocoCoverageStep(),
+                new RunPitestStep(),
                 new CodeChecksStep(),
-                new RunMetaTests(),
+                new RunMetaTestsStep(),
                 new CalculateFinalGradeStep());
     }
 
     public static List<ExecutionStep> examMode() {
-        return Arrays.asList(new RunJUnitTests(),
-                new RunJacoco(),
-                new RunPitest(),
+        return Arrays.asList(new RunJUnitTestsStep(),
+                new RunJacocoCoverageStep(),
+                new RunPitestStep(),
                 new CalculateFinalGradeStep());
     }
 
