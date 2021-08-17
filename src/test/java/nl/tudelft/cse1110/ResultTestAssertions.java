@@ -19,6 +19,15 @@ public class ResultTestAssertions {
         };
     }
 
+    private static Condition<String> containsString(String regex) {
+        return new Condition<>() {
+            @Override
+            public boolean matches(String value) {
+                return value.contains(regex);
+            }
+        };
+    }
+
     public static Condition<String> compilationErrorMoreTimes(String errorType, int times) {
         return new Condition<>() {
             @Override
@@ -52,7 +61,7 @@ public class ResultTestAssertions {
 
 
     public static Condition<String> parameterizedTestFailing(String testName, int testCaseNumber) {
-        return containsRegex("- Parameterized test \"" + testName + "\", test case #" + testCaseNumber + " failed:");
+        return containsString("- Parameterized test \"" + testName + "\", test case #" + testCaseNumber + " failed:");
     }
 
 
@@ -62,7 +71,7 @@ public class ResultTestAssertions {
 
 
     public static Condition<String> compilationSuccess() {
-        return containsRegex("--- Compilation\\nSuccess");
+        return containsString("--- Compilation\nSuccess");
     }
 
 
@@ -88,27 +97,27 @@ public class ResultTestAssertions {
 
 
     public static Condition<String> errorMessage(String errorMessage) {
-        return containsRegex(errorMessage);
+        return containsString(errorMessage);
     }
 
 
     public static Condition<String> failingParameterizedTestName(String testName) {
-        return containsRegex("- Parameterized test " + "\"" + testName + "\"" + ",");
+        return containsString("- Parameterized test " + "\"" + testName + "\"" + ",");
     }
 
 
     public static Condition<String> parameterizedTestCaseNumber(int testCaseNumber) {
-        return containsRegex(" test case #" + testCaseNumber + " failed:");
+        return containsString(" test case #" + testCaseNumber + " failed:");
     }
 
 
     public static Condition<String> uninvokedMethod(String uninvokedMethod) {
-        return containsRegex("Wanted but not invoked:\n" + uninvokedMethod);
+        return containsString("Wanted but not invoked:\n" + uninvokedMethod);
     }
 
 
     public static Condition<String> hintAtInteractionFound(String invokedMethod) {
-        return containsRegex("However, there was exactly 1 interaction with this mock:\n" + invokedMethod);
+        return containsString("However, there was exactly 1 interaction with this mock:\n" + invokedMethod);
     }
 
     public static Condition<String> linesCovered(int numberOfLinesCovered) {
@@ -132,15 +141,28 @@ public class ResultTestAssertions {
     }
 
     public static Condition<String> metaTestFailing(String metaTestName) {
-        return containsRegex("Meta test: " + metaTestName + " FAILED");
+        return containsString("Meta test: " + metaTestName + " FAILED");
     }
 
     public static Condition<String> finalGrade(int score) {
-        return containsRegex("--- Final grade\n" + score + "/100");
+        return containsString("--- Final grade\n" + score + "/100");
     }
 
     public static Condition<String> mutationScore(int mutantsKilled, int totalMutants) {
-        return containsRegex("--- Mutation testing\n" + mutantsKilled + "/" + totalMutants);
+        return containsString("--- Mutation testing\n" + mutantsKilled + "/" + totalMutants);
+    }
+
+    public static Condition<String> scoreOfCodeChecks(int points, int total) {
+        return containsString("Code checks score: " + points + "/" + total);
+    }
+
+    public static Condition<String> codeCheck(String description, boolean pass, int weight) {
+        String expectedCheck = String.format("%s: %s (weight: %d)",
+                description,
+                pass ? "PASS" : "FAIL",
+                weight);
+
+        return containsString(expectedCheck);
     }
 
 }

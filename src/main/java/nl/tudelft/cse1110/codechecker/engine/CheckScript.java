@@ -32,11 +32,11 @@ public class CheckScript {
                 '}';
     }
 
-    private int weightedChecks() {
+    public int weightedChecks() {
         return checks.stream().mapToInt(check -> check.getFinalResult() ? check.getWeight() : 0).sum();
     }
 
-    private int weights() {
+    public int weights() {
         int sumOfWeights = checks.stream().mapToInt(c -> c.getWeight()).sum();
         return sumOfWeights;
     }
@@ -46,6 +46,17 @@ public class CheckScript {
 
         report.append(String.format("%d\n", weights()));
         report.append(String.format("%d\n", weightedChecks()));
+
+        for (CheckType check : checks) {
+            report.append(String.format("%s", check.reportExecution()));
+        }
+
+        return report.toString();
+    }
+
+    public String generateReportOFailedChecks() {
+        StringBuilder report = new StringBuilder();
+
         for (CheckType check : checks) {
             report.append(String.format("%s", check.reportExecution()));
         }

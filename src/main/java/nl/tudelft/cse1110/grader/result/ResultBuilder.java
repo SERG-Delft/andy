@@ -236,10 +236,11 @@ public class ResultBuilder {
 
     public void logCodeChecks(CheckScript script) {
         l("\n--- Code checks");
-        l(script.generateReport());
+        l(script.generateReportOFailedChecks().trim());
 
-        int weightedChecks = script.getChecks().stream().mapToInt(check -> check.getFinalResult() ? check.getWeight() : 0).sum();
-        int sumOfWeights =  script.getChecks().stream().mapToInt(c -> c.getWeight()).sum();
+        int weightedChecks = script.weightedChecks();
+        int sumOfWeights = script.weights();
+        l(String.format("\nCode checks score: %d/%d", weightedChecks, sumOfWeights));
 
         grades.setCheckGrade(weightedChecks, sumOfWeights);
 

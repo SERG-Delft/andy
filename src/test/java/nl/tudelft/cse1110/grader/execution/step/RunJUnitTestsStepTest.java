@@ -78,7 +78,7 @@ public class RunJUnitTestsStepTest {
 
         // test class contains normal @Tests, parameterized tests and pbt.
         @Test
-        void ThreeDifferentTestTypesUsed() {
+        void threeDifferentTestTypesUsed() {
 
             String result = run(justTests(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfDifferentTestTypes");  // 5/5 @Tests passing
 

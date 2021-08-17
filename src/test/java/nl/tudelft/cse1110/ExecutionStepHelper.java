@@ -31,6 +31,10 @@ public class ExecutionStepHelper {
         return Arrays.asList(new CompilationStep());
     }
 
+    public static List<ExecutionStep> justCodeChecks() {
+        return Arrays.asList(new RunCodeChecksStep());
+    }
+
     public static List<ExecutionStep> withJacoco() {
         return Arrays.asList(new RunJacocoCoverageStep());
     }
