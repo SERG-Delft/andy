@@ -1,4 +1,4 @@
-package nl.tudelft.cse1110.grader.execution.step;
+package nl.tudelft.cse1110;
 
 import org.assertj.core.api.Condition;
 
@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class GraderIntegrationTestAssertions {
+public class ResultTestAssertions {
 
     private static Condition<String> containsRegex(String regex) {
         return new Condition<>() {

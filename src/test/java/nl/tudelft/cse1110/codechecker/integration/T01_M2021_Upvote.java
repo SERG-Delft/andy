@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class T01_M2021_Upvote extends IntegrationTestBase {
+public class T01_M2021_Upvote extends CodeCheckerIntegrationTestBase {
 
     private final CheckScript checkScript = script("integration/t01_m2021_upvote/m2021-upvote.yml");
 

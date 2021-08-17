@@ -32,7 +32,7 @@ public class ResultBuilder {
     private int testsRan = 0;
     private int testsSucceeded = 0;
 
-    private GradeCalculator gradeCalculator = new GradeCalculator();
+    private GradeCalculator gradeCalculator; // will be set once weights are injected
     private GradeWeight gradeWeights; // will be injected once configuration is loaded
     private GradeValues grades = new GradeValues();
 
@@ -199,13 +199,21 @@ public class ResultBuilder {
     }
 
     public int getFinalScore(){
-        return isFailed() ? -1 : gradeCalculator.calculateFinalGrade(grades);
+        return isFailed() ? -1 : finalGrade();
+    }
+
+    private int finalGrade() {
+        // this might be called when compilation fails, and we have no grade calculator yet
+        if(gradeCalculator==null)
+            return 0;
+
+        return gradeCalculator.calculateFinalGrade(grades);
     }
 
     public void logFinalGrade() {
 
         // rounding up from 0.5...
-        String grade = String.valueOf(gradeCalculator.calculateFinalGrade(grades));
+        String grade = String.valueOf(finalGrade());
 
         l("\n--- Final grade");
         l(grade + "/100");
@@ -269,6 +277,7 @@ public class ResultBuilder {
 
     public void setGradeWeights(GradeWeight gradeWeights) {
         this.gradeWeights = gradeWeights;
+        this.gradeCalculator = new GradeCalculator(gradeWeights);
     }
 
     public boolean isFailed() {
@@ -277,7 +286,11 @@ public class ResultBuilder {
 
     public void failed() {
         this.failed = true;
-        gradeCalculator.failed();
+
+        // The failing can happen before we instantiated a grade calculator
+        // e.g., during compilation time.
+        if(gradeCalculator!=null)
+            gradeCalculator.failed();
     }
 
     public boolean containsCompilationErrors() {

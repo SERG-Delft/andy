@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class T03_M2021_IsLeapYear extends IntegrationTestBase {
+public class T03_M2021_IsLeapYear extends CodeCheckerIntegrationTestBase {
 
     private final CheckScript checkScript = script("integration/t03_m2021_isLeapYear/m2021-isLeapYear.yml");
 

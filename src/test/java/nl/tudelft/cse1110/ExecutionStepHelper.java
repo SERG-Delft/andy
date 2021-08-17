@@ -1,4 +1,4 @@
-package nl.tudelft.cse1110.grader.execution.step;
+package nl.tudelft.cse1110;
 
 import nl.tudelft.cse1110.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class GraderIntegrationTestHelper {
+public class ExecutionStepHelper {
 
 
     public static List<ExecutionStep> justTests() {

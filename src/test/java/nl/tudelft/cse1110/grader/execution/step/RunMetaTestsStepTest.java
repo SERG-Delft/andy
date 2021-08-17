@@ -1,13 +1,14 @@
 package nl.tudelft.cse1110.grader.execution.step;
 
+import nl.tudelft.cse1110.IntegrationTestBase;
 import org.junit.jupiter.api.Test;
 
-import static nl.tudelft.cse1110.grader.execution.step.GraderIntegrationTestAssertions.*;
-import static nl.tudelft.cse1110.grader.execution.step.GraderIntegrationTestHelper.*;
+import static nl.tudelft.cse1110.ResultTestAssertions.*;
+import static nl.tudelft.cse1110.ExecutionStepHelper.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
-public class GraderMetaTest extends GraderIntegrationTestBase {
+public class RunMetaTestsStepTest extends IntegrationTestBase {
 
     @Test
     void testAllMetaTestsPassing() {

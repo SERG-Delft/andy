@@ -1,15 +1,16 @@
 package nl.tudelft.cse1110.grader.execution.step;
 
+import nl.tudelft.cse1110.IntegrationTestBase;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
-import static nl.tudelft.cse1110.grader.execution.step.GraderIntegrationTestHelper.justCompilation;
+import static nl.tudelft.cse1110.ExecutionStepHelper.justCompilation;
 import static nl.tudelft.cse1110.grader.util.FileUtils.concatenateDirectories;
-import static nl.tudelft.cse1110.grader.execution.step.GraderIntegrationTestAssertions.*;
+import static nl.tudelft.cse1110.ResultTestAssertions.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class GraderCompilationTest extends GraderIntegrationTestBase {
+public class CompilationStepTest extends IntegrationTestBase {
 
     @Test
     void compilationFails() {
@@ -39,7 +40,7 @@ public class GraderCompilationTest extends GraderIntegrationTestBase {
                 .has(compilationErrorOnLine(21))
                 .has(compilationErrorOnLine(25))
                 .has(compilationErrorOnLine(33))
-                .has(GraderIntegrationTestAssertions.compilationErrorMoreTimes("cannot find symbol", 3));
+                .has(compilationErrorMoreTimes("cannot find symbol", 3));
     }
 
     @Test

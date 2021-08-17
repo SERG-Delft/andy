@@ -5,9 +5,6 @@ public class GradeCalculator {
     private GradeWeight weights;
     private boolean failed;
 
-    // Needed because the weights are injected later when the configuration is loaded
-    public GradeCalculator() {}
-
     public GradeCalculator(GradeWeight weights) {
         this.weights = weights;
     }

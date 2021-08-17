@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class T04_E2021_MakeReservation extends IntegrationTestBase {
+public class T04_E2021_MakeReservation extends CodeCheckerIntegrationTestBase {
 
     private final CheckScript checkScript = script("integration/t04_e2021_makeReservation/e2021-makeReservation.yml");
 

@@ -1,4 +1,4 @@
-package nl.tudelft.cse1110.grader.execution.step;
+package nl.tudelft.cse1110;
 
 import nl.tudelft.cse1110.grader.config.Configuration;
 import nl.tudelft.cse1110.grader.config.DirectoryConfiguration;
@@ -15,9 +15,7 @@ import java.util.List;
 import static nl.tudelft.cse1110.ResourceUtils.resourceFolder;
 import static nl.tudelft.cse1110.grader.util.FileUtils.concatenateDirectories;
 
-public abstract class GraderIntegrationTestBase {
-
-
+public abstract class IntegrationTestBase {
     @TempDir
     protected Path reportDir;     
 

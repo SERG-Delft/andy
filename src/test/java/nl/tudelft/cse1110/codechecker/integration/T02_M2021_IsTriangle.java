@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class T02_M2021_IsTriangle extends IntegrationTestBase {
+public class T02_M2021_IsTriangle extends CodeCheckerIntegrationTestBase {
 
     private final CheckScript checkScript = script("integration/t02_m2021_isTriangle/m2021-isTriangle.yml");
 

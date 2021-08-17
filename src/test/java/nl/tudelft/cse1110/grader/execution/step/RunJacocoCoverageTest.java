@@ -1,16 +1,18 @@
 package nl.tudelft.cse1110.grader.execution.step;
 
+import nl.tudelft.cse1110.IntegrationTestBase;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-import static nl.tudelft.cse1110.grader.execution.step.GraderIntegrationTestAssertions.*;
-import static nl.tudelft.cse1110.grader.execution.step.GraderIntegrationTestHelper.*;
+import static nl.tudelft.cse1110.ExecutionStepHelper.withJacoco;
+import static nl.tudelft.cse1110.ResultTestAssertions.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class GraderJacocoTest extends GraderIntegrationTestBase {
+public class RunJacocoCoverageTest extends IntegrationTestBase {
 
     @ParameterizedTest
     @MethodSource("generator")
@@ -41,4 +43,15 @@ public class GraderJacocoTest extends GraderIntegrationTestBase {
                 Arguments.of("ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfJQWikPassing", 8, 25, 8)
         );
     }
+
+    // not really needed, as this was meant to exercise the configuration, but let's keep it for now
+    @Test
+    void specifyingConfigClass() {
+        String result = run(withJacoco(), "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfig");
+
+        assertThat(result).has(linesCovered(13))
+                .has(instructionsCovered(58))
+                .has(branchesCovered(2));
+    }
+
 }
