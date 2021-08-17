@@ -1,4 +1,4 @@
-package nl.tudelft.cse1110.grader.integration;
+package nl.tudelft.cse1110.grader.execution.step;
 
 import org.assertj.core.api.Condition;
 

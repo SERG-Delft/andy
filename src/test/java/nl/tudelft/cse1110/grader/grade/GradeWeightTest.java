@@ -1,6 +1,5 @@
-package nl.tudelft.cse1110.grader.unit;
+package nl.tudelft.cse1110.grader.grade;
 
-import nl.tudelft.cse1110.grader.grade.GradeWeight;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;

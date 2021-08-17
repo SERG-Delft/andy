@@ -1,8 +1,5 @@
-package nl.tudelft.cse1110.grader.unit;
+package nl.tudelft.cse1110.grader.grade;
 
-import nl.tudelft.cse1110.grader.grade.GradeCalculator;
-import nl.tudelft.cse1110.grader.grade.GradeValues;
-import nl.tudelft.cse1110.grader.grade.GradeWeight;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

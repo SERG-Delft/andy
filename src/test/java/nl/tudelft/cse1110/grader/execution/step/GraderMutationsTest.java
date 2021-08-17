@@ -1,10 +1,8 @@
-package nl.tudelft.cse1110.grader.integration;
+package nl.tudelft.cse1110.grader.execution.step;
 
 import org.junit.jupiter.api.Test;
 
-import static nl.tudelft.cse1110.grader.integration.GraderIntegrationTestAssertions.*;
-import static nl.tudelft.cse1110.grader.integration.GraderIntegrationTestHelper.withMeta;
-import static nl.tudelft.cse1110.grader.integration.GraderIntegrationTestHelper.withPiTest;
+import static nl.tudelft.cse1110.grader.execution.step.GraderIntegrationTestAssertions.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class GraderMutationsTest extends GraderIntegrationTestBase {
@@ -12,7 +10,7 @@ public class GraderMutationsTest extends GraderIntegrationTestBase {
 
     @Test
     void testPiTestConfiguration() {
-        String result = run(withPiTest(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddPiTestStrongerConfiguration");
+        String result = run(GraderIntegrationTestHelper.withPiTest(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddPiTestStrongerConfiguration");
 
         assertThat(result).has(mutationScore(7, 33));
     }

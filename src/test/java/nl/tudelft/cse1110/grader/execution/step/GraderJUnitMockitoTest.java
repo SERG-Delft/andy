@@ -1,10 +1,8 @@
-package nl.tudelft.cse1110.grader.integration;
+package nl.tudelft.cse1110.grader.execution.step;
 
 import org.junit.jupiter.api.Test;
 
-import static nl.tudelft.cse1110.grader.integration.GraderIntegrationTestAssertions.*;
-import static nl.tudelft.cse1110.grader.integration.GraderIntegrationTestHelper.justTests;
-import static nl.tudelft.cse1110.grader.integration.GraderIntegrationTestHelper.noScript;
+import static nl.tudelft.cse1110.grader.execution.step.GraderIntegrationTestAssertions.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class GraderJUnitMockitoTest extends GraderIntegrationTestBase {
@@ -14,7 +12,7 @@ public class GraderJUnitMockitoTest extends GraderIntegrationTestBase {
     @Test
     void methodVerifiedButNotInvoked() {
 
-        String result = run(justTests(), "TodoApplicationLibrary", "TodoApplicationMockitoMethodNotInvoked");  // 2/3 normal @Tests passing
+        String result = run(GraderIntegrationTestHelper.justTests(), "TodoApplicationLibrary", "TodoApplicationMockitoMethodNotInvoked");  // 2/3 normal @Tests passing
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(2))
@@ -29,7 +27,7 @@ public class GraderJUnitMockitoTest extends GraderIntegrationTestBase {
     @Test
     void stubbingNonMockClass() {
 
-        String result = run(justTests(), "TheQueueLibrary", "TheQueueMisusingMockitoStub");  // 2/3 normal @Tests passing
+        String result = run(GraderIntegrationTestHelper.justTests(), "TheQueueLibrary", "TheQueueMisusingMockitoStub");  // 2/3 normal @Tests passing
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(2))

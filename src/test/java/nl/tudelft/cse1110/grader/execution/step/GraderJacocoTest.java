@@ -1,14 +1,13 @@
-package nl.tudelft.cse1110.grader.integration;
+package nl.tudelft.cse1110.grader.execution.step;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-import static nl.tudelft.cse1110.grader.integration.GraderIntegrationTestAssertions.*;
-import static nl.tudelft.cse1110.grader.integration.GraderIntegrationTestHelper.*;
+import static nl.tudelft.cse1110.grader.execution.step.GraderIntegrationTestAssertions.*;
+import static nl.tudelft.cse1110.grader.execution.step.GraderIntegrationTestHelper.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class GraderJacocoTest extends GraderIntegrationTestBase {
