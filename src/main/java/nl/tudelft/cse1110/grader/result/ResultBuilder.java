@@ -2,6 +2,9 @@ package nl.tudelft.cse1110.grader.result;
 
 import nl.tudelft.cse1110.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
+import nl.tudelft.cse1110.grader.grade.GradeCalculator;
+import nl.tudelft.cse1110.grader.grade.GradeValues;
+import nl.tudelft.cse1110.grader.grade.GradeWeight;
 import org.jacoco.core.analysis.IClassCoverage;
 import nl.tudelft.cse1110.grader.util.ImportUtils;
 import org.jetbrains.annotations.NotNull;
@@ -29,18 +32,13 @@ public class ResultBuilder {
     private int testsRan = 0;
     private int testsSucceeded = 0;
 
-    private GradeCalculator gradeCalculator;
-    private GradeValues gradeValues;
+    private GradeCalculator gradeCalculator = new GradeCalculator();
+    private GradeWeight gradeWeights; // will be injected once configuration is loaded
+    private GradeValues grades = new GradeValues();
+
     private List<Diagnostic<? extends JavaFileObject>> compilationErrors;
 
-    public ResultBuilder() {
-        this.gradeCalculator = new GradeCalculator();
-    }
 
-    public void setGradeValues(GradeValues gradeValues) {
-        this.gradeValues = gradeValues;
-        this.gradeCalculator.setGradeValues(gradeValues);
-    }
 
     public void compilationSuccess() {
         l("--- Compilation\nSuccess");
@@ -201,13 +199,13 @@ public class ResultBuilder {
     }
 
     public int getFinalScore(){
-        return isFailed() ? -1 : gradeCalculator.calculateFinalGrade();
+        return isFailed() ? -1 : gradeCalculator.calculateFinalGrade(grades);
     }
 
     public void logFinalGrade() {
 
         // rounding up from 0.5...
-        String grade = String.valueOf(gradeCalculator.calculateFinalGrade());
+        String grade = String.valueOf(gradeCalculator.calculateFinalGrade(grades));
 
         l("\n--- Final grade");
         l(grade + "/100");
@@ -221,7 +219,7 @@ public class ResultBuilder {
         l("\n--- Mutation testing");
         l(String.format("%d/%d killed", detectedMutations, totalMutations));
 
-        gradeValues.setMutationGrade(detectedMutations, totalMutations);
+        grades.setMutationGrade(detectedMutations, totalMutations);
 
         if(detectedMutations < totalMutations)
             l("See attached report.");
@@ -235,7 +233,7 @@ public class ResultBuilder {
         int weightedChecks = script.getChecks().stream().mapToInt(check -> check.getFinalResult() ? check.getWeight() : 0).sum();
         int sumOfWeights =  script.getChecks().stream().mapToInt(c -> c.getWeight()).sum();
 
-        gradeValues.setCheckGrade(weightedChecks, sumOfWeights);
+        grades.setCheckGrade(weightedChecks, sumOfWeights);
 
     }
 
@@ -256,7 +254,7 @@ public class ResultBuilder {
         l(String.format("Instruction coverage: %d/%d", totalCoveredInstructions, totalInstructions));
         l(String.format("Branch coverage: %d/%d", totalCoveredBranches, totalBranches));
         l("See the attached report.");
-        gradeValues.setMutationGrade(totalCoveredBranches, totalBranches);
+        grades.setMutationGrade(totalCoveredBranches, totalBranches);
     }
 
     public void logMetaTests(int score, int totalTests, List<String> failures) {
@@ -266,7 +264,11 @@ public class ResultBuilder {
             l(String.format("Meta test: %s FAILED", failure));
         }
 
-        gradeValues.setMetaGrade(score, totalTests);
+        grades.setMetaGrade(score, totalTests);
+    }
+
+    public void setGradeWeights(GradeWeight gradeWeights) {
+        this.gradeWeights = gradeWeights;
     }
 
     public boolean isFailed() {

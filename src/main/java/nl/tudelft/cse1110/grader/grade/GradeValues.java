@@ -1,15 +1,6 @@
-package nl.tudelft.cse1110.grader.result;
+package nl.tudelft.cse1110.grader.grade;
 
 public class GradeValues {
-
-    //  flag to indicate whether having test failures should give a 0 right away to the student or not
-    private boolean failureGives0;
-
-    // together all weights in [0,1] add up to 1
-    private float branchCoverageWeight;
-    private float mutationCoverageWeight;
-    private float metaTestsWeight;
-    private float codeChecksWeight;
 
     private int coveredBranches;
     private int totalBranches;
@@ -22,36 +13,6 @@ public class GradeValues {
 
     private int checksPassed;
     private int totalChecks;
-
-    public GradeValues(boolean failureGives0,
-                       float branchCoverageWeight, float mutationCoverageWeight, float metaTestsWeight, float codeChecksWeight) {
-        this.failureGives0 = failureGives0;
-        this.branchCoverageWeight = branchCoverageWeight;
-        this.mutationCoverageWeight = mutationCoverageWeight;
-        this.metaTestsWeight = metaTestsWeight;
-        this.codeChecksWeight = codeChecksWeight;
-    }
-
-
-    public boolean getFailureGives0() {
-        return failureGives0;
-    }
-
-    public float getBranchCoverageWeight() {
-        return branchCoverageWeight;
-    }
-
-    public float getMutationCoverageWeight() {
-        return mutationCoverageWeight;
-    }
-
-    public float getMetaTestsWeight() {
-        return metaTestsWeight;
-    }
-
-    public float getCodeChecksWeight() {
-        return codeChecksWeight;
-    }
 
     public int getCoveredBranches() {
         return coveredBranches;

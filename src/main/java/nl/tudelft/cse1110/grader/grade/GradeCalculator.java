@@ -1,43 +1,38 @@
-package nl.tudelft.cse1110.grader.result;
-
-import nl.tudelft.cse1110.codechecker.engine.CheckScript;
-import org.junit.platform.launcher.listeners.TestExecutionSummary;
-import org.pitest.mutationtest.tooling.CombinedStatistics;
+package nl.tudelft.cse1110.grader.grade;
 
 public class GradeCalculator {
 
-    private GradeValues gradeValues;
+    private GradeWeight weights;
     private boolean failed;
 
-
+    // Needed because the weights are injected later when the configuration is loaded
     public GradeCalculator() {}
 
-    public GradeCalculator(GradeValues gradeValues) {
-        this.gradeValues = gradeValues;
+    public GradeCalculator(GradeWeight weights) {
+        this.weights = weights;
     }
 
-    public void setGradeValues(GradeValues gradeValues) {
-        this.gradeValues = gradeValues;
+    public void setWeights(GradeWeight weights) {
+        this.weights = weights;
     }
 
-    /** ResultBuilder calls this method in logFinalGrade(), to output final grade to student in format 85/100 e.g.
-     * @return - final grade as int between 0 and 100
-     *  We round up from 0.5
+    /*
+     * Calculates the final grade of the student, in a number between 0 and 100.
+     * Final number is rounded up from 0.5.
      */
-    public int calculateFinalGrade() {
-
-        if (gradeValues.getFailureGives0() && failed) {
+    public int calculateFinalGrade(GradeValues gradeValues) {
+        if (weights.isFailureGives0() && failed) {
             return 0;
         }
 
         float branchScore = branchCoverageScore(gradeValues.getCoveredBranches(), gradeValues.getTotalBranches())
-                * gradeValues.getBranchCoverageWeight();
+                * weights.getBranchCoverageWeight();
         float mutationScore = mutationCoverageScore(gradeValues.getDetectedMutations(), gradeValues.getTotalMutations())
-                * gradeValues.getMutationCoverageWeight();
+                * weights.getMutationCoverageWeight();
         float metaScore = metaTestsScore(gradeValues.getMetaTestsPassed(), gradeValues.getTotalMetaTests())
-                * gradeValues.getMetaTestsWeight();
+                * weights.getMetaTestsWeight();
         float checkScore = codeChecksScore(gradeValues.getChecksPassed(), gradeValues.getTotalChecks())
-                * gradeValues.getCodeChecksWeight();
+                * weights.getCodeChecksWeight();
 
         float finalDecimalGrade = branchScore + mutationScore + metaScore + checkScore;
 

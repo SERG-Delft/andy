@@ -5,7 +5,7 @@ import nl.tudelft.cse1110.grader.config.DefaultRunConfiguration;
 import nl.tudelft.cse1110.grader.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.grader.config.RunConfiguration;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
-import nl.tudelft.cse1110.grader.result.GradeValues;
+import nl.tudelft.cse1110.grader.grade.GradeWeight;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
 
 import java.util.NoSuchElementException;
@@ -45,6 +45,6 @@ public class GetRunConfigurationStep implements ExecutionStep {
         float meta = runCfg.weights().get("meta");
         float codechecks = runCfg.weights().get("codechecks");
 
-        result.setGradeValues(new GradeValues(failureGivesZero, coverage, mutation, meta, codechecks));
+        result.setGradeWeights(new GradeWeight(failureGivesZero, coverage, mutation, meta, codechecks));
     }
 }
