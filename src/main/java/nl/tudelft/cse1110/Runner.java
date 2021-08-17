@@ -1,11 +1,11 @@
-package nl.tudelft.cse1110.grader;
+package nl.tudelft.cse1110;
 
 import nl.tudelft.cse1110.grader.config.Configuration;
 import nl.tudelft.cse1110.grader.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
 
-public class GraderRunner {
+public class Runner {
 
     public static void main(String[] args) {
         Configuration cfg = new Configuration();

@@ -166,7 +166,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>nl.tudelft.cse1110.grader.GraderRunner</mainClass>
+                            <mainClass>nl.tudelft.cse1110.Runner</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
