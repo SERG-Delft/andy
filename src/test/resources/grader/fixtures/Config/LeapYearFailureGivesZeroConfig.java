@@ -2,7 +2,7 @@ package domain;
 
 import nl.tudelft.cse1110.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.grader.config.RunConfiguration;
-import nl.tudelft.cse1110.grader.execution.MetaTest;
+import nl.tudelft.cse1110.grader.MetaTest;
 
 import java.util.ArrayList;
 import java.util.HashMap;

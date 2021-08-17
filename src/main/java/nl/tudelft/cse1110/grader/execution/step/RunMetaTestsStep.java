@@ -5,7 +5,7 @@ import nl.tudelft.cse1110.grader.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.grader.config.RunConfiguration;
 import nl.tudelft.cse1110.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.grader.execution.ExecutionStep;
-import nl.tudelft.cse1110.grader.execution.MetaTest;
+import nl.tudelft.cse1110.grader.MetaTest;
 import nl.tudelft.cse1110.grader.execution.step.helper.FromBytesClassLoader;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
 import nl.tudelft.cse1110.grader.util.FileUtils;
