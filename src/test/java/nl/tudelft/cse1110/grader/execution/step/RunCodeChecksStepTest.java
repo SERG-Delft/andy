@@ -28,7 +28,7 @@ public class RunCodeChecksStepTest extends IntegrationTestBase {
         assertThat(result)
                 .has(scoreOfCodeChecks(2,5))
                 .has(codeCheck("Trip Repository should be mocked", true, 1))
-                .has(codeCheck("Trip should be mocked", false, 3)) // this makes no sense, just for the check to fail
+                .has(codeCheck("Trip should be mocked", false, 3)) // this check makes no sense, just for the check to fail
                 .has(codeCheck("getTripById should be set up", true, 1));
     }
 
