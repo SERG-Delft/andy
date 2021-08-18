@@ -21,18 +21,6 @@ public class RunPitestStepTest extends IntegrationTestBase {
     }
 
 
-    // Test where not all of the identified mutants are killed and a report is generated. The default run configuration is used.
-    // The test checks whether the report directory is generated and the log shows "See attached report."
-    @Test
-    void reportWasGenerated() {
-        String result = run(onlyMutationCoverage(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass");
-        File report = new File(reportDir.toString() + "/pitest");
-
-        assertThat(report).exists().isDirectory();
-        assertThat(result).has(pitestReport());
-    }
-
-
     // Test where all mutants are killed.
     // 32 killed mutants means 100%, because 1 of the 33 identified mutants cannot be killed.
     @Test
@@ -60,6 +48,18 @@ public class RunPitestStepTest extends IntegrationTestBase {
         String result = run(onlyMutationCoverage(), "ZagZigLibrary", "ZagZigNotAllMutantsKilled", "ZagZigDifferentTotalMutantsConfig");
 
         assertThat(result).has(mutationScore(24, 26));
+    }
+
+
+    // Test where not all of the identified mutants are killed and a report is generated. The default run configuration is used.
+    // The test checks whether the report directory is generated and the log shows "See attached report."
+    @Test
+    void reportWasGenerated() {
+        String result = run(onlyMutationCoverage(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass");
+        File report = new File(reportDir.toString() + "/pitest");
+
+        assertThat(report).exists().isDirectory();
+        assertThat(result).has(pitestReport());
     }
 
 }
