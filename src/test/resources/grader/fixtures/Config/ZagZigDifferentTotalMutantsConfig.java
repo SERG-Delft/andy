@@ -1,4 +1,4 @@
-package domain.addingnumbers;
+package delft;
 
 import nl.tudelft.cse1110.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.grader.config.RunConfiguration;
@@ -18,25 +18,31 @@ public class Configuration extends RunConfiguration {
     @Override
     public Map<String, Float> weights() {
         return new HashMap<>() {{
-            put("coverage", 0.1f);
-            put("mutation", 0.3f);
-            put("meta", 0.4f);
-            put("codechecks", 0.2f);
+            put("coverage", 0.0f);
+            put("mutation", 0.5f);
+            put("meta", 0.0f);
+            put("codechecks", 0.5f);
         }};
     }
 
     @Override
     public List<String> classesUnderTest() {
-        return List.of("domain.addingnumbers.NumberUtils");
+        return List.of("delft.ZagZig");
     }
 
     @Override
     public List<String> listOfMutants() {
-        return STRONGER;
+        return DEFAULTS;
     }
 
     @Override
     public List<MetaTest> metaTests() {
         return List.of();
     }
+
+    @Override
+    public int numberOfMutationsToConsider() {
+        return 26;
+    }
+
 }

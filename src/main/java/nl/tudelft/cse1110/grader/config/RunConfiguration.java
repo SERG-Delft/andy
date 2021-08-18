@@ -46,4 +46,8 @@ public abstract class RunConfiguration {
         return DEFAULTS;
     }
 
+    public int numberOfMutationsToConsider() {
+        return -1;
+    }
+
 }

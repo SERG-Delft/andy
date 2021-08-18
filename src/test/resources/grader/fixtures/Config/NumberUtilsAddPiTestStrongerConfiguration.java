@@ -19,8 +19,8 @@ public class Configuration extends RunConfiguration {
     public Map<String, Float> weights() {
         return new HashMap<>() {{
             put("coverage", 0.1f);
-            put("mutation", 0.3f);
-            put("meta", 0.4f);
+            put("mutation", 0.4f);
+            put("meta", 0.3f);
             put("codechecks", 0.2f);
         }};
     }

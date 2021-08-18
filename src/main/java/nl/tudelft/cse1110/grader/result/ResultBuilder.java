@@ -32,6 +32,8 @@ public class ResultBuilder {
     private int testsRan = 0;
     private int testsSucceeded = 0;
 
+    private int mutationsToConsider;
+
     private GradeCalculator gradeCalculator; // will be set once weights are injected
     private GradeWeight gradeWeights; // will be injected once configuration is loaded
     private GradeValues grades = new GradeValues();
@@ -222,7 +224,13 @@ public class ResultBuilder {
     public void logPitest(CombinedStatistics stats) {
 
         int detectedMutations = (int)(stats.getMutationStatistics().getTotalDetectedMutations());
-        int totalMutations = (int)(stats.getMutationStatistics().getTotalMutations());
+
+        int totalMutations;
+        if (this.mutationsToConsider != -1) {
+            totalMutations = this.mutationsToConsider;
+        } else {
+            totalMutations = (int)(stats.getMutationStatistics().getTotalMutations());
+        }
 
         l("\n--- Mutation testing");
         l(String.format("%d/%d killed", detectedMutations, totalMutations));
@@ -283,6 +291,10 @@ public class ResultBuilder {
     public void setGradeWeights(GradeWeight gradeWeights) {
         this.gradeWeights = gradeWeights;
         this.gradeCalculator = new GradeCalculator(gradeWeights);
+    }
+
+    public void setNumberOfMutationsToConsider(int numberOfMutations) {
+        this.mutationsToConsider = numberOfMutations;
     }
 
     public boolean isFailed() {
