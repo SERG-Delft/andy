@@ -152,6 +152,10 @@ public class ResultTestAssertions {
         return containsString("--- Mutation testing\n" + mutantsKilled + "/" + totalMutants);
     }
 
+    public static Condition<String> pitestReport() {
+        return containsString("See attached report.");
+    }
+
     public static Condition<String> scoreOfCodeChecks(int points, int total) {
         return containsString("Code checks score: " + points + "/" + total);
     }
