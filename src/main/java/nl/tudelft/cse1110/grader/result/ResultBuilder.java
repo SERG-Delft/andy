@@ -237,9 +237,6 @@ public class ResultBuilder {
         l(String.format("%d/%d killed", detectedMutations, totalMutations));
 
         grades.setMutationGrade(detectedMutations, totalMutations);
-
-        if(detectedMutations < totalMutations)
-            l("See attached report.");
     }
 
 
@@ -275,7 +272,6 @@ public class ResultBuilder {
         l(String.format("Line coverage: %d/%d", totalCoveredLines, totalLines));
         l(String.format("Instruction coverage: %d/%d", totalCoveredInstructions, totalInstructions));
         l(String.format("Branch coverage: %d/%d", totalCoveredBranches, totalBranches));
-        l("See the attached report.");
         grades.setMutationGrade(totalCoveredBranches, totalBranches);
     }
 
