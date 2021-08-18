@@ -226,7 +226,8 @@ public class ResultBuilder {
         int detectedMutations = (int)(stats.getMutationStatistics().getTotalDetectedMutations());
 
         int totalMutations;
-        if (this.mutationsToConsider != -1) {
+        boolean numberOfMutantsToConsiderIsOverridden = this.mutationsToConsider != -1;
+        if (numberOfMutantsToConsiderIsOverridden) {
             totalMutations = this.mutationsToConsider;
         } else {
             totalMutations = (int)(stats.getMutationStatistics().getTotalMutations());
