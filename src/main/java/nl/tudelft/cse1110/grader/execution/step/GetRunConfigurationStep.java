@@ -9,6 +9,7 @@ import nl.tudelft.cse1110.grader.grade.GradeWeight;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static nl.tudelft.cse1110.grader.util.ClassUtils.getConfigurationClass;
 
@@ -44,6 +45,16 @@ public class GetRunConfigurationStep implements ExecutionStep {
         float mutation = runCfg.weights().get("mutation");
         float meta = runCfg.weights().get("meta");
         float codechecks = runCfg.weights().get("codechecks");
+
+
+        // The DefaultRunConfiguration will not contain this key -> it will take the total number
+        // of mutants provided by Pitest
+        Optional<Float> totalMutations = Optional.ofNullable(runCfg.weights().get("totalMutants"));
+
+        // We set the new number of total mutations
+        if (totalMutations.isPresent()) {
+            result.setTotalMutants(Integer.parseInt(String.valueOf(totalMutations)));
+        }
 
         result.setGradeWeights(new GradeWeight(failureGivesZero, coverage, mutation, meta, codechecks));
     }
