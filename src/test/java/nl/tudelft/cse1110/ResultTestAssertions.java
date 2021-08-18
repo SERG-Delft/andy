@@ -152,10 +152,6 @@ public class ResultTestAssertions {
         return containsString("--- Mutation testing\n" + mutantsKilled + "/" + totalMutants);
     }
 
-    public static Condition<String> mutationScore2(int totalMutants) {
-        return containsString("--- Mutation testing\n*" + totalMutants);
-    }
-
     public static Condition<String> scoreOfCodeChecks(int points, int total) {
         return containsString("Code checks score: " + points + "/" + total);
     }
