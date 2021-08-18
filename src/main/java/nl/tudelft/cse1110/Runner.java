@@ -10,7 +10,8 @@ import org.jetbrains.annotations.Nullable;
 public class Runner {
 
     public static void main(String[] args) {
-        Configuration cfg = buildConfiguration();
+        long startTime = System.nanoTime();
+        Configuration cfg = buildConfiguration(startTime);
 
         ResultBuilder result = new ResultBuilder();
         ExecutionFlow flow = buildExecutionFlow(cfg, result);
@@ -25,8 +26,9 @@ public class Runner {
     }
 
     @NotNull
-    private static Configuration buildConfiguration() {
+    private static Configuration buildConfiguration(long startTime) {
         Configuration cfg = new Configuration();
+        cfg.setStartTime(startTime);
 
         DirectoryConfiguration dirCfg = new DirectoryConfiguration(
                 System.getenv("WORKING_DIR"),

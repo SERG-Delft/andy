@@ -4,6 +4,7 @@ public class Configuration {
 
     private DirectoryConfiguration directoryConfiguration = null;
     private RunConfiguration runConfiguration = null;
+    private long startTime;
 
     public DirectoryConfiguration getDirectoryConfiguration() {
         return directoryConfiguration;
@@ -19,5 +20,13 @@ public class Configuration {
 
     public void setRunConfiguration(RunConfiguration runConfiguration) {
         this.runConfiguration = runConfiguration;
+    }
+
+    public long getStartTime() {
+        return this.startTime;
+    }
+
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
     }
 }

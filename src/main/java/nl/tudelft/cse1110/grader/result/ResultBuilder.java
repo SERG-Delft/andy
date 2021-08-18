@@ -171,6 +171,10 @@ public class ResultBuilder {
         }
     }
 
+    public void logTimeToRun(double elapsedTime) {
+        l("\nOur grader took " + elapsedTime + " seconds to assess your question.");
+    }
+
     private String getParameterizedMethodName(TestExecutionSummary.Failure failure) {
         int endIndex = failure.getTestIdentifier().getLegacyReportingName().indexOf('(');
         return failure.getTestIdentifier().getLegacyReportingName().substring(0, endIndex);
@@ -183,7 +187,6 @@ public class ResultBuilder {
     public String buildDebugResult() {
         return debug.toString() + "\n\n" + result.toString();
     }
-
 
     private void l(String line) {
         result.append(line);
@@ -206,7 +209,7 @@ public class ResultBuilder {
 
     private int finalGrade() {
         // this might be called when compilation fails, and we have no grade calculator yet
-        if(gradeCalculator==null)
+        if (gradeCalculator == null)
             return 0;
 
         return gradeCalculator.calculateFinalGrade(grades);
@@ -239,7 +242,7 @@ public class ResultBuilder {
         grades.setMutationGrade(detectedMutations, totalMutations);
 
         if(detectedMutations < totalMutations)
-            l("See attached report.");
+            l("See the attached report.");
     }
 
 
