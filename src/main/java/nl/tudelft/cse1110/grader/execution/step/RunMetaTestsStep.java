@@ -107,7 +107,7 @@ public class RunMetaTestsStep implements ExecutionStep {
                 dirCfg.getOutputDir()
         );
 
-        Configuration metaCfg = new Configuration(System.nanoTime());
+        Configuration metaCfg = new Configuration();
         metaCfg.setDirectoryConfiguration(metaDirCfg);
 
         ResultBuilder metaResult = new ResultBuilder();

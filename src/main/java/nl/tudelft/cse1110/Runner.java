@@ -26,7 +26,7 @@ public class Runner {
 
     @NotNull
     private static Configuration buildConfiguration() {
-        Configuration cfg = new Configuration(System.nanoTime());
+        Configuration cfg = new Configuration();
 
         DirectoryConfiguration dirCfg = new DirectoryConfiguration(
                 System.getenv("WORKING_DIR"),
