@@ -54,4 +54,11 @@ public class CompilationStepTest extends IntegrationTestBase {
         assertThat(highlights).hasContent(expected);
     }
 
+    @Test
+    void configurationFileCompilationFails(){
+        String result = run(onlyCompilation(), "NumberUtilsAddLibrary","NumberUtilsAddAllTestsPass","NumberUtilsAddTypoConfiguration");
+
+        assertThat(result)
+                .has(configurationFailMessage());
+    }
 }

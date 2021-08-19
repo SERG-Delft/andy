@@ -47,7 +47,7 @@ public class RunJacocoCoverageTest extends IntegrationTestBase {
     // not really needed, as this was meant to exercise the configuration, but let's keep it for now
     @Test
     void specifyingConfigClass() {
-        String result = run(onlyBranchCoverage(), "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfig");
+        String result = run(onlyBranchCoverage(), "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfiguration");
 
         assertThat(result).has(linesCovered(13))
                 .has(instructionsCovered(58))

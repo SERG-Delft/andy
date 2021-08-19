@@ -11,7 +11,7 @@ public class RunCodeChecksStepTest extends IntegrationTestBase {
 
     @Test
     void allChecksPass() {
-        String result = run(onlyCodeChecks(), "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfigWithCodeChecks");
+        String result = run(onlyCodeChecks(), "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfigWithCodeChecksConfiguration");
 
         assertThat(result)
                 .has(scoreOfCodeChecks(3,3))
@@ -22,7 +22,7 @@ public class RunCodeChecksStepTest extends IntegrationTestBase {
 
     @Test
     void someChecksFail() {
-        String result = run(onlyCodeChecks(), "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfigWithCodeChecks2");
+        String result = run(onlyCodeChecks(), "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfigWithCodeChecks2Configuration");
 
         assertThat(result)
                 .has(scoreOfCodeChecks(2,5))
@@ -33,7 +33,7 @@ public class RunCodeChecksStepTest extends IntegrationTestBase {
 
     @Test
     void noChecks() {
-        String result = run(onlyCodeChecks(), "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfig");
+        String result = run(onlyCodeChecks(), "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfiguration");
         assertThat(result).doesNotHave(codeCheckScores());
     }
 

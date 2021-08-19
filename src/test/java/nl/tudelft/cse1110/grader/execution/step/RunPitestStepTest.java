@@ -38,7 +38,7 @@ public class RunPitestStepTest extends IntegrationTestBase {
      */
     @Test
     void differentNumberOfTotalMutantsAllKilled() {
-        String result = run(onlyMutationCoverage(), "ZagZigLibrary", "ZagZigAllMutantsKilled", "ZagZigDifferentTotalMutantsConfig");
+        String result = run(onlyMutationCoverage(), "ZagZigLibrary", "ZagZigAllMutantsKilled", "ZagZigDifferentTotalMutantsConfiguration");
 
         assertThat(result).has(mutationScore(26, 26));
     }
@@ -49,7 +49,7 @@ public class RunPitestStepTest extends IntegrationTestBase {
      */
     @Test
     void differentNumberOfTotalMutantsNotAllKilled() {
-        String result = run(onlyMutationCoverage(), "ZagZigLibrary", "ZagZigNotAllMutantsKilled", "ZagZigDifferentTotalMutantsConfig");
+        String result = run(onlyMutationCoverage(), "ZagZigLibrary", "ZagZigNotAllMutantsKilled", "ZagZigDifferentTotalMutantsConfiguration");
 
         assertThat(result).has(mutationScore(24, 26));
     }

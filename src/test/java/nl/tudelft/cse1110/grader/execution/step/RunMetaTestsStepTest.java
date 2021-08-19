@@ -46,7 +46,7 @@ public class RunMetaTestsStepTest extends IntegrationTestBase {
 
     @Test
     void testMetaWhenMultipleClassesInLibrary() {
-        String result = run(onlyMetaTests(), "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfig");
+        String result = run(onlyMetaTests(), "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfiguration");
 
         assertThat(result)
                 .has(metaTests(4))
@@ -56,7 +56,7 @@ public class RunMetaTestsStepTest extends IntegrationTestBase {
 
     @Test
     void testMetaWhenMultipleClassesInSolution() {
-        String result = run(onlyMetaTests(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfJQWikPassing", "ArrayUtilsIndexOfJQWikConfig");
+        String result = run(onlyMetaTests(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfJQWikPassing", "ArrayUtilsIndexOfJQWikConfiguration");
 
         assertThat(result)
                 .has(metaTests(3))
