@@ -171,7 +171,7 @@ public class ResultBuilder {
         }
     }
 
-    public void logTimeToRun(double elapsedTime) {
+    public void logTimeToRun(String elapsedTime) {
         l("\nOur grader took " + elapsedTime + " seconds to assess your question.");
     }
 
