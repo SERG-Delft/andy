@@ -169,4 +169,8 @@ public class ResultTestAssertions {
         return containsRegex("Code checks score: \\d*/\\d*");
     }
 
+    public static Condition<String> totalTimeToExecute() {
+        return containsRegex("Our grader took \\d+.\\d seconds to assess your question.");
+    }
+
 }
