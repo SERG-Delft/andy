@@ -14,7 +14,7 @@ public class ExecutionTimeInfoTest extends IntegrationTestBase {
 
     @Test
     void checkTotalTimeToExecute() {
-        String result = run(fullMode(), "ZagZigLibrary", "ZagZigNotAllMutantsKilled", "ZagZigDifferentTotalMutantsConfig");
+        String result = run(fullMode(), "ZagZigLibrary", "ZagZigNotAllMutantsKilled", "ZagZigDifferentTotalMutantsConfiguration");
         assertThat(result).has(totalTimeToExecute());
     }
 
