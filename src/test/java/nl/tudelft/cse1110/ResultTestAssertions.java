@@ -85,7 +85,6 @@ public class ResultTestAssertions {
     }
 
 
-
     public static Condition<String> failingTestName(String testName) {
         return containsRegex("- Test " + "\"" + testName + "\\(" + "\\)" + "\"" + " failed:");
     }
@@ -171,14 +170,16 @@ public class ResultTestAssertions {
 
     public static Condition<String> totalTimeToExecute() {
         return containsRegex("Our grader took \\d+.\\d seconds to assess your question.");
+    }
 
-    public static Condition<String> consoleOutput(String output) {
+
+    public static Condition<String> consoleOutput (String output){
         return containsString(output);
     }
 
-    public static Condition<String> consoleOutputExists() {
+    public static Condition<String> consoleOutputExists () {
         return containsString("- Console output");
-
     }
 
 }
+
