@@ -6,6 +6,10 @@ public class Configuration {
     private RunConfiguration runConfiguration = null;
     private long startTime;
 
+    public Configuration(long startTime) {
+        this.startTime = startTime;
+    }
+
     public DirectoryConfiguration getDirectoryConfiguration() {
         return directoryConfiguration;
     }

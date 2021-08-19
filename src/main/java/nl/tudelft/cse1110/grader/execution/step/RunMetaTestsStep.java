@@ -107,7 +107,7 @@ public class RunMetaTestsStep implements ExecutionStep {
                 dirCfg.getOutputDir()
         );
 
-        Configuration metaCfg = new Configuration();
+        Configuration metaCfg = new Configuration(System.nanoTime());
         metaCfg.setDirectoryConfiguration(metaDirCfg);
 
         ResultBuilder metaResult = new ResultBuilder();
@@ -118,4 +118,5 @@ public class RunMetaTestsStep implements ExecutionStep {
 
         return metaResult;
     }
+
 }

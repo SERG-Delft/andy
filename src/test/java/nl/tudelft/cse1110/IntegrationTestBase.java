@@ -25,7 +25,7 @@ public abstract class IntegrationTestBase {
     public String run(List<ExecutionStep> plan, String libraryFile, String solutionFile) {
         copyFiles(libraryFile, solutionFile);
 
-        Configuration cfg = new Configuration();
+        Configuration cfg = new Configuration(System.nanoTime());
 
         DirectoryConfiguration dirCfg = new DirectoryConfiguration(
                 workDir.toString(),

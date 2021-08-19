@@ -41,7 +41,8 @@ public class ExecutionFlow {
         generateOutput();
     }
 
-    // In this method we also calculate the total time in seconds our tool took to run.
+    /* In this method we also calculate the total time in seconds our tool took to run.
+     */
     private void generateOutput() {
         long stopTime = System.nanoTime();
         long elapsedTime = stopTime - cfg.getStartTime();

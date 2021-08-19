@@ -8,7 +8,8 @@ import static nl.tudelft.cse1110.ResultTestAssertions.totalTimeToExecute;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
-// This test class tests that the final time to execute is shown (in the format #.#).
+/* This test class tests that the final time to execute is shown (in the format #.#).
+ */
 public class ExecutionTimeInfoTest extends IntegrationTestBase {
 
     @Test
