@@ -224,6 +224,12 @@ public class ResultBuilder {
         l(grade + "/100");
     }
 
+    public void logConsoleOutput(ByteArrayOutputStream console){
+
+        l("\n--- Console output");
+        l(console.toString());
+    }
+
     public void logPitest(CombinedStatistics stats) {
 
         int detectedMutations = (int)(stats.getMutationStatistics().getTotalDetectedMutations());
@@ -243,6 +249,7 @@ public class ResultBuilder {
 
         if(detectedMutations < totalMutations)
             l("See the attached report.");
+      
     }
 
 
@@ -278,7 +285,6 @@ public class ResultBuilder {
         l(String.format("Line coverage: %d/%d", totalCoveredLines, totalLines));
         l(String.format("Instruction coverage: %d/%d", totalCoveredInstructions, totalInstructions));
         l(String.format("Branch coverage: %d/%d", totalCoveredBranches, totalBranches));
-        l("See the attached report.");
         grades.setMutationGrade(totalCoveredBranches, totalBranches);
     }
 

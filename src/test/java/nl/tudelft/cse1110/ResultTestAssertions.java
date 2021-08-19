@@ -171,6 +171,14 @@ public class ResultTestAssertions {
 
     public static Condition<String> totalTimeToExecute() {
         return containsRegex("Our grader took \\d+.\\d seconds to assess your question.");
+
+    public static Condition<String> consoleOutput(String output) {
+        return containsString(output);
+    }
+
+    public static Condition<String> consoleOutputExists() {
+        return containsString("- Console output");
+
     }
 
 }
