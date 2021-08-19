@@ -97,8 +97,30 @@ public class RunJUnitTestsStepTest {
             assertThat(result)
                     .has(errorMessage("We do not see any tests. Are you sure you wrote them?"));
         }
-    }
 
+        //Check to see if the System.out.printlns are caught from the console
+        @Test
+        void consoleOutputCaught(){
+
+            String result = run(onlyJUnitTests(), "ZagZigLibrary", "ZagZigRandomSysouts");
+
+            assertThat(result)
+                    .has(consoleOutputExists())
+                    .has(consoleOutput("RandomString1"))
+                    .has(consoleOutput("HelloWorld2"))
+                    .has(consoleOutput("I love SQT3"));
+        }
+
+        //Check to see that there're no sysouts
+        @Test
+        void noConsoleOutputToBeCaught(){
+
+            String result = run(onlyJUnitTests(), "ZagZigLibrary", "ZagZigNoSysouts");
+
+            assertThat(result)
+                    .doesNotHave(consoleOutputExists());
+        }
+    }
 
     @Nested
     class Mockito extends IntegrationTestBase {

@@ -169,4 +169,12 @@ public class ResultTestAssertions {
         return containsRegex("Code checks score: \\d*/\\d*");
     }
 
+    public static Condition<String> consoleOutput(String output) {
+        return containsString(output);
+    }
+
+    public static Condition<String> consoleOutputExists() {
+        return containsString("- Console output");
+    }
+
 }

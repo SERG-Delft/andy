@@ -12,6 +12,9 @@ import org.junit.platform.launcher.core.LauncherFactory;
 import org.junit.platform.launcher.listeners.SummaryGeneratingListener;
 import org.junit.platform.launcher.listeners.TestExecutionSummary;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
 import static nl.tudelft.cse1110.grader.util.ClassUtils.getTestClass;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
@@ -28,6 +31,10 @@ public class RunJUnitTestsStep implements ExecutionStep {
 
             String testClass = getTestClass(dirCfg.getNewClassNames());
 
+            PrintStream console = System.out;
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            System.setOut(new PrintStream(output));
+
             Launcher launcher = LauncherFactory.create();
             launcher.registerTestExecutionListeners(listener);
             launcher.registerTestExecutionListeners(additionalReportJUnitListener);
@@ -40,6 +47,10 @@ public class RunJUnitTestsStep implements ExecutionStep {
 
             TestExecutionSummary summary = listener.getSummary();
 
+            System.setOut(console);
+
+            if(output.size() > 0)
+                result.logConsoleOutput(output);
             result.logJUnitRun(summary);
         } catch (Exception e) {
             result.genericFailure(this, e);

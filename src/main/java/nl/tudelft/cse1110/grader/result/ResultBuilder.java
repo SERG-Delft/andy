@@ -221,6 +221,12 @@ public class ResultBuilder {
         l(grade + "/100");
     }
 
+    public void logConsoleOutput(ByteArrayOutputStream console){
+
+        l("\n--- Console output");
+        l(console.toString());
+    }
+
     public void logPitest(CombinedStatistics stats) {
 
         int detectedMutations = (int)(stats.getMutationStatistics().getTotalDetectedMutations());
