@@ -169,4 +169,7 @@ public class ResultTestAssertions {
         return containsRegex("Code checks score: \\d*/\\d*");
     }
 
+    public static Condition<String> configurationFailMessage() {
+        return containsString("There might be a problem with this exercise.");
+    }
 }

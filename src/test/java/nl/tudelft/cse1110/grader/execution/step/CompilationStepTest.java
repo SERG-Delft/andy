@@ -53,4 +53,12 @@ public class CompilationStepTest extends IntegrationTestBase {
         String expected = "{\"Error List\":[{\"Line\":40,\"Message\":\"cannot find symbol\\n  symbol:   class List\\n  location: class delft.ArrayUtilsTests\",\"Color\":\"red\"},{\"Line\":69,\"Message\":\"cannot find symbol\\n  symbol:   class List\\n  location: class delft.ArrayUtilsTests\",\"Color\":\"red\"}]}";
         assertThat(highlights).hasContent(expected);
     }
+
+    @Test
+    void configurationFileCompilationFails(){
+        String result = run(onlyCompilation(), "NumberUtilsAddLibrary","NumberUtilsAddAllTestsPass","NumberUtilsAddTypoConfiguration");
+
+        assertThat(result)
+                .has(configurationFailMessage());
+    }
 }

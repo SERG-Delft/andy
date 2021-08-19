@@ -5,8 +5,8 @@ import nl.tudelft.cse1110.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.grader.grade.GradeCalculator;
 import nl.tudelft.cse1110.grader.grade.GradeValues;
 import nl.tudelft.cse1110.grader.grade.GradeWeight;
-import org.jacoco.core.analysis.IClassCoverage;
 import nl.tudelft.cse1110.grader.util.ImportUtils;
+import org.jacoco.core.analysis.IClassCoverage;
 import org.jetbrains.annotations.NotNull;
 import org.junit.platform.engine.UniqueId;
 import org.junit.platform.engine.reporting.ReportEntry;
@@ -16,7 +16,8 @@ import org.pitest.mutationtest.tooling.CombinedStatistics;
 
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
-import java.io.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -52,6 +53,12 @@ public class ResultBuilder {
         l("We could not compile your code. See the compilation errors below:");
         for(Diagnostic diagnostic: compilationErrors) {
             if (diagnostic.getKind() == ERROR) {
+
+                if(isErrorInConfiguration(diagnostic)){
+                    rewriteResult();
+                    break;
+                }
+
                 l(String.format("- line %d: %s",
                         diagnostic.getLineNumber(),
                         diagnostic.getMessage(null)));
@@ -61,6 +68,16 @@ public class ResultBuilder {
             }
         }
         failed();
+    }
+
+    private void rewriteResult() {
+        result.setLength(0);
+        l("There might be a problem with this exercise. Please contact the SQT staff so we can fix this as quickly" +
+                "as possible. Thank you for your help! :)");
+    }
+
+    private boolean isErrorInConfiguration(Diagnostic diagnostic) {
+        return diagnostic.getSource().toString().contains("Configuration.java");
     }
 
     public void logFinish(ExecutionStep step) {

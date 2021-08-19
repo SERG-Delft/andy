@@ -35,7 +35,7 @@ public class RunPitestStepTest extends IntegrationTestBase {
     // All are killed by the solution.
     @Test
     void differentNumberOfTotalMutantsAllKilled() {
-        String result = run(onlyMutationCoverage(), "ZagZigLibrary", "ZagZigAllMutantsKilled", "ZagZigDifferentTotalMutantsConfig");
+        String result = run(onlyMutationCoverage(), "ZagZigLibrary", "ZagZigAllMutantsKilled", "ZagZigDifferentTotalMutantsConfiguration");
 
         assertThat(result).has(mutationScore(26, 26));
     }
@@ -45,7 +45,7 @@ public class RunPitestStepTest extends IntegrationTestBase {
     // Only some of them are killed by the solution.
     @Test
     void differentNumberOfTotalMutantsNotAllKilled() {
-        String result = run(onlyMutationCoverage(), "ZagZigLibrary", "ZagZigNotAllMutantsKilled", "ZagZigDifferentTotalMutantsConfig");
+        String result = run(onlyMutationCoverage(), "ZagZigLibrary", "ZagZigNotAllMutantsKilled", "ZagZigDifferentTotalMutantsConfiguration");
 
         assertThat(result).has(mutationScore(24, 26));
     }
