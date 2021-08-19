@@ -12,7 +12,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class RunPitestStepTest extends IntegrationTestBase {
 
 
-    // Test where some of the mutants are killed.
+    /* Test where some of the mutants are killed.
+     */
     @Test
     void mutantsSurvived() {
         String result = run(onlyMutationCoverage(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddPiTestStrongerConfiguration");
@@ -21,8 +22,9 @@ public class RunPitestStepTest extends IntegrationTestBase {
     }
 
 
-    // Test where all mutants are killed.
-    // 32 killed mutants means 100%, because 1 of the 33 identified mutants cannot be killed.
+    /* Test where all mutants are killed.
+     * 32 killed mutants means 100%, because 1 of the 33 identified mutants cannot be killed.
+     */
     @Test
     void allMutantsKilled() {
         String result = run(onlyMutationCoverage(), "NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution", "NumberUtilsAddPiTestStrongerConfiguration");
@@ -31,8 +33,9 @@ public class RunPitestStepTest extends IntegrationTestBase {
     }
 
 
-    // Test where a different total number of mutants is specified.
-    // All are killed by the solution.
+    /* Test where a different total number of mutants is specified.
+     * All are killed by the solution.
+     */
     @Test
     void differentNumberOfTotalMutantsAllKilled() {
         String result = run(onlyMutationCoverage(), "ZagZigLibrary", "ZagZigAllMutantsKilled", "ZagZigDifferentTotalMutantsConfiguration");
@@ -41,8 +44,9 @@ public class RunPitestStepTest extends IntegrationTestBase {
     }
 
 
-    // Test where a different total number of mutants is specified.
-    // Only some of them are killed by the solution.
+    /* Test where a different total number of mutants is specified.
+     * Only some of them are killed by the solution.
+     */
     @Test
     void differentNumberOfTotalMutantsNotAllKilled() {
         String result = run(onlyMutationCoverage(), "ZagZigLibrary", "ZagZigNotAllMutantsKilled", "ZagZigDifferentTotalMutantsConfiguration");
@@ -51,8 +55,10 @@ public class RunPitestStepTest extends IntegrationTestBase {
     }
 
 
-    // Test where not all of the identified mutants are killed and a report is generated. The default run configuration is used.
-    // The test checks whether the report directory is generated and the log shows "See attached report."
+    /* Test where not all of the identified mutants are killed and a report is generated.
+     * The default run configuration is used.
+     * The test checks whether the report directory is generated and the log shows "See the attached report."
+     */
     @Test
     void reportWasGenerated() {
         run(onlyMutationCoverage(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass");

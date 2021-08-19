@@ -4,9 +4,11 @@ import nl.tudelft.cse1110.grader.config.Configuration;
 import nl.tudelft.cse1110.grader.execution.step.*;
 import nl.tudelft.cse1110.grader.result.ResultBuilder;
 
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static nl.tudelft.cse1110.grader.result.OutputGenerator.*;
 
@@ -39,7 +41,15 @@ public class ExecutionFlow {
         generateOutput();
     }
 
+    /* In this method we also calculate the total time in seconds our tool took to run.
+     */
     private void generateOutput() {
+        long stopTime = System.nanoTime();
+        long elapsedTime = stopTime - cfg.getStartTime();
+        double timeInSeconds = (double) elapsedTime / 1_000_000_000.0;
+        DecimalFormat decimalFormat = new DecimalFormat("##.#");
+        result.logTimeToRun(decimalFormat.format(timeInSeconds));
+
         exportOutputFile(cfg, result);
         exportXMLFile(cfg, result);
         if(result.containsCompilationErrors()) {
