@@ -16,6 +16,7 @@ import org.pitest.mutationtest.tooling.CombinedStatistics;
 
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
+import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.time.LocalDateTime;
@@ -263,9 +264,6 @@ public class ResultBuilder {
         l(String.format("%d/%d killed", detectedMutations, totalMutations));
 
         grades.setMutationGrade(detectedMutations, totalMutations);
-
-        if(detectedMutations < totalMutations)
-            l("See the attached report.");
       
     }
 
