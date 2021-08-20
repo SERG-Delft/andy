@@ -2,11 +2,10 @@ package nl.tudelft.cse1110.andy.grader.execution.step;
 
 import nl.tudelft.cse1110.andy.grader.config.Configuration;
 import nl.tudelft.cse1110.andy.grader.config.DirectoryConfiguration;
+import nl.tudelft.cse1110.andy.grader.config.MetaTest;
 import nl.tudelft.cse1110.andy.grader.config.RunConfiguration;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
-import nl.tudelft.cse1110.andy.grader.config.MetaTest;
-import nl.tudelft.cse1110.andy.grader.execution.step.helper.FromBytesClassLoader;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.grader.util.FileUtils;
 
@@ -39,8 +38,10 @@ public class RunMetaTestsStep implements ExecutionStep {
              *
              * We reuse our execution framework to run the code with the meta test.
              */
+            ClassLoader currentClassLoader = Thread.currentThread().getContextClassLoader();
+
             for (MetaTest metaTest : metaTests) {
-                ClassLoader currentClassLoader = changeClassLoader(cfg);
+                Thread.currentThread().setContextClassLoader(cfg.getCleanClassloader());
 
                 /* Copy the library and replace the library by the meta test */
                 File metaWorkingDir = createTemporaryDirectory("metaWorkplace").toFile();
@@ -69,22 +70,12 @@ public class RunMetaTestsStep implements ExecutionStep {
             }
 
             result.logMetaTests(score, metaTests.size(), failures);
+
+            // restore the class loader to the one before meta tests
+            Thread.currentThread().setContextClassLoader(currentClassLoader);
         } catch (Exception ex) {
             result.genericFailure(this, ex);
         }
-    }
-
-    private ClassLoader changeClassLoader(Configuration configuration) {
-        /*
-         * We give the very first classloader as parent to this one.
-         * This clean classloader does not have the student classes (e.g., Library etc).
-         * Hopefully, this avoid clashes now that we will have "many libraries", one for each meta test.
-         */
-        ClassLoader classLoader = new FromBytesClassLoader(configuration.getCleanClassloader());
-        Thread.currentThread().setContextClassLoader(classLoader);
-
-        ClassLoader currentClassLoader = Thread.currentThread().getContextClassLoader();
-        return currentClassLoader;
     }
 
     private String generateMetaFileContent(MetaTest metaTest, DirectoryConfiguration dirCfg) {
@@ -119,7 +110,6 @@ public class RunMetaTestsStep implements ExecutionStep {
         ResultBuilder metaResult = new ResultBuilder();
 
         ExecutionFlow flow = ExecutionFlow.justTests(metaCfg, metaResult);
-
         flow.run();
 
         return metaResult;
