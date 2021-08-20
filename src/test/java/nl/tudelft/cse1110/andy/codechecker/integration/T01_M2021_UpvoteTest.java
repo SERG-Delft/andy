@@ -13,7 +13,7 @@ import static nl.tudelft.cse1110.andy.codechecker.checks.MockitoVerify.MethodTyp
 import static nl.tudelft.cse1110.andy.codechecker.checks.MockitoVerify.MethodType.TEST;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class T01_M2021_Upvote {
+public class T01_M2021_UpvoteTest {
 
     private final CheckScript checkScript = new CheckScript(Arrays.asList(
         new SingleCheck("UserRepository should be mocked", new MockClass("UserRepository")),

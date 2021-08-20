@@ -13,7 +13,7 @@ import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class T03_M2021_IsLeapYear {
+public class T03_M2021_IsLeapYearTest {
 
     private final CheckScript checkScript = new CheckScript(Arrays.asList(
             new SingleCheck("should have at least 2 properties", new JQWikProperty(Comparison.GTE, 2)),

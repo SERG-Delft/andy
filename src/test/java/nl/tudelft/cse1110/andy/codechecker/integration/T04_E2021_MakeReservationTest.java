@@ -11,7 +11,7 @@ import java.util.Arrays;
 import static nl.tudelft.cse1110.andy.codechecker.checks.MockitoVerify.MethodType.TEST;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class T04_E2021_MakeReservation {
+public class T04_E2021_MakeReservationTest {
 
     private final CheckScript checkScript = new CheckScript(Arrays.asList(
             new SingleCheck("TripRepository should be mocked", new MockClass("TripRepository")),

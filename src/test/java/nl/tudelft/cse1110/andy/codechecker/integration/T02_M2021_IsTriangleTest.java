@@ -12,7 +12,7 @@ import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class T02_M2021_IsTriangle {
+public class T02_M2021_IsTriangleTest {
 
     private final CheckScript checkScript = new CheckScript(Arrays.asList(
             new SingleCheck(2, "should have property(ies)", new JQWikProperty(Comparison.GTE, 1)),
