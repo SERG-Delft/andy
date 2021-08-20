@@ -7,8 +7,6 @@ import nl.tudelft.cse1110.andy.grader.grade.GradeValues;
 import nl.tudelft.cse1110.andy.grader.grade.GradeWeight;
 import nl.tudelft.cse1110.andy.grader.util.ImportUtils;
 import org.jacoco.core.analysis.IClassCoverage;
-import org.jetbrains.annotations.NotNull;
-import org.junit.platform.engine.UniqueId;
 import org.junit.platform.engine.reporting.ReportEntry;
 import org.junit.platform.launcher.TestIdentifier;
 import org.junit.platform.launcher.listeners.TestExecutionSummary;
@@ -119,7 +117,6 @@ public class ResultBuilder {
         genericFailure(step, failureMsg.toString());
     }
 
-    @NotNull
     private String exceptionMessage(Throwable e) {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
@@ -166,27 +163,40 @@ public class ResultBuilder {
     }
 
     private void logJUnitFailedTest(TestExecutionSummary.Failure failure) {
-        UniqueId.Segment lastSegment = failure.getTestIdentifier().getUniqueIdObject().getLastSegment();
+        boolean isParameterizedTest = failure.getTestIdentifier().getUniqueId().contains("test-template-invocation");
+        boolean isPBT = failure.getTestIdentifier().getUniqueId().contains("property");
 
-        switch (lastSegment.getType()) {
-            case "test-template-invocation" -> {
-                String methodName = this.getParameterizedMethodName(failure);
-                l(String.format("\n- Parameterized test \"%s\", test case %s failed:", methodName, lastSegment.getValue()));
-                l(String.format("%s", failure.getException()));
-            }
-            case "property" -> {
-                l(String.format("\n- Property test \"%s\" failed:", failure.getTestIdentifier().getDisplayName()));
+        if(isParameterizedTest) {
+            String methodName = this.getParameterizedMethodName(failure);
+            String testCaseNumber = this.getParameterizedTestCaseNumber(failure);
+            l(String.format("\n- Parameterized test \"%s\", test case #%s failed:", methodName, testCaseNumber));
+            l(String.format("%s", failure.getException()));
+        } else if (isPBT) {
+            l(String.format("\n- Property test \"%s\" failed:", failure.getTestIdentifier().getDisplayName()));
 
-                if (this.additionalReports.containsKey(failure.getTestIdentifier())) {
-                    l(this.additionalReports.get(failure.getTestIdentifier()).getKeyValuePairs().toString());
-                }
+            if (this.additionalReports.containsKey(failure.getTestIdentifier())) {
+                l(this.additionalReports.get(failure.getTestIdentifier()).getKeyValuePairs().toString());
             }
-            default -> {
-                l(String.format("\n- Test \"%s\" failed:", failure.getTestIdentifier().getDisplayName()));
-                l(String.format("%s", failure.getException()));
-            }
+        } else {
+            l(String.format("\n- Test \"%s\" failed:", failure.getTestIdentifier().getDisplayName()));
+            l(String.format("%s", failure.getException()));
         }
     }
+
+    private String getParameterizedMethodName(TestExecutionSummary.Failure failure) {
+        int endIndex = failure.getTestIdentifier().getLegacyReportingName().indexOf('(');
+        return failure.getTestIdentifier().getLegacyReportingName().substring(0, endIndex);
+    }
+
+
+    private String getParameterizedTestCaseNumber(TestExecutionSummary.Failure failure) {
+        int open = failure.getTestIdentifier().getLegacyReportingName().lastIndexOf('[');
+        int close = failure.getTestIdentifier().getLegacyReportingName().lastIndexOf(']');
+
+        return failure.getTestIdentifier().getLegacyReportingName().substring(open+1, close);
+    }
+
+
 
     public void logTimeToRun(long startTime) {
         long stopTime = System.nanoTime();
@@ -196,10 +206,7 @@ public class ResultBuilder {
         l(String.format("\nAndy took %.1f seconds to assess your question.", timeInSeconds));
     }
 
-    private String getParameterizedMethodName(TestExecutionSummary.Failure failure) {
-        int endIndex = failure.getTestIdentifier().getLegacyReportingName().indexOf('(');
-        return failure.getTestIdentifier().getLegacyReportingName().substring(0, endIndex);
-    }
+
 
     public String buildEndUserResult() {
         return result.toString();
