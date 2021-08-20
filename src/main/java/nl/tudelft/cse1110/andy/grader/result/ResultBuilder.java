@@ -206,14 +206,15 @@ public class ResultBuilder {
     }
 
     public String buildDebugResult() {
-        return debug.toString() + "\n\n" + result.toString();
+        return debug.toString();
     }
 
     private void l(String line) {
         result.append(line);
         result.append("\n");
 
-        d(line);
+        debug.append(line);
+        debug.append("\n");
     }
 
     private void d(String line) {

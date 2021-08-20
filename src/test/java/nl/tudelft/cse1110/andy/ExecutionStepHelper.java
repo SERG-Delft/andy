@@ -4,6 +4,7 @@ import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.grader.execution.step.*;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class ExecutionStepHelper {
@@ -17,7 +18,8 @@ public class ExecutionStepHelper {
     }
 
     public static List<ExecutionStep> onlyCompilation() {
-        return Arrays.asList(new CompilationStep());
+        // compilation is part of the basic steps
+        return Collections.emptyList();
     }
 
     public static List<ExecutionStep> onlyCodeChecks() {

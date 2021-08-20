@@ -1,9 +1,9 @@
 package nl.tudelft.cse1110.andy.grader.execution.step;
 
-import nl.tudelft.cse1110.andy.grader.config.DirectoryConfiguration;
-import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.grader.config.Configuration;
+import nl.tudelft.cse1110.andy.grader.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
+import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -11,7 +11,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * This step replaces the classloader with one that sees the folder
@@ -33,9 +32,6 @@ public class ReplaceClassloaderStep implements ExecutionStep {
 
     private void replaceClassloader(String pathToAddToClassloader, ResultBuilder result) {
         List<Path> additionalClasspathEntries = Arrays.asList(Paths.get(pathToAddToClassloader));
-        result.debug(this, String.format("Classes to add to the classloader: %s",
-                additionalClasspathEntries.stream().map(x -> x.getFileName().toString()).collect(Collectors.joining(","))));
-
         URL[] urls = additionalClasspathEntries.stream().map(this::toURL).toArray(URL[]::new);
         ClassLoader currentClassloader = Thread.currentThread().getContextClassLoader();
         ClassLoader customClassLoader = URLClassLoader.newInstance(urls, currentClassloader);

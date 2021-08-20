@@ -30,8 +30,8 @@ public class RunJUnitTestsStep implements ExecutionStep {
             AdditionalReportJUnitListener additionalReportJUnitListener = new AdditionalReportJUnitListener(result);
 
             String testClass = ClassUtils.getTestClass(dirCfg.getNewClassNames());
-            result.debug(this, String.format("Name of the test class: %s", testClass));
-            result.debug(this, String.format("Classloader finds it? ", Class.forName(testClass).getName()));
+            Class<?> clazz = Class.forName(testClass, false, Thread.currentThread().getContextClassLoader());
+            result.debug(this, String.format("Name of the test class: %s", clazz.getName()));
 
             /* Change the sysout so that we can show it to the student later */
             PrintStream console = System.out;
@@ -43,7 +43,7 @@ public class RunJUnitTestsStep implements ExecutionStep {
             launcher.registerTestExecutionListeners(additionalReportJUnitListener);
 
             LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
-                    .selectors(selectClass(testClass))
+                    .selectors(selectClass(clazz))
                     .configurationParameter("jqwik.reporting.usejunitplatform", "true")
                     .build();
             launcher.execute(request);

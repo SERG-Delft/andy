@@ -37,10 +37,17 @@ public abstract class IntegrationTestBase {
 
         ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
 
-        ExecutionFlow flow = ExecutionFlow.asSteps(plan, cfg, result);
-        flow.run();
-
-        Thread.currentThread().setContextClassLoader(oldClassLoader);
+        try {
+            ExecutionFlow flow = ExecutionFlow.asSteps(plan, cfg, result);
+            flow.run();
+        } catch(Exception e) {
+            // something went wrong, let's print the debugging version in the console
+            // and fail the test
+            System.out.println(result.buildDebugResult());
+            throw e;
+        } finally {
+            Thread.currentThread().setContextClassLoader(oldClassLoader);
+        }
 
         return readStdOut();
     }

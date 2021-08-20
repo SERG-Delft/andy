@@ -1,7 +1,6 @@
 package nl.tudelft.cse1110.andy.grader.result;
 
 import nl.tudelft.cse1110.andy.grader.config.Configuration;
-import nl.tudelft.cse1110.andy.grader.util.FileUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -11,21 +10,28 @@ import java.io.File;
 import java.util.List;
 
 import static javax.tools.Diagnostic.Kind.ERROR;
+import static nl.tudelft.cse1110.andy.grader.util.FileUtils.concatenateDirectories;
+import static nl.tudelft.cse1110.andy.grader.util.FileUtils.writeToFile;
 
 public class OutputGenerator {
 
     private static final String highlightColour = "red";
 
     public static void exportOutputFile(Configuration cfg, ResultBuilder result) {
-        File stdoutTxt = new File(FileUtils.concatenateDirectories(cfg.getDirectoryConfiguration().getOutputDir(), "stdout.txt"));
-        FileUtils.writeToFile(stdoutTxt, cfg.getRunConfiguration().debug() ? result.buildDebugResult() : result.buildEndUserResult());
+        File stdoutTxt = new File(concatenateDirectories(cfg.getDirectoryConfiguration().getOutputDir(), "stdout.txt"));
+        writeToFile(stdoutTxt, isDebug(cfg) ? result.buildDebugResult() : result.buildEndUserResult());
+    }
+
+    private static boolean isDebug(Configuration cfg) {
+        /* run configuration might be null in case we stop the pipeline sooner, during to a compilation error */
+        return cfg.getRunConfiguration()!=null && cfg.getRunConfiguration().debug();
     }
 
     public static void exportXMLFile(Configuration cfg, ResultBuilder result) {
         String xml = buildResultsXml(result);
 
-        File resultsXml = new File(FileUtils.concatenateDirectories(cfg.getDirectoryConfiguration().getOutputDir(), "results.xml"));
-        FileUtils.writeToFile(resultsXml, xml);
+        File resultsXml = new File(concatenateDirectories(cfg.getDirectoryConfiguration().getOutputDir(), "results.xml"));
+        writeToFile(resultsXml, xml);
     }
 
     private static String buildResultsXml(ResultBuilder result) {
@@ -62,7 +68,7 @@ public class OutputGenerator {
         }
         obj.put("Error List", errors);
 
-        File highlightsJson = new File(FileUtils.concatenateDirectories(cfg.getDirectoryConfiguration().getOutputDir(), "highlights.json"));
-        FileUtils.writeToFile(highlightsJson, obj.toJSONString());
+        File highlightsJson = new File(concatenateDirectories(cfg.getDirectoryConfiguration().getOutputDir(), "highlights.json"));
+        writeToFile(highlightsJson, obj.toJSONString());
     }
 }
