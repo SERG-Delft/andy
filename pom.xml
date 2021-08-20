@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>nl.tudelft.cse1110</groupId>
-    <artifactId>grader</artifactId>
+    <artifactId>andy</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -166,7 +166,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>nl.tudelft.cse1110.Runner</mainClass>
+                            <mainClass>nl.tudelft.cse1110.andy.Andy</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

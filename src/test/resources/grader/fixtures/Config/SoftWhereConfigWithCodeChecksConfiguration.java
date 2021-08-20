@@ -1,12 +1,11 @@
 package domain.addingnumbers;
 
-import nl.tudelft.cse1110.codechecker.checks.Comparison;
-import nl.tudelft.cse1110.codechecker.checks.MockClass;
-import nl.tudelft.cse1110.codechecker.checks.MockitoWhen;
-import nl.tudelft.cse1110.codechecker.engine.CheckScript;
-import nl.tudelft.cse1110.codechecker.engine.SingleCheck;
-import nl.tudelft.cse1110.grader.config.RunConfiguration;
-import nl.tudelft.cse1110.codechecker.checks.*;
+import nl.tudelft.cse1110.andy.codechecker.checks.Comparison;
+import nl.tudelft.cse1110.andy.codechecker.checks.MockClass;
+import nl.tudelft.cse1110.andy.codechecker.checks.MockitoWhen;
+import nl.tudelft.cse1110.andy.codechecker.engine.CheckScript;
+import nl.tudelft.cse1110.andy.codechecker.engine.SingleCheck;
+import nl.tudelft.cse1110.andy.grader.config.RunConfiguration;
 
 import java.util.HashMap;
 import java.util.List;
