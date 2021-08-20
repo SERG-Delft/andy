@@ -72,9 +72,9 @@ public class ExecutionFlow {
                 Arrays.asList(
                         new RunJUnitTestsStep(),
                         new RunJacocoCoverageStep(),
+                        new RunPitestStep(),
                         new RunCodeChecksStep(),
                         new RunMetaTestsStep(),
-                        new RunPitestStep(),
                         new CalculateFinalGradeStep()),
                 cfg,
                 result
