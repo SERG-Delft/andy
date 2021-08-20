@@ -1,12 +1,11 @@
 package nl.tudelft.cse1110.andy.grader.execution.step;
 
-import nl.tudelft.cse1110.andy.ExecutionStepHelper;
 import nl.tudelft.cse1110.andy.IntegrationTestBase;
-import nl.tudelft.cse1110.andy.ResultTestAssertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static nl.tudelft.cse1110.andy.ExecutionStepHelper.onlyJUnitTests;
+import static nl.tudelft.cse1110.andy.ResultTestAssertions.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class RunJUnitTestsStepTest {
@@ -21,8 +20,8 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass");
 
             assertThat(result)
-                    .has(ResultTestAssertions.numberOfJUnitTestsPassing(4))
-                    .has(ResultTestAssertions.totalNumberOfJUnitTests(4));
+                    .has(numberOfJUnitTestsPassing(4))
+                    .has(totalNumberOfJUnitTests(4));
 
         }
 
@@ -33,10 +32,10 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "LeapYearLibrary", "LeapYearSingleTestFails");  // 3/4 normal @Tests passing
 
             assertThat(result)
-                    .has(ResultTestAssertions.numberOfJUnitTestsPassing(3))
-                    .has(ResultTestAssertions.totalNumberOfJUnitTests(4))
-                    .has(ResultTestAssertions.failingTestName("leapCenturialYears"))
-                    .has(ResultTestAssertions.errorType("AssertionFailedError"));
+                    .has(numberOfJUnitTestsPassing(3))
+                    .has(totalNumberOfJUnitTests(4))
+                    .has(failingTestName("leapCenturialYears"))
+                    .has(errorType("AssertionFailedError"));
         }
 
 
@@ -48,11 +47,11 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "CountLettersLibrary", "CountLettersAllTestsFail");
 
             assertThat(result)
-                    .has(ResultTestAssertions.numberOfJUnitTestsPassing(0))
-                    .has(ResultTestAssertions.totalNumberOfJUnitTests(2))
-                    .has(ResultTestAssertions.failingTestName("multipleMatchingWords"))
-                    .has(ResultTestAssertions.failingTestName("lastWordDoesNotMatch"))
-                    .has(ResultTestAssertions.errorType("AssertionFailedError"));
+                    .has(numberOfJUnitTestsPassing(0))
+                    .has(totalNumberOfJUnitTests(2))
+                    .has(failingTestName("multipleMatchingWords"))
+                    .has(failingTestName("lastWordDoesNotMatch"))
+                    .has(errorType("AssertionFailedError"));
         }
 
 
@@ -66,12 +65,12 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "PlayerPointsLibrary", "PlayerPointsSomeTestsFail");
 
             assertThat(result)
-                    .has(ResultTestAssertions.numberOfJUnitTestsPassing(1))
-                    .has(ResultTestAssertions.totalNumberOfJUnitTests(4))
-                    .has(ResultTestAssertions.failingTestName("lessPoints"))
-                    .has(ResultTestAssertions.failingTestName("manyPointsAndManyLives"))
-                    .has(ResultTestAssertions.failingTestName("manyPointsButLittleLives"))
-                    .has(ResultTestAssertions.errorType("AssertionFailedError"));
+                    .has(numberOfJUnitTestsPassing(1))
+                    .has(totalNumberOfJUnitTests(4))
+                    .has(failingTestName("lessPoints"))
+                    .has(failingTestName("manyPointsAndManyLives"))
+                    .has(failingTestName("manyPointsButLittleLives"))
+                    .has(errorType("AssertionFailedError"));
 
         }
 
@@ -83,8 +82,8 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfDifferentTestTypes");  // 5/5 @Tests passing
 
             assertThat(result)
-                    .has(ResultTestAssertions.numberOfJUnitTestsPassing(5))
-                    .has(ResultTestAssertions.totalNumberOfJUnitTests(5));
+                    .has(numberOfJUnitTestsPassing(5))
+                    .has(totalNumberOfJUnitTests(5));
 
         }
 
@@ -95,7 +94,7 @@ public class RunJUnitTestsStepTest {
         void noTests() {
             String result = run(onlyJUnitTests(), "NumberUtilsAddLibrary", "NumberUtilsNoTests");
             assertThat(result)
-                    .has(ResultTestAssertions.errorMessage("We do not see any tests. Are you sure you wrote them?"));
+                    .has(errorMessage("We do not see any tests. Are you sure you wrote them?"));
         }
 
         //Check to see if the System.out.printlns are caught from the console
@@ -105,10 +104,10 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "ZagZigLibrary", "ZagZigRandomSysouts");
 
             assertThat(result)
-                    .has(ResultTestAssertions.consoleOutputExists())
-                    .has(ResultTestAssertions.consoleOutput("RandomString1"))
-                    .has(ResultTestAssertions.consoleOutput("HelloWorld2"))
-                    .has(ResultTestAssertions.consoleOutput("I love SQT3"));
+                    .has(consoleOutputExists())
+                    .has(consoleOutput("RandomString1"))
+                    .has(consoleOutput("HelloWorld2"))
+                    .has(consoleOutput("I love SQT3"));
         }
 
         //Check to see that there're no sysouts
@@ -118,7 +117,7 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "ZagZigLibrary", "ZagZigNoSysouts");
 
             assertThat(result)
-                    .doesNotHave(ResultTestAssertions.consoleOutputExists());
+                    .doesNotHave(consoleOutputExists());
         }
     }
 
@@ -128,27 +127,27 @@ public class RunJUnitTestsStepTest {
         @Test
         void methodVerifiedButNotInvoked() {
 
-            String result = run(ExecutionStepHelper.onlyJUnitTests(), "TodoApplicationLibrary", "TodoApplicationMockitoMethodNotInvoked");  // 2/3 normal @Tests passing
+            String result = run(onlyJUnitTests(), "TodoApplicationLibrary", "TodoApplicationMockitoMethodNotInvoked");  // 2/3 normal @Tests passing
 
             assertThat(result)
-                    .has(ResultTestAssertions.numberOfJUnitTestsPassing(2))
-                    .has(ResultTestAssertions.totalNumberOfJUnitTests(3))
-                    .has(ResultTestAssertions.failingTestName("addTodoTest"))
-                    .has(ResultTestAssertions.uninvokedMethod("todoService.completeTodo"))
-                    .has(ResultTestAssertions.hintAtInteractionFound("todoService.addTodo"));
+                    .has(numberOfJUnitTestsPassing(2))
+                    .has(totalNumberOfJUnitTests(3))
+                    .has(failingTestName("addTodoTest"))
+                    .has(uninvokedMethod("todoService.completeTodo"))
+                    .has(hintAtInteractionFound("todoService.addTodo"));
         }
 
         // error in @Test 3: student is misusing Mockito stubs in line 48: TheQueue q is not a mock, thus its methods cannot be stubbed!
         @Test
         void stubbingNonMockClass() {
 
-            String result = run(ExecutionStepHelper.onlyJUnitTests(), "TheQueueLibrary", "TheQueueMisusingMockitoStub");  // 2/3 normal @Tests passing
+            String result = run(onlyJUnitTests(), "TheQueueLibrary", "TheQueueMisusingMockitoStub");  // 2/3 normal @Tests passing
 
             assertThat(result)
-                    .has(ResultTestAssertions.numberOfJUnitTestsPassing(2))
-                    .has(ResultTestAssertions.totalNumberOfJUnitTests(3))
-                    .has(ResultTestAssertions.failingTestName("getNextReturnsFirst"))
-                    .has(ResultTestAssertions.errorType("mockito.exceptions.misusing"));
+                    .has(numberOfJUnitTestsPassing(2))
+                    .has(totalNumberOfJUnitTests(3))
+                    .has(failingTestName("getNextReturnsFirst"))
+                    .has(errorType("mockito.exceptions.misusing"));
         }
     }
 
@@ -164,11 +163,11 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "PassingGradeLibrary", "PassingGradeSingleParameterizedTestFails");  // 4/5 parameterized test cases
 
             assertThat(result)
-                    .has(ResultTestAssertions.numberOfJUnitTestsPassing(4))
-                    .has(ResultTestAssertions.totalNumberOfJUnitTests(5))
-                    .has(ResultTestAssertions.failingParameterizedTestName("passed"))
-                    .has(ResultTestAssertions.parameterizedTestCaseNumber(3))
-                    .has(ResultTestAssertions.errorType("AssertionFailedError"));
+                    .has(numberOfJUnitTestsPassing(4))
+                    .has(totalNumberOfJUnitTests(5))
+                    .has(failingParameterizedTestName("passed"))
+                    .has(parameterizedTestCaseNumber(3))
+                    .has(errorType("AssertionFailedError"));
         }
 
 
@@ -180,13 +179,13 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "ATMLibrary", "ATMMoreParameterizedTestsFail");  // 11/14 parameterized test cases
 
             assertThat(result)
-                    .has(ResultTestAssertions.numberOfJUnitTestsPassing(11))
-                    .has(ResultTestAssertions.totalNumberOfJUnitTests(14))
-                    .has(ResultTestAssertions.failingParameterizedTestName("validTest"))
-                    .has(ResultTestAssertions.failingParameterizedTestName("invalidTest"))
-                    .has(ResultTestAssertions.parameterizedTestCaseNumber(1))
-                    .has(ResultTestAssertions.parameterizedTestCaseNumber(2))
-                    .has(ResultTestAssertions.errorType("AssertionFailedError"));
+                    .has(numberOfJUnitTestsPassing(11))
+                    .has(totalNumberOfJUnitTests(14))
+                    .has(failingParameterizedTestName("validTest"))
+                    .has(failingParameterizedTestName("invalidTest"))
+                    .has(parameterizedTestCaseNumber(1))
+                    .has(parameterizedTestCaseNumber(2))
+                    .has(errorType("AssertionFailedError"));
         }
 
 
@@ -198,17 +197,17 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "TwoIntegersLibrary", "TwoIntegersAllParameterizedTestsFail");  // 0/6 parameterized test cases
 
             assertThat(result)
-                    .has(ResultTestAssertions.numberOfJUnitTestsPassing(0))
-                    .has(ResultTestAssertions.totalNumberOfJUnitTests(6))
-                    .has(ResultTestAssertions.failingParameterizedTestName("sumValidCases"))
-                    .has(ResultTestAssertions.parameterizedTestCaseNumber(1))
-                    .has(ResultTestAssertions.parameterizedTestCaseNumber(2))
-                    .has(ResultTestAssertions.parameterizedTestCaseNumber(3))
-                    .has(ResultTestAssertions.parameterizedTestCaseNumber(4))
-                    .has(ResultTestAssertions.parameterizedTestCaseNumber(5))
-                    .has(ResultTestAssertions.parameterizedTestCaseNumber(6))
-                    .has(ResultTestAssertions.errorType("AssertionFailedError"))
-                    .has(ResultTestAssertions.errorType("IllegalArgumentException"));  // method will throw exception (See Library.java)
+                    .has(numberOfJUnitTestsPassing(0))
+                    .has(totalNumberOfJUnitTests(6))
+                    .has(failingParameterizedTestName("sumValidCases"))
+                    .has(parameterizedTestCaseNumber(1))
+                    .has(parameterizedTestCaseNumber(2))
+                    .has(parameterizedTestCaseNumber(3))
+                    .has(parameterizedTestCaseNumber(4))
+                    .has(parameterizedTestCaseNumber(5))
+                    .has(parameterizedTestCaseNumber(6))
+                    .has(errorType("AssertionFailedError"))
+                    .has(errorType("IllegalArgumentException"));  // method will throw exception (See Library.java)
         }
 
 
@@ -218,8 +217,8 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "PiecewiseLibrary", "PiecewiseHelperInTest");  // 26/26 parameterized test cases
 
             assertThat(result)
-                    .has(ResultTestAssertions.numberOfJUnitTestsPassing(26))
-                    .has(ResultTestAssertions.totalNumberOfJUnitTests(26));
+                    .has(numberOfJUnitTestsPassing(26))
+                    .has(totalNumberOfJUnitTests(26));
         }
 
 
@@ -233,16 +232,16 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "MScAdmisisionLibrary", "MScAdmissionParameterizedTestThrowsException");  // 0/5 parameterized test cases
 
             assertThat(result)
-                    .has(ResultTestAssertions.numberOfJUnitTestsPassing(0))
-                    .has(ResultTestAssertions.totalNumberOfJUnitTests(5))
-                    .has(ResultTestAssertions.failingParameterizedTestName("validInputs"))
-                    .has(ResultTestAssertions.failingParameterizedTestName("invalidInputs"))
-                    .has(ResultTestAssertions.parameterizedTestCaseNumber(1))
-                    .has(ResultTestAssertions.parameterizedTestCaseNumber(2))
-                    .has(ResultTestAssertions.parameterizedTestCaseNumber(3))
-                    .has(ResultTestAssertions.errorType("ParameterResolutionException"))
-                    .has(ResultTestAssertions.errorType("AssertionError"))
-                    .has(ResultTestAssertions.errorMessage("Expecting code to raise a throwable."));
+                    .has(numberOfJUnitTestsPassing(0))
+                    .has(totalNumberOfJUnitTests(5))
+                    .has(failingParameterizedTestName("validInputs"))
+                    .has(failingParameterizedTestName("invalidInputs"))
+                    .has(parameterizedTestCaseNumber(1))
+                    .has(parameterizedTestCaseNumber(2))
+                    .has(parameterizedTestCaseNumber(3))
+                    .has(errorType("ParameterResolutionException"))
+                    .has(errorType("AssertionError"))
+                    .has(errorMessage("Expecting code to raise a throwable."));
         }
 
 
@@ -256,7 +255,7 @@ public class RunJUnitTestsStepTest {
         void testSimplePropertyTest() {
             String result = run(onlyJUnitTests(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfSimpleJqwikError");
             assertThat(result)
-                    .has(ResultTestAssertions.propertyTestFailing("testNoElementInWholeArray"));
+                    .has(propertyTestFailing("testNoElementInWholeArray"));
         }
 
 
@@ -264,8 +263,8 @@ public class RunJUnitTestsStepTest {
         void testMultiplePropertyTestsFailing() {
             String result = run(onlyJUnitTests(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfMultipleJqwikErrors");
             assertThat(result)
-                    .has(ResultTestAssertions.propertyTestFailing("testNoElementInWholeArray"))
-                    .has(ResultTestAssertions.propertyTestFailing("testValueInArrayUniqueElements"));
+                    .has(propertyTestFailing("testNoElementInWholeArray"))
+                    .has(propertyTestFailing("testValueInArrayUniqueElements"));
         }
 
 
@@ -273,9 +272,9 @@ public class RunJUnitTestsStepTest {
         void testMultiplePropertyWithParameterizedTests() {
             String result = run(onlyJUnitTests(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfJqwikWithParameterized");
             assertThat(result)
-                    .has(ResultTestAssertions.propertyTestFailing("testNoElementInWholeArray"))
-                    .has(ResultTestAssertions.propertyTestFailing("testValueInArrayUniqueElements"))
-                    .has(ResultTestAssertions.parameterizedTestFailing("test", 6));
+                    .has(propertyTestFailing("testNoElementInWholeArray"))
+                    .has(propertyTestFailing("testValueInArrayUniqueElements"))
+                    .has(parameterizedTestFailing("test", 6));
         }
 
 
@@ -283,7 +282,7 @@ public class RunJUnitTestsStepTest {
         void testMessageOtherThanAssertionError() {
             String result = run(onlyJUnitTests(), "NumberUtilsAddPositiveLibrary", "NumberUtilsAddPositiveJqwikException");
             assertThat(result)
-                    .has(ResultTestAssertions.propertyTestFailing("testAddition"));
+                    .has(propertyTestFailing("testAddition"));
         }
     }
 
