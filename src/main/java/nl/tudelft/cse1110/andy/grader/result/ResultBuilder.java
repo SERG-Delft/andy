@@ -1,11 +1,11 @@
 package nl.tudelft.cse1110.andy.grader.result;
 
 import nl.tudelft.cse1110.andy.codechecker.engine.CheckScript;
+import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.grader.grade.GradeCalculator;
 import nl.tudelft.cse1110.andy.grader.grade.GradeValues;
-import nl.tudelft.cse1110.andy.grader.util.ImportUtils;
-import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.grader.grade.GradeWeight;
+import nl.tudelft.cse1110.andy.grader.util.ImportUtils;
 import org.jacoco.core.analysis.IClassCoverage;
 import org.jetbrains.annotations.NotNull;
 import org.junit.platform.engine.UniqueId;
@@ -188,8 +188,12 @@ public class ResultBuilder {
         }
     }
 
-    public void logTimeToRun(String elapsedTime) {
-        l("\nOur grader took " + elapsedTime + " seconds to assess your question.");
+    public void logTimeToRun(long startTime) {
+        long stopTime = System.nanoTime();
+        long elapsedTime = stopTime - startTime;
+        double timeInSeconds = (double) elapsedTime / 1_000_000_000.0;
+
+        l(String.format("\nAndy took %.1f seconds to assess your question.", timeInSeconds));
     }
 
     private String getParameterizedMethodName(TestExecutionSummary.Failure failure) {

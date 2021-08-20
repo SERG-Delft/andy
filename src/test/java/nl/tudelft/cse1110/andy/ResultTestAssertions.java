@@ -172,8 +172,8 @@ public class ResultTestAssertions {
         return containsString("There might be a problem with this exercise.");
     }
   
-    public static Condition<String> totalTimeToExecute() {
-        return containsRegex("Our grader took \\d+.\\d seconds to assess your question.");
+    public static Condition<String> totalTimeItTookToExecute() {
+        return containsRegex("Andy took \\d+(.\\d)? seconds to assess your question.");
     }
 
 
