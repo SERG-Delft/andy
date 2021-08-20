@@ -54,8 +54,8 @@ public class RunJacocoCoverageStep implements ExecutionStep {
              */
             final Instrumenter instr = new Instrumenter(runtime);
 
-            ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
-            FromBytesClassLoader classLoader = new FromBytesClassLoader();
+            ClassLoader currentClassLoader = Thread.currentThread().getContextClassLoader();
+            FromBytesClassLoader classLoader = new FromBytesClassLoader(currentClassLoader);
 
             this.instrumentAllInDirectory(instr, new File(dirCfg.getWorkingDir()), classLoader, "");
 
@@ -96,7 +96,7 @@ public class RunJacocoCoverageStep implements ExecutionStep {
             this.generateReport(dirCfg, testClass, coverageBuilder, executionData, sessionInfos);
 
             /* Restore the old class loader to get the non-instrumented classes back.*/
-            Thread.currentThread().setContextClassLoader(oldClassLoader);
+            Thread.currentThread().setContextClassLoader(currentClassLoader);
         } catch (Exception ex) {
             result.genericFailure(this, ex);
         }

@@ -19,9 +19,9 @@ public class GetRunConfigurationStep implements ExecutionStep {
         DirectoryConfiguration dirCfg = cfg.getDirectoryConfiguration();
 
         try {
-            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+            ClassLoader currentClassLoader = Thread.currentThread().getContextClassLoader();
 
-            Class<?> runConfigurationClass = Class.forName(getConfigurationClass(dirCfg.getNewClassNames()), false, classLoader);
+            Class<?> runConfigurationClass = Class.forName(getConfigurationClass(dirCfg.getNewClassNames()), false, currentClassLoader);
             RunConfiguration runConfiguration = (RunConfiguration) runConfigurationClass.getDeclaredConstructor().newInstance();
 
             cfg.setRunConfiguration(runConfiguration);

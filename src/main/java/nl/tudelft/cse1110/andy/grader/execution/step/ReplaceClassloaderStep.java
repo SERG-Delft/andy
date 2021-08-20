@@ -33,8 +33,8 @@ public class ReplaceClassloaderStep implements ExecutionStep {
     private void replaceClassloader(String pathToAddToClassloader) {
         List<Path> additionalClasspathEntries = Arrays.asList(Paths.get(pathToAddToClassloader));
         URL[] urls = additionalClasspathEntries.stream().map(this::toURL).toArray(URL[]::new);
-        ClassLoader parent = Thread.currentThread().getContextClassLoader();
-        ClassLoader customClassLoader = URLClassLoader.newInstance(urls, parent);
+        ClassLoader currentClassloader = Thread.currentThread().getContextClassLoader();
+        ClassLoader customClassLoader = URLClassLoader.newInstance(urls, currentClassloader);
 
         Thread.currentThread().setContextClassLoader(customClassLoader);
     }

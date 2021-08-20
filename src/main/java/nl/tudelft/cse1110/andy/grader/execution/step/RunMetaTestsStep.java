@@ -40,7 +40,7 @@ public class RunMetaTestsStep implements ExecutionStep {
              * We reuse our execution framework to run the code with the meta test.
              */
             for (MetaTest metaTest : metaTests) {
-                ClassLoader oldClassLoader = changeClassLoader();
+                ClassLoader currentClassLoader = changeClassLoader(cfg);
 
                 /* Copy the library and replace the library by the meta test */
                 File metaWorkingDir = createTemporaryDirectory("metaWorkplace").toFile();
@@ -65,7 +65,7 @@ public class RunMetaTestsStep implements ExecutionStep {
 
                 /* Clean up and put the original classloader back */
                 deleteDirectory(metaWorkingDir);
-                Thread.currentThread().setContextClassLoader(oldClassLoader);
+                Thread.currentThread().setContextClassLoader(currentClassLoader);
             }
 
             result.logMetaTests(score, metaTests.size(), failures);
@@ -74,11 +74,17 @@ public class RunMetaTestsStep implements ExecutionStep {
         }
     }
 
-    private ClassLoader changeClassLoader() {
-        ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
-        ClassLoader classLoader = new FromBytesClassLoader();
+    private ClassLoader changeClassLoader(Configuration configuration) {
+        /*
+         * We give the very first classloader as parent to this one.
+         * This clean classloader does not have the student classes (e.g., Library etc).
+         * Hopefully, this avoid clashes now that we will have "many libraries", one for each meta test.
+         */
+        ClassLoader classLoader = new FromBytesClassLoader(configuration.getCleanClassloader());
         Thread.currentThread().setContextClassLoader(classLoader);
-        return oldClassLoader;
+
+        ClassLoader currentClassLoader = Thread.currentThread().getContextClassLoader();
+        return currentClassLoader;
     }
 
     private String generateMetaFileContent(MetaTest metaTest, DirectoryConfiguration dirCfg) {

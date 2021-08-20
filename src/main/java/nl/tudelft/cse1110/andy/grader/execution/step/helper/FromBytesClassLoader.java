@@ -6,6 +6,10 @@ import java.util.Map;
 public class FromBytesClassLoader extends ClassLoader {
     private final Map<String, byte[]> definitions = new HashMap<>();
 
+    public FromBytesClassLoader(ClassLoader cleanClassloader) {
+        super(cleanClassloader);
+    }
+
     public void addDefinition(final String name, final byte[] bytes) {
         definitions.put(name, bytes);
     }
