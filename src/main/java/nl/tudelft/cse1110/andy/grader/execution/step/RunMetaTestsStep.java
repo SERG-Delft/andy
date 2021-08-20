@@ -14,8 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static nl.tudelft.cse1110.andy.grader.util.FileUtils.createTemporaryDirectory;
-import static nl.tudelft.cse1110.andy.grader.util.FileUtils.deleteDirectory;
+import static nl.tudelft.cse1110.andy.grader.util.FileUtils.*;
 
 public class RunMetaTestsStep implements ExecutionStep {
 
@@ -29,8 +28,14 @@ public class RunMetaTestsStep implements ExecutionStep {
         ClassLoader currentClassLoader = Thread.currentThread().getContextClassLoader();
 
         try {
+            /* Get the student solution, which we will run for each meta test */
+            String solutionFile = findSolution(dirCfg.getWorkingDir());
+
+            /* Get the original library content that we will keep changing according to the meta test */
+            File libraryFile = new File(findLibrary(dirCfg.getWorkingDir()));
+            String originalLibraryContent = readFile(libraryFile);
+
             List<MetaTest> metaTests = runCfg.metaTests();
-            String solutionFile = FileUtils.findSolution(dirCfg.getWorkingDir());
             List<String> failures = new ArrayList<>();
 
             /*
@@ -41,12 +46,15 @@ public class RunMetaTestsStep implements ExecutionStep {
              * We reuse our execution framework to run the code with the meta test.
              */
             for (MetaTest metaTest : metaTests) {
+                result.debug(this, String.format("Preparing meta test %s", metaTest.getName()));
+
+                /* Set the classloader to the cleanest classloader we have */
                 Thread.currentThread().setContextClassLoader(cfg.getCleanClassloader());
 
                 /* Copy the library and replace the library by the meta test */
                 File metaWorkingDir = createTemporaryDirectory("metaWorkplace").toFile();
-                FileUtils.copyFile(solutionFile, metaWorkingDir.getAbsolutePath());
-                String metaFileContent = generateMetaFileContent(metaTest, dirCfg);
+                copyFile(solutionFile, metaWorkingDir.getAbsolutePath());
+                String metaFileContent = generateMetaFileContent(metaTest, originalLibraryContent);
                 createMetaTestFile(metaWorkingDir, metaFileContent);
 
                 /* We then run the meta test, using our infrastructure */
@@ -56,6 +64,8 @@ public class RunMetaTestsStep implements ExecutionStep {
                 int testsRan = metaResult.getTestsRan();
                 int testsSucceeded = metaResult.getTestsSucceeded();
                 boolean passesTheMetaTest = testsSucceeded < testsRan;
+
+                result.debug(this, String.format("Tests ran with the meta test: %d/%d", testsSucceeded, testsRan));
 
                 if (passesTheMetaTest) {
                     score++;
@@ -77,9 +87,7 @@ public class RunMetaTestsStep implements ExecutionStep {
         }
     }
 
-    private String generateMetaFileContent(MetaTest metaTest, DirectoryConfiguration dirCfg) {
-        File libraryFile = new File(FileUtils.findLibrary(dirCfg.getWorkingDir()));
-        String originalLibraryContent = FileUtils.readFile(libraryFile);
+    private String generateMetaFileContent(MetaTest metaTest, String originalLibraryContent) {
         String metaFileContent = metaTest.evaluate(originalLibraryContent);
 
         if (metaFileContent.equals(originalLibraryContent)) {

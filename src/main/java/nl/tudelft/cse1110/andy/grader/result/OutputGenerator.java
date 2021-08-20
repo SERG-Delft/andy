@@ -18,7 +18,7 @@ public class OutputGenerator {
 
     public static void exportOutputFile(Configuration cfg, ResultBuilder result) {
         File stdoutTxt = new File(FileUtils.concatenateDirectories(cfg.getDirectoryConfiguration().getOutputDir(), "stdout.txt"));
-        FileUtils.writeToFile(stdoutTxt, result.buildEndUserResult());
+        FileUtils.writeToFile(stdoutTxt, cfg.getRunConfiguration().debug() ? result.buildDebugResult() : result.buildEndUserResult());
     }
 
     public static void exportXMLFile(Configuration cfg, ResultBuilder result) {

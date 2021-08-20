@@ -30,7 +30,10 @@ public class RunJUnitTestsStep implements ExecutionStep {
             AdditionalReportJUnitListener additionalReportJUnitListener = new AdditionalReportJUnitListener(result);
 
             String testClass = ClassUtils.getTestClass(dirCfg.getNewClassNames());
+            result.debug(this, String.format("Name of the test class: %s", testClass));
+            result.debug(this, String.format("Classloader finds it? ", Class.forName(testClass).getName()));
 
+            /* Change the sysout so that we can show it to the student later */
             PrintStream console = System.out;
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             System.setOut(new PrintStream(output));
@@ -46,11 +49,14 @@ public class RunJUnitTestsStep implements ExecutionStep {
             launcher.execute(request);
 
             TestExecutionSummary summary = listener.getSummary();
+            result.debug(this, String.format("JUnit ran %d tests", summary.getTestsFoundCount()));
 
+            /* Restore the sysout back, and put it in the result in case there's something */
             System.setOut(console);
-
             if(output.size() > 0)
                 result.logConsoleOutput(output);
+
+            /* Log the junit result */
             result.logJUnitRun(summary);
         } catch (Exception e) {
             result.genericFailure(this, e);

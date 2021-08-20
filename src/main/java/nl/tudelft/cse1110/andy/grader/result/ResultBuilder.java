@@ -212,10 +212,12 @@ public class ResultBuilder {
     private void l(String line) {
         result.append(line);
         result.append("\n");
+
+        d(line);
     }
 
     private void d(String line) {
-        debug.append(line);
+        debug.append("DEBUG: " + line);
         debug.append("\n");
     }
 

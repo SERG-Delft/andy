@@ -50,4 +50,8 @@ public abstract class RunConfiguration {
         return -1;
     }
 
+    public boolean debug() {
+        return false;
+    }
+
 }
