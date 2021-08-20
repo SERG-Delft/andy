@@ -11,11 +11,6 @@ import java.util.Map;
 public class Configuration extends RunConfiguration {
 
     @Override
-    public CheckScript checkScript() {
-        return new CheckScript(List.of());
-    }
-
-    @Override
     public Map<String, Float> weights() {
         return new HashMap<>() {{
             put("coverage", 0.1f);
