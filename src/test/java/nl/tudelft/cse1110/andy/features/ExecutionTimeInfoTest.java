@@ -1,4 +1,4 @@
-package nl.tudelft.cse1110.andy.acceptance;
+package nl.tudelft.cse1110.andy.features;
 
 import nl.tudelft.cse1110.andy.IntegrationTestBase;
 import org.junit.jupiter.params.ParameterizedTest;
