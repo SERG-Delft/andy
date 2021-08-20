@@ -66,7 +66,7 @@ public class ResultTestAssertions {
 
 
     public static Condition<String> compilationFailure() {
-        return containsRegex("We could not compile your code\\. See the compilation errors below:");
+        return containsString("We could not compile the code. See the compilation errors below:");
     }
 
 
@@ -168,7 +168,7 @@ public class ResultTestAssertions {
         return containsRegex("Code checks score: \\d*/\\d*");
     }
 
-    public static Condition<String> configurationFailMessage() {
+    public static Condition<String> failDueToBadConfigurationMessage() {
         return containsString("There might be a problem with this exercise.");
     }
   

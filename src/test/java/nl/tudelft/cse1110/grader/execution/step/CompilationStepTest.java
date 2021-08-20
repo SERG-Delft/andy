@@ -31,7 +31,6 @@ public class CompilationStepTest extends IntegrationTestBase {
                 .has(compilationSuccess());
     }
 
-
     @Test
     void compilationDifferentFailures() {
         String result = run(onlyCompilation(), "MathArraysLibrary","MathArraysDifferentCompilationErrors");
@@ -59,6 +58,7 @@ public class CompilationStepTest extends IntegrationTestBase {
         String result = run(onlyCompilation(), "NumberUtilsAddLibrary","NumberUtilsAddAllTestsPass","NumberUtilsAddTypoConfiguration");
 
         assertThat(result)
-                .has(configurationFailMessage());
+                .has(compilationFailure())
+                .has(failDueToBadConfigurationMessage());
     }
 }

@@ -51,14 +51,9 @@ public class ResultBuilder {
     public void compilationFail(List<Diagnostic<? extends JavaFileObject>> compilationErrors) {
         this.compilationErrors = compilationErrors;
 
-        l("We could not compile your code. See the compilation errors below:");
+        l("We could not compile the code. See the compilation errors below:");
         for(Diagnostic diagnostic: compilationErrors) {
             if (diagnostic.getKind() == ERROR) {
-
-                if(isErrorInConfiguration(diagnostic)){
-                    rewriteResult();
-                    break;
-                }
 
                 l(String.format("- line %d: %s",
                         diagnostic.getLineNumber(),
@@ -68,17 +63,21 @@ public class ResultBuilder {
                 importLog.ifPresent(this::l);
             }
         }
+
+        if(anyOfTheErrorsAreCausedDueToBadConfiguration(compilationErrors)) {
+            l("\n**WARNING:** There might be a problem with this exercise. "+
+                    "Please contact the teaching staff so they can fix this as quickly" +
+                    "as possible. Thank you for your help! :)");
+        }
+
         failed();
+
     }
 
-    private void rewriteResult() {
-        result.setLength(0);
-        l("There might be a problem with this exercise. Please contact the SQT staff so we can fix this as quickly" +
-                "as possible. Thank you for your help! :)");
-    }
-
-    private boolean isErrorInConfiguration(Diagnostic diagnostic) {
-        return diagnostic.getSource().toString().contains("Configuration.java");
+    private boolean anyOfTheErrorsAreCausedDueToBadConfiguration(List<Diagnostic<? extends JavaFileObject>> compilationErrors) {
+        return compilationErrors
+                .stream()
+                .anyMatch(c -> c.getKind() == ERROR && c.getSource().getName().endsWith("Configuration.java"));
     }
 
     public void logFinish(ExecutionStep step) {
