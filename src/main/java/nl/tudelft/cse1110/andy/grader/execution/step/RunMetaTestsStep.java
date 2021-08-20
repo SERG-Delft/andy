@@ -65,6 +65,7 @@ public class RunMetaTestsStep implements ExecutionStep {
                 int testsSucceeded = metaResult.getTestsSucceeded();
                 boolean passesTheMetaTest = testsSucceeded < testsRan;
 
+                result.debug(this, metaResult.buildDebugResult());
                 result.debug(this, String.format("Tests ran with the meta test: %d/%d", testsSucceeded, testsRan));
 
                 if (passesTheMetaTest) {
