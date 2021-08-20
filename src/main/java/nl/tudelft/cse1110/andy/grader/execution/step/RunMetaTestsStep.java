@@ -64,14 +64,13 @@ public class RunMetaTestsStep implements ExecutionStep {
                     failures.add(metaName);
                 }
 
-                /* Clean up and put the original classloader back */
+                /* Clean up the directory */
                 deleteDirectory(metaWorkingDir);
-                Thread.currentThread().setContextClassLoader(currentClassLoader);
             }
 
             result.logMetaTests(score, metaTests.size(), failures);
 
-            // restore the class loader to the one before meta tests
+            /* restore the class loader to the one before meta tests */
             Thread.currentThread().setContextClassLoader(currentClassLoader);
         } catch (Exception ex) {
             result.genericFailure(this, ex);
