@@ -26,6 +26,8 @@ public class RunMetaTestsStep implements ExecutionStep {
 
         int score = 0;
 
+        ClassLoader currentClassLoader = Thread.currentThread().getContextClassLoader();
+
         try {
             List<MetaTest> metaTests = runCfg.metaTests();
             String solutionFile = FileUtils.findSolution(dirCfg.getWorkingDir());
@@ -38,8 +40,6 @@ public class RunMetaTestsStep implements ExecutionStep {
              *
              * We reuse our execution framework to run the code with the meta test.
              */
-            ClassLoader currentClassLoader = Thread.currentThread().getContextClassLoader();
-
             for (MetaTest metaTest : metaTests) {
                 Thread.currentThread().setContextClassLoader(cfg.getCleanClassloader());
 
@@ -69,11 +69,11 @@ public class RunMetaTestsStep implements ExecutionStep {
             }
 
             result.logMetaTests(score, metaTests.size(), failures);
-
-            /* restore the class loader to the one before meta tests */
-            Thread.currentThread().setContextClassLoader(currentClassLoader);
         } catch (Exception ex) {
             result.genericFailure(this, ex);
+        } finally {
+            /* restore the class loader to the one before meta tests */
+            Thread.currentThread().setContextClassLoader(currentClassLoader);
         }
     }
 
