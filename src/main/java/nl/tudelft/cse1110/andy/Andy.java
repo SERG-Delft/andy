@@ -4,8 +4,6 @@ import nl.tudelft.cse1110.andy.grader.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.grader.config.Configuration;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class Andy {
 
@@ -24,7 +22,6 @@ public class Andy {
         System.out.println(result.buildDebugResult());
     }
 
-    @NotNull
     private static Configuration buildConfiguration() {
         Configuration cfg = new Configuration();
 
@@ -36,7 +33,6 @@ public class Andy {
         return cfg;
     }
 
-    @Nullable
     private static ExecutionFlow buildExecutionFlow(Configuration cfg, ResultBuilder result) {
         String mode = System.getenv("MODE");
         ExecutionFlow flow = null;

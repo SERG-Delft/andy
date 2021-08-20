@@ -7,7 +7,6 @@ import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.grader.util.ClassUtils;
 import nl.tudelft.cse1110.andy.grader.util.FileUtils;
-import org.jetbrains.annotations.NotNull;
 import org.pitest.mutationtest.commandline.OptionsParser;
 import org.pitest.mutationtest.commandline.ParseResult;
 import org.pitest.mutationtest.commandline.PluginFilter;
@@ -47,7 +46,6 @@ public class RunPitestStep implements ExecutionStep {
         }
     }
 
-    @NotNull
     private String createDirectoryForPitest(Configuration cfg) {
         String outputPitestDir = FileUtils.concatenateDirectories(cfg.getDirectoryConfiguration().getOutputDir(), "pitest");
         FileUtils.createDirIfNeeded(outputPitestDir);
