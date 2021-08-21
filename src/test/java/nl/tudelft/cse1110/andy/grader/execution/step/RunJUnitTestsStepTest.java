@@ -285,7 +285,7 @@ public class RunJUnitTestsStepTest {
             assertThat(result)
                     .has(numberOfJUnitTestsPassing(2))
                     .has(totalNumberOfJUnitTests(2))
-                    .has(errorMessage("Make sure your corresponding method tudelft.domain.MScAdmissionTest.invalidInputs() is static!"));
+                    .has(errorMessage("Make sure your corresponding method tudelft.domain.MScAdmissionTest.validInputs() is static!"));
         }
 
 
