@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 
 import static nl.tudelft.cse1110.andy.ExecutionStepHelper.onlyCompilation;
-import static nl.tudelft.cse1110.andy.grader.util.FileUtils.concatenateDirectories;
+import static nl.tudelft.cse1110.andy.grader.util.FilesUtils.concatenateDirectories;
 import static nl.tudelft.cse1110.andy.ResultTestAssertions.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 

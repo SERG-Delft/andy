@@ -8,7 +8,7 @@ import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.grader.util.ClassUtils;
 
-import nl.tudelft.cse1110.andy.grader.util.FileUtils;
+import nl.tudelft.cse1110.andy.grader.util.FilesUtils;
 import org.jacoco.core.analysis.Analyzer;
 import org.jacoco.core.analysis.CoverageBuilder;
 import org.jacoco.core.analysis.IClassCoverage;
@@ -146,8 +146,8 @@ public class RunJacocoCoverageStep implements ExecutionStep {
                                 SessionInfoStore sessionInfos) throws IOException {
         final HTMLFormatter htmlFormatter = new HTMLFormatter();
 
-        String outputJacocoDir = FileUtils.concatenateDirectories(dirCfg.getOutputDir(), "jacoco");
-        FileUtils.createDirIfNeeded(outputJacocoDir);
+        String outputJacocoDir = FilesUtils.concatenateDirectories(dirCfg.getOutputDir(), "jacoco");
+        FilesUtils.createDirIfNeeded(outputJacocoDir);
 
         final IReportVisitor visitor = htmlFormatter
                 .createVisitor(new FileMultiReportOutput(new File(outputJacocoDir)));

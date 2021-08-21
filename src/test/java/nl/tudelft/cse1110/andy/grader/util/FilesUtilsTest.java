@@ -7,7 +7,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class FileUtilsTest {
+public class FilesUtilsTest {
 
 
     @Test
@@ -16,7 +16,7 @@ public class FileUtilsTest {
         String dir1 = "C:/Users/alice/education/cse1110/test/code/";
         String dir2 = "delft";
 
-        assertThat(FileUtils.concatenateDirectories(dir1, dir2))
+        assertThat(FilesUtils.concatenateDirectories(dir1, dir2))
                 .isEqualTo("C:/Users/alice/education/cse1110/test/code/delft");
     }
 
@@ -27,7 +27,7 @@ public class FileUtilsTest {
         String dir1 = "C:/Users/alice/education/cse1110/test/code";
         String dir2 = "delft";
 
-        assertThat(FileUtils.concatenateDirectories(dir1, dir2))
+        assertThat(FilesUtils.concatenateDirectories(dir1, dir2))
                 .isEqualTo("C:/Users/alice/education/cse1110/test/code/delft");
     }
 
@@ -37,7 +37,7 @@ public class FileUtilsTest {
         String dir1 = "/Users/alice/education/cse1110/test/code/";
         String dir2 = "delft";
 
-        assertThat(FileUtils.concatenateDirectories(dir1, dir2))
+        assertThat(FilesUtils.concatenateDirectories(dir1, dir2))
                 .isEqualTo("/Users/alice/education/cse1110/test/code/delft");
     }
 
@@ -48,7 +48,7 @@ public class FileUtilsTest {
         String dir1 = "/Users/alice/education/cse1110/test/code";
         String dir2 = "delft";
 
-        assertThat(FileUtils.concatenateDirectories(dir1, dir2))
+        assertThat(FilesUtils.concatenateDirectories(dir1, dir2))
                 .isEqualTo("/Users/alice/education/cse1110/test/code/delft");
     }
 
@@ -60,7 +60,7 @@ public class FileUtilsTest {
         String destFile = "C:\\Users\\alice\\AppData\\NonExistentPath\\Temp\\metaWorkplace8612545675667245859";
 
         assertThrows(RuntimeException.class,
-                () -> FileUtils.copyFile(sourceFile, destFile));
+                () -> FilesUtils.copyFile(sourceFile, destFile));
     }
 
 
@@ -72,7 +72,7 @@ public class FileUtilsTest {
         String destFileName = "Solution.java";
 
         assertThrows(RuntimeException.class,
-                () -> FileUtils.moveFile(sourceFile, destDir, destFileName));
+                () -> FilesUtils.moveFile(sourceFile, destDir, destFileName));
     }
 
 
@@ -83,7 +83,7 @@ public class FileUtilsTest {
         String destFile = "\\Users\\alice\\AppData\\NonExistentPath\\Temp\\metaWorkplace8612545675667245859";
 
         assertThrows(RuntimeException.class,
-                () -> FileUtils.copyFile(sourceFile, destFile));
+                () -> FilesUtils.copyFile(sourceFile, destFile));
     }
 
 
@@ -95,7 +95,7 @@ public class FileUtilsTest {
         String destFileName = "Solution.java";
 
         assertThrows(RuntimeException.class,
-                () -> FileUtils.moveFile(sourceFile, destDir, destFileName));
+                () -> FilesUtils.moveFile(sourceFile, destDir, destFileName));
     }
 
 

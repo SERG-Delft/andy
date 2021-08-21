@@ -3,7 +3,7 @@ package nl.tudelft.cse1110.andy.features;
 import nl.tudelft.cse1110.andy.ExecutionStepHelper;
 import nl.tudelft.cse1110.andy.IntegrationTestBase;
 import nl.tudelft.cse1110.andy.ResourceUtils;
-import nl.tudelft.cse1110.andy.grader.util.FileUtils;
+import nl.tudelft.cse1110.andy.grader.util.FilesUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -16,7 +16,7 @@ public class ResultXmlTest extends IntegrationTestBase {
     void resultsXmlWithGrade0() {
         run(ExecutionStepHelper.fullMode(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfImportListCommented");
 
-        File xmlFile = new File(FileUtils.concatenateDirectories(workDir.toString(), "results.xml"));
+        File xmlFile = new File(FilesUtils.concatenateDirectories(workDir.toString(), "results.xml"));
         File expected = new File(ResourceUtils.resourceFolder("/grader/fixtures/Output/resultsIndexOfListCommentedFail.xml"));
 
         assertThat(xmlFile).exists().isFile();
@@ -27,7 +27,7 @@ public class ResultXmlTest extends IntegrationTestBase {
     void resultsXmlWithFullGrade() {
         run(ExecutionStepHelper.fullMode(), "MathArraysLibrary", "MathArrays100Score");
 
-        File xmlFile = new File(FileUtils.concatenateDirectories(workDir.toString(), "results.xml"));
+        File xmlFile = new File(FilesUtils.concatenateDirectories(workDir.toString(), "results.xml"));
         File expected = new File(ResourceUtils.resourceFolder("/grader/fixtures/Output/resultsMathArraysSuccess.xml"));
 
         assertThat(xmlFile).exists().isFile();
@@ -38,7 +38,7 @@ public class ResultXmlTest extends IntegrationTestBase {
     void resultsXmlWithPartialGrade() {
         run(ExecutionStepHelper.fullMode(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass");
 
-        File xmlFile = new File(FileUtils.concatenateDirectories(workDir.toString(), "results.xml"));
+        File xmlFile = new File(FilesUtils.concatenateDirectories(workDir.toString(), "results.xml"));
         File expected = new File(ResourceUtils.resourceFolder("/grader/fixtures/Output/resultsNumberUtilsPartial.xml"));
 
         assertThat(xmlFile).exists().isFile();

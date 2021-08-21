@@ -2,7 +2,7 @@ package nl.tudelft.cse1110.andy.grader.execution.step;
 
 import nl.tudelft.cse1110.andy.grader.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
-import nl.tudelft.cse1110.andy.grader.util.FileUtils;
+import nl.tudelft.cse1110.andy.grader.util.FilesUtils;
 import nl.tudelft.cse1110.andy.grader.execution.Context;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
 
@@ -44,7 +44,7 @@ public class CompilationStep implements ExecutionStep {
          * The compiler uses the classpath of the current JVM.
          * So, all the libraries available (JUnit, etc) will be reused here
          */
-        Collection<File> listOfFiles = FileUtils.getAllJavaFiles(dirCfg.getWorkingDir());
+        Collection<File> listOfFiles = FilesUtils.getAllJavaFiles(dirCfg.getWorkingDir());
         result.debug(this, String.format("Files for compilation: %d (%s)", listOfFiles.size(),
                 listOfFiles.stream().map(c -> c.getName()).collect(Collectors.joining(","))));
 

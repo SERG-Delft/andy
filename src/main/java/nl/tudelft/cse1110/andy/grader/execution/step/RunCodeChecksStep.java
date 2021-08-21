@@ -7,7 +7,7 @@ import nl.tudelft.cse1110.andy.grader.config.RunConfiguration;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 
-import static nl.tudelft.cse1110.andy.grader.util.FileUtils.findSolution;
+import static nl.tudelft.cse1110.andy.grader.util.FilesUtils.findSolution;
 
 public class RunCodeChecksStep implements ExecutionStep {
     @Override

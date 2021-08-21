@@ -12,7 +12,7 @@ import java.util.List;
 
 import static nl.tudelft.cse1110.andy.grader.util.ClassUtils.extractPackageName;
 import static nl.tudelft.cse1110.andy.grader.util.ClassUtils.packageToDirectory;
-import static nl.tudelft.cse1110.andy.grader.util.FileUtils.*;
+import static nl.tudelft.cse1110.andy.grader.util.FilesUtils.*;
 
 public class OrganizeSourceCodeStep implements ExecutionStep {
 

@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
-public class FileUtils {
+public class FilesUtils {
 
     public static List<String> filePathsAsString(Collection<File> files) {
         return files.stream()
@@ -141,6 +141,5 @@ public class FileUtils {
         } catch (Exception ex) {
             throw new RuntimeException();
         }
-
     }
 }

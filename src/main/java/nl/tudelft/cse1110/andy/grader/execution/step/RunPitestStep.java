@@ -6,7 +6,7 @@ import nl.tudelft.cse1110.andy.grader.config.RunConfiguration;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.grader.util.ClassUtils;
-import nl.tudelft.cse1110.andy.grader.util.FileUtils;
+import nl.tudelft.cse1110.andy.grader.util.FilesUtils;
 import org.pitest.mutationtest.commandline.OptionsParser;
 import org.pitest.mutationtest.commandline.ParseResult;
 import org.pitest.mutationtest.commandline.PluginFilter;
@@ -16,6 +16,7 @@ import org.pitest.mutationtest.tooling.AnalysisResult;
 import org.pitest.mutationtest.tooling.CombinedStatistics;
 import org.pitest.mutationtest.tooling.EntryPoint;
 import org.pitest.util.Unchecked;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -47,8 +48,8 @@ public class RunPitestStep implements ExecutionStep {
     }
 
     private String createDirectoryForPitest(Context ctx) {
-        String outputPitestDir = FileUtils.concatenateDirectories(ctx.getDirectoryConfiguration().getOutputDir(), "pitest");
-        FileUtils.createDirIfNeeded(outputPitestDir);
+        String outputPitestDir = FilesUtils.concatenateDirectories(ctx.getDirectoryConfiguration().getOutputDir(), "pitest");
+        FilesUtils.createDirIfNeeded(outputPitestDir);
         return outputPitestDir;
     }
 
@@ -106,16 +107,13 @@ public class RunPitestStep implements ExecutionStep {
          * as every WebLab submission gets a "clean" image.
          */
         try {
-            File[] contentsOfPitestOutputDir = FileUtils.getAllFiles(new File(outputPitestDir));
+            File[] contentsOfPitestOutputDir = FilesUtils.getAllFiles(new File(outputPitestDir));
 
             if (contentsOfPitestOutputDir.length != 0) {
                 File reportFolderToSkip = contentsOfPitestOutputDir[0];
 
-                File[] pitestReportFiles = FileUtils.getAllFiles(new File(reportFolderToSkip.getAbsolutePath()));
-                for (File f : pitestReportFiles) {
-                    FileUtils.copyFile(f.getAbsolutePath(), outputPitestDir);
-                }
-                FileUtils.deleteDirectory(reportFolderToSkip);
+                FileUtils.copyDirectory(reportFolderToSkip, new File(outputPitestDir),true);
+                FilesUtils.deleteDirectory(reportFolderToSkip);
             } else {
                 throw new RuntimeException("PiTest report was not written to .../output/pitest!");
             }

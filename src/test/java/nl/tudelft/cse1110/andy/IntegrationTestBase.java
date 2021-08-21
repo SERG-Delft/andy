@@ -1,7 +1,7 @@
 package nl.tudelft.cse1110.andy;
 
 import nl.tudelft.cse1110.andy.grader.config.DirectoryConfiguration;
-import nl.tudelft.cse1110.andy.grader.util.FileUtils;
+import nl.tudelft.cse1110.andy.grader.util.FilesUtils;
 import nl.tudelft.cse1110.andy.grader.execution.Context;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
@@ -53,7 +53,7 @@ public abstract class IntegrationTestBase {
     }
 
     private String readStdOut() {
-        return FileUtils.readFile(new File(FileUtils.concatenateDirectories(workDir.toString(), "stdout.txt")));
+        return FilesUtils.readFile(new File(FilesUtils.concatenateDirectories(workDir.toString(), "stdout.txt")));
     }
 
     public String run(List<ExecutionStep> plan, String libraryFile, String solutionFile, String configurationFile) {
@@ -71,8 +71,8 @@ public abstract class IntegrationTestBase {
 
         String dirToCopy = workDir.toString();
 
-        File copiedLibrary = FileUtils.copyFile(library.getAbsolutePath(), dirToCopy).toFile();
-        File copiedSolution = FileUtils.copyFile(solution.getAbsolutePath(), dirToCopy).toFile();
+        File copiedLibrary = FilesUtils.copyFile(library.getAbsolutePath(), dirToCopy).toFile();
+        File copiedSolution = FilesUtils.copyFile(solution.getAbsolutePath(), dirToCopy).toFile();
 
         copiedLibrary.renameTo(new File(copiedLibrary.getParentFile() + "/Library.java"));
         copiedSolution.renameTo(new File(copiedSolution.getParentFile() + "/Solution.java"));
@@ -82,7 +82,7 @@ public abstract class IntegrationTestBase {
         String dirWithConfiguration = resourceFolder("/grader/fixtures/Config/");
 
         File config = new File(dirWithConfiguration + configurationFile + ".java");
-        File copied = FileUtils.copyFile(config.getAbsolutePath(), workDir.toString()).toFile();
+        File copied = FilesUtils.copyFile(config.getAbsolutePath(), workDir.toString()).toFile();
 
         copied.renameTo(new File(copied.getParentFile() + "/Configuration.java"));
     }

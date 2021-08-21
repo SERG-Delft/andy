@@ -10,8 +10,8 @@ import java.io.File;
 import java.util.List;
 
 import static javax.tools.Diagnostic.Kind.ERROR;
-import static nl.tudelft.cse1110.andy.grader.util.FileUtils.concatenateDirectories;
-import static nl.tudelft.cse1110.andy.grader.util.FileUtils.writeToFile;
+import static nl.tudelft.cse1110.andy.grader.util.FilesUtils.concatenateDirectories;
+import static nl.tudelft.cse1110.andy.grader.util.FilesUtils.writeToFile;
 
 public class OutputGenerator {
 

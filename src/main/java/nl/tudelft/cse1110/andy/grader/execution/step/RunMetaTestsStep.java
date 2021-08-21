@@ -7,14 +7,14 @@ import nl.tudelft.cse1110.andy.grader.config.RunConfiguration;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
-import nl.tudelft.cse1110.andy.grader.util.FileUtils;
+import nl.tudelft.cse1110.andy.grader.util.FilesUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static nl.tudelft.cse1110.andy.grader.util.FileUtils.*;
+import static nl.tudelft.cse1110.andy.grader.util.FilesUtils.*;
 
 public class RunMetaTestsStep implements ExecutionStep {
 
@@ -103,7 +103,7 @@ public class RunMetaTestsStep implements ExecutionStep {
         if (!metaFile.createNewFile()) {
             throw new IOException("Failed to create a meta file.");
         }
-        FileUtils.writeToFile(metaFile, metaFileContent);
+        FilesUtils.writeToFile(metaFile, metaFileContent);
     }
 
     private ResultBuilder runMetaTest(DirectoryConfiguration dirCfg, File metaWorkingDir) {
