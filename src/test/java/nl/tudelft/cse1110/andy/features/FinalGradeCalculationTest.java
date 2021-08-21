@@ -12,7 +12,7 @@ public class FinalGradeCalculationTest extends IntegrationTestBase {
     @Test
     void calculatesCorrectFinalGrade() {
         String result = run(fullMode(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddConfiguration");
-        assertThat(result).has(ResultTestAssertions.finalGrade(46));
+        assertThat(result).has(ResultTestAssertions.finalGrade(42));
     }
 
 }
