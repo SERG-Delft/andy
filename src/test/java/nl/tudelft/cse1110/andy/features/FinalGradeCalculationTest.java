@@ -9,10 +9,11 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class FinalGradeCalculationTest extends IntegrationTestBase {
 
+    // 0.1 * 13/22 + 0.3 * 6/30 + 0.4 * 1/4 + 0.2 --> 42
     @Test
     void calculatesCorrectFinalGrade() {
         String result = run(fullMode(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddConfiguration");
-        assertThat(result).has(ResultTestAssertions.finalGrade(46));
+        assertThat(result).has(ResultTestAssertions.finalGrade(42));
     }
 
 }

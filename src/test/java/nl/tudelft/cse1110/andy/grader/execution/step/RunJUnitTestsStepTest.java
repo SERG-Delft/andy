@@ -93,8 +93,9 @@ public class RunJUnitTestsStepTest {
         @Test
         void noTests() {
             String result = run(onlyJUnitTests(), "NumberUtilsAddLibrary", "NumberUtilsNoTests");
+
             assertThat(result)
-                    .has(errorMessage("We do not see any tests. Are you sure you wrote them?"));
+                    .has(errorMessage("We do not see any tests."));
         }
 
         //Check to see if the System.out.printlns are caught from the console
@@ -119,6 +120,37 @@ public class RunJUnitTestsStepTest {
             assertThat(result)
                     .doesNotHave(consoleOutputExists());
         }
+
+
+
+        // @BeforeAll methods should be static
+        @Test
+        void nonStaticBeforeAll(){
+
+            String result = run(onlyJUnitTests(), "PiecewiseLibrary", "PiecewiseNonStaticBeforeAll");
+
+            assertThat(result)
+                    .has(errorMessage("--- Warning\n" +
+                            "Please check for the following JUnit pre-conditions:\n" +
+                            "- @BeforeAll and @AfterAll methods should be static\n" +
+                            "- @BeforeEach methods should be non-static"));
+        }
+
+
+        // @BeforeEach methods should NOT be static
+        @Test
+        void staticBeforeEach(){
+
+            String result = run(onlyJUnitTests(), "PiecewiseLibrary", "PiecewiseStaticBeforeEach");
+
+            assertThat(result)
+                    .has(errorMessage("--- Warning\n" +
+                            "Please check for the following JUnit pre-conditions:\n" +
+                            "- @BeforeAll and @AfterAll methods should be static\n" +
+                            "- @BeforeEach methods should be non-static"));
+        }
+
+
     }
 
     @Nested
@@ -229,7 +261,7 @@ public class RunJUnitTestsStepTest {
         @Test
         void exceptionThrownByTest() {
 
-            String result = run(onlyJUnitTests(), "MScAdmisisionLibrary", "MScAdmissionParameterizedTestThrowsException");  // 0/5 parameterized test cases
+            String result = run(onlyJUnitTests(), "MScAdmissionLibrary", "MScAdmissionParameterizedTestThrowsException");  // 0/5 parameterized test cases
 
             assertThat(result)
                     .has(numberOfJUnitTestsPassing(0))
@@ -243,6 +275,67 @@ public class RunJUnitTestsStepTest {
                     .has(errorType("AssertionError"))
                     .has(errorMessage("Expecting code to raise a throwable."));
         }
+
+        // @MethodSource method should be static -> test failure
+        @Test
+        void nonStaticMethodSourceSomeFail() {
+
+            String result = run(onlyJUnitTests(), "MScAdmissionLibrary", "MScAdmissionNonStaticMethodSourceSomeFail");  // 5/5 @Tests passing
+
+            assertThat(result)
+                    .has(numberOfJUnitTestsPassing(2))
+                    .has(totalNumberOfJUnitTests(2))
+                    .has(errorMessage("Make sure your corresponding method tudelft.domain.MScAdmissionTest.invalidInputs() is static!"));
+        }
+
+
+        // @MethodSource method should be static -> test failure
+        @Test
+        void nonStaticMethodSourceAllFail() {
+
+            String result = run(onlyJUnitTests(), "MScAdmissionLibrary", "MScAdmissionNonStaticMethodSourceAllFail");  // 5/5 @Tests passing
+
+            assertThat(result)
+                    .has(errorMessage("--- Warning\n" +
+                            "We do not see any tests.\n" +
+                            "Please check for the following JUnit pre-conditions:"));
+        }
+
+
+        // Student forgot @ParameterizedTest -> no tests detected
+        @Test
+        void forgotParameterizedTestAnnotation() {
+
+            String result = run(onlyJUnitTests(), "PassingGradeLibrary", "PassingGradeForgotParameterizedTestAnnotation");  // 5/5 @Tests passing
+
+            assertThat(result)
+                    .has(errorMessage("--- Warning\n" +
+                            "We do not see any tests.\n" +
+                            "Please check for the following JUnit pre-conditions:"));
+        }
+
+
+        //         Student forgot @MethodSource -> no tests detected
+        @Test
+        void forgotMethodSourceAnnotationAllFail() {
+
+            String result = run(onlyJUnitTests(), "PassingGradeLibrary", "PassingGradeForgotMethodSourceAnnotationAllFail");  // 5/5 @Tests passing
+
+            assertThat(result)
+                    .has(errorMessage("--- Warning\n" +
+                            "We do not see any tests.\n" +
+                            "Please check for the following JUnit pre-conditions:"));
+        }
+
+        @Test
+        void forgotMethodSourceAnnotationSomeFail() {
+
+            String result = run(onlyJUnitTests(), "MScAdmissionLibrary", "MScAdmissionForgotMethodSourceSomeFail");  // 5/5 @Tests passing
+
+            assertThat(result)
+                    .has(errorMessage("Make sure you have provided a @MethodSource for this @ParameterizedTest!"));
+        }
+
 
 
     }
@@ -284,6 +377,19 @@ public class RunJUnitTestsStepTest {
             assertThat(result)
                     .has(propertyTestFailing("testAddition"));
         }
+
+        // Student forgot @Property -> no tests detected
+        @Test
+        void forgotPropertyAnnotation() {
+
+            String result = run(onlyJUnitTests(), "MathArraysLibrary", "MathArraysForgotProperty");  // 5/5 @Tests passing
+
+            assertThat(result)
+                    .has(errorMessage("--- Warning\n" +
+                            "We do not see any tests.\n" +
+                            "Please check for the following JUnit pre-conditions:"));
+        }
+
     }
 
 }
