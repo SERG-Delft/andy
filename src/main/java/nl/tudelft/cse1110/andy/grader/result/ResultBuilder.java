@@ -127,7 +127,7 @@ public class ResultBuilder {
 
     public void logJUnitRun(TestExecutionSummary summary) {
         if (summary.getTestsFoundCount() == 0) {
-            noTestsFound();
+            noTestsFound(summary);
         } else {
 
             l("\n--- JUnit execution");
@@ -145,10 +145,27 @@ public class ResultBuilder {
         }
     }
 
-    private void noTestsFound() {
-        l("--- Warning\nWe do not see any tests. Are you sure you wrote them?");
+
+    /** Checks for different cases possible:
+     *  - Tests are not being executed due to JUnit API errors
+     *  - Student forgot @Test
+     * @param summary - JUnit execution summary
+     */
+    private void noTestsFound(TestExecutionSummary summary) {
+
+        if (summary.getContainersFoundCount() > summary.getContainersStartedCount()) {
+            l("--- Warning\n " +
+                    "Please check for the following JUnit pre-conditions:\n" +
+                    "- @BeforeAll and @AfterAll methods should be static\n" +
+                    "- @BeforeEach methods should be non-static\n" +
+                    "- Parameterized tests must be annotated with \"@ParameterizedTest\"\n" +
+                    "- Method sources must be provided as: \"@MethodSource(\"generator\")\" e.g.\n");
+        } else {
+            l("--- Warning\nWe do not see any tests. Are you sure you wrote them?");
+        }
         failed();
     }
+
 
     public int getTestsRan() {
         return this.testsRan;
@@ -179,9 +196,19 @@ public class ResultBuilder {
             }
         } else {
             l(String.format("\n- Test \"%s\" failed:", failure.getTestIdentifier().getDisplayName()));
-            l(String.format("%s", failure.getException()));
+            l(String.format("%s", simplifyTestErrorMessage(failure)));
         }
     }
+
+    private String simplifyTestErrorMessage(TestExecutionSummary.Failure failure) {
+        if (failure.getException().toString()
+                .contains("Cannot invoke non-static method [java.util.stream.Stream<org.junit.jupiter.params.provider.Arguments>")) {
+            String failingMethodSource = getFailingMethodSource(failure);
+            return "Make sure your corresponding @MethodSource method" + failingMethodSource + " is static!";
+        }
+        return failure.getException().toString();
+    }
+
 
     private String getParameterizedMethodName(TestExecutionSummary.Failure failure) {
         int endIndex = failure.getTestIdentifier().getLegacyReportingName().indexOf('(');
@@ -194,6 +221,14 @@ public class ResultBuilder {
         int close = failure.getTestIdentifier().getLegacyReportingName().lastIndexOf(']');
 
         return failure.getTestIdentifier().getLegacyReportingName().substring(open+1, close);
+    }
+
+
+    private String getFailingMethodSource(TestExecutionSummary.Failure failure) {
+        int open = failure.getException().toString().indexOf('>');
+        int close = failure.getException().toString().indexOf(']');
+
+        return failure.getException().toString().substring(open+1, close);
     }
 
 
