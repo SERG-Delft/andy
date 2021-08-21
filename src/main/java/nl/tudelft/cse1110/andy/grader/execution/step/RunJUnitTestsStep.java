@@ -1,11 +1,10 @@
 package nl.tudelft.cse1110.andy.grader.execution.step;
 
-import nl.tudelft.cse1110.andy.grader.config.DirectoryConfiguration;
-import nl.tudelft.cse1110.andy.grader.execution.step.helper.AdditionalReportJUnitListener;
-import nl.tudelft.cse1110.andy.grader.util.ClassUtils;
-import nl.tudelft.cse1110.andy.grader.config.Configuration;
+import nl.tudelft.cse1110.andy.grader.execution.Context;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
+import nl.tudelft.cse1110.andy.grader.execution.step.helper.AdditionalReportJUnitListener;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
+import nl.tudelft.cse1110.andy.grader.util.ClassUtils;
 import org.junit.platform.launcher.Launcher;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
 import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
@@ -21,15 +20,13 @@ import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass
 public class RunJUnitTestsStep implements ExecutionStep {
 
     @Override
-    public void execute(Configuration cfg, ResultBuilder result) {
-        DirectoryConfiguration dirCfg = cfg.getDirectoryConfiguration();
-
+    public void execute(Context ctx, ResultBuilder result) {
         try {
 
             SummaryGeneratingListener listener = new SummaryGeneratingListener();
             AdditionalReportJUnitListener additionalReportJUnitListener = new AdditionalReportJUnitListener(result);
 
-            String testClass = ClassUtils.getTestClass(dirCfg.getNewClassNames());
+            String testClass = ClassUtils.getTestClass(ctx.getNewClassNames());
             Class<?> clazz = Class.forName(testClass, false, Thread.currentThread().getContextClassLoader());
             result.debug(this, String.format("Name of the test class: %s", clazz.getName()));
 

@@ -1,15 +1,16 @@
 package nl.tudelft.cse1110.andy.grader.config;
 
-import nl.tudelft.cse1110.andy.grader.util.ClassUtils;
-
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class DefaultRunConfiguration extends RunConfiguration {
 
-    private DirectoryConfiguration dirCfg;
+    private final List<String> classesUnderTest;
 
-    public DefaultRunConfiguration(DirectoryConfiguration dirCfg) {
-        this.dirCfg = dirCfg;
+    public DefaultRunConfiguration(List<String> classesUnderTest) {
+        this.classesUnderTest = classesUnderTest;
     }
 
     @Override
@@ -24,7 +25,7 @@ public class DefaultRunConfiguration extends RunConfiguration {
 
     @Override
     public List<String> classesUnderTest() {
-        return ClassUtils.allClassesButTestingAndConfigOnes(this.dirCfg.getNewClassNames());
+        return Collections.unmodifiableList(classesUnderTest);
     }
 
 }

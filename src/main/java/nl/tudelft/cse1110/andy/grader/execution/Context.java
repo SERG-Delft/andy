@@ -1,13 +1,19 @@
-package nl.tudelft.cse1110.andy.grader.config;
+package nl.tudelft.cse1110.andy.grader.execution;
 
-public class Configuration {
+import nl.tudelft.cse1110.andy.grader.config.DirectoryConfiguration;
+import nl.tudelft.cse1110.andy.grader.config.RunConfiguration;
+
+import java.util.List;
+
+public class Context {
 
     private final ClassLoader cleanClassloader;
     private DirectoryConfiguration directoryConfiguration = null;
     private RunConfiguration runConfiguration = null;
     private long startTime;
+    private List<String> fullClassNames;
 
-    public Configuration() {
+    public Context() {
         this.cleanClassloader = Thread.currentThread().getContextClassLoader();
         this.startTime = System.nanoTime();
     }
@@ -34,5 +40,13 @@ public class Configuration {
 
     public ClassLoader getCleanClassloader() {
         return cleanClassloader;
+    }
+
+    public void setNewClassNames(List<String> fullClassNames) {
+        this.fullClassNames = fullClassNames;
+    }
+
+    public List<String> getNewClassNames() {
+        return fullClassNames;
     }
 }

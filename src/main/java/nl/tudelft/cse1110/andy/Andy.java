@@ -1,14 +1,14 @@
 package nl.tudelft.cse1110.andy;
 
 import nl.tudelft.cse1110.andy.grader.config.DirectoryConfiguration;
-import nl.tudelft.cse1110.andy.grader.config.Configuration;
+import nl.tudelft.cse1110.andy.grader.execution.Context;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 
 public class Andy {
 
     public static void main(String[] args) {
-        Configuration cfg = buildConfiguration();
+        Context cfg = buildConfiguration();
 
         ResultBuilder result = new ResultBuilder();
         ExecutionFlow flow = buildExecutionFlow(cfg, result);
@@ -22,8 +22,8 @@ public class Andy {
         System.out.println(result.buildDebugResult());
     }
 
-    private static Configuration buildConfiguration() {
-        Configuration cfg = new Configuration();
+    private static Context buildConfiguration() {
+        Context cfg = new Context();
 
         DirectoryConfiguration dirCfg = new DirectoryConfiguration(
                 System.getenv("WORKING_DIR"),
@@ -33,7 +33,7 @@ public class Andy {
         return cfg;
     }
 
-    private static ExecutionFlow buildExecutionFlow(Configuration cfg, ResultBuilder result) {
+    private static ExecutionFlow buildExecutionFlow(Context cfg, ResultBuilder result) {
         String mode = System.getenv("MODE");
         ExecutionFlow flow = null;
         if (mode.equals("FULL")) {

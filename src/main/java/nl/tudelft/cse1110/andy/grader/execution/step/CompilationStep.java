@@ -3,7 +3,7 @@ package nl.tudelft.cse1110.andy.grader.execution.step;
 import nl.tudelft.cse1110.andy.grader.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.grader.util.FileUtils;
-import nl.tudelft.cse1110.andy.grader.config.Configuration;
+import nl.tudelft.cse1110.andy.grader.execution.Context;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -27,8 +27,8 @@ public class CompilationStep implements ExecutionStep {
 
 
     @Override
-    public void execute(Configuration cfg, ResultBuilder result) {
-        DirectoryConfiguration dirCfg = cfg.getDirectoryConfiguration();
+    public void execute(Context ctx, ResultBuilder result) {
+        DirectoryConfiguration dirCfg = ctx.getDirectoryConfiguration();
 
         /*
          * creates the java compiler and diagnostic collector object
@@ -65,7 +65,7 @@ public class CompilationStep implements ExecutionStep {
             boolean compilationResult = task.call();
 
             if(compilationResult) {
-                dirCfg.setNewClassNames(scanner.getFullClassNames());
+                ctx.setNewClassNames(scanner.getFullClassNames());
                 result.compilationSuccess();
             }
             else {

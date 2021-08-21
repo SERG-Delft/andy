@@ -2,7 +2,7 @@ package nl.tudelft.cse1110.andy;
 
 import nl.tudelft.cse1110.andy.grader.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.grader.util.FileUtils;
-import nl.tudelft.cse1110.andy.grader.config.Configuration;
+import nl.tudelft.cse1110.andy.grader.execution.Context;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
@@ -24,7 +24,7 @@ public abstract class IntegrationTestBase {
     public String run(List<ExecutionStep> plan, String libraryFile, String solutionFile) {
         copyFiles(libraryFile, solutionFile);
 
-        Configuration cfg = new Configuration();
+        Context cfg = new Context();
 
         DirectoryConfiguration dirCfg = new DirectoryConfiguration(
                 workDir.toString(),

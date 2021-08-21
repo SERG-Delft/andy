@@ -1,7 +1,7 @@
 package nl.tudelft.cse1110.andy.grader.execution.step;
 
 import nl.tudelft.cse1110.andy.grader.config.DirectoryConfiguration;
-import nl.tudelft.cse1110.andy.grader.config.Configuration;
+import nl.tudelft.cse1110.andy.grader.execution.Context;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 
@@ -17,8 +17,8 @@ import static nl.tudelft.cse1110.andy.grader.util.FileUtils.*;
 public class OrganizeSourceCodeStep implements ExecutionStep {
 
     @Override
-    public void execute(Configuration cfg, ResultBuilder result) {
-        DirectoryConfiguration dirCfg = cfg.getDirectoryConfiguration();
+    public void execute(Context ctx, ResultBuilder result) {
+        DirectoryConfiguration dirCfg = ctx.getDirectoryConfiguration();
 
         try {
             List<String> listOfFiles = filePathsAsString(getAllJavaFiles(dirCfg.getWorkingDir()));

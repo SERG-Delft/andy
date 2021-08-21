@@ -1,37 +1,35 @@
 package nl.tudelft.cse1110.andy.grader.execution.step;
 
-import nl.tudelft.cse1110.andy.grader.config.Configuration;
 import nl.tudelft.cse1110.andy.grader.config.DefaultRunConfiguration;
-import nl.tudelft.cse1110.andy.grader.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.grader.config.RunConfiguration;
+import nl.tudelft.cse1110.andy.grader.execution.Context;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.grader.grade.GradeWeight;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 
 import java.util.NoSuchElementException;
 
+import static nl.tudelft.cse1110.andy.grader.util.ClassUtils.allClassesButTestingAndConfigOnes;
 import static nl.tudelft.cse1110.andy.grader.util.ClassUtils.getConfigurationClass;
 
 public class GetRunConfigurationStep implements ExecutionStep {
 
     @Override
-    public void execute(Configuration cfg, ResultBuilder result) {
-        DirectoryConfiguration dirCfg = cfg.getDirectoryConfiguration();
-
+    public void execute(Context ctx, ResultBuilder result) {
         try {
             ClassLoader currentClassLoader = Thread.currentThread().getContextClassLoader();
 
-            Class<?> runConfigurationClass = Class.forName(getConfigurationClass(dirCfg.getNewClassNames()), false, currentClassLoader);
+            Class<?> runConfigurationClass = Class.forName(getConfigurationClass(ctx.getNewClassNames()), false, currentClassLoader);
             RunConfiguration runConfiguration = (RunConfiguration) runConfigurationClass.getDeclaredConstructor().newInstance();
 
-            cfg.setRunConfiguration(runConfiguration);
+            ctx.setRunConfiguration(runConfiguration);
 
             this.buildGradeValues(runConfiguration, result);
             this.setTotalNumberOfMutations(runConfiguration, result);
         } catch (NoSuchElementException ex) {
             // There's no configuration set. We put a default one!
-            RunConfiguration runConfiguration = new DefaultRunConfiguration(cfg.getDirectoryConfiguration());
-            cfg.setRunConfiguration(runConfiguration);
+            RunConfiguration runConfiguration = new DefaultRunConfiguration(allClassesButTestingAndConfigOnes(ctx.getNewClassNames()));
+            ctx.setRunConfiguration(runConfiguration);
 
             this.buildGradeValues(runConfiguration, result);
             this.setTotalNumberOfMutations(runConfiguration, result);

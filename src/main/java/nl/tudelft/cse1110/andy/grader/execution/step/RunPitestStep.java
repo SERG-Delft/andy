@@ -1,6 +1,6 @@
 package nl.tudelft.cse1110.andy.grader.execution.step;
 
-import nl.tudelft.cse1110.andy.grader.config.Configuration;
+import nl.tudelft.cse1110.andy.grader.execution.Context;
 import nl.tudelft.cse1110.andy.grader.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.grader.config.RunConfiguration;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
@@ -27,12 +27,12 @@ public class RunPitestStep implements ExecutionStep {
 
 
     @Override
-    public void execute(Configuration cfg, ResultBuilder result) {
+    public void execute(Context ctx, ResultBuilder result) {
         final PluginServices plugins = PluginServices.makeForContextLoader();
         final OptionsParser parser = new OptionsParser(new PluginFilter(plugins));
 
-        String outputPitestDir = createDirectoryForPitest(cfg);
-        final ParseResult pr = parser.parse(buildArgs(cfg, outputPitestDir));
+        String outputPitestDir = createDirectoryForPitest(ctx);
+        final ParseResult pr = parser.parse(buildArgs(ctx, outputPitestDir));
 
         if (!pr.isOk()) {
             result.genericFailure(this, pr.getErrorMessage().get());
@@ -46,15 +46,15 @@ public class RunPitestStep implements ExecutionStep {
         }
     }
 
-    private String createDirectoryForPitest(Configuration cfg) {
-        String outputPitestDir = FileUtils.concatenateDirectories(cfg.getDirectoryConfiguration().getOutputDir(), "pitest");
+    private String createDirectoryForPitest(Context ctx) {
+        String outputPitestDir = FileUtils.concatenateDirectories(ctx.getDirectoryConfiguration().getOutputDir(), "pitest");
         FileUtils.createDirIfNeeded(outputPitestDir);
         return outputPitestDir;
     }
 
-    private String[] buildArgs(Configuration cfg, String pitestOutputDir) {
-        DirectoryConfiguration dirCfg = cfg.getDirectoryConfiguration();
-        RunConfiguration runCfg = cfg.getRunConfiguration();
+    private String[] buildArgs(Context ctx, String pitestOutputDir) {
+        DirectoryConfiguration dirCfg = ctx.getDirectoryConfiguration();
+        RunConfiguration runCfg = ctx.getRunConfiguration();
 
         List<String> args = new ArrayList<>();
 
@@ -65,7 +65,7 @@ public class RunPitestStep implements ExecutionStep {
         args.add(commaSeparated(runCfg.classesUnderTest()));
 
         args.add("--targetTests");
-        args.add(ClassUtils.getTestClass(dirCfg.getNewClassNames()));
+        args.add(ClassUtils.getTestClass(ctx.getNewClassNames()));
 
         args.add("--sourceDirs");
         args.add(dirCfg.getWorkingDir());

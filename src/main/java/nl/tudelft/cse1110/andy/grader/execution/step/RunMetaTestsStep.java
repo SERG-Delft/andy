@@ -1,6 +1,6 @@
 package nl.tudelft.cse1110.andy.grader.execution.step;
 
-import nl.tudelft.cse1110.andy.grader.config.Configuration;
+import nl.tudelft.cse1110.andy.grader.execution.Context;
 import nl.tudelft.cse1110.andy.grader.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.grader.config.MetaTest;
 import nl.tudelft.cse1110.andy.grader.config.RunConfiguration;
@@ -19,9 +19,9 @@ import static nl.tudelft.cse1110.andy.grader.util.FileUtils.*;
 public class RunMetaTestsStep implements ExecutionStep {
 
     @Override
-    public void execute(Configuration cfg, ResultBuilder result) {
-        DirectoryConfiguration dirCfg = cfg.getDirectoryConfiguration();
-        RunConfiguration runCfg = cfg.getRunConfiguration();
+    public void execute(Context ctx, ResultBuilder result) {
+        DirectoryConfiguration dirCfg = ctx.getDirectoryConfiguration();
+        RunConfiguration runCfg = ctx.getRunConfiguration();
 
         int score = 0;
 
@@ -49,7 +49,7 @@ public class RunMetaTestsStep implements ExecutionStep {
                 result.debug(this, String.format("Preparing meta test %s", metaTest.getName()));
 
                 /* Set the classloader to the cleanest classloader we have */
-                Thread.currentThread().setContextClassLoader(cfg.getCleanClassloader());
+                Thread.currentThread().setContextClassLoader(ctx.getCleanClassloader());
 
                 /* Copy the library and replace the library by the meta test */
                 File metaWorkingDir = createTemporaryDirectory("metaWorkplace").toFile();
@@ -112,7 +112,7 @@ public class RunMetaTestsStep implements ExecutionStep {
                 dirCfg.getOutputDir()
         );
 
-        Configuration metaCfg = new Configuration();
+        Context metaCfg = new Context();
         metaCfg.setDirectoryConfiguration(metaDirCfg);
 
         ResultBuilder metaResult = new ResultBuilder();

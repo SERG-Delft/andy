@@ -1,6 +1,6 @@
 package nl.tudelft.cse1110.andy.grader.result;
 
-import nl.tudelft.cse1110.andy.grader.config.Configuration;
+import nl.tudelft.cse1110.andy.grader.execution.Context;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -17,17 +17,17 @@ public class OutputGenerator {
 
     private static final String highlightColour = "red";
 
-    public static void exportOutputFile(Configuration cfg, ResultBuilder result) {
+    public static void exportOutputFile(Context cfg, ResultBuilder result) {
         File stdoutTxt = new File(concatenateDirectories(cfg.getDirectoryConfiguration().getOutputDir(), "stdout.txt"));
         writeToFile(stdoutTxt, isDebug(cfg) ? result.buildDebugResult() : result.buildEndUserResult());
     }
 
-    private static boolean isDebug(Configuration cfg) {
+    private static boolean isDebug(Context cfg) {
         /* run configuration might be null in case we stop the pipeline sooner, during to a compilation error */
         return cfg.getRunConfiguration()!=null && cfg.getRunConfiguration().debug();
     }
 
-    public static void exportXMLFile(Configuration cfg, ResultBuilder result) {
+    public static void exportXMLFile(Context cfg, ResultBuilder result) {
         String xml = buildResultsXml(result);
 
         File resultsXml = new File(concatenateDirectories(cfg.getDirectoryConfiguration().getOutputDir(), "results.xml"));
@@ -54,7 +54,7 @@ public class OutputGenerator {
         return xml.toString();
     }
 
-    public static void exportCompilationHighlights(Configuration cfg, List<Diagnostic<? extends JavaFileObject>> diagnostics){
+    public static void exportCompilationHighlights(Context cfg, List<Diagnostic<? extends JavaFileObject>> diagnostics){
         JSONObject obj = new JSONObject();
         JSONArray errors = new JSONArray();
         for (Diagnostic diagnostic : diagnostics) {

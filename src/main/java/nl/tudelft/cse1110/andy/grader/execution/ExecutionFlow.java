@@ -1,6 +1,5 @@
 package nl.tudelft.cse1110.andy.grader.execution;
 
-import nl.tudelft.cse1110.andy.grader.config.Configuration;
 import nl.tudelft.cse1110.andy.grader.execution.step.*;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 
@@ -11,14 +10,14 @@ import java.util.List;
 import static nl.tudelft.cse1110.andy.grader.result.OutputGenerator.*;
 
 public class ExecutionFlow {
-    private final Configuration cfg;
+    private final Context ctx;
     private final ResultBuilder result;
     private LinkedList<ExecutionStep> steps;
 
-    private ExecutionFlow(List<ExecutionStep> plan, Configuration cfg, ResultBuilder result) {
+    private ExecutionFlow(List<ExecutionStep> plan, Context ctx, ResultBuilder result) {
         this.steps = new LinkedList<>(plan);
         steps.addAll(0, basicSteps());
-        this.cfg = cfg;
+        this.ctx = ctx;
         this.result = result;
     }
 
@@ -29,7 +28,7 @@ public class ExecutionFlow {
 
             result.logStart(currentStep);
             try {
-                currentStep.execute(cfg, result);
+                currentStep.execute(ctx, result);
             } catch(Throwable e) {
                 result.genericFailure(currentStep, e);
             }
@@ -42,16 +41,16 @@ public class ExecutionFlow {
     /* In this method we also calculate the total time in seconds our tool took to run.
      */
     private void generateOutput() {
-        result.logTimeToRun(cfg.getStartTime());
+        result.logTimeToRun(ctx.getStartTime());
 
-        exportOutputFile(cfg, result);
-        exportXMLFile(cfg, result);
+        exportOutputFile(ctx, result);
+        exportXMLFile(ctx, result);
         if(result.containsCompilationErrors()) {
-            exportCompilationHighlights(cfg, result.getCompilationErrors());
+            exportCompilationHighlights(ctx, result.getCompilationErrors());
         }
     }
 
-    public static ExecutionFlow examMode(Configuration cfg, ResultBuilder result) {
+    public static ExecutionFlow examMode(Context cfg, ResultBuilder result) {
         return new ExecutionFlow(
                 Arrays.asList(
                         new RunJUnitTestsStep(),
@@ -63,11 +62,11 @@ public class ExecutionFlow {
         );
     }
 
-    public static ExecutionFlow asSteps(List<ExecutionStep> plan, Configuration cfg, ResultBuilder result) {
+    public static ExecutionFlow asSteps(List<ExecutionStep> plan, Context cfg, ResultBuilder result) {
         return new ExecutionFlow(plan, cfg, result);
     }
 
-    public static ExecutionFlow fullMode(Configuration cfg, ResultBuilder result) {
+    public static ExecutionFlow fullMode(Context cfg, ResultBuilder result) {
         return new ExecutionFlow(
                 Arrays.asList(
                         new RunJUnitTestsStep(),
@@ -81,7 +80,7 @@ public class ExecutionFlow {
         );
     }
 
-    public static ExecutionFlow justTests(Configuration cfg, ResultBuilder result) {
+    public static ExecutionFlow justTests(Context cfg, ResultBuilder result) {
         return new ExecutionFlow(
                 Arrays.asList(new RunJUnitTestsStep(), new CalculateFinalGradeStep()),
                 cfg,
