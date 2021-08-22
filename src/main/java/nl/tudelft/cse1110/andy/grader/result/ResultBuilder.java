@@ -128,7 +128,7 @@ public class ResultBuilder {
 
     public void logJUnitRun(TestExecutionSummary summary) {
         if (summary.getTestsFoundCount() == 0) {
-            noTestsFound();
+            noTestsFound(summary);
         } else {
 
             l("\n--- JUnit execution");
@@ -146,10 +146,28 @@ public class ResultBuilder {
         }
     }
 
-    private void noTestsFound() {
-        l("--- Warning\nWe do not see any tests. Are you sure you wrote them?");
+
+    /** Checks for different error cases possible when tests are not detected
+     * @param summary - JUnit execution summary
+     */
+    private void noTestsFound(TestExecutionSummary summary) {
+
+        if (summary.getContainersFoundCount() > summary.getContainersStartedCount()) {
+            l("--- Warning\nWe do not see any tests.\n" +
+                    "Please check for the following JUnit pre-conditions:\n" +
+                    "- @BeforeAll and @AfterAll methods should be static\n" +
+                    "- @BeforeEach methods should be non-static\n");
+        } else {
+            l("--- Warning\nWe do not see any tests.\n" +
+                    "Please check for the following JUnit pre-conditions:\n" +
+                    "- Normal tests must be annotated with \"@Test\"\n" +
+                    "- Parameterized tests must be annotated with \"@ParameterizedTest\"\n" +
+                    "- Method sources must be static and provided as: \"@MethodSource(\"generator\")\" e.g.\n" +
+                    "- Property based tests must be annotated with \"@Property\"\n");
+        }
         failed();
     }
+
 
     public int getTestsRan() {
         return this.testsRan;
@@ -180,9 +198,24 @@ public class ResultBuilder {
             }
         } else {
             l(String.format("\n- Test \"%s\" failed:", failure.getTestIdentifier().getDisplayName()));
-            l(String.format("%s", failure.getException()));
+            l(String.format("%s", simplifyTestErrorMessage(failure)));
         }
     }
+
+    private String simplifyTestErrorMessage(TestExecutionSummary.Failure failure) {
+        if (failure.getException().toString()
+                .contains("Cannot invoke non-static method")) {
+            String failingMethod = getFailingMethod(failure);
+
+            return "Make sure your corresponding method " + failingMethod + " is static!";
+        } else if (failure.getException().toString()
+                .contains("You must configure at least one set of arguments"))    {
+            return "Make sure you have provided a @MethodSource for this @ParameterizedTest!";
+        }
+        return failure.getException().toString();
+    }
+
+
 
     private String getParameterizedMethodName(TestExecutionSummary.Failure failure) {
         int endIndex = failure.getTestIdentifier().getLegacyReportingName().indexOf('(');
@@ -195,6 +228,14 @@ public class ResultBuilder {
         int close = failure.getTestIdentifier().getLegacyReportingName().lastIndexOf(']');
 
         return failure.getTestIdentifier().getLegacyReportingName().substring(open+1, close);
+    }
+
+
+    private String getFailingMethod(TestExecutionSummary.Failure failure) {
+        int open = failure.getException().toString().indexOf('>');
+        int close = failure.getException().toString().indexOf(']');
+
+        return failure.getException().toString().substring(open+2, close);
     }
 
 
@@ -281,10 +322,9 @@ public class ResultBuilder {
       
     }
 
-
     public void logCodeChecks(CheckScript script) {
 
-        if(script.hasChecks()) {
+        if (script.hasChecks()) {
             int weightedChecks = script.weightedChecks();
             int sumOfWeights = script.weights();
 
@@ -292,14 +332,13 @@ public class ResultBuilder {
                 l("\n--- Code checks");
                 l(script.generateReportOFailedChecks().trim());
 
-                l(String.format("\nCode checks score: %d/%d", weightedChecks, sumOfWeights));
+                l(String.format("\n%d/%d passed", weightedChecks, sumOfWeights));
             }
 
             grades.setCheckGrade(weightedChecks, sumOfWeights);
         }
 
     }
-
 
     public void logJacoco(Collection<IClassCoverage> coverages) {
         l("\n--- JaCoCo coverage");
@@ -350,7 +389,7 @@ public class ResultBuilder {
 
         // The failing can happen before we instantiated a grade calculator
         // e.g., during compilation time.
-        if(gradeCalculator != null)
+        if (gradeCalculator != null)
             gradeCalculator.failed();
     }
 

@@ -152,7 +152,7 @@ public class ResultTestAssertions {
     }
 
     public static Condition<String> scoreOfCodeChecks(int points, int total) {
-        return containsString("Code checks score: " + points + "/" + total);
+        return containsString(points + "/" + total);
     }
 
     public static Condition<String> codeCheck(String description, boolean pass, int weight) {
@@ -184,6 +184,23 @@ public class ResultTestAssertions {
     public static Condition<String> consoleOutputExists () {
         return containsString("- Console output");
     }
+
+    public static Condition<String> weDoNotSeeTestsMessage () {
+        return containsString("--- Warning\n" +
+                "We do not see any tests.\n" +
+                "Please check for the following JUnit pre-conditions:");
+    }
+
+    public static Condition<String> noMethodSourceProvidedMessage () {
+        return containsString("Make sure you have provided a @MethodSource for this @ParameterizedTest!");
+    }
+
+
+    public static Condition<String> hintAtNonStaticMethodSource(String methodSource) {
+        return containsString("Make sure your corresponding method " + methodSource
+                + "() is static!");
+    }
+
 
 }
 
