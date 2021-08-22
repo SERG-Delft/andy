@@ -123,7 +123,7 @@ public class RunJUnitTestsStepTest {
 
 
 
-        // @BeforeAll methods should be static
+        // @BeforeAll methods should be static -> no tests detected
         @Test
         void nonStaticBeforeAll(){
 
@@ -137,7 +137,7 @@ public class RunJUnitTestsStepTest {
         }
 
 
-        // @BeforeEach methods should NOT be static
+        // @BeforeEach methods should NOT be static -> no tests detected
         @Test
         void staticBeforeEach(){
 
@@ -283,7 +283,9 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "MScAdmissionLibrary", "MScAdmissionNonStaticMethodSourceSomeFail");
 
             assertThat(result)
-                    .has(errorMessage("Make sure your corresponding method tudelft.domain.MScAdmissionTest.validInputs() is static!"));
+//                    .has(numberOfJUnitTestsPassing(2))
+//                    .has(totalNumberOfJUnitTests(2))
+                    .has(errorMessage("Make sure your corresponding method tudelft.domain.MScAdmissionTest.validGenerator() is static!"));
         }
 
 
@@ -325,12 +327,15 @@ public class RunJUnitTestsStepTest {
                             "Please check for the following JUnit pre-conditions:"));
         }
 
+        //         Student forgot @MethodSource -> 3/3 tests pass
         @Test
         void forgotMethodSourceAnnotationSomeFail() {
 
             String result = run(onlyJUnitTests(), "MScAdmissionLibrary", "MScAdmissionForgotMethodSourceSomeFail");
 
             assertThat(result)
+                    .has(numberOfJUnitTestsPassing(3))
+                    .has(totalNumberOfJUnitTests(3))
                     .has(errorMessage("Make sure you have provided a @MethodSource for this @ParameterizedTest!"));
         }
 

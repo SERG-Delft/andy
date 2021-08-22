@@ -9,13 +9,13 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-// Method source "invalidInputs" should be static!
+// Method source "invalidInputs" should be static! -> 2/2 tests pass
 class MScAdmissionTest {
 
     private final MScAdmission admission = new MScAdmission();
 
     @ParameterizedTest
-    @MethodSource("validInputs")
+    @MethodSource("validGenerator")
     void validInputs(int act, double gpa, boolean expectedResult) {
         boolean admit = admission.admit(act, gpa);
 
@@ -23,18 +23,18 @@ class MScAdmissionTest {
     }
 
     @ParameterizedTest
-    @MethodSource("invalidInputs")
+    @MethodSource("invalidGenerator")
     void invalidInputs(int act, double gpa) {
         assertThatThrownBy(() -> {
             admission.admit(act, gpa);
         })
-                .isInstanceOf(AssertionError.class)
-                .hasMessageContaining("has to be between");
+        .isInstanceOf(AssertionError.class)
+        .hasMessageContaining("has to be between");
     }
 
     // ACT and GPA are tightly coupled: you quickly get into another equivalent class
     // we base the classes on the restrictions
-    private Stream<Arguments> validInputs() {
+    private Stream<Arguments> validGenerator() {
         return Stream.of(
                 Arguments.of(35,3.5, false), // off-point 3.5 ACT
                 Arguments.of(36,3.5, true),  // both on-points
@@ -45,7 +45,7 @@ class MScAdmissionTest {
 
     // ACT has to be between [0,36]
     // GPA has to be between [0, 4.0]
-    private static Stream<Arguments> invalidInputs() {
+    private static Stream<Arguments> invalidGenerator() {
         return Stream.of(
                 Arguments.of(-1,4.0),
                 Arguments.of(40,4.0)
