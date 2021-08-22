@@ -327,11 +327,12 @@ public class ResultBuilder {
         if(script.hasChecks()) {
 
             l("\n--- Code checks");
-            l(script.generateReportOFailedChecks().trim());
 
             int weightedChecks = script.weightedChecks();
             int sumOfWeights = script.weights();
-            l(String.format("\nCode checks score: %d/%d", weightedChecks, sumOfWeights));
+            l(String.format("%d/%d passed", weightedChecks, sumOfWeights));
+
+            l(script.generateReportOFailedChecks().trim());
 
             grades.setCheckGrade(weightedChecks, sumOfWeights);
         }
@@ -354,6 +355,7 @@ public class ResultBuilder {
         l(String.format("Line coverage: %d/%d", totalCoveredLines, totalLines));
         l(String.format("Instruction coverage: %d/%d", totalCoveredInstructions, totalInstructions));
         l(String.format("Branch coverage: %d/%d", totalCoveredBranches, totalBranches));
+
         grades.setBranchGrade(totalCoveredBranches, totalBranches);
     }
 
