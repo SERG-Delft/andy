@@ -75,6 +75,8 @@ public class GetRunConfigurationStep implements ExecutionStep {
             case PRACTICE_MODE -> {
                 if (hints() || noHints()) {
                     flow.addSteps(fullMode());
+                } else if (coverage()) {
+                    flow.addSteps(withCoverage());
                 } else {
                     flow.addSteps(justTests());
                 }
