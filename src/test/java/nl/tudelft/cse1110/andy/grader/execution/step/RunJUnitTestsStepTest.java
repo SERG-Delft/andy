@@ -93,8 +93,9 @@ public class RunJUnitTestsStepTest {
         @Test
         void noTests() {
             String result = run(onlyJUnitTests(), "NumberUtilsAddLibrary", "NumberUtilsNoTests");
+
             assertThat(result)
-                    .has(errorMessage("We do not see any tests. Are you sure you wrote them?"));
+                    .has(errorMessage("We do not see any tests."));
         }
 
         //Check to see if the System.out.printlns are caught from the console
@@ -119,6 +120,31 @@ public class RunJUnitTestsStepTest {
             assertThat(result)
                     .doesNotHave(consoleOutputExists());
         }
+
+
+
+        // @BeforeAll methods should be static -> no tests detected
+        @Test
+        void nonStaticBeforeAll(){
+
+            String result = run(onlyJUnitTests(), "PiecewiseLibrary", "PiecewiseNonStaticBeforeAll");
+
+            assertThat(result)
+                    .has(weDoNotSeeTestsMessage());
+        }
+
+
+        // @BeforeEach methods should NOT be static -> no tests detected
+        @Test
+        void staticBeforeEach(){
+
+            String result = run(onlyJUnitTests(), "PiecewiseLibrary", "PiecewiseStaticBeforeEach");
+
+            assertThat(result)
+                    .has(weDoNotSeeTestsMessage());
+        }
+
+
     }
 
     @Nested
@@ -229,7 +255,7 @@ public class RunJUnitTestsStepTest {
         @Test
         void exceptionThrownByTest() {
 
-            String result = run(onlyJUnitTests(), "MScAdmisisionLibrary", "MScAdmissionParameterizedTestThrowsException");  // 0/5 parameterized test cases
+            String result = run(onlyJUnitTests(), "MScAdmissionLibrary", "MScAdmissionParameterizedTestThrowsException");  // 0/5 parameterized test cases
 
             assertThat(result)
                     .has(numberOfJUnitTestsPassing(0))
@@ -243,6 +269,64 @@ public class RunJUnitTestsStepTest {
                     .has(errorType("AssertionError"))
                     .has(errorMessage("Expecting code to raise a throwable."));
         }
+
+        // @MethodSource method should be static -> test failure -> 2/2 pass (but in GitHub this is 0/2?)
+        @Test
+        void nonStaticMethodSourceSomeFail() {
+
+            String result = run(onlyJUnitTests(), "MScAdmissionLibrary", "MScAdmissionNonStaticMethodSourceSomeFail");
+
+            assertThat(result)
+                    .has(numberOfJUnitTestsPassing(2))
+                    .has(totalNumberOfJUnitTests(2))
+                    .has(hintAtNonStaticMethodSource("tudelft.domain.MScAdmissionTest.validGenerator"));
+        }
+
+
+        // @MethodSource method should be static -> test failure
+        @Test
+        void nonStaticMethodSourceAllFail() {
+
+            String result = run(onlyJUnitTests(), "MScAdmissionLibrary", "MScAdmissionNonStaticMethodSourceAllFail");
+
+            assertThat(result)
+                    .has(weDoNotSeeTestsMessage());
+        }
+
+
+        // Student forgot @ParameterizedTest -> no tests detected
+        @Test
+        void forgotParameterizedTestAnnotation() {
+
+            String result = run(onlyJUnitTests(), "PassingGradeLibrary", "PassingGradeForgotParameterizedTestAnnotation");
+
+            assertThat(result)
+                    .has(weDoNotSeeTestsMessage());
+        }
+
+
+        //         Student forgot @MethodSource -> no tests detected
+        @Test
+        void forgotMethodSourceAnnotationAllFail() {
+
+            String result = run(onlyJUnitTests(), "PassingGradeLibrary", "PassingGradeForgotMethodSourceAnnotationAllFail");
+
+            assertThat(result)
+                    .has(weDoNotSeeTestsMessage());
+        }
+
+        //         Student forgot @MethodSource -> 3/3 tests pass
+        @Test
+        void forgotMethodSourceAnnotationSomeFail() {
+
+            String result = run(onlyJUnitTests(), "MScAdmissionLibrary", "MScAdmissionForgotMethodSourceSomeFail");
+
+            assertThat(result)
+                    .has(numberOfJUnitTestsPassing(3))
+                    .has(totalNumberOfJUnitTests(3))
+                    .has(noMethodSourceProvidedMessage());
+        }
+
 
 
     }
@@ -284,6 +368,17 @@ public class RunJUnitTestsStepTest {
             assertThat(result)
                     .has(propertyTestFailing("testAddition"));
         }
+
+        // Student forgot @Property -> no tests detected
+        @Test
+        void forgotPropertyAnnotation() {
+
+            String result = run(onlyJUnitTests(), "MathArraysLibrary", "MathArraysForgotProperty");
+
+            assertThat(result)
+                    .has(weDoNotSeeTestsMessage());
+        }
+
     }
 
 }

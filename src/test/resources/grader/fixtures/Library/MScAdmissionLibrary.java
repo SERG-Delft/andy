@@ -7,8 +7,15 @@ class MScAdmission {
 
         // Dependency between act / gpa: they have a joint effect
 
-        assert (act >= 0 && act <= 36) : "ACT has to be between [0,36]";
-        assert (gpa >= 0 && gpa <= 4.0) : "GPA has to be between [0, 4.0]";
+
+        if (act < 0 || act > 36) {
+            throw new RuntimeException("ACT has to be between [0,36]");
+        }
+
+        if (gpa < 0 || gpa > 4.0) {
+            throw new RuntimeException("GPA has to be between [0, 4.0]");
+        }
+
 
         if(act==36 && gpa >= 3.5)
             return true;
