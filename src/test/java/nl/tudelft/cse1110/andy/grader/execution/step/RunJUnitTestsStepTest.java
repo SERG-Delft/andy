@@ -276,11 +276,11 @@ public class RunJUnitTestsStepTest {
                     .has(errorMessage("Expecting code to raise a throwable."));
         }
 
-        // @MethodSource method should be static -> test failure
+        // @MethodSource method should be static -> test failure -> 2/2 pass (but in GitHub this is 0/2?)
         @Test
         void nonStaticMethodSourceSomeFail() {
 
-            String result = run(onlyJUnitTests(), "MScAdmissionLibrary", "MScAdmissionNonStaticMethodSourceSomeFail");  // 5/5 @Tests passing
+            String result = run(onlyJUnitTests(), "MScAdmissionLibrary", "MScAdmissionNonStaticMethodSourceSomeFail");
 
             assertThat(result)
                     .has(errorMessage("Make sure your corresponding method tudelft.domain.MScAdmissionTest.validInputs() is static!"));
@@ -291,7 +291,7 @@ public class RunJUnitTestsStepTest {
         @Test
         void nonStaticMethodSourceAllFail() {
 
-            String result = run(onlyJUnitTests(), "MScAdmissionLibrary", "MScAdmissionNonStaticMethodSourceAllFail");  // 5/5 @Tests passing
+            String result = run(onlyJUnitTests(), "MScAdmissionLibrary", "MScAdmissionNonStaticMethodSourceAllFail");
 
             assertThat(result)
                     .has(errorMessage("--- Warning\n" +
@@ -304,7 +304,7 @@ public class RunJUnitTestsStepTest {
         @Test
         void forgotParameterizedTestAnnotation() {
 
-            String result = run(onlyJUnitTests(), "PassingGradeLibrary", "PassingGradeForgotParameterizedTestAnnotation");  // 5/5 @Tests passing
+            String result = run(onlyJUnitTests(), "PassingGradeLibrary", "PassingGradeForgotParameterizedTestAnnotation");
 
             assertThat(result)
                     .has(errorMessage("--- Warning\n" +
@@ -317,7 +317,7 @@ public class RunJUnitTestsStepTest {
         @Test
         void forgotMethodSourceAnnotationAllFail() {
 
-            String result = run(onlyJUnitTests(), "PassingGradeLibrary", "PassingGradeForgotMethodSourceAnnotationAllFail");  // 5/5 @Tests passing
+            String result = run(onlyJUnitTests(), "PassingGradeLibrary", "PassingGradeForgotMethodSourceAnnotationAllFail");
 
             assertThat(result)
                     .has(errorMessage("--- Warning\n" +
@@ -328,7 +328,7 @@ public class RunJUnitTestsStepTest {
         @Test
         void forgotMethodSourceAnnotationSomeFail() {
 
-            String result = run(onlyJUnitTests(), "MScAdmissionLibrary", "MScAdmissionForgotMethodSourceSomeFail");  // 5/5 @Tests passing
+            String result = run(onlyJUnitTests(), "MScAdmissionLibrary", "MScAdmissionForgotMethodSourceSomeFail");
 
             assertThat(result)
                     .has(errorMessage("Make sure you have provided a @MethodSource for this @ParameterizedTest!"));
@@ -380,7 +380,7 @@ public class RunJUnitTestsStepTest {
         @Test
         void forgotPropertyAnnotation() {
 
-            String result = run(onlyJUnitTests(), "MathArraysLibrary", "MathArraysForgotProperty");  // 5/5 @Tests passing
+            String result = run(onlyJUnitTests(), "MathArraysLibrary", "MathArraysForgotProperty");
 
             assertThat(result)
                     .has(errorMessage("--- Warning\n" +
