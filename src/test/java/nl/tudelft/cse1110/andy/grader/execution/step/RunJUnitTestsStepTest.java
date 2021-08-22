@@ -283,8 +283,8 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "MScAdmissionLibrary", "MScAdmissionNonStaticMethodSourceSomeFail");
 
             assertThat(result)
-//                    .has(numberOfJUnitTestsPassing(2))
-//                    .has(totalNumberOfJUnitTests(2))
+                    .has(numberOfJUnitTestsPassing(2))
+                    .has(totalNumberOfJUnitTests(2))
                     .has(errorMessage("Make sure your corresponding method tudelft.domain.MScAdmissionTest.validGenerator() is static!"));
         }
 

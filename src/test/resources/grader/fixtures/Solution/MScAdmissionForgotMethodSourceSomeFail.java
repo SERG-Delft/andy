@@ -28,7 +28,7 @@ class MScAdmissionTest {
         assertThatThrownBy(() -> {
             admission.admit(act, gpa);
         })
-                .isInstanceOf(AssertionError.class)
+                .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("has to be between");
     }
 

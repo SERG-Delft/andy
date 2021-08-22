@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-// Method source "invalidInputs" should be static! -> 2/2 tests pass
+// Method source "validGenerator" should be static! -> 2/2 tests pass
 class MScAdmissionTest {
 
     private final MScAdmission admission = new MScAdmission();
@@ -28,8 +28,8 @@ class MScAdmissionTest {
         assertThatThrownBy(() -> {
             admission.admit(act, gpa);
         })
-        .isInstanceOf(AssertionError.class)
-        .hasMessageContaining("has to be between");
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("has to be between");
     }
 
     // ACT and GPA are tightly coupled: you quickly get into another equivalent class
