@@ -152,7 +152,7 @@ public class ResultTestAssertions {
     }
 
     public static Condition<String> scoreOfCodeChecks(int points, int total) {
-        return containsString("Code checks score: " + points + "/" + total);
+        return containsString(points + "/" + total);
     }
 
     public static Condition<String> codeCheck(String description, boolean pass, int weight) {
