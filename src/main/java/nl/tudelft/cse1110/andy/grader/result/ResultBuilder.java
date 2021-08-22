@@ -289,7 +289,7 @@ public class ResultBuilder {
 
             int weightedChecks = script.weightedChecks();
             int sumOfWeights = script.weights();
-            l(String.format("Code checks score: %d/%d passed", weightedChecks, sumOfWeights));
+            l(String.format("%d/%d passed", weightedChecks, sumOfWeights));
 
             l(script.generateReportOFailedChecks().trim());
 
