@@ -130,10 +130,7 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "PiecewiseLibrary", "PiecewiseNonStaticBeforeAll");
 
             assertThat(result)
-                    .has(errorMessage("--- Warning\n" +
-                            "Please check for the following JUnit pre-conditions:\n" +
-                            "- @BeforeAll and @AfterAll methods should be static\n" +
-                            "- @BeforeEach methods should be non-static"));
+                    .has(weDoNotSeeTestsMessage());
         }
 
 
@@ -144,10 +141,7 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "PiecewiseLibrary", "PiecewiseStaticBeforeEach");
 
             assertThat(result)
-                    .has(errorMessage("--- Warning\n" +
-                            "Please check for the following JUnit pre-conditions:\n" +
-                            "- @BeforeAll and @AfterAll methods should be static\n" +
-                            "- @BeforeEach methods should be non-static"));
+                    .has(weDoNotSeeTestsMessage());
         }
 
 
@@ -285,7 +279,7 @@ public class RunJUnitTestsStepTest {
             assertThat(result)
                     .has(numberOfJUnitTestsPassing(2))
                     .has(totalNumberOfJUnitTests(2))
-                    .has(errorMessage("Make sure your corresponding method tudelft.domain.MScAdmissionTest.validGenerator() is static!"));
+                    .has(hintAtNonStaticMethodSource("tudelft.domain.MScAdmissionTest.validGenerator"));
         }
 
 
@@ -296,9 +290,7 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "MScAdmissionLibrary", "MScAdmissionNonStaticMethodSourceAllFail");
 
             assertThat(result)
-                    .has(errorMessage("--- Warning\n" +
-                            "We do not see any tests.\n" +
-                            "Please check for the following JUnit pre-conditions:"));
+                    .has(weDoNotSeeTestsMessage());
         }
 
 
@@ -309,9 +301,7 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "PassingGradeLibrary", "PassingGradeForgotParameterizedTestAnnotation");
 
             assertThat(result)
-                    .has(errorMessage("--- Warning\n" +
-                            "We do not see any tests.\n" +
-                            "Please check for the following JUnit pre-conditions:"));
+                    .has(weDoNotSeeTestsMessage());
         }
 
 
@@ -322,9 +312,7 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "PassingGradeLibrary", "PassingGradeForgotMethodSourceAnnotationAllFail");
 
             assertThat(result)
-                    .has(errorMessage("--- Warning\n" +
-                            "We do not see any tests.\n" +
-                            "Please check for the following JUnit pre-conditions:"));
+                    .has(weDoNotSeeTestsMessage());
         }
 
         //         Student forgot @MethodSource -> 3/3 tests pass
@@ -336,7 +324,7 @@ public class RunJUnitTestsStepTest {
             assertThat(result)
                     .has(numberOfJUnitTestsPassing(3))
                     .has(totalNumberOfJUnitTests(3))
-                    .has(errorMessage("Make sure you have provided a @MethodSource for this @ParameterizedTest!"));
+                    .has(noMethodSourceProvidedMessage());
         }
 
 
@@ -388,9 +376,7 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "MathArraysLibrary", "MathArraysForgotProperty");
 
             assertThat(result)
-                    .has(errorMessage("--- Warning\n" +
-                            "We do not see any tests.\n" +
-                            "Please check for the following JUnit pre-conditions:"));
+                    .has(weDoNotSeeTestsMessage());
         }
 
     }

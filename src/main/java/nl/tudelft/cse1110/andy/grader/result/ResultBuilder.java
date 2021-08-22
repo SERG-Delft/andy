@@ -152,7 +152,7 @@ public class ResultBuilder {
     private void noTestsFound(TestExecutionSummary summary) {
 
         if (summary.getContainersFoundCount() > summary.getContainersStartedCount()) {
-            l("--- Warning\n" +
+            l("--- Warning\nWe do not see any tests.\n" +
                     "Please check for the following JUnit pre-conditions:\n" +
                     "- @BeforeAll and @AfterAll methods should be static\n" +
                     "- @BeforeEach methods should be non-static\n");
@@ -205,7 +205,8 @@ public class ResultBuilder {
         if (failure.getException().toString()
                 .contains("Cannot invoke non-static method")) {
             String failingMethod = getFailingMethod(failure);
-            return "Make sure your corresponding method" + failingMethod + " is static!";
+
+            return "Make sure your corresponding method " + failingMethod + " is static!";
         } else if (failure.getException().toString()
                 .contains("You must configure at least one set of arguments"))    {
             return "Make sure you have provided a @MethodSource for this @ParameterizedTest!";
@@ -233,7 +234,7 @@ public class ResultBuilder {
         int open = failure.getException().toString().indexOf('>');
         int close = failure.getException().toString().indexOf(']');
 
-        return failure.getException().toString().substring(open+1, close);
+        return failure.getException().toString().substring(open+2, close);
     }
 
 

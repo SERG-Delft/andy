@@ -185,5 +185,22 @@ public class ResultTestAssertions {
         return containsString("- Console output");
     }
 
+    public static Condition<String> weDoNotSeeTestsMessage () {
+        return containsString("--- Warning\n" +
+                "We do not see any tests.\n" +
+                "Please check for the following JUnit pre-conditions:");
+    }
+
+    public static Condition<String> noMethodSourceProvidedMessage () {
+        return containsString("Make sure you have provided a @MethodSource for this @ParameterizedTest!");
+    }
+
+
+    public static Condition<String> hintAtNonStaticMethodSource(String methodSource) {
+        return containsString("Make sure your corresponding method " + methodSource
+                + "() is static!");
+    }
+
+
 }
 
