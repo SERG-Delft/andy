@@ -5,6 +5,7 @@ import nl.tudelft.cse1110.andy.grader.config.RunConfiguration;
 import nl.tudelft.cse1110.andy.grader.execution.Context;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
+import nl.tudelft.cse1110.andy.grader.execution.step.helper.ModeSelector;
 import nl.tudelft.cse1110.andy.grader.grade.GradeWeight;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 
@@ -71,55 +72,7 @@ public class GetRunConfigurationStep implements ExecutionStep {
         RunConfiguration runConfiguration = ctx.getRunConfiguration();
 
         String mode = runConfiguration.mode();
-        switch (mode) {
-            case PRACTICE_MODE -> {
-                if (hints() || noHints()) {
-                    flow.addSteps(fullMode());
-                } else if (coverage()) {
-                    flow.addSteps(withCoverage());
-                } else {
-                    flow.addSteps(justTests());
-                }
-            }
-            case EXAM_MODE -> {
-                if (coverage()) {
-                    flow.addSteps(withCoverage());
-                } else {
-                    flow.addSteps(justTests());
-                }
-            }
-            case GRADING_MODE -> flow.addSteps(fullMode());
-        }
+        ModeSelector modeSelector = new ModeSelector(mode);
+        flow.addSteps(modeSelector.selectMode());
     }
-
-    private List<ExecutionStep> justTests() {
-        return List.of(new RunJUnitTestsStep());
-    }
-
-    private List<ExecutionStep> examMode() {
-        return List.of(new RunJUnitTestsStep(),
-                new RunJacocoCoverageStep(),
-                new RunPitestStep(),
-                new CalculateFinalGradeStep());
-    }
-
-    private List<ExecutionStep> withCoverage() {
-        return List.of(
-                new RunJUnitTestsStep(),
-                new RunJacocoCoverageStep(),
-                new RunPitestStep()
-        );
-    }
-
-    private List<ExecutionStep> fullMode() {
-        return List.of(
-                new RunJUnitTestsStep(),
-                new RunJacocoCoverageStep(),
-                new RunPitestStep(),
-                new RunCodeChecksStep(),
-                new RunMetaTestsStep(),
-                new CalculateFinalGradeStep()
-        );
-    }
-
 }
