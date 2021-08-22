@@ -3,14 +3,17 @@ package nl.tudelft.cse1110.andy.grader.execution.step;
 import nl.tudelft.cse1110.andy.grader.config.DefaultRunConfiguration;
 import nl.tudelft.cse1110.andy.grader.config.RunConfiguration;
 import nl.tudelft.cse1110.andy.grader.execution.Context;
+import nl.tudelft.cse1110.andy.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.grader.grade.GradeWeight;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import static nl.tudelft.cse1110.andy.grader.util.ClassUtils.allClassesButTestingAndConfigOnes;
 import static nl.tudelft.cse1110.andy.grader.util.ClassUtils.getConfigurationClass;
+import static nl.tudelft.cse1110.andy.grader.util.ModeUtils.*;
 
 public class GetRunConfigurationStep implements ExecutionStep {
 
@@ -26,6 +29,7 @@ public class GetRunConfigurationStep implements ExecutionStep {
 
             this.buildGradeValues(runConfiguration, result);
             this.setTotalNumberOfMutations(runConfiguration, result);
+            this.addExecutionSteps(ctx);
         } catch (NoSuchElementException ex) {
             // There's no configuration set. We put a default one!
             RunConfiguration runConfiguration = new DefaultRunConfiguration(allClassesButTestingAndConfigOnes(ctx.getNewClassNames()));
@@ -33,6 +37,7 @@ public class GetRunConfigurationStep implements ExecutionStep {
 
             this.buildGradeValues(runConfiguration, result);
             this.setTotalNumberOfMutations(runConfiguration, result);
+            this.addExecutionSteps(ctx);
         } catch (Exception ex) {
             result.genericFailure(this, ex);
         }
@@ -54,6 +59,55 @@ public class GetRunConfigurationStep implements ExecutionStep {
     private void setTotalNumberOfMutations(RunConfiguration runCfg, ResultBuilder result) {
         int numberOfMutations = runCfg.numberOfMutationsToConsider();
         result.setNumberOfMutationsToConsider(numberOfMutations);
+    }
+
+    private void addExecutionSteps(Context ctx) {
+        ExecutionFlow flow = ctx.getFlow();
+        if (flow == null) {
+            return;
+        }
+
+        RunConfiguration runConfiguration = ctx.getRunConfiguration();
+
+        if (runConfiguration.isInExamMode()) {
+            if (coverage()) {
+                flow.addSteps(withCoverage());
+            } else {
+                flow.addSteps(justTests());
+            }
+        } else {
+            flow.addSteps(fullMode());
+        }
+    }
+
+    private List<ExecutionStep> justTests() {
+        return List.of(new RunJUnitTestsStep());
+    }
+
+    private List<ExecutionStep> examMode() {
+        return List.of(new RunJUnitTestsStep(),
+                new RunJacocoCoverageStep(),
+                new RunPitestStep(),
+                new CalculateFinalGradeStep());
+    }
+
+    private List<ExecutionStep> withCoverage() {
+        return List.of(
+                new RunJUnitTestsStep(),
+                new RunJacocoCoverageStep(),
+                new RunPitestStep()
+        );
+    }
+
+    private List<ExecutionStep> fullMode() {
+        return List.of(
+                new RunJUnitTestsStep(),
+                new RunJacocoCoverageStep(),
+                new RunPitestStep(),
+                new RunCodeChecksStep(),
+                new RunMetaTestsStep(),
+                new CalculateFinalGradeStep()
+        );
     }
 
 }

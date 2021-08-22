@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import static javax.tools.Diagnostic.Kind.ERROR;
+import static nl.tudelft.cse1110.andy.grader.util.ModeUtils.*;
 
 public class ResultBuilder {
 
@@ -284,13 +285,15 @@ public class ResultBuilder {
     public void logCodeChecks(CheckScript script) {
 
         if(script.hasChecks()) {
-
-            l("\n--- Code checks");
-            l(script.generateReportOFailedChecks().trim());
-
             int weightedChecks = script.weightedChecks();
             int sumOfWeights = script.weights();
-            l(String.format("\nCode checks score: %d/%d", weightedChecks, sumOfWeights));
+
+            if (hints()) {
+                l("\n--- Code checks");
+                l(script.generateReportOFailedChecks().trim());
+
+                l(String.format("\nCode checks score: %d/%d", weightedChecks, sumOfWeights));
+            }
 
             grades.setCheckGrade(weightedChecks, sumOfWeights);
         }
@@ -318,10 +321,12 @@ public class ResultBuilder {
     }
 
     public void logMetaTests(int score, int totalTests, List<String> failures) {
-        l("\n--- Meta tests");
-        l(String.format("%d/%d passed", score, totalTests));
-        for (String failure : failures) {
-            l(String.format("Meta test: %s FAILED", failure));
+        if (hints()) {
+            l("\n--- Meta tests");
+            l(String.format("%d/%d passed", score, totalTests));
+            for (String failure : failures) {
+                l(String.format("Meta test: %s FAILED", failure));
+            }
         }
 
         grades.setMetaGrade(score, totalTests);
@@ -345,7 +350,7 @@ public class ResultBuilder {
 
         // The failing can happen before we instantiated a grade calculator
         // e.g., during compilation time.
-        if(gradeCalculator!=null)
+        if(gradeCalculator != null)
             gradeCalculator.failed();
     }
 

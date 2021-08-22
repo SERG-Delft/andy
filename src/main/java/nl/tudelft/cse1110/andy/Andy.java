@@ -19,7 +19,7 @@ public class Andy {
         }
 
         flow.run();
-        System.out.println(result.buildDebugResult());
+        System.out.println(result.buildEndUserResult());
     }
 
     private static Context buildConfiguration() {
@@ -34,15 +34,8 @@ public class Andy {
     }
 
     private static ExecutionFlow buildExecutionFlow(Context cfg, ResultBuilder result) {
-        String mode = System.getenv("MODE");
-        ExecutionFlow flow = null;
-        if (mode.equals("FULL")) {
-            flow = ExecutionFlow.fullMode(cfg, result);
-        } else if (mode.equals("EXAM")) {
-            flow = ExecutionFlow.examMode(cfg, result);
-        } else if (mode.equals("TESTS")) {
-            flow = ExecutionFlow.justTests(cfg, result);
-        }
+        ExecutionFlow flow = ExecutionFlow.justBasic(cfg, result);
+        cfg.setFlow(flow);
         return flow;
     }
 }

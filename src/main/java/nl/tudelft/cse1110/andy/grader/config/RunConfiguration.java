@@ -54,4 +54,6 @@ public abstract class RunConfiguration {
         return false;
     }
 
+    public boolean isInExamMode() {return false;}
+
 }

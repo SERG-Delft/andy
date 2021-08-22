@@ -12,10 +12,17 @@ public class Context {
     private RunConfiguration runConfiguration = null;
     private long startTime;
     private List<String> fullClassNames;
+    private ExecutionFlow flow;
 
     public Context() {
         this.cleanClassloader = Thread.currentThread().getContextClassLoader();
         this.startTime = System.nanoTime();
+    }
+
+    public void setFlow(ExecutionFlow flow) {this.flow = flow;}
+
+    public ExecutionFlow getFlow() {
+        return flow;
     }
 
     public DirectoryConfiguration getDirectoryConfiguration() {

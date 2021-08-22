@@ -3,6 +3,7 @@ package nl.tudelft.cse1110.andy.grader.execution;
 import nl.tudelft.cse1110.andy.grader.execution.step.*;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 
+import javax.print.attribute.standard.ReferenceUriSchemesSupported;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,6 +37,10 @@ public class ExecutionFlow {
         } while(!steps.isEmpty() && !result.isFailed());
         result.logFinish();
         generateOutput();
+    }
+
+    public void addSteps(List<ExecutionStep> steps) {
+        this.steps.addAll(steps);
     }
 
     /* In this method we also calculate the total time in seconds our tool took to run.
@@ -86,6 +91,10 @@ public class ExecutionFlow {
                 cfg,
                 result
         );
+    }
+
+    public static ExecutionFlow justBasic(Context cfg, ResultBuilder result) {
+        return new ExecutionFlow(List.of(), cfg, result);
     }
 
     private List<ExecutionStep> basicSteps() {
