@@ -5,6 +5,7 @@ import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 
 import javax.print.attribute.standard.ReferenceUriSchemesSupported;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -55,34 +56,8 @@ public class ExecutionFlow {
         }
     }
 
-    public static ExecutionFlow examMode(Context cfg, ResultBuilder result) {
-        return new ExecutionFlow(
-                Arrays.asList(
-                        new RunJUnitTestsStep(),
-                        new RunJacocoCoverageStep(),
-                        new RunPitestStep(),
-                        new CalculateFinalGradeStep()),
-                cfg,
-                result
-        );
-    }
-
     public static ExecutionFlow asSteps(List<ExecutionStep> plan, Context cfg, ResultBuilder result) {
         return new ExecutionFlow(plan, cfg, result);
-    }
-
-    public static ExecutionFlow fullMode(Context cfg, ResultBuilder result) {
-        return new ExecutionFlow(
-                Arrays.asList(
-                        new RunJUnitTestsStep(),
-                        new RunJacocoCoverageStep(),
-                        new RunPitestStep(),
-                        new RunCodeChecksStep(),
-                        new RunMetaTestsStep(),
-                        new CalculateFinalGradeStep()),
-                cfg,
-                result
-        );
     }
 
     public static ExecutionFlow justTests(Context cfg, ResultBuilder result) {
@@ -94,7 +69,7 @@ public class ExecutionFlow {
     }
 
     public static ExecutionFlow justBasic(Context cfg, ResultBuilder result) {
-        return new ExecutionFlow(List.of(), cfg, result);
+        return new ExecutionFlow(Collections.emptyList(), cfg, result);
     }
 
     private List<ExecutionStep> basicSteps() {

@@ -8,15 +8,14 @@ import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 public class Andy {
 
     public static void main(String[] args) {
+        if (System.getenv("MODE") == null) {
+            throw new RuntimeException("No mode has been set.");
+        }
+
         Context cfg = buildConfiguration();
 
         ResultBuilder result = new ResultBuilder();
         ExecutionFlow flow = buildExecutionFlow(cfg, result);
-
-        if(flow == null) {
-            System.out.println("Unknown mode");
-            System.exit(-1);
-        }
 
         flow.run();
         System.out.println(result.buildEndUserResult());

@@ -14,6 +14,7 @@ import java.util.NoSuchElementException;
 import static nl.tudelft.cse1110.andy.grader.util.ClassUtils.allClassesButTestingAndConfigOnes;
 import static nl.tudelft.cse1110.andy.grader.util.ClassUtils.getConfigurationClass;
 import static nl.tudelft.cse1110.andy.grader.util.ModeUtils.*;
+import static nl.tudelft.cse1110.andy.grader.config.RunConfiguration.*;
 
 public class GetRunConfigurationStep implements ExecutionStep {
 
@@ -69,14 +70,23 @@ public class GetRunConfigurationStep implements ExecutionStep {
 
         RunConfiguration runConfiguration = ctx.getRunConfiguration();
 
-        if (runConfiguration.isInExamMode()) {
-            if (coverage()) {
-                flow.addSteps(withCoverage());
-            } else {
-                flow.addSteps(justTests());
+        String mode = runConfiguration.mode();
+        switch (mode) {
+            case PRACTICE_MODE -> {
+                if (hints() || noHints()) {
+                    flow.addSteps(fullMode());
+                } else {
+                    flow.addSteps(justTests());
+                }
             }
-        } else {
-            flow.addSteps(fullMode());
+            case EXAM_MODE -> {
+                if (coverage()) {
+                    flow.addSteps(withCoverage());
+                } else {
+                    flow.addSteps(justTests());
+                }
+            }
+            case GRADING_MODE -> flow.addSteps(fullMode());
         }
     }
 

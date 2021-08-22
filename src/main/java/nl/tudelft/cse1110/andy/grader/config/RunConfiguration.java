@@ -26,6 +26,10 @@ public abstract class RunConfiguration {
             "EXPERIMENTAL_BIG_INTEGER", "EXPERIMENTAL_NAKED_RECEIVER", "EXPERIMENTAL_MEMBER_VARIABLE", "ABS",
             "AOR", "AOD", "CRCR", "OBBN", "ROR", "UOI");
 
+    public static final String PRACTICE_MODE = "practice";
+    public static final String EXAM_MODE = "exam";
+    public static final String GRADING_MODE = "grading";
+
     public abstract List<String> classesUnderTest();
 
     public abstract Map<String, Float> weights();
@@ -54,6 +58,8 @@ public abstract class RunConfiguration {
         return false;
     }
 
-    public boolean isInExamMode() {return false;}
+    public String mode() {
+        return PRACTICE_MODE;
+    }
 
 }
