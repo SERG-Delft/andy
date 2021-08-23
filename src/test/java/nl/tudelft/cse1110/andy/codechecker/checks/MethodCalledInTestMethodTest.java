@@ -1,5 +1,6 @@
 package nl.tudelft.cse1110.andy.codechecker.checks;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -18,6 +19,13 @@ public class MethodCalledInTestMethodTest extends ChecksBaseTest {
         Check check = new MethodCalledInTestMethod(methodName);
         run("MethodCalled.java", check);
         assertThat(check.result()).isEqualTo(expectation);
+    }
+
+    @Test
+    void shouldIgnoreAnonymousClasses() { // was breaking in midterm 2021
+        Check check = new MethodCalledInTestMethod("getPoints");
+        run("StackOverflowTestWithAnonymousClass.java", check);
+        assertThat(check.result()).isTrue();
     }
 
 }

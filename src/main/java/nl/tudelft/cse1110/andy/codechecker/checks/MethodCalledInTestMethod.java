@@ -34,6 +34,7 @@ public class MethodCalledInTestMethod extends WithinTestMethod {
         return super.visit(mi);
     }
 
+
     @Override
     public boolean result() {
         return methodWasCalled;

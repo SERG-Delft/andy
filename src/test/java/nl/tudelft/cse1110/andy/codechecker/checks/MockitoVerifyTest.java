@@ -1,5 +1,6 @@
 package nl.tudelft.cse1110.andy.codechecker.checks;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -38,6 +39,13 @@ public class MockitoVerifyTest extends ChecksBaseTest {
     void times0IsTheSameAsNever(String methodWeExpectAVerify) {
         Check check = new MockitoVerify(methodWeExpectAVerify, TEST, Comparison.EQ, 1, true);
         run("MockitoVerifyNeverCalls.java", check);
+        assertThat(check.result()).isTrue();
+    }
+
+    @Test
+    void ignoreAnonymousClasses() { // was breaking in midterm 2021
+        Check check = new MockitoVerify("update", TEST, Comparison.EQ, 2);
+        run("StackOverflowTestWithAnonymousClass.java", check);
         assertThat(check.result()).isTrue();
     }
 

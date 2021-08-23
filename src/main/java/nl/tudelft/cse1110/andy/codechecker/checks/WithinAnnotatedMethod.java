@@ -46,4 +46,11 @@ public abstract class WithinAnnotatedMethod extends Check {
          */
         annotationFound = false;
     }
+
+
+    @Override
+    public boolean visit(AnonymousClassDeclaration classDeclaration) {
+        // we fully ignore anonymous classes
+        return false;
+    }
 }
