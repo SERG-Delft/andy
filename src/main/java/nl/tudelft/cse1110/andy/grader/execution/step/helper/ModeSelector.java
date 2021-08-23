@@ -44,11 +44,11 @@ public class ModeSelector {
         return Collections.emptyList();
     }
 
-    private List<ExecutionStep> justTests() {
+    public List<ExecutionStep> justTests() {
         return List.of(new RunJUnitTestsStep());
     }
 
-    private List<ExecutionStep> withCoverage() {
+    public List<ExecutionStep> withCoverage() {
         return List.of(
                 new RunJUnitTestsStep(),
                 new RunJacocoCoverageStep(),
@@ -56,7 +56,7 @@ public class ModeSelector {
         );
     }
 
-    private List<ExecutionStep> fullMode() {
+    public List<ExecutionStep> fullMode() {
         return List.of(
                 new RunJUnitTestsStep(),
                 new RunJacocoCoverageStep(),

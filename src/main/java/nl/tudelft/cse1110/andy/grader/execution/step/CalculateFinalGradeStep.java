@@ -10,4 +10,9 @@ public class CalculateFinalGradeStep implements ExecutionStep {
     public void execute(Context ctx, ResultBuilder result) {
         result.logFinalGrade();
     }
+
+    @Override
+    public boolean equals(Object other) {
+        return other instanceof CalculateFinalGradeStep;
+    }
 }

@@ -160,4 +160,9 @@ public class RunJacocoCoverageStep implements ExecutionStep {
 
         visitor.visitEnd();
     }
+
+    @Override
+    public boolean equals(Object other) {
+        return other instanceof RunJacocoCoverageStep;
+    }
 }

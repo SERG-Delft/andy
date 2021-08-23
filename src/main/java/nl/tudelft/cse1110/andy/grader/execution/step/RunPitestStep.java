@@ -125,4 +125,8 @@ public class RunPitestStep implements ExecutionStep {
 
     }
 
+    @Override
+    public boolean equals(Object other) {
+        return other instanceof RunPitestStep;
+    }
 }

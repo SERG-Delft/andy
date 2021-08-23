@@ -47,4 +47,9 @@ public class ReplaceClassloaderStep implements ExecutionStep {
             throw new RuntimeException("Invalid classpath entry: " + path, ex);
         }
     }
+
+    @Override
+    public boolean equals(Object other) {
+        return other instanceof ReplaceClassloaderStep;
+    }
 }

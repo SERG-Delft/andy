@@ -123,4 +123,8 @@ public class RunMetaTestsStep implements ExecutionStep {
         return metaResult;
     }
 
+    @Override
+    public boolean equals(Object other) {
+        return other instanceof RunMetaTestsStep;
+    }
 }

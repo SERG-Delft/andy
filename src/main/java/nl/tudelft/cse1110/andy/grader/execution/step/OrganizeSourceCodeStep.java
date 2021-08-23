@@ -37,5 +37,8 @@ public class OrganizeSourceCodeStep implements ExecutionStep {
         }
     }
 
-
+    @Override
+    public boolean equals(Object other) {
+        return other instanceof OrganizeSourceCodeStep;
+    }
 }

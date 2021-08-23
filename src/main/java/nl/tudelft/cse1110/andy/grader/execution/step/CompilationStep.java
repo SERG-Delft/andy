@@ -113,4 +113,9 @@ public class CompilationStep implements ExecutionStep {
         }
     }
 
+    @Override
+    public boolean equals(Object other) {
+        return other instanceof CompilationStep;
+    }
+
 }

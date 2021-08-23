@@ -21,4 +21,9 @@ public class RunCodeChecksStep implements ExecutionStep {
         result.logCodeChecks(script);
 
     }
+
+    @Override
+    public boolean equals(Object other) {
+        return other instanceof RunCodeChecksStep;
+    }
 }

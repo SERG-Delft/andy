@@ -75,4 +75,9 @@ public class GetRunConfigurationStep implements ExecutionStep {
         ModeSelector modeSelector = new ModeSelector(mode);
         flow.addSteps(modeSelector.selectMode());
     }
+
+    @Override
+    public boolean equals(Object other) {
+        return other instanceof GetRunConfigurationStep;
+    }
 }

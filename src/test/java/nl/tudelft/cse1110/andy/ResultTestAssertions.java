@@ -1,7 +1,9 @@
 package nl.tudelft.cse1110.andy;
 
+import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
 import org.assertj.core.api.Condition;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,6 +43,20 @@ public class ResultTestAssertions {
                 }
 
                 return count == times;
+            }
+        };
+    }
+
+    public static Condition<List<ExecutionStep>> executionStep(ExecutionStep stepToFind) {
+        return new Condition<>() {
+            @Override
+            public boolean matches(List<ExecutionStep> steps) {
+                for (ExecutionStep step : steps) {
+                    if (step.equals(stepToFind)) {
+                        return true;
+                    }
+                }
+                return false;
             }
         };
     }
