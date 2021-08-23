@@ -191,8 +191,7 @@ public class RunJUnitTestsStepTest {
             assertThat(result)
                     .has(numberOfJUnitTestsPassing(4))
                     .has(totalNumberOfJUnitTests(5))
-                    .has(failingParameterizedTestName("passed"))
-                    .has(parameterizedTestCaseNumber(3))
+                    .has(parameterizedTestFailing("passed", 3))
                     .has(errorType("AssertionFailedError"));
         }
 
@@ -207,10 +206,9 @@ public class RunJUnitTestsStepTest {
             assertThat(result)
                     .has(numberOfJUnitTestsPassing(11))
                     .has(totalNumberOfJUnitTests(14))
-                    .has(failingParameterizedTestName("validTest"))
-                    .has(failingParameterizedTestName("invalidTest"))
-                    .has(parameterizedTestCaseNumber(1))
-                    .has(parameterizedTestCaseNumber(2))
+                    .has(parameterizedTestFailing("validTest", 1))
+                    .has(parameterizedTestFailing("validTest", 2))
+                    .has(parameterizedTestFailing("invalidTest", 1))
                     .has(errorType("AssertionFailedError"));
         }
 
@@ -225,13 +223,12 @@ public class RunJUnitTestsStepTest {
             assertThat(result)
                     .has(numberOfJUnitTestsPassing(0))
                     .has(totalNumberOfJUnitTests(6))
-                    .has(failingParameterizedTestName("sumValidCases"))
-                    .has(parameterizedTestCaseNumber(1))
-                    .has(parameterizedTestCaseNumber(2))
-                    .has(parameterizedTestCaseNumber(3))
-                    .has(parameterizedTestCaseNumber(4))
-                    .has(parameterizedTestCaseNumber(5))
-                    .has(parameterizedTestCaseNumber(6))
+                    .has(parameterizedTestFailing("sumValidCases", 1))
+                    .has(parameterizedTestFailing("sumValidCases", 2))
+                    .has(parameterizedTestFailing("sumValidCases", 3))
+                    .has(parameterizedTestFailing("sumValidCases", 4))
+                    .has(parameterizedTestFailing("sumValidCases", 5))
+                    .has(parameterizedTestFailing("sumValidCases", 6))
                     .has(errorType("AssertionFailedError"))
                     .has(errorType("IllegalArgumentException"));  // method will throw exception (See Library.java)
         }
@@ -260,11 +257,11 @@ public class RunJUnitTestsStepTest {
             assertThat(result)
                     .has(numberOfJUnitTestsPassing(0))
                     .has(totalNumberOfJUnitTests(5))
-                    .has(failingParameterizedTestName("validInputs"))
-                    .has(failingParameterizedTestName("invalidInputs"))
-                    .has(parameterizedTestCaseNumber(1))
-                    .has(parameterizedTestCaseNumber(2))
-                    .has(parameterizedTestCaseNumber(3))
+                    .has(parameterizedTestFailing("validInputs", 1))
+                    .has(parameterizedTestFailing("validInputs", 2))
+                    .has(parameterizedTestFailing("invalidInputs", 1))
+                    .has(parameterizedTestFailing("invalidInputs", 2))
+                    .has(parameterizedTestFailing("invalidInputs", 3))
                     .has(errorType("ParameterResolutionException"))
                     .has(errorType("AssertionError"))
                     .has(errorMessage("Expecting code to raise a throwable."));

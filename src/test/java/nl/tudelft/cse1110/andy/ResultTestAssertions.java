@@ -100,16 +100,6 @@ public class ResultTestAssertions {
     }
 
 
-    public static Condition<String> failingParameterizedTestName(String testName) {
-        return containsString("- Parameterized test " + "\"" + testName + "\"" + ",");
-    }
-
-
-    public static Condition<String> parameterizedTestCaseNumber(int testCaseNumber) {
-        return containsString(" test case #" + testCaseNumber + " failed:");
-    }
-
-
     public static Condition<String> uninvokedMethod(String uninvokedMethod) {
         return containsString("Wanted but not invoked:\n" + uninvokedMethod);
     }
