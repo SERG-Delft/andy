@@ -79,7 +79,7 @@ public class RunMetaTestsStep implements ExecutionStep {
                 deleteDirectory(metaWorkingDir);
             }
 
-            result.logMetaTests(score, metaTests.size(), failures);
+            result.logMetaTests(score, metaTests.size(), failures, ctx.getEnvironmentMode());
         } catch (Exception ex) {
             result.genericFailure(this, ex);
         } finally {
@@ -112,7 +112,7 @@ public class RunMetaTestsStep implements ExecutionStep {
                 dirCfg.getOutputDir()
         );
 
-        Context metaCfg = new Context();
+        Context metaCfg = new Context("TESTS");
         metaCfg.setDirectoryConfiguration(metaDirCfg);
 
         ResultBuilder metaResult = new ResultBuilder();

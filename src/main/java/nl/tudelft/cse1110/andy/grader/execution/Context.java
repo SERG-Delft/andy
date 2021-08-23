@@ -13,10 +13,12 @@ public class Context {
     private long startTime;
     private List<String> fullClassNames;
     private ExecutionFlow flow;
+    private String environmentMode;
 
-    public Context() {
+    public Context(String environmentMode) {
         this.cleanClassloader = Thread.currentThread().getContextClassLoader();
         this.startTime = System.nanoTime();
+        this.environmentMode = environmentMode;
     }
 
     public void setFlow(ExecutionFlow flow) {this.flow = flow;}
@@ -55,5 +57,9 @@ public class Context {
 
     public List<String> getNewClassNames() {
         return fullClassNames;
+    }
+
+    public String getEnvironmentMode() {
+        return environmentMode;
     }
 }

@@ -322,13 +322,13 @@ public class ResultBuilder {
       
     }
 
-    public void logCodeChecks(CheckScript script) {
+    public void logCodeChecks(CheckScript script, String environmentMode) {
 
         if (script.hasChecks()) {
             int weightedChecks = script.weightedChecks();
             int sumOfWeights = script.weights();
 
-            if (hints()) {
+            if (hints(environmentMode)) {
                 l("\n--- Code checks");
                 l(script.generateReportOFailedChecks().trim());
 
@@ -359,8 +359,8 @@ public class ResultBuilder {
         grades.setBranchGrade(totalCoveredBranches, totalBranches);
     }
 
-    public void logMetaTests(int score, int totalTests, List<String> failures) {
-        if (hints()) {
+    public void logMetaTests(int score, int totalTests, List<String> failures, String environmentMode) {
+        if (hints(environmentMode)) {
             l("\n--- Meta tests");
             l(String.format("%d/%d passed", score, totalTests));
             for (String failure : failures) {

@@ -22,7 +22,7 @@ public class Andy {
     }
 
     private static Context buildConfiguration() {
-        Context cfg = new Context();
+        Context cfg = new Context(System.getenv("MODE"));
 
         DirectoryConfiguration dirCfg = new DirectoryConfiguration(
                 System.getenv("WORKING_DIR"),

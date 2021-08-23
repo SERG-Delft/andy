@@ -2,24 +2,19 @@ package nl.tudelft.cse1110.andy.grader.util;
 
 public class ModeUtils {
 
-    private static String getMode() {
-        return System.getenv("MODE");
+    public static boolean hints(String mode) {
+        return mode.equals("HINTS");
     }
 
-    public static boolean tests() {
-        return getMode().equals("TESTS");
+    public static boolean noHints(String mode) {
+        return mode.equals("NO_HINTS");
     }
 
-    public static boolean coverage() {
-        return getMode().equals("COVERAGE");
+    public static boolean coverage(String mode) {
+        return mode.equals("COVERAGE");
     }
 
-    public static boolean noHints() {
-        return getMode().equals("NO_HINTS");
+    public static boolean tests(String mode) {
+        return mode.equals("TESTS");
     }
-
-    public static boolean hints() {
-        return getMode().equals("HINTS");
-    }
-
 }

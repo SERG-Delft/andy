@@ -7,9 +7,7 @@ import nl.tudelft.cse1110.andy.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 import org.junit.jupiter.api.io.TempDir;
-import nl.tudelft.cse1110.andy.grader.util.ModeUtils;
 import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -26,12 +24,9 @@ public abstract class IntegrationTestBase {
     protected Path workDir;
 
     public String run(List<ExecutionStep> plan, String libraryFile, String solutionFile) {
-        MockedStatic<ModeUtils> mockStatic = mockStatic(ModeUtils.class);
-        when(ModeUtils.hints()).thenReturn(true);
-
         copyFiles(libraryFile, solutionFile);
 
-        Context cfg = new Context();
+        Context cfg = new Context("HINTS");
 
         DirectoryConfiguration dirCfg = new DirectoryConfiguration(
                 workDir.toString(),
@@ -47,7 +42,6 @@ public abstract class IntegrationTestBase {
         try {
             ExecutionFlow flow = ExecutionFlow.asSteps(plan, cfg, result);
             flow.run();
-            mockStatic.close();
         } catch(Exception e) {
             // something went wrong, let's print the debugging version in the console
             // and fail the test

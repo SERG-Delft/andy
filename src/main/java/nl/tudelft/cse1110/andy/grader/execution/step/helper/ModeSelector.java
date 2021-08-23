@@ -13,25 +13,27 @@ import static nl.tudelft.cse1110.andy.grader.util.ModeUtils.*;
 
 public class ModeSelector {
 
-    private String mode;
+    private String runMode;
+    private String environmentMode;
 
-    public ModeSelector(String mode) {
-        this.mode = mode;
+    public ModeSelector(String runMode, String environmentMode) {
+        this.runMode = runMode;
+        this.environmentMode = environmentMode;
     }
 
     public List<ExecutionStep> selectMode() {
-        switch (mode) {
+        switch (runMode) {
             case PRACTICE_MODE -> {
-                if (hints() || noHints()) {
+                if (hints(environmentMode) || noHints(environmentMode)) {
                     return fullMode();
-                } else if (coverage()) {
+                } else if (coverage(environmentMode)) {
                     return withCoverage();
                 } else {
                     return justTests();
                 }
             }
             case EXAM_MODE -> {
-                if (coverage()) {
+                if (coverage(environmentMode)) {
                     return withCoverage();
                 } else {
                     return justTests();

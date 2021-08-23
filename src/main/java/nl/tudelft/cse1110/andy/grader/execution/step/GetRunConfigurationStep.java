@@ -71,8 +71,9 @@ public class GetRunConfigurationStep implements ExecutionStep {
 
         RunConfiguration runConfiguration = ctx.getRunConfiguration();
 
-        String mode = runConfiguration.mode();
-        ModeSelector modeSelector = new ModeSelector(mode);
+        String runMode = runConfiguration.mode();
+        String environmentMode = ctx.getEnvironmentMode();
+        ModeSelector modeSelector = new ModeSelector(runMode, environmentMode);
         flow.addSteps(modeSelector.selectMode());
     }
 
