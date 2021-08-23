@@ -83,7 +83,7 @@ public class ModeSelectorTest {
     void testShowHints(Mode mode, Action action, boolean showHints) {
         ModeSelector modeSelector = new ModeSelector(mode, action);
 
-        assertThat(modeSelector.showHints()).isEqualTo(showHints);
+        assertThat(modeSelector.shouldShowHints()).isEqualTo(showHints);
     }
 
     static Stream<Arguments> generator() {
