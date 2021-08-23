@@ -3,47 +3,47 @@ package nl.tudelft.cse1110.andy.grader.execution.step.helper;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.grader.execution.step.*;
-import org.dom4j.rule.Mode;
 
 import java.util.Collections;
 import java.util.List;
 
 import static nl.tudelft.cse1110.andy.grader.config.RunConfiguration.*;
+import static nl.tudelft.cse1110.andy.grader.execution.step.helper.Action.*;
+import static nl.tudelft.cse1110.andy.grader.execution.step.helper.Mode.*;
 
 public class ModeSelector {
 
-    private String runMode;
-    private String environmentMode;
+    private Mode mode;
+    private Action action;
 
-    public static final String HINTS = "HINTS";
-    public static final String NO_HINTS = "NO_HINTS";
-    public static final String COVERAGE = "COVERAGE";
-    public static final String TESTS = "TESTS";
-
-    public ModeSelector(String runMode, String environmentMode) {
-        this.runMode = runMode;
-        this.environmentMode = environmentMode;
+    public ModeSelector(Mode mode, Action action) {
+        this.mode = mode;
+        this.action = action;
     }
 
     public List<ExecutionStep> selectMode() {
-        switch (runMode) {
-            case PRACTICE_MODE -> {
+        switch (mode) {
+            case PRACTICE -> {
                 return getPracticeMode();
             }
-            case EXAM_MODE -> {
+            case EXAM -> {
                 return getExamMode();
             }
-            case GRADING_MODE -> {
+            case GRADING -> {
                 return getGradingMode();
             }
         }
         return Collections.emptyList();
     }
 
+    public boolean showHints() {
+        return mode == GRADING || action == HINTS;
+    }
+
     private List<ExecutionStep> getPracticeMode() {
-        if (environmentMode.equals(HINTS) || environmentMode.equals(NO_HINTS)) {
+        if (action == HINTS || action == NO_HINTS) {
             return fullMode();
-        } else if (environmentMode.equals(COVERAGE)) {
+        } else if (action == COVERAGE) {
             return withCoverage();
         } else {
             return justTests();
@@ -51,9 +51,7 @@ public class ModeSelector {
     }
 
     private List<ExecutionStep> getExamMode() {
-        if (environmentMode.equals(COVERAGE)
-                || environmentMode.equals(HINTS)
-                || environmentMode.equals(NO_HINTS)) {
+        if (action == HINTS || action == NO_HINTS || action == COVERAGE) {
             return withCoverage();
         } else {
             return justTests();

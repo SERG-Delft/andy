@@ -6,6 +6,8 @@ import org.mockito.MockedStatic;
 
 import java.util.List;
 
+import static nl.tudelft.cse1110.andy.grader.execution.step.helper.Action.*;
+import static nl.tudelft.cse1110.andy.grader.execution.step.helper.Mode.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
@@ -14,15 +16,15 @@ import static nl.tudelft.cse1110.andy.grader.config.RunConfiguration.*;
 
 public class ModeSelectorTest {
 
-    private List<ExecutionStep> run(String mode, String environmentMode) {
-        ModeSelector modeSelector = new ModeSelector(mode, environmentMode);
+    private List<ExecutionStep> run(Mode mode, Action action) {
+        ModeSelector modeSelector = new ModeSelector(mode, action);
 
         return modeSelector.selectMode();
     }
 
     @Test
     void testPracticeModeHints() {
-        List<ExecutionStep> result = run(PRACTICE_MODE, "HINTS");
+        List<ExecutionStep> result = run(PRACTICE, HINTS);
 
         assertThat(result)
                 .containsExactlyElementsOf(ModeSelector.fullMode());
@@ -30,7 +32,7 @@ public class ModeSelectorTest {
 
     @Test
     void testPracticeModeNoHints() {
-        List<ExecutionStep> result = run(PRACTICE_MODE, "NO_HINTS");
+        List<ExecutionStep> result = run(PRACTICE, NO_HINTS);
 
         assertThat(result)
                 .containsExactlyElementsOf(ModeSelector.fullMode());
@@ -38,7 +40,7 @@ public class ModeSelectorTest {
 
     @Test
     void testPracticeModeCoverage() {
-        List<ExecutionStep> result = run(PRACTICE_MODE, "COVERAGE");
+        List<ExecutionStep> result = run(PRACTICE, COVERAGE);
 
         assertThat(result)
                 .containsExactlyElementsOf(ModeSelector.withCoverage());
@@ -46,7 +48,7 @@ public class ModeSelectorTest {
 
     @Test
     void testPracticeModeTests() {
-        List<ExecutionStep> result = run(PRACTICE_MODE, "TESTS");
+        List<ExecutionStep> result = run(PRACTICE, TESTS);
 
         assertThat(result)
                 .containsExactlyElementsOf(ModeSelector.justTests());
@@ -54,7 +56,7 @@ public class ModeSelectorTest {
 
     @Test
     void testExamModeCoverage() {
-        List<ExecutionStep> result = run(EXAM_MODE, "COVERAGE");
+        List<ExecutionStep> result = run(EXAM, COVERAGE);
 
         assertThat(result)
                 .containsExactlyElementsOf(ModeSelector.withCoverage());
@@ -62,7 +64,7 @@ public class ModeSelectorTest {
 
     @Test
     void testExamModeTests() {
-        List<ExecutionStep> result = run(EXAM_MODE, "TESTS");
+        List<ExecutionStep> result = run(EXAM, TESTS);
 
         assertThat(result)
                 .containsExactlyElementsOf(ModeSelector.justTests());
@@ -70,7 +72,7 @@ public class ModeSelectorTest {
 
     @Test
     void testGradingMode() {
-        List<ExecutionStep> result = run(GRADING_MODE, "");
+        List<ExecutionStep> result = run(GRADING, TESTS);
 
         assertThat(result)
                 .containsExactlyElementsOf(ModeSelector.fullMode());

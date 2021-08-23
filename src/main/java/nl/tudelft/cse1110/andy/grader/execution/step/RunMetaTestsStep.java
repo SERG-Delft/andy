@@ -6,6 +6,9 @@ import nl.tudelft.cse1110.andy.grader.config.MetaTest;
 import nl.tudelft.cse1110.andy.grader.config.RunConfiguration;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
+import nl.tudelft.cse1110.andy.grader.execution.step.helper.Action;
+import nl.tudelft.cse1110.andy.grader.execution.step.helper.Mode;
+import nl.tudelft.cse1110.andy.grader.execution.step.helper.ModeSelector;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.grader.util.FilesUtils;
 
@@ -79,7 +82,7 @@ public class RunMetaTestsStep implements ExecutionStep {
                 deleteDirectory(metaWorkingDir);
             }
 
-            result.logMetaTests(score, metaTests.size(), failures, ctx.getEnvironmentMode());
+            result.logMetaTests(score, metaTests.size(), failures, ctx.getModeSelector().showHints());
         } catch (Exception ex) {
             result.genericFailure(this, ex);
         } finally {
@@ -112,12 +115,15 @@ public class RunMetaTestsStep implements ExecutionStep {
                 dirCfg.getOutputDir()
         );
 
-        Context metaCfg = new Context("TESTS");
-        metaCfg.setDirectoryConfiguration(metaDirCfg);
+        Context metaCtx = new Context(Action.TESTS);
+        metaCtx.setDirectoryConfiguration(metaDirCfg);
+
+        ModeSelector modeSelector = new ModeSelector(Mode.PRACTICE, Action.TESTS);
+        metaCtx.setModeSelector(modeSelector);
 
         ResultBuilder metaResult = new ResultBuilder();
 
-        ExecutionFlow flow = ExecutionFlow.justTests(metaCfg, metaResult);
+        ExecutionFlow flow = ExecutionFlow.justTests(metaCtx, metaResult);
         flow.run();
 
         return metaResult;

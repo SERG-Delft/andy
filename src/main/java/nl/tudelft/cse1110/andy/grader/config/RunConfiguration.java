@@ -1,6 +1,7 @@
 package nl.tudelft.cse1110.andy.grader.config;
 
 import nl.tudelft.cse1110.andy.codechecker.engine.CheckScript;
+import nl.tudelft.cse1110.andy.grader.execution.step.helper.Mode;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,10 +26,6 @@ public abstract class RunConfiguration {
             "INLINE_CONSTS", "NON_VOID_METHOD_CALLS", "REMOVE_CONDITIONALS", "REMOVE_INCREMENTS", "EXPERIMENTAL_ARGUMENT_PROPAGATION",
             "EXPERIMENTAL_BIG_INTEGER", "EXPERIMENTAL_NAKED_RECEIVER", "EXPERIMENTAL_MEMBER_VARIABLE", "ABS",
             "AOR", "AOD", "CRCR", "OBBN", "ROR", "UOI");
-
-    public static final String PRACTICE_MODE = "practice";
-    public static final String EXAM_MODE = "exam";
-    public static final String GRADING_MODE = "grading";
 
     public abstract List<String> classesUnderTest();
 
@@ -58,8 +55,8 @@ public abstract class RunConfiguration {
         return false;
     }
 
-    public String mode() {
-        return PRACTICE_MODE;
+    public Mode mode() {
+        return Mode.PRACTICE;
     }
 
 }

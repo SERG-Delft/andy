@@ -3,13 +3,16 @@ package nl.tudelft.cse1110.andy;
 import nl.tudelft.cse1110.andy.grader.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.grader.execution.Context;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionFlow;
+import nl.tudelft.cse1110.andy.grader.execution.step.helper.Action;
+import nl.tudelft.cse1110.andy.grader.execution.step.helper.Mode;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
+import org.assertj.core.internal.bytebuddy.matcher.StringMatcher;
 
 public class Andy {
 
     public static void main(String[] args) {
-        if (System.getenv("MODE") == null) {
-            throw new RuntimeException("No mode has been set.");
+        if (System.getenv("ACTION") == null) {
+            throw new RuntimeException("No action has been set.");
         }
 
         Context cfg = buildConfiguration();
@@ -22,7 +25,8 @@ public class Andy {
     }
 
     private static Context buildConfiguration() {
-        Context cfg = new Context(System.getenv("MODE"));
+        Action action = Action.valueOf(System.getenv("ACTION"));
+        Context cfg = new Context(action);
 
         DirectoryConfiguration dirCfg = new DirectoryConfiguration(
                 System.getenv("WORKING_DIR"),

@@ -21,7 +21,6 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import static javax.tools.Diagnostic.Kind.ERROR;
-import static nl.tudelft.cse1110.andy.grader.execution.step.helper.ModeSelector.HINTS;
 
 public class ResultBuilder {
 
@@ -312,13 +311,13 @@ public class ResultBuilder {
       
     }
 
-    public void logCodeChecks(CheckScript script, String environmentMode) {
+    public void logCodeChecks(CheckScript script, boolean showHints) {
 
         if (script.hasChecks()) {
             int weightedChecks = script.weightedChecks();
             int sumOfWeights = script.weights();
 
-            if (environmentMode.equals(HINTS)) {
+            if (showHints) {
                 l("\n--- Code checks");
                 l(script.generateReportOFailedChecks().trim());
 
@@ -349,8 +348,8 @@ public class ResultBuilder {
         grades.setBranchGrade(totalCoveredBranches, totalBranches);
     }
 
-    public void logMetaTests(int score, int totalTests, List<String> failures, String environmentMode) {
-        if (environmentMode.equals(HINTS)) {
+    public void logMetaTests(int score, int totalTests, List<String> failures, boolean showHints) {
+        if (showHints) {
             l("\n--- Meta tests");
             l(String.format("%d/%d passed", score, totalTests));
             for (String failure : failures) {

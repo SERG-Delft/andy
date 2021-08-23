@@ -1,6 +1,7 @@
 package nl.tudelft.cse1110.andy;
 
 import nl.tudelft.cse1110.andy.grader.config.DirectoryConfiguration;
+import nl.tudelft.cse1110.andy.grader.execution.step.helper.Action;
 import nl.tudelft.cse1110.andy.grader.util.FilesUtils;
 import nl.tudelft.cse1110.andy.grader.execution.Context;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionFlow;
@@ -26,21 +27,21 @@ public abstract class IntegrationTestBase {
     public String run(List<ExecutionStep> plan, String libraryFile, String solutionFile) {
         copyFiles(libraryFile, solutionFile);
 
-        Context cfg = new Context("HINTS");
+        Context ctx = new Context(Action.HINTS);
 
         DirectoryConfiguration dirCfg = new DirectoryConfiguration(
                 workDir.toString(),
                 reportDir.toString()
         );
 
-        cfg.setDirectoryConfiguration(dirCfg);
+        ctx.setDirectoryConfiguration(dirCfg);
 
         ResultBuilder result = new ResultBuilder();
 
         ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
 
         try {
-            ExecutionFlow flow = ExecutionFlow.asSteps(plan, cfg, result);
+            ExecutionFlow flow = ExecutionFlow.asSteps(plan, ctx, result);
             flow.run();
         } catch(Exception e) {
             // something went wrong, let's print the debugging version in the console
