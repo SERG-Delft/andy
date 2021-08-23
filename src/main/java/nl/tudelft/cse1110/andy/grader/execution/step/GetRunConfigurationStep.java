@@ -15,7 +15,6 @@ import java.util.NoSuchElementException;
 import static nl.tudelft.cse1110.andy.grader.execution.step.helper.ModeSelector.HINTS;
 import static nl.tudelft.cse1110.andy.grader.util.ClassUtils.allClassesButTestingAndConfigOnes;
 import static nl.tudelft.cse1110.andy.grader.util.ClassUtils.getConfigurationClass;
-import static nl.tudelft.cse1110.andy.grader.util.ModeUtils.*;
 import static nl.tudelft.cse1110.andy.grader.config.RunConfiguration.*;
 
 public class GetRunConfigurationStep implements ExecutionStep {
