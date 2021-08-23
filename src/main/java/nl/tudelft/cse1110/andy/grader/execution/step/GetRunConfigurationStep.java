@@ -69,6 +69,8 @@ public class GetRunConfigurationStep implements ExecutionStep {
 
         ModeSelector modeSelector = createModeSelector(ctx);
 
+        // In case flow is null, it means flow already contains other steps than the basics and hence we return early.
+        // This happens for example in tests or when running the meta tests.
         if (flow == null) {
             return;
         }
