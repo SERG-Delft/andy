@@ -17,108 +17,77 @@ import static org.mockito.Mockito.when;
 
 import static nl.tudelft.cse1110.andy.grader.config.RunConfiguration.*;
 
-public class ModeSelectorTest extends IntegrationTestBase {
+public class ModeSelectorTest {
+
+    private List<ExecutionStep> run(String mode, boolean hints, boolean noHints, boolean coverage) {
+        MockedStatic<ModeUtils> mockStatic = mockStatic(ModeUtils.class);
+
+        when(ModeUtils.hints()).thenReturn(hints);
+        when(ModeUtils.noHints()).thenReturn(noHints);
+        when(ModeUtils.coverage()).thenReturn(coverage);
+
+        ModeSelector modeSelector = new ModeSelector(mode);
+        List<ExecutionStep> result = modeSelector.selectMode();
+
+        mockStatic.close();
+
+        return result;
+    }
 
     @Test
     void testPracticeModeHints() {
-        MockedStatic<ModeUtils> mockStatic = mockStatic(ModeUtils.class);
-        when(ModeUtils.hints()).thenReturn(true);
+        List<ExecutionStep> result = run(PRACTICE_MODE, true, false, false);
 
-        ModeSelector modeSelector = new ModeSelector(PRACTICE_MODE);
-        List<ExecutionStep> expected = modeSelector.fullMode();
-
-        assertThat(modeSelector.selectMode())
-                .containsExactlyElementsOf(expected);
-
-        mockStatic.close();
+        assertThat(result)
+                .containsExactlyElementsOf(ModeSelector.fullMode());
     }
 
     @Test
     void testPracticeModeNoHints() {
-        MockedStatic<ModeUtils> mockStatic = mockStatic(ModeUtils.class);
-        when(ModeUtils.hints()).thenReturn(false);
-        when(ModeUtils.noHints()).thenReturn(true);
+        List<ExecutionStep> result = run(PRACTICE_MODE, false, true, false);
 
-        ModeSelector modeSelector = new ModeSelector(PRACTICE_MODE);
-        List<ExecutionStep> expected = modeSelector.fullMode();
-
-        assertThat(modeSelector.selectMode())
-                .containsExactlyElementsOf(expected);
-
-        mockStatic.close();
+        assertThat(result)
+                .containsExactlyElementsOf(ModeSelector.fullMode());
     }
 
     @Test
     void testPracticeModeCoverage() {
-        MockedStatic<ModeUtils> mockStatic = mockStatic(ModeUtils.class);
-        when(ModeUtils.coverage()).thenReturn(true);
-        when(ModeUtils.hints()).thenReturn(false);
-        when(ModeUtils.noHints()).thenReturn(false);
+        List<ExecutionStep> result = run(PRACTICE_MODE, false, false, true);
 
-        ModeSelector modeSelector = new ModeSelector(PRACTICE_MODE);
-        List<ExecutionStep> expected = modeSelector.withCoverage();
-
-        assertThat(modeSelector.selectMode())
-                .containsExactlyElementsOf(expected);
-
-        mockStatic.close();
+        assertThat(result)
+                .containsExactlyElementsOf(ModeSelector.withCoverage());
     }
 
     @Test
     void testPracticeModeTests() {
-        MockedStatic<ModeUtils> mockStatic = mockStatic(ModeUtils.class);
-        when(ModeUtils.coverage()).thenReturn(false);
-        when(ModeUtils.hints()).thenReturn(false);
-        when(ModeUtils.noHints()).thenReturn(false);
+        List<ExecutionStep> result = run(PRACTICE_MODE, false, false, false);
 
-        ModeSelector modeSelector = new ModeSelector(PRACTICE_MODE);
-        List<ExecutionStep> expected = modeSelector.justTests();
-
-        assertThat(modeSelector.selectMode())
-                .containsExactlyElementsOf(expected);
-
-        mockStatic.close();
+        assertThat(result)
+                .containsExactlyElementsOf(ModeSelector.justTests());
     }
 
     @Test
     void testExamModeCoverage() {
-        MockedStatic<ModeUtils> mockStatic = mockStatic(ModeUtils.class);
-        when(ModeUtils.coverage()).thenReturn(true);
+        List<ExecutionStep> result = run(EXAM_MODE, false, false, true);
 
-        ModeSelector modeSelector = new ModeSelector(EXAM_MODE);
-        List<ExecutionStep> expected = modeSelector.withCoverage();
-
-        assertThat(modeSelector.selectMode())
-                .containsExactlyElementsOf(expected);
-
-        mockStatic.close();
+        assertThat(result)
+                .containsExactlyElementsOf(ModeSelector.withCoverage());
     }
 
     @Test
     void testExamModeTests() {
-        MockedStatic<ModeUtils> mockStatic = mockStatic(ModeUtils.class);
-        when(ModeUtils.coverage()).thenReturn(false);
+        List<ExecutionStep> result = run(EXAM_MODE, false, false, false);
 
-        ModeSelector modeSelector = new ModeSelector(EXAM_MODE);
-        List<ExecutionStep> expected = modeSelector.justTests();
-
-        assertThat(modeSelector.selectMode())
-                .containsExactlyElementsOf(expected);
-
-        mockStatic.close();
+        assertThat(result)
+                .containsExactlyElementsOf(ModeSelector.justTests());
     }
 
     @Test
     void testGradingMode() {
-        MockedStatic<ModeUtils> mockStatic = mockStatic(ModeUtils.class);
+        List<ExecutionStep> result = run(GRADING_MODE, false, false, false);
 
-        ModeSelector modeSelector = new ModeSelector(GRADING_MODE);
-        List<ExecutionStep> expected = modeSelector.fullMode();
-
-        assertThat(modeSelector.selectMode())
-                .containsExactlyElementsOf(expected);
-
-        mockStatic.close();
+        assertThat(result)
+                .containsExactlyElementsOf(ModeSelector.fullMode());
     }
 
 }
