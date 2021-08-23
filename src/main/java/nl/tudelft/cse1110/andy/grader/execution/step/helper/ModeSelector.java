@@ -36,7 +36,7 @@ public class ModeSelector {
         return Collections.emptyList();
     }
 
-    public boolean showHints() {
+    public boolean shouldShowHints() {
         return mode == GRADING || action == HINTS;
     }
 

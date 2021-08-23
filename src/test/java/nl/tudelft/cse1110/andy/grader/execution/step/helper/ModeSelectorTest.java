@@ -2,17 +2,17 @@ package nl.tudelft.cse1110.andy.grader.execution.step.helper;
 
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.MockedStatic;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static nl.tudelft.cse1110.andy.grader.execution.step.helper.Action.*;
 import static nl.tudelft.cse1110.andy.grader.execution.step.helper.Mode.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.when;
-
-import static nl.tudelft.cse1110.andy.grader.config.RunConfiguration.*;
 
 public class ModeSelectorTest {
 
@@ -76,6 +76,23 @@ public class ModeSelectorTest {
 
         assertThat(result)
                 .containsExactlyElementsOf(ModeSelector.fullMode());
+    }
+
+    @ParameterizedTest
+    @MethodSource("generator")
+    void testShowHints(Mode mode, Action action, boolean showHints) {
+        ModeSelector modeSelector = new ModeSelector(mode, action);
+
+        assertThat(modeSelector.showHints()).isEqualTo(showHints);
+    }
+
+    static Stream<Arguments> generator() {
+        return Stream.of(
+                Arguments.of(EXAM, TESTS, false),
+                Arguments.of(GRADING, TESTS, true),
+                Arguments.of(PRACTICE, HINTS, true),
+                Arguments.of(GRADING, HINTS, true)
+        );
     }
 
 }

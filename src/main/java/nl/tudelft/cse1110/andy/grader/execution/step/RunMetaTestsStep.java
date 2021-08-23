@@ -82,7 +82,7 @@ public class RunMetaTestsStep implements ExecutionStep {
                 deleteDirectory(metaWorkingDir);
             }
 
-            result.logMetaTests(score, metaTests.size(), failures, ctx.getModeSelector().showHints());
+            result.logMetaTests(score, metaTests.size(), failures, ctx.getModeSelector().shouldShowHints());
         } catch (Exception ex) {
             result.genericFailure(this, ex);
         } finally {
