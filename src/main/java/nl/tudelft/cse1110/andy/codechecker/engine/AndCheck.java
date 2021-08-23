@@ -4,6 +4,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class AndCheck extends CheckType {
 
@@ -16,7 +17,7 @@ public class AndCheck extends CheckType {
     }
 
     public AndCheck(List<SingleCheck> checks) {
-        this(1, null, checks);
+        this(1, checks.stream().map(c -> c.toString()).collect(Collectors.joining(" AND ")), checks);
     }
 
     @Override

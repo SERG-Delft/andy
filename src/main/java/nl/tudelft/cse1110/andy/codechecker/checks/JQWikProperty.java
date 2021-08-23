@@ -20,5 +20,9 @@ public class JQWikProperty extends UsageOfAnAnnotationTemplate {
         return "Property";
     }
 
+    public String toString() {
+        return "Number of JQWik property(ies) is " + comparison.toString() + " " + minimumNumberOfUsage;
+    }
+
 
 }

@@ -51,5 +51,9 @@ public class UseOfStringLiterals extends WithinAnnotatedMethod {
         return literalFound;
     }
 
+    public String toString() {
+        return "Uses string literals";
+    }
+
 
 }

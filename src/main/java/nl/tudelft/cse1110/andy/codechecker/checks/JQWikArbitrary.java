@@ -15,21 +15,20 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 public class JQWikArbitrary extends Check {
 
     private final String type;
-    private final boolean specificType;
     private boolean arbitraryIsReturned = false;
 
     public JQWikArbitrary(String type) {
         this.type = type;
-        this.specificType = true;
     }
 
     public JQWikArbitrary() {
         this.type = null;
-        this.specificType = false;
     }
 
     @Override
     public boolean visit(MethodDeclaration mi) {
+
+        boolean specificType = type != null;
 
         if(mi.getReturnType2()!=null) {
             String returnType = mi.getReturnType2().toString();
@@ -47,5 +46,12 @@ public class JQWikArbitrary extends Check {
     @Override
     public boolean result() {
         return arbitraryIsReturned;
+    }
+
+    public String toString() {
+        if(type == null)
+            return "any JQWikArbitrary is defined";
+        else
+            return "JQWiKArbitrary " + type + " is defined";
     }
 }

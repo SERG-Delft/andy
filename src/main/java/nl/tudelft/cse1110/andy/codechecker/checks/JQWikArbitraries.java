@@ -43,4 +43,8 @@ public class JQWikArbitraries extends WithinAnnotatedMethod {
     protected Set<String> annotations() {
         return Set.of("Provide");
     }
+
+    public String toString() {
+        return "JQWikArbitrary " + arbitraryMethodToLookFor + " is used";
+    }
 }

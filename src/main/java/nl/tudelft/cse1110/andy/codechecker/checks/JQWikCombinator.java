@@ -29,4 +29,8 @@ public class JQWikCombinator extends Check {
     public boolean result() {
         return combineIsUsed;
     }
+
+    public String toString() {
+        return "Combinators.Combine(...) is used";
+    }
 }

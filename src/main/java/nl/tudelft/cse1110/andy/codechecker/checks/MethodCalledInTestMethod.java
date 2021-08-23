@@ -34,8 +34,13 @@ public class MethodCalledInTestMethod extends WithinTestMethod {
         return super.visit(mi);
     }
 
+
     @Override
     public boolean result() {
         return methodWasCalled;
+    }
+
+    public String toString() {
+        return methodToBeCalled + " method is called";
     }
 }

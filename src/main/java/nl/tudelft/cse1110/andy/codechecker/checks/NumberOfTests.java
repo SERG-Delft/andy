@@ -22,5 +22,9 @@ public class NumberOfTests extends UsageOfAnAnnotationTemplate {
         return "Test";
     }
 
+    public String toString() {
+        return "Number of tests " + comparison + " " + minimumNumberOfUsage;
+    }
+
 
 }

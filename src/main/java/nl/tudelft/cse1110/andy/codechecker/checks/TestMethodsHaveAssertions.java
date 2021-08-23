@@ -1,6 +1,7 @@
 package nl.tudelft.cse1110.andy.codechecker.checks;
 
-import org.eclipse.jdt.core.dom.*;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.MethodInvocation;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -42,8 +43,15 @@ public class TestMethodsHaveAssertions extends WithinTestMethod {
     }};
 
     @Override
-    public void endVisit(MethodDeclaration md) {
+    public boolean visit(MethodDeclaration md) {
+        // we reset the flag that stores whether we found a call to an assertion
+        currentMethodContainsAssertion = false;
 
+        return super.visit(md);
+    }
+
+    @Override
+    public void endVisit(MethodDeclaration md) {
         /**
          * if we are in a test method, and at the end of the method,
          * we did not find any assertions, then, we have a problem.
@@ -56,14 +64,6 @@ public class TestMethodsHaveAssertions extends WithinTestMethod {
     }
 
     @Override
-    public boolean visit(MethodDeclaration md) {
-        // we reset the flag that stores whether we found a call to an assertion
-        currentMethodContainsAssertion = false;
-
-        return super.visit(md);
-    }
-
-    @Override
     public boolean visit(MethodInvocation mi) {
         if(ASSERT_METHODS.contains(mi.getName().toString())) {
             currentMethodContainsAssertion = true;
@@ -72,12 +72,14 @@ public class TestMethodsHaveAssertions extends WithinTestMethod {
         return super.visit(mi);
     }
 
-
-
     @Override
     public boolean result() {
         // we negate the result!
         return !containsATestWithoutAssertion;
+    }
+
+    public String toString() {
+        return "Tests have assertions";
     }
 
 

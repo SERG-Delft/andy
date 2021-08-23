@@ -36,7 +36,7 @@ public class RunPitestStep implements ExecutionStep {
         final ParseResult pr = parser.parse(buildArgs(ctx, outputPitestDir));
 
         if (!pr.isOk()) {
-            result.genericFailure(this, pr.getErrorMessage().get());
+            result.genericFailure("PITEST: " + pr.getErrorMessage().get());
         } else {
             final ReportOptions data = pr.getOptions();
             final CombinedStatistics stats = runReport(data, plugins);

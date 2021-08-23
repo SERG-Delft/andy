@@ -43,4 +43,8 @@ public class MockClass extends Check {
     public boolean result() {
         return classWasMocked;
     }
+
+    public String toString() {
+        return classToBeMocked + " is mocked";
+    }
 }

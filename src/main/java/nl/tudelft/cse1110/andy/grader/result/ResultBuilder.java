@@ -97,7 +97,7 @@ public class ResultBuilder {
         d(String.format("%s: %s", step.getClass().getSimpleName(), msg));
     }
 
-    public void genericFailure(ExecutionStep step, String msg) {
+    public void genericFailure(String msg) {
         l(msg);
         d(msg);
 
@@ -114,7 +114,7 @@ public class ResultBuilder {
         failureMsg.append(exceptionMessage(e));
         failureMsg.append("---\n");
 
-        genericFailure(step, failureMsg.toString());
+        genericFailure(failureMsg.toString());
     }
 
     private String exceptionMessage(Throwable e) {

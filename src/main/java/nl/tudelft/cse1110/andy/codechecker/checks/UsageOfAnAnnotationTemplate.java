@@ -7,7 +7,7 @@ import org.eclipse.jdt.core.dom.SingleMemberAnnotation;
 
 public abstract class UsageOfAnAnnotationTemplate extends Check {
     protected final int minimumNumberOfUsage;
-    private final Comparison comparison;
+    protected final Comparison comparison;
     private int numberOfTestsInCU = 0;
 
     public UsageOfAnAnnotationTemplate(Comparison comparison, int minimumNumberOfUsage) {
