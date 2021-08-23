@@ -4,7 +4,7 @@ import nl.tudelft.cse1110.andy.IntegrationTestBase;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import static nl.tudelft.cse1110.andy.ExecutionStepHelper.fullMode;
+import static nl.tudelft.cse1110.andy.ExecutionStepHelper.onlyJUnitTests;
 import static nl.tudelft.cse1110.andy.ResultTestAssertions.totalTimeItTookToExecute;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -19,7 +19,7 @@ public class ExecutionTimeInfoTest extends IntegrationTestBase {
         "NumberUtilsAddLibrary,NumberUtilsAddAllTestsPass,NumberUtilsAddConfiguration"
     })
     void checkTotalTimeToExecute(String library, String solution, String config) {
-        String result = run(fullMode(), library, solution, config);
+        String result = run(onlyJUnitTests(), library, solution, config);
         assertThat(result).has(totalTimeItTookToExecute());
     }
 
