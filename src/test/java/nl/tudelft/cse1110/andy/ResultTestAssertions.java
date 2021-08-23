@@ -47,20 +47,6 @@ public class ResultTestAssertions {
         };
     }
 
-    public static Condition<List<ExecutionStep>> executionStep(ExecutionStep stepToFind) {
-        return new Condition<>() {
-            @Override
-            public boolean matches(List<ExecutionStep> steps) {
-                for (ExecutionStep step : steps) {
-                    if (step.equals(stepToFind)) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        };
-    }
-
     public static Condition<String> numberOfJUnitTestsPassing(int numberOfTestsPassing) {
         return containsRegex("--- JUnit execution\\n" + numberOfTestsPassing + "\\/\\d+ passed");
     }
