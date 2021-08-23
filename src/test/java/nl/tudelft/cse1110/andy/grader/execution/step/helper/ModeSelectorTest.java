@@ -19,7 +19,7 @@ public class ModeSelectorTest {
     private List<ExecutionStep> run(Mode mode, Action action) {
         ModeSelector modeSelector = new ModeSelector(mode, action);
 
-        return modeSelector.selectMode();
+        return modeSelector.getCorrectSteps();
     }
 
     @Test
