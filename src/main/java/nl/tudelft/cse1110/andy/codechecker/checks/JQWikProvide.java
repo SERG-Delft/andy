@@ -20,5 +20,9 @@ public class JQWikProvide extends UsageOfAnAnnotationTemplate {
         return "Provide";
     }
 
+    public String toString() {
+        return "Number of JQWik provider methods is " + comparison.toString() + " " + minimumNumberOfUsage;
+    }
+
 
 }

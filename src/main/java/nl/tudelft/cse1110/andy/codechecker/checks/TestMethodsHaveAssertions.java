@@ -80,5 +80,9 @@ public class TestMethodsHaveAssertions extends WithinTestMethod {
         return !containsATestWithoutAssertion;
     }
 
+    public String toString() {
+        return "Tests have assertions";
+    }
+
 
 }

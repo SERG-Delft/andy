@@ -44,4 +44,8 @@ public class LoopInTestMethods extends WithinTestMethod {
     public boolean result() {
         return loopFound;
     }
+
+    public String toString() {
+        return "Loop is used in test methods";
+    }
 }

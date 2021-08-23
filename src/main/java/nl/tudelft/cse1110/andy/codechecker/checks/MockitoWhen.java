@@ -64,4 +64,8 @@ public class MockitoWhen extends Check {
     public boolean result() {
         return comparison.compare(numberOfCallsToWhen, expectedNumberOfOccurrences);
     }
+
+    public String toString() {
+        return methodToSetUp + " is stubbed" + (expectedNumberOfOccurrences > 0 ? " (" + comparison + " " + expectedNumberOfOccurrences + ")" : "");
+    }
 }

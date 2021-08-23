@@ -122,4 +122,10 @@ public class MockitoVerify extends WithinAnnotatedMethod {
     protected Set<String> annotations() {
         return methodType.getAnnotations();
     }
+
+    public String toString() {
+        return "Mockito verifies " + methodToVerify + " method " +
+                (expectedNumberOfOccurrences > 0 ? "(" + comparison + " " + expectedNumberOfOccurrences + ")" : "") +
+                (never ? "(never or zero interactions)" : "");
+    }
 }

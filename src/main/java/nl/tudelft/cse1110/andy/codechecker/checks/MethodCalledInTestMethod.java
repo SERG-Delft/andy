@@ -38,4 +38,8 @@ public class MethodCalledInTestMethod extends WithinTestMethod {
     public boolean result() {
         return methodWasCalled;
     }
+
+    public String toString() {
+        return methodToBeCalled + " method is called";
+    }
 }

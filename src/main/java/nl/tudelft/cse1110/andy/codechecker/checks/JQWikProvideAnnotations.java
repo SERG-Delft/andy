@@ -7,6 +7,7 @@ import org.eclipse.jdt.core.dom.SingleMemberAnnotation;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class JQWikProvideAnnotations extends Check {
 
@@ -48,5 +49,9 @@ public class JQWikProvideAnnotations extends Check {
     @Override
     public boolean result() {
         return provideAnnotationIdentified;
+    }
+
+    public String toString() {
+        return "Any of " + JQWIK_PROVIDE_ANNOTATIONS.stream().collect(Collectors.joining(",")) + " is used";
     }
 }

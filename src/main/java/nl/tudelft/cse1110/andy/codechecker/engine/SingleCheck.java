@@ -21,15 +21,21 @@ public class SingleCheck extends CheckType {
     }
 
     public SingleCheck(Check check) {
-        this(1, null, false, check);
+        this(1, check.toString(), false, check);
     }
 
     public SingleCheck(String description, boolean flip, Check check) {
         this(1, description, flip, check);
     }
+    public SingleCheck(boolean flip, Check check) {
+        this(1, check.toString() + (flip ? " (NOT)":""), flip, check);
+    }
 
     public SingleCheck(int weight, String description, Check check) {
         this(weight, description, false, check);
+    }
+    public SingleCheck(int weight, Check check) {
+        this(weight, check.toString(), false, check);
     }
 
     @Override

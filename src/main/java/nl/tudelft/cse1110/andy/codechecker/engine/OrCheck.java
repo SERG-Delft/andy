@@ -4,6 +4,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class OrCheck extends CheckType {
 
@@ -13,6 +14,10 @@ public class OrCheck extends CheckType {
     public OrCheck(int weight, String description, List<CheckType> checks) {
         super(weight, description);
         this.checks = checks;
+    }
+
+    public OrCheck(List<CheckType> checks) {
+        this(1, checks.stream().map(c -> c.toString()).collect(Collectors.joining(" OR ")), checks);
     }
 
     @Override

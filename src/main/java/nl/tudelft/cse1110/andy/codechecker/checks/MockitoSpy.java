@@ -39,4 +39,8 @@ public class MockitoSpy extends Check {
     public boolean result() {
         return numberOfSpies > 0;
     }
+
+    public String toString() {
+        return "Spies are used";
+    }
 }
