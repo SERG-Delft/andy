@@ -82,7 +82,7 @@ public class RunMetaTestsStep implements ExecutionStep {
                 deleteDirectory(metaWorkingDir);
             }
 
-            result.logMetaTests(score, metaTests.size(), failures, ctx.getModeSelector().shouldShowHints());
+            result.logMetaTests(score, metaTests.size(), failures);
         } catch (Exception ex) {
             result.genericFailure(this, ex);
         } finally {
@@ -119,9 +119,9 @@ public class RunMetaTestsStep implements ExecutionStep {
         metaCtx.setDirectoryConfiguration(metaDirCfg);
 
         ModeSelector modeSelector = new ModeSelector(Mode.PRACTICE, Action.TESTS);
-        metaCtx.setModeSelector(modeSelector);
 
         ResultBuilder metaResult = new ResultBuilder();
+        metaResult.setModeSelector(modeSelector);
 
         ExecutionFlow flow = ExecutionFlow.justTests(metaCtx, metaResult);
         flow.run();

@@ -2,6 +2,8 @@ package nl.tudelft.cse1110.andy.grader.result;
 
 import nl.tudelft.cse1110.andy.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
+import nl.tudelft.cse1110.andy.grader.execution.step.helper.Mode;
+import nl.tudelft.cse1110.andy.grader.execution.step.helper.ModeSelector;
 import nl.tudelft.cse1110.andy.grader.grade.GradeCalculator;
 import nl.tudelft.cse1110.andy.grader.grade.GradeValues;
 import nl.tudelft.cse1110.andy.grader.grade.GradeWeight;
@@ -39,6 +41,12 @@ public class ResultBuilder {
     private GradeValues grades = new GradeValues();
 
     private List<Diagnostic<? extends JavaFileObject>> compilationErrors;
+
+    private ModeSelector modeSelector;
+
+    public void setModeSelector(ModeSelector modeSelector) {
+        this.modeSelector = modeSelector;
+    }
 
     public void compilationSuccess() {
         l("--- Compilation\nSuccess");
@@ -311,13 +319,13 @@ public class ResultBuilder {
       
     }
 
-    public void logCodeChecks(CheckScript script, boolean showHints) {
+    public void logCodeChecks(CheckScript script) {
 
         if (script.hasChecks()) {
             int weightedChecks = script.weightedChecks();
             int sumOfWeights = script.weights();
 
-            if (showHints) {
+            if (modeSelector.shouldShowHints()) {
                 l("\n--- Code checks");
                 l(script.generateReportOFailedChecks().trim());
 
@@ -348,8 +356,8 @@ public class ResultBuilder {
         grades.setBranchGrade(totalCoveredBranches, totalBranches);
     }
 
-    public void logMetaTests(int score, int totalTests, List<String> failures, boolean showHints) {
-        if (showHints) {
+    public void logMetaTests(int score, int totalTests, List<String> failures) {
+        if (modeSelector.shouldShowHints()) {
             l("\n--- Meta tests");
             l(String.format("%d/%d passed", score, totalTests));
             for (String failure : failures) {

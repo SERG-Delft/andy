@@ -18,8 +18,7 @@ public class RunCodeChecksStep implements ExecutionStep {
         CheckScript script = runCfg.checkScript();
         script.runChecks(findSolution(dirCfg.getWorkingDir()));
 
-        result.logCodeChecks(script, ctx.getModeSelector().shouldShowHints());
-
+        result.logCodeChecks(script);
     }
 
     @Override

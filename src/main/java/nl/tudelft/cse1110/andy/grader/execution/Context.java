@@ -15,7 +15,6 @@ public class Context {
     private long startTime;
     private List<String> fullClassNames;
     private ExecutionFlow flow;
-    private ModeSelector modeSelector;
     private Action action;
 
     public Context(Action action) {
@@ -60,14 +59,6 @@ public class Context {
 
     public List<String> getNewClassNames() {
         return fullClassNames;
-    }
-
-    public ModeSelector getModeSelector() {
-        return modeSelector;
-    }
-
-    public void setModeSelector(ModeSelector modeSelector) {
-        this.modeSelector = modeSelector;
     }
 
     public Action getAction() {
