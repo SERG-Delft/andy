@@ -12,6 +12,7 @@ import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import static nl.tudelft.cse1110.andy.grader.execution.step.helper.ModeSelector.HINTS;
 import static nl.tudelft.cse1110.andy.grader.util.ClassUtils.allClassesButTestingAndConfigOnes;
 import static nl.tudelft.cse1110.andy.grader.util.ClassUtils.getConfigurationClass;
 import static nl.tudelft.cse1110.andy.grader.util.ModeUtils.*;
@@ -72,7 +73,12 @@ public class GetRunConfigurationStep implements ExecutionStep {
         RunConfiguration runConfiguration = ctx.getRunConfiguration();
 
         String runMode = runConfiguration.mode();
+
+        if (runMode.equals(GRADING_MODE)) {
+            ctx.setEnvironmentMode(HINTS);
+        }
         String environmentMode = ctx.getEnvironmentMode();
+
         ModeSelector modeSelector = new ModeSelector(runMode, environmentMode);
         flow.addSteps(modeSelector.selectMode());
     }

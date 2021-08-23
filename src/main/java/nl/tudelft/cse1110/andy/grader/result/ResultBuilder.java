@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import static javax.tools.Diagnostic.Kind.ERROR;
-import static nl.tudelft.cse1110.andy.grader.util.ModeUtils.*;
+import static nl.tudelft.cse1110.andy.grader.execution.step.helper.ModeSelector.HINTS;
 
 public class ResultBuilder {
 
@@ -40,8 +40,6 @@ public class ResultBuilder {
     private GradeValues grades = new GradeValues();
 
     private List<Diagnostic<? extends JavaFileObject>> compilationErrors;
-
-
 
     public void compilationSuccess() {
         l("--- Compilation\nSuccess");
@@ -70,7 +68,6 @@ public class ResultBuilder {
         }
 
         failed();
-
     }
 
     private boolean anyOfTheErrorsAreCausedDueToBadConfiguration(List<Diagnostic<? extends JavaFileObject>> compilationErrors) {
@@ -146,7 +143,6 @@ public class ResultBuilder {
         }
     }
 
-
     /** Checks for different error cases possible when tests are not detected
      * @param summary - JUnit execution summary
      */
@@ -167,7 +163,6 @@ public class ResultBuilder {
         }
         failed();
     }
-
 
     public int getTestsRan() {
         return this.testsRan;
@@ -215,8 +210,6 @@ public class ResultBuilder {
         return failure.getException().toString();
     }
 
-
-
     private String getParameterizedMethodName(TestExecutionSummary.Failure failure) {
         int endIndex = failure.getTestIdentifier().getLegacyReportingName().indexOf('(');
         return failure.getTestIdentifier().getLegacyReportingName().substring(0, endIndex);
@@ -248,8 +241,6 @@ public class ResultBuilder {
         l(String.format("\nAndy took %.1f seconds to assess your question.", timeInSeconds));
     }
 
-
-
     public String buildEndUserResult() {
         return result.toString();
     }
@@ -270,7 +261,6 @@ public class ResultBuilder {
         debug.append("DEBUG: " + line);
         debug.append("\n");
     }
-
 
     private String now() {
         return LocalDateTime.now().toString();
@@ -328,7 +318,7 @@ public class ResultBuilder {
             int weightedChecks = script.weightedChecks();
             int sumOfWeights = script.weights();
 
-            if (hints(environmentMode)) {
+            if (environmentMode.equals(HINTS)) {
                 l("\n--- Code checks");
                 l(script.generateReportOFailedChecks().trim());
 
@@ -360,7 +350,7 @@ public class ResultBuilder {
     }
 
     public void logMetaTests(int score, int totalTests, List<String> failures, String environmentMode) {
-        if (hints(environmentMode)) {
+        if (environmentMode.equals(HINTS)) {
             l("\n--- Meta tests");
             l(String.format("%d/%d passed", score, totalTests));
             for (String failure : failures) {

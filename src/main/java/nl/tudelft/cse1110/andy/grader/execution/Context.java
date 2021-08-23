@@ -62,4 +62,8 @@ public class Context {
     public String getEnvironmentMode() {
         return environmentMode;
     }
+
+    public void setEnvironmentMode(String environmentMode) {
+        this.environmentMode = environmentMode;
+    }
 }

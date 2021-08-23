@@ -9,12 +9,16 @@ import java.util.Collections;
 import java.util.List;
 
 import static nl.tudelft.cse1110.andy.grader.config.RunConfiguration.*;
-import static nl.tudelft.cse1110.andy.grader.util.ModeUtils.*;
 
 public class ModeSelector {
 
     private String runMode;
     private String environmentMode;
+
+    public static final String HINTS = "HINTS";
+    public static final String NO_HINTS = "NO_HINTS";
+    public static final String COVERAGE = "COVERAGE";
+    public static final String TESTS = "TESTS";
 
     public ModeSelector(String runMode, String environmentMode) {
         this.runMode = runMode;
@@ -24,26 +28,40 @@ public class ModeSelector {
     public List<ExecutionStep> selectMode() {
         switch (runMode) {
             case PRACTICE_MODE -> {
-                if (hints(environmentMode) || noHints(environmentMode)) {
-                    return fullMode();
-                } else if (coverage(environmentMode)) {
-                    return withCoverage();
-                } else {
-                    return justTests();
-                }
+                return getPracticeMode();
             }
             case EXAM_MODE -> {
-                if (coverage(environmentMode)) {
-                    return withCoverage();
-                } else {
-                    return justTests();
-                }
+                return getExamMode();
             }
             case GRADING_MODE -> {
-                return fullMode();
+                return getGradingMode();
             }
         }
         return Collections.emptyList();
+    }
+
+    private List<ExecutionStep> getPracticeMode() {
+        if (environmentMode.equals(HINTS) || environmentMode.equals(NO_HINTS)) {
+            return fullMode();
+        } else if (environmentMode.equals(COVERAGE)) {
+            return withCoverage();
+        } else {
+            return justTests();
+        }
+    }
+
+    private List<ExecutionStep> getExamMode() {
+        if (environmentMode.equals(COVERAGE)
+                || environmentMode.equals(HINTS)
+                || environmentMode.equals(NO_HINTS)) {
+            return withCoverage();
+        } else {
+            return justTests();
+        }
+    }
+
+    private List<ExecutionStep> getGradingMode() {
+        return fullMode();
     }
 
     public static List<ExecutionStep> justTests() {
