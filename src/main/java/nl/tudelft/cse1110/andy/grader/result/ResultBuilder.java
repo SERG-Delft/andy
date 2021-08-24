@@ -238,7 +238,11 @@ public class ResultBuilder {
     }
 
     public void logMode() {
-        l(String.format("\nAndy is running in %s mode.", modeActionSelector.getMode().toString()));
+        // modeActionSelector can be null if the code did not get to GetRunConfigurationStep.
+        // This can happen due to a compilation error for example.
+        if (modeActionSelector != null) {
+            l(String.format("\nAndy is running in %s mode.", modeActionSelector.getMode().toString()));
+        }
     }
 
     public void logTimeToRun(long startTime) {
