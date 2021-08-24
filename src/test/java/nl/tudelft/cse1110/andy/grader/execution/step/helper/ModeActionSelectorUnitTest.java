@@ -13,7 +13,7 @@ import static nl.tudelft.cse1110.andy.grader.execution.step.helper.Action.*;
 import static nl.tudelft.cse1110.andy.grader.execution.step.helper.Mode.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ModeActionSelectorTest {
+public class ModeActionSelectorUnitTest {
 
     private List<ExecutionStep> run(Mode mode, Action action) {
         ModeActionSelector modeActionSelector = new ModeActionSelector(mode, action);
@@ -78,19 +78,20 @@ public class ModeActionSelectorTest {
     }
 
     @ParameterizedTest
-    @MethodSource("generator")
+    @MethodSource("testShowHintsGenerator")
     void testShowHints(Mode mode, Action action, boolean showHints) {
         ModeActionSelector modeActionSelector = new ModeActionSelector(mode, action);
 
         assertThat(modeActionSelector.shouldShowHints()).isEqualTo(showHints);
     }
 
-    static Stream<Arguments> generator() {
+    static Stream<Arguments> testShowHintsGenerator() {
         return Stream.of(
                 Arguments.of(EXAM, TESTS, false),
                 Arguments.of(GRADING, TESTS, true),
                 Arguments.of(PRACTICE, HINTS, true),
-                Arguments.of(GRADING, HINTS, true)
+                Arguments.of(GRADING, HINTS, true),
+                Arguments.of(EXAM, CUSTOM, true)
         );
     }
 

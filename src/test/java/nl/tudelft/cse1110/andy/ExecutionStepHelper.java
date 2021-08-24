@@ -9,6 +9,10 @@ import java.util.List;
 
 public class ExecutionStepHelper {
 
+    public static List<ExecutionStep> onlyBasic() {
+        return Collections.emptyList();
+    }
+
     public static List<ExecutionStep> onlyJUnitTests() {
         return Arrays.asList(new RunJUnitTestsStep());
     }
