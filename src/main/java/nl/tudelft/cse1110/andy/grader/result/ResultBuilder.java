@@ -238,7 +238,9 @@ public class ResultBuilder {
         return failure.getException().toString().substring(open+2, close);
     }
 
-
+    public void logMode() {
+        l(String.format("\nAndy is running in %s mode.", modeSelector.getMode().toString()));
+    }
 
     public void logTimeToRun(long startTime) {
         long stopTime = System.nanoTime();

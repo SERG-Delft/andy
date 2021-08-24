@@ -47,6 +47,7 @@ public class ExecutionFlow {
     /* In this method we also calculate the total time in seconds our tool took to run.
      */
     private void generateOutput() {
+        result.logMode();
         result.logTimeToRun(ctx.getStartTime());
 
         exportOutputFile(ctx, result);

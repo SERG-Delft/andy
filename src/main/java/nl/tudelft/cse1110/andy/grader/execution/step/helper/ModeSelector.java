@@ -21,6 +21,14 @@ public class ModeSelector {
         this.action = action;
     }
 
+    public Mode getMode() {
+        return mode;
+    }
+
+    public Action getAction() {
+        return action;
+    }
+
     public List<ExecutionStep> getCorrectSteps() {
         switch (mode) {
             case PRACTICE -> {
