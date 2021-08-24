@@ -135,6 +135,10 @@ public class ResultTestAssertions {
         return containsString("Meta test: " + metaTestName + " FAILED");
     }
 
+    public static Condition<String> metaTestPassing(String metaTestName) {
+        return containsString("Meta test: " + metaTestName + " PASSED");
+    }
+
     public static Condition<String> finalGrade(int score) {
         return containsString("--- Final grade\n" + score + "/100");
     }

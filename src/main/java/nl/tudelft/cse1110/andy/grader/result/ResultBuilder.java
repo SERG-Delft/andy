@@ -361,10 +361,13 @@ public class ResultBuilder {
         grades.setBranchGrade(totalCoveredBranches, totalBranches);
     }
 
-    public void logMetaTests(int score, int totalTests, List<String> failures) {
+    public void logMetaTests(int score, int totalTests, List<String> passes, List<String> failures) {
         if (modeActionSelector.shouldShowHints()) {
             l("\n--- Meta tests");
             l(String.format("%d/%d passed", score, totalTests));
+            for (String pass : passes) {
+                l(String.format("Meta test: %s PASSED", pass));
+            }
             for (String failure : failures) {
                 l(String.format("Meta test: %s FAILED", failure));
             }

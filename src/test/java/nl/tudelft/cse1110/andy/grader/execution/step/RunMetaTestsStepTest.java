@@ -16,7 +16,11 @@ public class RunMetaTestsStepTest extends IntegrationTestBase {
 
         assertThat(result)
                 .has(metaTests(4))
-                .has(metaTestsPassing(4));
+                .has(metaTestsPassing(4))
+                .has(metaTestPassing("AppliesMultipleCarriesWrongly"))
+                .has(metaTestPassing("DoesNotApplyCarryAtAll"))
+                .has(metaTestPassing("DoesNotApplyLastCarry"))
+                .has(metaTestPassing("DoesNotCheckNumbersOutOfRange"));
     }
 
     @Test
@@ -26,6 +30,7 @@ public class RunMetaTestsStepTest extends IntegrationTestBase {
         assertThat(result)
                 .has(metaTests(4))
                 .has(metaTestsPassing(1))
+                .has(metaTestPassing("DoesNotCheckNumbersOutOfRange"))
                 .has(metaTestFailing("AppliesMultipleCarriesWrongly"))
                 .has(metaTestFailing("DoesNotApplyCarryAtAll"))
                 .has(metaTestFailing("DoesNotApplyLastCarry"));
@@ -51,6 +56,9 @@ public class RunMetaTestsStepTest extends IntegrationTestBase {
         assertThat(result)
                 .has(metaTests(4))
                 .has(metaTestsPassing(3))
+                .has(metaTestPassing("BoundaryCheck"))
+                .has(metaTestPassing("DoesNotCheckCapacity"))
+                .has(metaTestPassing("DoesNotCheckSave"))
                 .has(metaTestFailing("DoesNotCheckInvalidTripId"));
     }
 
@@ -60,7 +68,10 @@ public class RunMetaTestsStepTest extends IntegrationTestBase {
 
         assertThat(result)
                 .has(metaTests(3))
-                .has(metaTestsPassing(3));
+                .has(metaTestsPassing(3))
+                .has(metaTestPassing("AlwaysReturnsNotFound"))
+                .has(metaTestPassing("AlwaysReturnsStartIndex"))
+                .has(metaTestPassing("DoesNotUseStartIndex"));
     }
 
 }
