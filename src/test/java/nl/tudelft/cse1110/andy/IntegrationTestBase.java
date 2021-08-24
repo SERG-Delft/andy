@@ -27,7 +27,7 @@ public abstract class IntegrationTestBase {
     public String run(List<ExecutionStep> plan, String libraryFile, String solutionFile) {
         copyFiles(libraryFile, solutionFile);
 
-        Context ctx = new Context(Action.HINTS);
+        Context ctx = new Context(Action.CUSTOM);
 
         DirectoryConfiguration dirCfg = new DirectoryConfiguration(
                 workDir.toString(),

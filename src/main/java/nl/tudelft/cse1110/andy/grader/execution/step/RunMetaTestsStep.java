@@ -115,13 +115,10 @@ public class RunMetaTestsStep implements ExecutionStep {
                 dirCfg.getOutputDir()
         );
 
-        Context metaCtx = new Context(Action.TESTS);
+        Context metaCtx = new Context(Action.CUSTOM);
         metaCtx.setDirectoryConfiguration(metaDirCfg);
 
-        ModeActionSelector modeActionSelector = new ModeActionSelector(Mode.PRACTICE, Action.TESTS);
-
         ResultBuilder metaResult = new ResultBuilder();
-        metaResult.setModeSelector(modeActionSelector);
 
         ExecutionFlow flow = ExecutionFlow.justTests(metaCtx, metaResult);
         flow.run();

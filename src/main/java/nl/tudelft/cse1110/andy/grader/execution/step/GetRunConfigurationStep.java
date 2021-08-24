@@ -67,9 +67,8 @@ public class GetRunConfigurationStep implements ExecutionStep {
 
         ModeActionSelector modeActionSelector = createModeSelector(ctx, result);
 
-        // In case flow is null, it means flow already contains other steps than the basics and hence we return early.
-        // This happens for example in tests or when running the meta tests.
-        if (flow == null) {
+        // Custom action means the steps of the flow have already been declared.
+        if (modeActionSelector.getAction() == Action.CUSTOM) {
             return;
         }
 

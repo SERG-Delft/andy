@@ -38,7 +38,6 @@ public class Andy {
 
     private static ExecutionFlow buildExecutionFlow(Context cfg, ResultBuilder result) {
         ExecutionFlow flow = ExecutionFlow.justBasic(cfg, result);
-        cfg.setFlow(flow);
         return flow;
     }
 }

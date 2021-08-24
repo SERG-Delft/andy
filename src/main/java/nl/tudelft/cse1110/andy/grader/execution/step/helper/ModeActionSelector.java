@@ -45,7 +45,7 @@ public class ModeActionSelector {
     }
 
     public boolean shouldShowHints() {
-        return mode == GRADING || action == HINTS;
+        return mode == GRADING || action == HINTS || action == CUSTOM;
     }
 
     private List<ExecutionStep> getPracticeMode() {

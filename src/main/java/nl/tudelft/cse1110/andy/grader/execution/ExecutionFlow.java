@@ -21,6 +21,7 @@ public class ExecutionFlow {
         steps.addAll(0, basicSteps());
         this.ctx = ctx;
         this.result = result;
+        this.ctx.setFlow(this);
     }
 
     public void run() {
@@ -57,20 +58,20 @@ public class ExecutionFlow {
         }
     }
 
-    public static ExecutionFlow asSteps(List<ExecutionStep> plan, Context cfg, ResultBuilder result) {
-        return new ExecutionFlow(plan, cfg, result);
+    public static ExecutionFlow asSteps(List<ExecutionStep> plan, Context ctx, ResultBuilder result) {
+        return new ExecutionFlow(plan, ctx, result);
     }
 
-    public static ExecutionFlow justTests(Context cfg, ResultBuilder result) {
+    public static ExecutionFlow justTests(Context ctx, ResultBuilder result) {
         return new ExecutionFlow(
                 Arrays.asList(new RunJUnitTestsStep(), new CalculateFinalGradeStep()),
-                cfg,
+                ctx,
                 result
         );
     }
 
-    public static ExecutionFlow justBasic(Context cfg, ResultBuilder result) {
-        return new ExecutionFlow(Collections.emptyList(), cfg, result);
+    public static ExecutionFlow justBasic(Context ctx, ResultBuilder result) {
+        return new ExecutionFlow(Collections.emptyList(), ctx, result);
     }
 
     private List<ExecutionStep> basicSteps() {
