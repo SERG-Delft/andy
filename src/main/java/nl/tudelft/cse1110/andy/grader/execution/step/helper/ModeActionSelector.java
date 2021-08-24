@@ -1,15 +1,13 @@
 package nl.tudelft.cse1110.andy.grader.execution.step.helper;
 
-import nl.tudelft.cse1110.andy.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.grader.execution.step.*;
 
 import java.util.Collections;
 import java.util.List;
 
-import static nl.tudelft.cse1110.andy.grader.config.RunConfiguration.*;
 import static nl.tudelft.cse1110.andy.grader.execution.step.helper.Action.*;
-import static nl.tudelft.cse1110.andy.grader.execution.step.helper.Mode.*;
+import static nl.tudelft.cse1110.andy.grader.execution.step.helper.Mode.GRADING;
 
 public class ModeActionSelector {
 

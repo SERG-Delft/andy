@@ -3,7 +3,6 @@ package nl.tudelft.cse1110.andy.grader.execution;
 import nl.tudelft.cse1110.andy.grader.execution.step.*;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 
-import javax.print.attribute.standard.ReferenceUriSchemesSupported;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;

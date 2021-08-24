@@ -4,9 +4,7 @@ import nl.tudelft.cse1110.andy.grader.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.grader.execution.Context;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.grader.execution.step.helper.Action;
-import nl.tudelft.cse1110.andy.grader.execution.step.helper.Mode;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
-import org.assertj.core.internal.bytebuddy.matcher.StringMatcher;
 
 public class Andy {
 

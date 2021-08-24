@@ -1,14 +1,12 @@
 package nl.tudelft.cse1110.andy.grader.execution.step;
 
-import nl.tudelft.cse1110.andy.grader.execution.Context;
 import nl.tudelft.cse1110.andy.grader.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.grader.config.MetaTest;
 import nl.tudelft.cse1110.andy.grader.config.RunConfiguration;
+import nl.tudelft.cse1110.andy.grader.execution.Context;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.grader.execution.step.helper.Action;
-import nl.tudelft.cse1110.andy.grader.execution.step.helper.Mode;
-import nl.tudelft.cse1110.andy.grader.execution.step.helper.ModeActionSelector;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.grader.util.FilesUtils;
 
