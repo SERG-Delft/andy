@@ -2,6 +2,7 @@ package nl.tudelft.cse1110.andy.grader.execution;
 
 import nl.tudelft.cse1110.andy.grader.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.grader.config.RunConfiguration;
+import nl.tudelft.cse1110.andy.grader.execution.step.helper.Action;
 
 import java.util.List;
 
@@ -12,10 +13,19 @@ public class Context {
     private RunConfiguration runConfiguration = null;
     private long startTime;
     private List<String> fullClassNames;
+    private ExecutionFlow flow;
+    private Action action;
 
-    public Context() {
+    public Context(Action action) {
         this.cleanClassloader = Thread.currentThread().getContextClassLoader();
         this.startTime = System.nanoTime();
+        this.action = action;
+    }
+
+    public void setFlow(ExecutionFlow flow) {this.flow = flow;}
+
+    public ExecutionFlow getFlow() {
+        return flow;
     }
 
     public DirectoryConfiguration getDirectoryConfiguration() {
@@ -48,5 +58,9 @@ public class Context {
 
     public List<String> getNewClassNames() {
         return fullClassNames;
+    }
+
+    public Action getAction() {
+        return action;
     }
 }

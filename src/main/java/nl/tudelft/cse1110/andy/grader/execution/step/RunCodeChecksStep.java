@@ -19,6 +19,10 @@ public class RunCodeChecksStep implements ExecutionStep {
         script.runChecks(findSolution(dirCfg.getWorkingDir()));
 
         result.logCodeChecks(script);
+    }
 
+    @Override
+    public boolean equals(Object other) {
+        return other instanceof RunCodeChecksStep;
     }
 }

@@ -3,7 +3,11 @@ package nl.tudelft.cse1110.andy.grader.execution.step;
 import nl.tudelft.cse1110.andy.grader.config.DefaultRunConfiguration;
 import nl.tudelft.cse1110.andy.grader.config.RunConfiguration;
 import nl.tudelft.cse1110.andy.grader.execution.Context;
+import nl.tudelft.cse1110.andy.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
+import nl.tudelft.cse1110.andy.grader.execution.step.helper.Action;
+import nl.tudelft.cse1110.andy.grader.execution.step.helper.Mode;
+import nl.tudelft.cse1110.andy.grader.execution.step.helper.ModeActionSelector;
 import nl.tudelft.cse1110.andy.grader.grade.GradeWeight;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 
@@ -26,6 +30,7 @@ public class GetRunConfigurationStep implements ExecutionStep {
 
             this.buildGradeValues(runConfiguration, result);
             this.setTotalNumberOfMutations(runConfiguration, result);
+            this.addExecutionSteps(ctx, result);
         } catch (NoSuchElementException ex) {
             // There's no configuration set. We put a default one!
             RunConfiguration runConfiguration = new DefaultRunConfiguration(allClassesButTestingAndConfigOnes(ctx.getNewClassNames()));
@@ -33,6 +38,7 @@ public class GetRunConfigurationStep implements ExecutionStep {
 
             this.buildGradeValues(runConfiguration, result);
             this.setTotalNumberOfMutations(runConfiguration, result);
+            this.addExecutionSteps(ctx, result);
         } catch (Exception ex) {
             result.genericFailure(this, ex);
         }
@@ -56,4 +62,33 @@ public class GetRunConfigurationStep implements ExecutionStep {
         result.setNumberOfMutationsToConsider(numberOfMutations);
     }
 
+    private void addExecutionSteps(Context ctx, ResultBuilder result) {
+        ExecutionFlow flow = ctx.getFlow();
+
+        ModeActionSelector modeActionSelector = createModeSelector(ctx, result);
+
+        // Custom action means the steps of the flow have already been declared.
+        if (modeActionSelector.getAction() == Action.CUSTOM) {
+            return;
+        }
+
+        flow.addSteps(modeActionSelector.getCorrectSteps());
+    }
+
+    private ModeActionSelector createModeSelector(Context ctx, ResultBuilder result) {
+        RunConfiguration runConfiguration = ctx.getRunConfiguration();
+
+        Mode mode = runConfiguration.mode();
+        Action action = ctx.getAction();
+
+        ModeActionSelector modeActionSelector = new ModeActionSelector(mode, action);
+        result.setModeSelector(modeActionSelector);
+
+        return modeActionSelector;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return other instanceof GetRunConfigurationStep;
+    }
 }

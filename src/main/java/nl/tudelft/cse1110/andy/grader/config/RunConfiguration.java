@@ -1,6 +1,7 @@
 package nl.tudelft.cse1110.andy.grader.config;
 
 import nl.tudelft.cse1110.andy.codechecker.engine.CheckScript;
+import nl.tudelft.cse1110.andy.grader.execution.step.helper.Mode;
 
 import java.util.Collections;
 import java.util.List;
@@ -52,6 +53,10 @@ public abstract class RunConfiguration {
 
     public boolean debug() {
         return false;
+    }
+
+    public Mode mode() {
+        return Mode.PRACTICE;
     }
 
 }

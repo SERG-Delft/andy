@@ -1,11 +1,12 @@
 package nl.tudelft.cse1110.andy;
 
 import nl.tudelft.cse1110.andy.grader.config.DirectoryConfiguration;
-import nl.tudelft.cse1110.andy.grader.util.FilesUtils;
 import nl.tudelft.cse1110.andy.grader.execution.Context;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
+import nl.tudelft.cse1110.andy.grader.execution.step.helper.Action;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
+import nl.tudelft.cse1110.andy.grader.util.FilesUtils;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
@@ -21,24 +22,28 @@ public abstract class IntegrationTestBase {
     @TempDir
     protected Path workDir;
 
-    public String run(List<ExecutionStep> plan, String libraryFile, String solutionFile) {
+    public String run(Action action, List<ExecutionStep> plan, String libraryFile, String solutionFile, String configurationFile) {
+        if (configurationFile != null) {
+            copyConfigurationFile(configurationFile);
+        }
+
         copyFiles(libraryFile, solutionFile);
 
-        Context cfg = new Context();
+        Context ctx = new Context(action);
 
         DirectoryConfiguration dirCfg = new DirectoryConfiguration(
                 workDir.toString(),
                 reportDir.toString()
         );
 
-        cfg.setDirectoryConfiguration(dirCfg);
+        ctx.setDirectoryConfiguration(dirCfg);
 
         ResultBuilder result = new ResultBuilder();
 
         ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
 
         try {
-            ExecutionFlow flow = ExecutionFlow.asSteps(plan, cfg, result);
+            ExecutionFlow flow = ExecutionFlow.asSteps(plan, ctx, result);
             flow.run();
         } catch(Exception e) {
             // something went wrong, let's print the debugging version in the console
@@ -52,14 +57,16 @@ public abstract class IntegrationTestBase {
         return readStdOut();
     }
 
-    private String readStdOut() {
-        return FilesUtils.readFile(new File(FilesUtils.concatenateDirectories(workDir.toString(), "stdout.txt")));
+    public String run(List<ExecutionStep> plan, String libraryFile, String solutionFile) {
+        return this.run(Action.CUSTOM, plan, libraryFile, solutionFile, null);
     }
 
     public String run(List<ExecutionStep> plan, String libraryFile, String solutionFile, String configurationFile) {
-        this.copyConfigurationFile(configurationFile);
+        return this.run(Action.CUSTOM, plan, libraryFile, solutionFile, configurationFile);
+    }
 
-        return this.run(plan, libraryFile, solutionFile);
+    private String readStdOut() {
+        return FilesUtils.readFile(new File(FilesUtils.concatenateDirectories(workDir.toString(), "stdout.txt")));
     }
 
 

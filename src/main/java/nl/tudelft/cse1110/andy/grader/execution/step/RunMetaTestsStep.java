@@ -1,11 +1,12 @@
 package nl.tudelft.cse1110.andy.grader.execution.step;
 
-import nl.tudelft.cse1110.andy.grader.execution.Context;
 import nl.tudelft.cse1110.andy.grader.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.grader.config.MetaTest;
 import nl.tudelft.cse1110.andy.grader.config.RunConfiguration;
+import nl.tudelft.cse1110.andy.grader.execution.Context;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
+import nl.tudelft.cse1110.andy.grader.execution.step.helper.Action;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.grader.util.FilesUtils;
 
@@ -112,15 +113,19 @@ public class RunMetaTestsStep implements ExecutionStep {
                 dirCfg.getOutputDir()
         );
 
-        Context metaCfg = new Context();
-        metaCfg.setDirectoryConfiguration(metaDirCfg);
+        Context metaCtx = new Context(Action.CUSTOM);
+        metaCtx.setDirectoryConfiguration(metaDirCfg);
 
         ResultBuilder metaResult = new ResultBuilder();
 
-        ExecutionFlow flow = ExecutionFlow.justTests(metaCfg, metaResult);
+        ExecutionFlow flow = ExecutionFlow.justTests(metaCtx, metaResult);
         flow.run();
 
         return metaResult;
     }
 
+    @Override
+    public boolean equals(Object other) {
+        return other instanceof RunMetaTestsStep;
+    }
 }

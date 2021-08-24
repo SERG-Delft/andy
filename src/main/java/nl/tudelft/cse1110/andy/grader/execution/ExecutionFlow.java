@@ -4,6 +4,7 @@ import nl.tudelft.cse1110.andy.grader.execution.step.*;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class ExecutionFlow {
         steps.addAll(0, basicSteps());
         this.ctx = ctx;
         this.result = result;
+        this.ctx.setFlow(this);
     }
 
     public void run() {
@@ -38,9 +40,14 @@ public class ExecutionFlow {
         generateOutput();
     }
 
+    public void addSteps(List<ExecutionStep> steps) {
+        this.steps.addAll(steps);
+    }
+
     /* In this method we also calculate the total time in seconds our tool took to run.
      */
     private void generateOutput() {
+        result.logMode();
         result.logTimeToRun(ctx.getStartTime());
 
         exportOutputFile(ctx, result);
@@ -50,42 +57,20 @@ public class ExecutionFlow {
         }
     }
 
-    public static ExecutionFlow examMode(Context cfg, ResultBuilder result) {
-        return new ExecutionFlow(
-                Arrays.asList(
-                        new RunJUnitTestsStep(),
-                        new RunJacocoCoverageStep(),
-                        new RunPitestStep(),
-                        new CalculateFinalGradeStep()),
-                cfg,
-                result
-        );
+    public static ExecutionFlow asSteps(List<ExecutionStep> plan, Context ctx, ResultBuilder result) {
+        return new ExecutionFlow(plan, ctx, result);
     }
 
-    public static ExecutionFlow asSteps(List<ExecutionStep> plan, Context cfg, ResultBuilder result) {
-        return new ExecutionFlow(plan, cfg, result);
-    }
-
-    public static ExecutionFlow fullMode(Context cfg, ResultBuilder result) {
-        return new ExecutionFlow(
-                Arrays.asList(
-                        new RunJUnitTestsStep(),
-                        new RunJacocoCoverageStep(),
-                        new RunPitestStep(),
-                        new RunCodeChecksStep(),
-                        new RunMetaTestsStep(),
-                        new CalculateFinalGradeStep()),
-                cfg,
-                result
-        );
-    }
-
-    public static ExecutionFlow justTests(Context cfg, ResultBuilder result) {
+    public static ExecutionFlow justTests(Context ctx, ResultBuilder result) {
         return new ExecutionFlow(
                 Arrays.asList(new RunJUnitTestsStep(), new CalculateFinalGradeStep()),
-                cfg,
+                ctx,
                 result
         );
+    }
+
+    public static ExecutionFlow justBasic(Context ctx, ResultBuilder result) {
+        return new ExecutionFlow(Collections.emptyList(), ctx, result);
     }
 
     private List<ExecutionStep> basicSteps() {

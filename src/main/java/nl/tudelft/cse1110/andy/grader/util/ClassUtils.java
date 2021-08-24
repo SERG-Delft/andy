@@ -3,9 +3,6 @@ package nl.tudelft.cse1110.andy.grader.util;
 import org.apache.commons.lang3.SystemUtils;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

@@ -2,6 +2,7 @@ package nl.tudelft.cse1110.andy.grader.result;
 
 import nl.tudelft.cse1110.andy.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
+import nl.tudelft.cse1110.andy.grader.execution.step.helper.ModeActionSelector;
 import nl.tudelft.cse1110.andy.grader.grade.GradeCalculator;
 import nl.tudelft.cse1110.andy.grader.grade.GradeValues;
 import nl.tudelft.cse1110.andy.grader.grade.GradeWeight;
@@ -40,7 +41,11 @@ public class ResultBuilder {
 
     private List<Diagnostic<? extends JavaFileObject>> compilationErrors;
 
+    private ModeActionSelector modeActionSelector;
 
+    public void setModeSelector(ModeActionSelector modeActionSelector) {
+        this.modeActionSelector = modeActionSelector;
+    }
 
     public void compilationSuccess() {
         l("--- Compilation\nSuccess");
@@ -69,7 +74,6 @@ public class ResultBuilder {
         }
 
         failed();
-
     }
 
     private boolean anyOfTheErrorsAreCausedDueToBadConfiguration(List<Diagnostic<? extends JavaFileObject>> compilationErrors) {
@@ -145,7 +149,6 @@ public class ResultBuilder {
         }
     }
 
-
     /** Checks for different error cases possible when tests are not detected
      * @param summary - JUnit execution summary
      */
@@ -166,7 +169,6 @@ public class ResultBuilder {
         }
         failed();
     }
-
 
     public int getTestsRan() {
         return this.testsRan;
@@ -214,8 +216,6 @@ public class ResultBuilder {
         return failure.getException().toString();
     }
 
-
-
     private String getParameterizedMethodName(TestExecutionSummary.Failure failure) {
         int endIndex = failure.getTestIdentifier().getLegacyReportingName().indexOf('(');
         return failure.getTestIdentifier().getLegacyReportingName().substring(0, endIndex);
@@ -237,7 +237,13 @@ public class ResultBuilder {
         return failure.getException().toString().substring(open+2, close);
     }
 
-
+    public void logMode() {
+        // modeActionSelector can be null if the code did not get to GetRunConfigurationStep.
+        // This can happen due to a compilation error for example.
+        if (modeActionSelector != null) {
+            l(String.format("\nAndy is running in %s mode.", modeActionSelector.getMode().toString()));
+        }
+    }
 
     public void logTimeToRun(long startTime) {
         long stopTime = System.nanoTime();
@@ -246,8 +252,6 @@ public class ResultBuilder {
 
         l(String.format("\nAndy took %.1f seconds to assess your question.", timeInSeconds));
     }
-
-
 
     public String buildEndUserResult() {
         return result.toString();
@@ -269,7 +273,6 @@ public class ResultBuilder {
         debug.append("DEBUG: " + line);
         debug.append("\n");
     }
-
 
     private String now() {
         return LocalDateTime.now().toString();
@@ -321,24 +324,23 @@ public class ResultBuilder {
       
     }
 
-
     public void logCodeChecks(CheckScript script) {
 
-        if(script.hasChecks()) {
-
-            l("\n--- Code checks");
-
+        if (script.hasChecks()) {
             int weightedChecks = script.weightedChecks();
             int sumOfWeights = script.weights();
-            l(String.format("%d/%d passed", weightedChecks, sumOfWeights));
 
-            l(script.generateReportOFailedChecks().trim());
+            if (modeActionSelector.shouldShowHints()) {
+                l("\n--- Code checks");
+                l(script.generateReportOFailedChecks().trim());
+
+                l(String.format("\n%d/%d passed", weightedChecks, sumOfWeights));
+            }
 
             grades.setCheckGrade(weightedChecks, sumOfWeights);
         }
 
     }
-
 
     public void logJacoco(Collection<IClassCoverage> coverages) {
         l("\n--- JaCoCo coverage");
@@ -360,10 +362,12 @@ public class ResultBuilder {
     }
 
     public void logMetaTests(int score, int totalTests, List<String> failures) {
-        l("\n--- Meta tests");
-        l(String.format("%d/%d passed", score, totalTests));
-        for (String failure : failures) {
-            l(String.format("Meta test: %s FAILED", failure));
+        if (modeActionSelector.shouldShowHints()) {
+            l("\n--- Meta tests");
+            l(String.format("%d/%d passed", score, totalTests));
+            for (String failure : failures) {
+                l(String.format("Meta test: %s FAILED", failure));
+            }
         }
 
         grades.setMetaGrade(score, totalTests);
@@ -387,7 +391,7 @@ public class ResultBuilder {
 
         // The failing can happen before we instantiated a grade calculator
         // e.g., during compilation time.
-        if(gradeCalculator!=null)
+        if (gradeCalculator != null)
             gradeCalculator.failed();
     }
 
