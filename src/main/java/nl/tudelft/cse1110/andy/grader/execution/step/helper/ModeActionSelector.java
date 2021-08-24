@@ -11,12 +11,12 @@ import static nl.tudelft.cse1110.andy.grader.config.RunConfiguration.*;
 import static nl.tudelft.cse1110.andy.grader.execution.step.helper.Action.*;
 import static nl.tudelft.cse1110.andy.grader.execution.step.helper.Mode.*;
 
-public class ModeSelector {
+public class ModeActionSelector {
 
     private Mode mode;
     private Action action;
 
-    public ModeSelector(Mode mode, Action action) {
+    public ModeActionSelector(Mode mode, Action action) {
         this.mode = mode;
         this.action = action;
     }

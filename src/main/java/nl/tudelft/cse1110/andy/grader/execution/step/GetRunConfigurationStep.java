@@ -7,17 +7,14 @@ import nl.tudelft.cse1110.andy.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.grader.execution.step.helper.Action;
 import nl.tudelft.cse1110.andy.grader.execution.step.helper.Mode;
-import nl.tudelft.cse1110.andy.grader.execution.step.helper.ModeSelector;
+import nl.tudelft.cse1110.andy.grader.execution.step.helper.ModeActionSelector;
 import nl.tudelft.cse1110.andy.grader.grade.GradeWeight;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 
-import javax.xml.transform.Result;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 import static nl.tudelft.cse1110.andy.grader.util.ClassUtils.allClassesButTestingAndConfigOnes;
 import static nl.tudelft.cse1110.andy.grader.util.ClassUtils.getConfigurationClass;
-import static nl.tudelft.cse1110.andy.grader.config.RunConfiguration.*;
 
 public class GetRunConfigurationStep implements ExecutionStep {
 
@@ -68,7 +65,7 @@ public class GetRunConfigurationStep implements ExecutionStep {
     private void addExecutionSteps(Context ctx, ResultBuilder result) {
         ExecutionFlow flow = ctx.getFlow();
 
-        ModeSelector modeSelector = createModeSelector(ctx, result);
+        ModeActionSelector modeActionSelector = createModeSelector(ctx, result);
 
         // In case flow is null, it means flow already contains other steps than the basics and hence we return early.
         // This happens for example in tests or when running the meta tests.
@@ -76,19 +73,19 @@ public class GetRunConfigurationStep implements ExecutionStep {
             return;
         }
 
-        flow.addSteps(modeSelector.getCorrectSteps());
+        flow.addSteps(modeActionSelector.getCorrectSteps());
     }
 
-    private ModeSelector createModeSelector(Context ctx, ResultBuilder result) {
+    private ModeActionSelector createModeSelector(Context ctx, ResultBuilder result) {
         RunConfiguration runConfiguration = ctx.getRunConfiguration();
 
         Mode mode = runConfiguration.mode();
         Action action = ctx.getAction();
 
-        ModeSelector modeSelector = new ModeSelector(mode, action);
-        result.setModeSelector(modeSelector);
+        ModeActionSelector modeActionSelector = new ModeActionSelector(mode, action);
+        result.setModeSelector(modeActionSelector);
 
-        return modeSelector;
+        return modeActionSelector;
     }
 
     @Override

@@ -8,7 +8,7 @@ import nl.tudelft.cse1110.andy.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.grader.execution.step.helper.Action;
 import nl.tudelft.cse1110.andy.grader.execution.step.helper.Mode;
-import nl.tudelft.cse1110.andy.grader.execution.step.helper.ModeSelector;
+import nl.tudelft.cse1110.andy.grader.execution.step.helper.ModeActionSelector;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.grader.util.FilesUtils;
 
@@ -118,10 +118,10 @@ public class RunMetaTestsStep implements ExecutionStep {
         Context metaCtx = new Context(Action.TESTS);
         metaCtx.setDirectoryConfiguration(metaDirCfg);
 
-        ModeSelector modeSelector = new ModeSelector(Mode.PRACTICE, Action.TESTS);
+        ModeActionSelector modeActionSelector = new ModeActionSelector(Mode.PRACTICE, Action.TESTS);
 
         ResultBuilder metaResult = new ResultBuilder();
-        metaResult.setModeSelector(modeSelector);
+        metaResult.setModeSelector(modeActionSelector);
 
         ExecutionFlow flow = ExecutionFlow.justTests(metaCtx, metaResult);
         flow.run();

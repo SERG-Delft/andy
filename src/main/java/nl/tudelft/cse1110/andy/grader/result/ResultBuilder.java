@@ -2,8 +2,7 @@ package nl.tudelft.cse1110.andy.grader.result;
 
 import nl.tudelft.cse1110.andy.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
-import nl.tudelft.cse1110.andy.grader.execution.step.helper.Mode;
-import nl.tudelft.cse1110.andy.grader.execution.step.helper.ModeSelector;
+import nl.tudelft.cse1110.andy.grader.execution.step.helper.ModeActionSelector;
 import nl.tudelft.cse1110.andy.grader.grade.GradeCalculator;
 import nl.tudelft.cse1110.andy.grader.grade.GradeValues;
 import nl.tudelft.cse1110.andy.grader.grade.GradeWeight;
@@ -42,10 +41,10 @@ public class ResultBuilder {
 
     private List<Diagnostic<? extends JavaFileObject>> compilationErrors;
 
-    private ModeSelector modeSelector;
+    private ModeActionSelector modeActionSelector;
 
-    public void setModeSelector(ModeSelector modeSelector) {
-        this.modeSelector = modeSelector;
+    public void setModeSelector(ModeActionSelector modeActionSelector) {
+        this.modeActionSelector = modeActionSelector;
     }
 
     public void compilationSuccess() {
@@ -239,7 +238,7 @@ public class ResultBuilder {
     }
 
     public void logMode() {
-        l(String.format("\nAndy is running in %s mode.", modeSelector.getMode().toString()));
+        l(String.format("\nAndy is running in %s mode.", modeActionSelector.getMode().toString()));
     }
 
     public void logTimeToRun(long startTime) {
@@ -327,7 +326,7 @@ public class ResultBuilder {
             int weightedChecks = script.weightedChecks();
             int sumOfWeights = script.weights();
 
-            if (modeSelector.shouldShowHints()) {
+            if (modeActionSelector.shouldShowHints()) {
                 l("\n--- Code checks");
                 l(script.generateReportOFailedChecks().trim());
 
@@ -359,7 +358,7 @@ public class ResultBuilder {
     }
 
     public void logMetaTests(int score, int totalTests, List<String> failures) {
-        if (modeSelector.shouldShowHints()) {
+        if (modeActionSelector.shouldShowHints()) {
             l("\n--- Meta tests");
             l(String.format("%d/%d passed", score, totalTests));
             for (String failure : failures) {
