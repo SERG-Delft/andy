@@ -1,6 +1,6 @@
 package nl.tudelft.cse1110.andy.codechecker;
 
-import static nl.tudelft.cse1110.andy.ResourceUtils.resourceFolder;
+import static nl.tudelft.cse1110.andy.TestResourceUtils.resourceFolder;
 
 public class CodeCheckerTestUtils {
     public String getTestResource(String fixtureName) {

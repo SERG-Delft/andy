@@ -16,4 +16,17 @@ public class FinalGradeCalculationTest extends IntegrationTestBase {
         assertThat(result).has(ResultTestAssertions.finalGrade(42));
     }
 
+
+    // 0.1 * 22/22 + 0.3 * 29/29 + 0.4 * 4/4 + 0.2 --> 100
+    @Test
+    void printAsciiArtWhen100Score() {
+
+        String result = run(fullMode(),
+                "NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution",
+                "NumberUtilsAddFullPointsConfiguration");
+
+        assertThat(result).has(ResultTestAssertions.congratsMessage());
+    }
+
+
 }

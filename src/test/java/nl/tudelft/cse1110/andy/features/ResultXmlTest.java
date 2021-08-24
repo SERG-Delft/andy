@@ -1,7 +1,7 @@
 package nl.tudelft.cse1110.andy.features;
 
 import nl.tudelft.cse1110.andy.IntegrationTestBase;
-import nl.tudelft.cse1110.andy.ResourceUtils;
+import nl.tudelft.cse1110.andy.TestResourceUtils;
 import nl.tudelft.cse1110.andy.grader.util.FilesUtils;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +18,7 @@ public class ResultXmlTest extends IntegrationTestBase {
         run(onlyJUnitTests(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfImportListCommented");
 
         File xmlFile = new File(FilesUtils.concatenateDirectories(workDir.toString(), "results.xml"));
-        File expected = new File(ResourceUtils.resourceFolder("/grader/fixtures/Output/resultsIndexOfListCommentedFail.xml"));
+        File expected = new File(TestResourceUtils.resourceFolder("/grader/fixtures/Output/resultsIndexOfListCommentedFail.xml"));
 
         assertThat(xmlFile).exists().isFile();
         assertThat(xmlFile).hasSameTextualContentAs(expected);
@@ -29,7 +29,7 @@ public class ResultXmlTest extends IntegrationTestBase {
         run(onlyJUnitTests(), "MathArraysLibrary", "MathArrays100Score");
 
         File xmlFile = new File(FilesUtils.concatenateDirectories(workDir.toString(), "results.xml"));
-        File expected = new File(ResourceUtils.resourceFolder("/grader/fixtures/Output/resultsMathArraysSuccess.xml"));
+        File expected = new File(TestResourceUtils.resourceFolder("/grader/fixtures/Output/resultsMathArraysSuccess.xml"));
 
         assertThat(xmlFile).exists().isFile();
         assertThat(xmlFile).hasSameTextualContentAs(expected);
@@ -40,7 +40,7 @@ public class ResultXmlTest extends IntegrationTestBase {
         run(fullMode(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass");
 
         File xmlFile = new File(FilesUtils.concatenateDirectories(workDir.toString(), "results.xml"));
-        File expected = new File(ResourceUtils.resourceFolder("/grader/fixtures/Output/resultsNumberUtilsPartial.xml"));
+        File expected = new File(TestResourceUtils.resourceFolder("/grader/fixtures/Output/resultsNumberUtilsPartial.xml"));
 
         assertThat(xmlFile).exists().isFile();
         assertThat(xmlFile).hasSameTextualContentAs(expected);

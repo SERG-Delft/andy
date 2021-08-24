@@ -13,7 +13,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 
-import static nl.tudelft.cse1110.andy.ResourceUtils.resourceFolder;
+import static nl.tudelft.cse1110.andy.TestResourceUtils.resourceFolder;
 
 public abstract class IntegrationTestBase {
     @TempDir

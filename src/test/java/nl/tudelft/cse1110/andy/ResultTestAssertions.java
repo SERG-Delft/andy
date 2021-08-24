@@ -216,5 +216,10 @@ public class ResultTestAssertions {
     public static Condition<String> noPitestCoverage() {
         return not(containsRegex("--- Mutation testing"));
     }
+
+    public static Condition<String> congratsMessage () {
+        return containsString("Super congrats!");
+    }
+
 }
 

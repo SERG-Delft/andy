@@ -1,11 +1,13 @@
 package nl.tudelft.cse1110.andy.grader.result;
 
+import nl.tudelft.cse1110.andy.ResourceUtils;
 import nl.tudelft.cse1110.andy.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.grader.execution.step.helper.ModeActionSelector;
 import nl.tudelft.cse1110.andy.grader.grade.GradeCalculator;
 import nl.tudelft.cse1110.andy.grader.grade.GradeValues;
 import nl.tudelft.cse1110.andy.grader.grade.GradeWeight;
+import nl.tudelft.cse1110.andy.grader.util.FilesUtils;
 import nl.tudelft.cse1110.andy.grader.util.ImportUtils;
 import org.jacoco.core.analysis.IClassCoverage;
 import org.junit.platform.engine.reporting.ReportEntry;
@@ -15,9 +17,7 @@ import org.pitest.mutationtest.tooling.CombinedStatistics;
 
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -296,7 +296,33 @@ public class ResultBuilder {
         String grade = String.valueOf(finalGrade());
 
         l("\n--- Final grade");
-        l(grade + "/100");
+        l(grade + "/100\n");
+
+        if (grade.equals("100")) {
+            printAsciiArt(ResourceUtils.resourceFolder("congrats"));
+        }
+    }
+
+
+    private void printAsciiArt(String asciDir) {
+
+        File asciiDir = new File(asciDir);
+        File[] listOfAscii = FilesUtils.getAllFiles(asciiDir);
+
+        // Randomly pick one of the .txt files under resources/congrats
+        Random random = new Random();
+        File randomAsciiFile = listOfAscii[random.nextInt(listOfAscii.length)];
+
+//         Log the content of the .txt file
+        try (BufferedReader br = new BufferedReader(new FileReader(randomAsciiFile))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                l(line);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
     public void logConsoleOutput(ByteArrayOutputStream console){
