@@ -38,6 +38,7 @@ public class RunMetaTestsStep implements ExecutionStep {
 
             List<MetaTest> metaTests = runCfg.metaTests();
             List<String> failures = new ArrayList<>();
+            List<String> passes = new ArrayList<>();
 
             /*
              * For each meta test, we basically perform a string replace in the
@@ -71,6 +72,8 @@ public class RunMetaTestsStep implements ExecutionStep {
 
                 if (passesTheMetaTest) {
                     score++;
+                    String metaName = metaTest.getName();
+                    passes.add(metaName);
                 } else {
                     String metaName = metaTest.getName();
                     failures.add(metaName);
@@ -80,7 +83,7 @@ public class RunMetaTestsStep implements ExecutionStep {
                 deleteDirectory(metaWorkingDir);
             }
 
-            result.logMetaTests(score, metaTests.size(), failures);
+            result.logMetaTests(score, metaTests.size(), passes, failures);
         } catch (Exception ex) {
             result.genericFailure(this, ex);
         } finally {
