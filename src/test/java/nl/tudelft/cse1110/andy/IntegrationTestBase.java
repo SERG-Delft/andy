@@ -24,10 +24,14 @@ public abstract class IntegrationTestBase {
     @TempDir
     protected Path workDir;
 
-    public String run(List<ExecutionStep> plan, String libraryFile, String solutionFile) {
+    public String run(Action action, List<ExecutionStep> plan, String libraryFile, String solutionFile, String configurationFile) {
+        if (configurationFile != null) {
+            copyConfigurationFile(configurationFile);
+        }
+
         copyFiles(libraryFile, solutionFile);
 
-        Context ctx = new Context(Action.CUSTOM);
+        Context ctx = new Context(action);
 
         DirectoryConfiguration dirCfg = new DirectoryConfiguration(
                 workDir.toString(),
@@ -55,14 +59,16 @@ public abstract class IntegrationTestBase {
         return readStdOut();
     }
 
-    private String readStdOut() {
-        return FilesUtils.readFile(new File(FilesUtils.concatenateDirectories(workDir.toString(), "stdout.txt")));
+    public String run(List<ExecutionStep> plan, String libraryFile, String solutionFile) {
+        return this.run(Action.CUSTOM, plan, libraryFile, solutionFile, null);
     }
 
     public String run(List<ExecutionStep> plan, String libraryFile, String solutionFile, String configurationFile) {
-        this.copyConfigurationFile(configurationFile);
+        return this.run(Action.CUSTOM, plan, libraryFile, solutionFile, configurationFile);
+    }
 
-        return this.run(plan, libraryFile, solutionFile);
+    private String readStdOut() {
+        return FilesUtils.readFile(new File(FilesUtils.concatenateDirectories(workDir.toString(), "stdout.txt")));
     }
 
 
