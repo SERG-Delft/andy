@@ -1,9 +1,7 @@
 package nl.tudelft.cse1110.andy;
 
-import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
 import org.assertj.core.api.Condition;
 
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

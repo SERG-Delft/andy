@@ -1,21 +1,19 @@
 package nl.tudelft.cse1110.andy;
 
 import nl.tudelft.cse1110.andy.grader.config.DirectoryConfiguration;
-import nl.tudelft.cse1110.andy.grader.execution.step.helper.Action;
-import nl.tudelft.cse1110.andy.grader.util.FilesUtils;
 import nl.tudelft.cse1110.andy.grader.execution.Context;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
+import nl.tudelft.cse1110.andy.grader.execution.step.helper.Action;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
+import nl.tudelft.cse1110.andy.grader.util.FilesUtils;
 import org.junit.jupiter.api.io.TempDir;
-import org.mockito.MockedStatic;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 
 import static nl.tudelft.cse1110.andy.ResourceUtils.resourceFolder;
-import static org.mockito.Mockito.*;
 
 public abstract class IntegrationTestBase {
     @TempDir

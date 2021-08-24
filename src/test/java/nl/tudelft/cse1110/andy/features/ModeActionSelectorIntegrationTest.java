@@ -1,7 +1,6 @@
 package nl.tudelft.cse1110.andy.features;
 
 import nl.tudelft.cse1110.andy.IntegrationTestBase;
-import nl.tudelft.cse1110.andy.ResultTestAssertions;
 import nl.tudelft.cse1110.andy.grader.execution.step.helper.Action;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -10,7 +9,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-import static nl.tudelft.cse1110.andy.ExecutionStepHelper.*;
+import static nl.tudelft.cse1110.andy.ExecutionStepHelper.onlyBasic;
 import static nl.tudelft.cse1110.andy.ResultTestAssertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
