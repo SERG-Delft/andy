@@ -3,6 +3,7 @@ package nl.tudelft.cse1110.andy.features;
 import nl.tudelft.cse1110.andy.IntegrationTestBase;
 import nl.tudelft.cse1110.andy.ResultTestAssertions;
 import nl.tudelft.cse1110.andy.TestResourceUtils;
+import nl.tudelft.cse1110.andy.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.andy.grader.execution.step.helper.Action;
 import nl.tudelft.cse1110.andy.grader.grade.GradeCalculator;
 import nl.tudelft.cse1110.andy.grader.grade.GradeValues;
@@ -14,6 +15,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.platform.launcher.listeners.TestExecutionSummary;
+import org.pitest.mutationtest.tooling.CombinedStatistics;
 
 import java.io.File;
 import java.util.stream.Stream;
@@ -25,9 +28,9 @@ import static org.mockito.Mockito.*;
 
 public class FinalGradePrintAsciiArtTest extends IntegrationTestBase {
 
-    RandomAsciiArtGenerator asciiArtGenerator;
-    GradeCalculator gradeCalculator;
-    ResultBuilder resultBuilder;
+    private RandomAsciiArtGenerator asciiArtGenerator;
+    private GradeCalculator gradeCalculator;
+    private ResultBuilder resultBuilder;
 
     @BeforeEach
     void setup() {
@@ -78,17 +81,52 @@ public class FinalGradePrintAsciiArtTest extends IntegrationTestBase {
     }
 
 
+    // In practice mode, grade should be shown for both actions HINTS and NO_HINTS
+
+    @ParameterizedTest
+    @MethodSource("testPracticeActionGenerator")
+    void asciiArtInPracticeFullMode(Action action) {
+
+        String result = run(action, onlyBasic(),
+                "NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution",
+                "NumberUtilsAddFullPointsPracticeModeConfiguration", resultBuilder);
+
+        assertThat(result)
+                .has(ResultTestAssertions
+                        .asciiArtPrinted(new File(TestResourceUtils.resourceFolder("grader/fixtures/Congrats/monkey.txt"))));
+    }
+
+    static Stream<Arguments> testPracticeActionGenerator() {
+        return Stream.of(
+                Arguments.of(Action.HINTS),
+                Arguments.of(Action.NO_HINTS)
+        );
+    }
+
+
+
+
     // This unit test stubs the calculated final grade
     @Test
     void logFinalGradePrintAsciiUnitTest() {
 
+        TestExecutionSummary testExecutionSummary = mock(TestExecutionSummary.class);
+
         when(gradeCalculator.calculateFinalGrade(any(GradeValues.class)))
                 .thenReturn(100);
+        when(testExecutionSummary.getTestsFoundCount()).thenReturn((long)5);
+        when(testExecutionSummary.getTestsSucceededCount()).thenReturn((long)5);
+        when(testExecutionSummary.getTestsFailedCount()).thenReturn((long)5);
 
+        resultBuilder.logJUnitRun(testExecutionSummary);
         resultBuilder.logFinalGrade();
         String result = resultBuilder.buildEndUserResult();
 
-        assertThat(result).endsWith(
+        assertThat(result)
+                .startsWith("\n" +
+                "--- JUnit execution\n" +
+                "5/5 passed")
+                .endsWith(
                 "\n--- Final grade\n" +
                 "100/100\n" +
                 "\n" +
