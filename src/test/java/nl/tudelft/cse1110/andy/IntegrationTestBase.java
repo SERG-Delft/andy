@@ -13,7 +13,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 
-import static nl.tudelft.cse1110.andy.ResourceUtils.resourceFolder;
+import static nl.tudelft.cse1110.andy.TestResourceUtils.resourceFolder;
 
 public abstract class IntegrationTestBase {
     @TempDir
@@ -65,6 +65,10 @@ public abstract class IntegrationTestBase {
 
     public String run(List<ExecutionStep> plan, String libraryFile, String solutionFile, String configurationFile) {
         return this.run(Action.CUSTOM, plan, libraryFile, solutionFile, configurationFile, new ResultBuilder());
+    }
+
+    public String run(Action action, List<ExecutionStep> plan, String libraryFile, String solutionFile, String configurationFile) {
+        return this.run(action, plan, libraryFile, solutionFile, configurationFile, new ResultBuilder());
     }
 
     public String run(List<ExecutionStep> plan,

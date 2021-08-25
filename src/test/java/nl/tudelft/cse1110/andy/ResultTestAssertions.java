@@ -8,6 +8,8 @@ import java.io.FileReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.assertj.core.api.AssertionsForClassTypes.not;
+
 
 public class ResultTestAssertions {
 
@@ -136,6 +138,10 @@ public class ResultTestAssertions {
         return containsString("Meta test: " + metaTestName + " FAILED");
     }
 
+    public static Condition<String> metaTestPassing(String metaTestName) {
+        return containsString("Meta test: " + metaTestName + " PASSED");
+    }
+
     public static Condition<String> finalGrade(int score) {
         return containsString("--- Final grade\n" + score + "/100");
     }
@@ -192,6 +198,31 @@ public class ResultTestAssertions {
     public static Condition<String> hintAtNonStaticMethodSource(String methodSource) {
         return containsString("Make sure your corresponding method " + methodSource
                 + "() is static!");
+    }
+
+
+    public static Condition<String> mode(String mode) {
+        return containsRegex(String.format("Andy is running in %s mode.", mode));
+    }
+
+    public static Condition<String> noMetaTests() {
+        return not(containsRegex("--- Meta tests"));
+    }
+
+    public static Condition<String> noCodeChecks() {
+        return not(containsRegex("--- Code checks"));
+    }
+
+    public static Condition<String> noFinalGrade() {
+        return not(containsRegex("--- Final grade"));
+    }
+
+    public static Condition<String> noJacocoCoverage() {
+        return not(containsRegex("--- JaCoCo coverage"));
+    }
+
+    public static Condition<String> noPitestCoverage() {
+        return not(containsRegex("--- Mutation testing"));
     }
 
 

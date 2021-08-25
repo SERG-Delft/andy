@@ -85,7 +85,6 @@ public class ResultBuilder {
         }
 
         failed();
-
     }
 
     private boolean anyOfTheErrorsAreCausedDueToBadConfiguration(List<Diagnostic<? extends JavaFileObject>> compilationErrors) {
@@ -161,7 +160,6 @@ public class ResultBuilder {
         }
     }
 
-
     /** Checks for different error cases possible when tests are not detected
      * @param summary - JUnit execution summary
      */
@@ -182,7 +180,6 @@ public class ResultBuilder {
         }
         failed();
     }
-
 
     public int getTestsRan() {
         return this.testsRan;
@@ -230,8 +227,6 @@ public class ResultBuilder {
         return failure.getException().toString();
     }
 
-
-
     private String getParameterizedMethodName(TestExecutionSummary.Failure failure) {
         int endIndex = failure.getTestIdentifier().getLegacyReportingName().indexOf('(');
         return failure.getTestIdentifier().getLegacyReportingName().substring(0, endIndex);
@@ -269,8 +264,6 @@ public class ResultBuilder {
         l(String.format("\nAndy took %.1f seconds to assess your question.", timeInSeconds));
     }
 
-
-
     public String buildEndUserResult() {
         return result.toString();
     }
@@ -292,7 +285,6 @@ public class ResultBuilder {
         debug.append("\n");
     }
 
-
     private String now() {
         return LocalDateTime.now().toString();
     }
@@ -311,7 +303,7 @@ public class ResultBuilder {
 
     public void logFinalGrade() {
 
-        // Rounding up from 0.5...
+        // rounding up from 0.5...
         String grade = String.valueOf(finalGrade());
 
         l("\n--- Final grade");
@@ -363,24 +355,23 @@ public class ResultBuilder {
       
     }
 
-
     public void logCodeChecks(CheckScript script) {
 
-        if(script.hasChecks()) {
-
-            l("\n--- Code checks");
-
+        if (script.hasChecks()) {
             int weightedChecks = script.weightedChecks();
             int sumOfWeights = script.weights();
-            l(String.format("%d/%d passed", weightedChecks, sumOfWeights));
 
-            l(script.generateReportOFailedChecks().trim());
+            if (modeActionSelector.shouldShowHints()) {
+                l("\n--- Code checks");
+                l(script.generateReportOFailedChecks().trim());
+
+                l(String.format("\n%d/%d passed", weightedChecks, sumOfWeights));
+            }
 
             grades.setCheckGrade(weightedChecks, sumOfWeights);
         }
 
     }
-
 
     public void logJacoco(Collection<IClassCoverage> coverages) {
         l("\n--- JaCoCo coverage");
@@ -401,11 +392,16 @@ public class ResultBuilder {
         grades.setBranchGrade(totalCoveredBranches, totalBranches);
     }
 
-    public void logMetaTests(int score, int totalTests, List<String> failures) {
-        l("\n--- Meta tests");
-        l(String.format("%d/%d passed", score, totalTests));
-        for (String failure : failures) {
-            l(String.format("Meta test: %s FAILED", failure));
+    public void logMetaTests(int score, int totalTests, List<String> passes, List<String> failures) {
+        if (modeActionSelector.shouldShowHints()) {
+            l("\n--- Meta tests");
+            l(String.format("%d/%d passed", score, totalTests));
+            for (String pass : passes) {
+                l(String.format("Meta test: %s PASSED", pass));
+            }
+            for (String failure : failures) {
+                l(String.format("Meta test: %s FAILED", failure));
+            }
         }
 
         grades.setMetaGrade(score, totalTests);
@@ -429,7 +425,7 @@ public class ResultBuilder {
 
         // The failing can happen before we instantiated a grade calculator
         // e.g., during compilation time.
-        if(gradeCalculator!=null)
+        if (gradeCalculator != null)
             gradeCalculator.failed();
     }
 
