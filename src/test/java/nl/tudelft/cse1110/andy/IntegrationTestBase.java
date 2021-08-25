@@ -13,16 +13,18 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 
-import static nl.tudelft.cse1110.andy.TestResourceUtils.resourceFolder;
+import static nl.tudelft.cse1110.andy.ResourceUtils.resourceFolder;
 
 public abstract class IntegrationTestBase {
     @TempDir
-    protected Path reportDir;     
+    protected Path reportDir;
 
     @TempDir
     protected Path workDir;
 
-    public String run(Action action, List<ExecutionStep> plan, String libraryFile, String solutionFile, String configurationFile) {
+    public String run(Action action, List<ExecutionStep> plan,
+                      String libraryFile, String solutionFile, String configurationFile,
+                      ResultBuilder resultBuilder) {
         if (configurationFile != null) {
             copyConfigurationFile(configurationFile);
         }
@@ -38,7 +40,7 @@ public abstract class IntegrationTestBase {
 
         ctx.setDirectoryConfiguration(dirCfg);
 
-        ResultBuilder result = new ResultBuilder();
+        ResultBuilder result = resultBuilder;
 
         ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
 
@@ -58,11 +60,17 @@ public abstract class IntegrationTestBase {
     }
 
     public String run(List<ExecutionStep> plan, String libraryFile, String solutionFile) {
-        return this.run(Action.CUSTOM, plan, libraryFile, solutionFile, null);
+        return this.run(Action.CUSTOM, plan, libraryFile, solutionFile, null, new ResultBuilder());
     }
 
     public String run(List<ExecutionStep> plan, String libraryFile, String solutionFile, String configurationFile) {
-        return this.run(Action.CUSTOM, plan, libraryFile, solutionFile, configurationFile);
+        return this.run(Action.CUSTOM, plan, libraryFile, solutionFile, configurationFile, new ResultBuilder());
+    }
+
+    public String run(List<ExecutionStep> plan,
+                      String libraryFile, String solutionFile, String configurationFile,
+                      ResultBuilder resultBuilder) {
+        return this.run(Action.CUSTOM, plan, libraryFile, solutionFile, configurationFile, resultBuilder);
     }
 
     private String readStdOut() {

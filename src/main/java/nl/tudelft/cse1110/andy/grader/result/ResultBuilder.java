@@ -38,14 +38,25 @@ public class ResultBuilder {
     private GradeCalculator gradeCalculator; // will be set once weights are injected
     private GradeWeight gradeWeights; // will be injected once configuration is loaded
     private GradeValues grades = new GradeValues();
+    private ModeActionSelector modeActionSelector;
+    private RandomAsciiArtGenerator asciiArtGenerator;
 
     private List<Diagnostic<? extends JavaFileObject>> compilationErrors;
 
-    private ModeActionSelector modeActionSelector;
+
+    // Facilitates testing
+    public ResultBuilder(RandomAsciiArtGenerator asciiArtGenerator, GradeCalculator calculator) {
+        this.asciiArtGenerator = asciiArtGenerator;
+        this.gradeCalculator = calculator;
+    }
+
+    public ResultBuilder() {
+    }
 
     public void setModeSelector(ModeActionSelector modeActionSelector) {
         this.modeActionSelector = modeActionSelector;
     }
+
 
     public void compilationSuccess() {
         l("--- Compilation\nSuccess");
@@ -74,6 +85,7 @@ public class ResultBuilder {
         }
 
         failed();
+
     }
 
     private boolean anyOfTheErrorsAreCausedDueToBadConfiguration(List<Diagnostic<? extends JavaFileObject>> compilationErrors) {
@@ -149,6 +161,7 @@ public class ResultBuilder {
         }
     }
 
+
     /** Checks for different error cases possible when tests are not detected
      * @param summary - JUnit execution summary
      */
@@ -169,6 +182,7 @@ public class ResultBuilder {
         }
         failed();
     }
+
 
     public int getTestsRan() {
         return this.testsRan;
@@ -216,6 +230,8 @@ public class ResultBuilder {
         return failure.getException().toString();
     }
 
+
+
     private String getParameterizedMethodName(TestExecutionSummary.Failure failure) {
         int endIndex = failure.getTestIdentifier().getLegacyReportingName().indexOf('(');
         return failure.getTestIdentifier().getLegacyReportingName().substring(0, endIndex);
@@ -253,6 +269,8 @@ public class ResultBuilder {
         l(String.format("\nAndy took %.1f seconds to assess your question.", timeInSeconds));
     }
 
+
+
     public String buildEndUserResult() {
         return result.toString();
     }
@@ -274,6 +292,7 @@ public class ResultBuilder {
         debug.append("\n");
     }
 
+
     private String now() {
         return LocalDateTime.now().toString();
     }
@@ -292,28 +311,22 @@ public class ResultBuilder {
 
     public void logFinalGrade() {
 
-        // rounding up from 0.5...
+        // Rounding up from 0.5...
         String grade = String.valueOf(finalGrade());
 
         l("\n--- Final grade");
         l(grade + "/100\n");
 
-        if (grade.equals("100")) {
-            printAsciiArt(ResourceUtils.resourceFolder("congrats"));
+        if (Integer.valueOf(grade) == 100) {
+            printAsciiArt();
         }
     }
 
+    private void printAsciiArt() {
 
-    private void printAsciiArt(String asciDir) {
+        File randomAsciiFile = asciiArtGenerator.pickRandomAsciiArt();
 
-        File asciiDir = new File(asciDir);
-        File[] listOfAscii = FilesUtils.getAllFiles(asciiDir);
-
-        // Randomly pick one of the .txt files under resources/congrats
-        Random random = new Random();
-        File randomAsciiFile = listOfAscii[random.nextInt(listOfAscii.length)];
-
-//         Log the content of the .txt file
+        // Log the content of the .txt file
         try (BufferedReader br = new BufferedReader(new FileReader(randomAsciiFile))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -350,23 +363,24 @@ public class ResultBuilder {
       
     }
 
+
     public void logCodeChecks(CheckScript script) {
 
-        if (script.hasChecks()) {
+        if(script.hasChecks()) {
+
+            l("\n--- Code checks");
+
             int weightedChecks = script.weightedChecks();
             int sumOfWeights = script.weights();
+            l(String.format("%d/%d passed", weightedChecks, sumOfWeights));
 
-            if (modeActionSelector.shouldShowHints()) {
-                l("\n--- Code checks");
-                l(script.generateReportOFailedChecks().trim());
-
-                l(String.format("\n%d/%d passed", weightedChecks, sumOfWeights));
-            }
+            l(script.generateReportOFailedChecks().trim());
 
             grades.setCheckGrade(weightedChecks, sumOfWeights);
         }
 
     }
+
 
     public void logJacoco(Collection<IClassCoverage> coverages) {
         l("\n--- JaCoCo coverage");
@@ -388,12 +402,10 @@ public class ResultBuilder {
     }
 
     public void logMetaTests(int score, int totalTests, List<String> failures) {
-        if (modeActionSelector.shouldShowHints()) {
-            l("\n--- Meta tests");
-            l(String.format("%d/%d passed", score, totalTests));
-            for (String failure : failures) {
-                l(String.format("Meta test: %s FAILED", failure));
-            }
+        l("\n--- Meta tests");
+        l(String.format("%d/%d passed", score, totalTests));
+        for (String failure : failures) {
+            l(String.format("Meta test: %s FAILED", failure));
         }
 
         grades.setMetaGrade(score, totalTests);
@@ -417,7 +429,7 @@ public class ResultBuilder {
 
         // The failing can happen before we instantiated a grade calculator
         // e.g., during compilation time.
-        if (gradeCalculator != null)
+        if(gradeCalculator!=null)
             gradeCalculator.failed();
     }
 

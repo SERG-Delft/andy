@@ -2,10 +2,11 @@ package nl.tudelft.cse1110.andy;
 
 import org.assertj.core.api.Condition;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static org.assertj.core.api.AssertionsForClassTypes.not;
 
 
 public class ResultTestAssertions {
@@ -193,32 +194,22 @@ public class ResultTestAssertions {
                 + "() is static!");
     }
 
-    public static Condition<String> mode(String mode) {
-        return containsRegex(String.format("Andy is running in %s mode.", mode));
-    }
 
-    public static Condition<String> noMetaTests() {
-        return not(containsRegex("--- Meta tests"));
-    }
+    public static Condition<String> asciiArtPrinted (File asciiArtFile) {
 
-    public static Condition<String> noCodeChecks() {
-        return not(containsRegex("--- Code checks"));
-    }
+        StringBuilder asciiArt = new StringBuilder();
 
-    public static Condition<String> noFinalGrade() {
-        return not(containsRegex("--- Final grade"));
-    }
+        try (BufferedReader br = new BufferedReader(new FileReader(asciiArtFile))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                asciiArt.append(line + "\n");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
 
-    public static Condition<String> noJacocoCoverage() {
-        return not(containsRegex("--- JaCoCo coverage"));
-    }
-
-    public static Condition<String> noPitestCoverage() {
-        return not(containsRegex("--- Mutation testing"));
-    }
-
-    public static Condition<String> congratsMessage () {
-        return containsString("Super congrats!");
+        return containsString(asciiArt.toString());
     }
 
 }
