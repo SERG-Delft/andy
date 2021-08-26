@@ -51,7 +51,7 @@ public class RunJUnitTestsStep implements ExecutionStep {
             /* Restore the sysout back, and put it in the result in case there's something */
             System.setOut(console);
             if(output.size() > 0)
-                result.logConsoleOutput(output);
+                result.logConsoleOutput(output.toString());
 
             /* Log the junit result */
             result.logJUnitRun(summary);

@@ -302,26 +302,22 @@ public class ResultBuilder {
 
     public void logFinalGrade() {
 
-        // rounding up from 0.5...
-        String grade = String.valueOf(finalGrade());
+        int finalGrade = finalGrade();
+        String grade = String.valueOf(finalGrade);
 
         l("\n--- Final grade");
         l(grade + "/100\n");
 
-        if (finalGrade() == 100) {
-            printAsciiArt();
+        boolean fullyCorrect = finalGrade == 100;
+        if (fullyCorrect) {
+            String randomAsciiArt = asciiArtGenerator.getRandomAsciiArt();
+            l(randomAsciiArt);
         }
     }
 
-    private void printAsciiArt() {
-        String randomAsciiArt = asciiArtGenerator.getRandomAsciiArt();
-        l(randomAsciiArt);
-    }
-
-    public void logConsoleOutput(ByteArrayOutputStream console){
-
+    public void logConsoleOutput(String console){
         l("\n--- Console output");
-        l(console.toString());
+        l(console);
     }
 
     public void logPitest(CombinedStatistics stats) {
