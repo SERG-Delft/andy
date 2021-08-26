@@ -34,7 +34,6 @@ public class ResultBuilder {
     private int mutationsToConsider;
 
     private GradeCalculator gradeCalculator; // will be set once weights are injected
-    private GradeWeight gradeWeights; // will be injected once configuration is loaded
     private GradeValues grades = new GradeValues();
     private ModeActionSelector modeActionSelector;
     private RandomAsciiArtGenerator asciiArtGenerator;
@@ -392,7 +391,6 @@ public class ResultBuilder {
     }
 
     public void setGradeWeights(GradeWeight gradeWeights) {
-        this.gradeWeights = gradeWeights;
         this.gradeCalculator = new GradeCalculator(gradeWeights);
     }
 
