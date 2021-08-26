@@ -24,7 +24,7 @@ public class FinalGradeCalculationTest extends IntegrationTestBase {
 
     // 0.1 * 22/22 + 0.3 * 29/29 + 0.4 * 4/4 + 0.2 --> 100
     @Test
-    void printAsciiArtWhen100Score() {
+    void calculatesCorrectFinalGradeFullPoints() {
 
         String result = run(fullMode(),
                 "NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution",

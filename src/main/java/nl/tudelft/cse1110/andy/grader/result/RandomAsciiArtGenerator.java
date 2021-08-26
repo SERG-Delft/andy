@@ -1,6 +1,6 @@
 package nl.tudelft.cse1110.andy.grader.result;
 
-import nl.tudelft.cse1110.andy.ResourceUtils;
+import nl.tudelft.cse1110.andy.utils.ResourceUtils;
 import nl.tudelft.cse1110.andy.grader.util.FilesUtils;
 
 import java.io.BufferedReader;
@@ -11,7 +11,22 @@ import java.util.Random;
 public class RandomAsciiArtGenerator {
 
 
-    public File pickRandomAsciiArt() {
+    /**
+     * @return String - ASCII art read from .txt file
+     */
+    public String getRandomAsciiArt() {
+
+        File randomAsciiFile = pickRandomAsciiArtFile();
+        return convertAsciiFileToString(randomAsciiFile);
+
+    }
+
+
+    /** Picks a random ASCII art .txt file from src/main/resources/congrats
+     * This method is public, to facilitate stubbing in tests, so we can control the random file picked.
+     * @return - File containing ASCII art
+     */
+    public File pickRandomAsciiArtFile() {
 
         String asciiDirPath = ResourceUtils.resourceFolder("congrats");
         File asciiDir = new File(asciiDirPath);
@@ -24,6 +39,32 @@ public class RandomAsciiArtGenerator {
 
         return randomAsciiFile;
     }
+
+
+    /**
+     * @param asciiFile - File containing ASCII art
+     * @return String - ASCII art read from .txt fileA
+     */
+    public String convertAsciiFileToString(File asciiFile) {
+
+        StringBuilder asciiArt = new StringBuilder();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(asciiFile))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                asciiArt.append(line + "\n");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+
+        return asciiArt.toString();
+    }
+
+
+
+
 
 
 

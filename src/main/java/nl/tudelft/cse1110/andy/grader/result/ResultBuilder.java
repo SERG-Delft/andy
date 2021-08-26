@@ -1,13 +1,11 @@
 package nl.tudelft.cse1110.andy.grader.result;
 
-import nl.tudelft.cse1110.andy.ResourceUtils;
 import nl.tudelft.cse1110.andy.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.grader.execution.step.helper.ModeActionSelector;
 import nl.tudelft.cse1110.andy.grader.grade.GradeCalculator;
 import nl.tudelft.cse1110.andy.grader.grade.GradeValues;
 import nl.tudelft.cse1110.andy.grader.grade.GradeWeight;
-import nl.tudelft.cse1110.andy.grader.util.FilesUtils;
 import nl.tudelft.cse1110.andy.grader.util.ImportUtils;
 import org.jacoco.core.analysis.IClassCoverage;
 import org.junit.platform.engine.reporting.ReportEntry;
@@ -51,6 +49,7 @@ public class ResultBuilder {
     }
 
     public ResultBuilder() {
+        this.asciiArtGenerator = new RandomAsciiArtGenerator();
     }
 
     public void setModeSelector(ModeActionSelector modeActionSelector) {
@@ -309,25 +308,14 @@ public class ResultBuilder {
         l("\n--- Final grade");
         l(grade + "/100\n");
 
-        if (Integer.valueOf(grade) == 100) {
+        if (finalGrade() == 100) {
             printAsciiArt();
         }
     }
 
     private void printAsciiArt() {
-
-        File randomAsciiFile = asciiArtGenerator.pickRandomAsciiArt();
-
-        // Log the content of the .txt file
-        try (BufferedReader br = new BufferedReader(new FileReader(randomAsciiFile))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                l(line);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+        String randomAsciiArt = asciiArtGenerator.getRandomAsciiArt();
+        l(randomAsciiArt);
     }
 
     public void logConsoleOutput(ByteArrayOutputStream console){

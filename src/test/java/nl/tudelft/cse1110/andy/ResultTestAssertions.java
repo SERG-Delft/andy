@@ -225,22 +225,8 @@ public class ResultTestAssertions {
         return not(containsRegex("--- Mutation testing"));
     }
 
-
-    public static Condition<String> asciiArtPrinted (File asciiArtFile) {
-
-        StringBuilder asciiArt = new StringBuilder();
-
-        try (BufferedReader br = new BufferedReader(new FileReader(asciiArtFile))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                asciiArt.append(line + "\n");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-
-        return containsString(asciiArt.toString());
+    public static Condition<String> asciiArtPrinted (String asciiArt) {
+        return containsString(asciiArt);
     }
 
 }

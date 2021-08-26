@@ -3,11 +3,9 @@ package nl.tudelft.cse1110.andy.features;
 import nl.tudelft.cse1110.andy.IntegrationTestBase;
 import nl.tudelft.cse1110.andy.ResultTestAssertions;
 import nl.tudelft.cse1110.andy.TestResourceUtils;
-import nl.tudelft.cse1110.andy.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.andy.grader.execution.step.helper.Action;
 import nl.tudelft.cse1110.andy.grader.grade.GradeCalculator;
 import nl.tudelft.cse1110.andy.grader.grade.GradeValues;
-import nl.tudelft.cse1110.andy.grader.grade.GradeWeight;
 import nl.tudelft.cse1110.andy.grader.result.RandomAsciiArtGenerator;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,30 +14,42 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.platform.launcher.listeners.TestExecutionSummary;
-import org.pitest.mutationtest.tooling.CombinedStatistics;
 
 import java.io.File;
 import java.util.stream.Stream;
 
 import static nl.tudelft.cse1110.andy.ExecutionStepHelper.*;
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
 
 public class FinalGradePrintAsciiArtTest extends IntegrationTestBase {
 
+    private String asciiArtExpected;
     private RandomAsciiArtGenerator asciiArtGenerator;
     private GradeCalculator gradeCalculator;
     private ResultBuilder resultBuilder;
 
     @BeforeEach
     void setup() {
+
         asciiArtGenerator = mock(RandomAsciiArtGenerator.class);
+
+        asciiArtExpected =  "     Super congrats!\n" +
+                "\n" +
+                "            __,__\n" +
+                "   .--.  .-\"     \"-.  .--.\n" +
+                "  / .. \\/  .-. .-.  \\/ .. \\\n" +
+                " | |  '|  /   Y   \\  |'  | |\n" +
+                " | \\   \\  \\ 0 | 0 /  /   / |\n" +
+                "  \\ '- ,\\.-\"`` ``\"-./, -' /\n" +
+                "   `'-' /_   ^ ^   _\\ '-'`\n" +
+                "       |  \\._   _./  |\n" +
+                "       \\   \\ `~` /   /\n" +
+                "        '._ '-=-' _.'\n" +
+                "           '~---~'\n";
+        when(asciiArtGenerator.getRandomAsciiArt()).thenReturn(asciiArtExpected);
+
         gradeCalculator = mock(GradeCalculator.class);
-
-        when(asciiArtGenerator.pickRandomAsciiArt())
-                .thenReturn(new File(TestResourceUtils.resourceFolder("grader/fixtures/Congrats/monkey.txt")));
-
         resultBuilder = new ResultBuilder(asciiArtGenerator, gradeCalculator);
     }
 
@@ -52,8 +62,7 @@ public class FinalGradePrintAsciiArtTest extends IntegrationTestBase {
                 "NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution",
                 "NumberUtilsAddFullPointsConfiguration", resultBuilder);
 
-        assertThat(result).has(ResultTestAssertions
-                .asciiArtPrinted(new File(TestResourceUtils.resourceFolder("grader/fixtures/Congrats/monkey.txt"))));
+        assertThat(result).has(ResultTestAssertions.asciiArtPrinted(asciiArtExpected));
     }
 
 
@@ -68,8 +77,7 @@ public class FinalGradePrintAsciiArtTest extends IntegrationTestBase {
 
         assertThat(result)
                 .has(ResultTestAssertions.noFinalGrade())
-                .doesNotHave(ResultTestAssertions
-                .asciiArtPrinted(new File(TestResourceUtils.resourceFolder("grader/fixtures/Congrats/monkey.txt"))));
+                .doesNotHave(ResultTestAssertions.asciiArtPrinted(asciiArtExpected));
     }
 
     static Stream<Arguments> testExamActionGenerator() {
@@ -92,8 +100,8 @@ public class FinalGradePrintAsciiArtTest extends IntegrationTestBase {
                 "NumberUtilsAddFullPointsPracticeModeConfiguration", resultBuilder);
 
         assertThat(result)
-                .has(ResultTestAssertions
-                        .asciiArtPrinted(new File(TestResourceUtils.resourceFolder("grader/fixtures/Congrats/monkey.txt"))));
+                .has(ResultTestAssertions.finalGrade(100))
+                .has(ResultTestAssertions.asciiArtPrinted(asciiArtExpected));
     }
 
     static Stream<Arguments> testPracticeActionGenerator() {
@@ -120,6 +128,7 @@ public class FinalGradePrintAsciiArtTest extends IntegrationTestBase {
 
         resultBuilder.logJUnitRun(testExecutionSummary);
         resultBuilder.logFinalGrade();
+
         String result = resultBuilder.buildEndUserResult();
 
         assertThat(result)
@@ -129,20 +138,7 @@ public class FinalGradePrintAsciiArtTest extends IntegrationTestBase {
                 .endsWith(
                 "\n--- Final grade\n" +
                 "100/100\n" +
-                "\n" +
-                "     Super congrats!\n" +
-                "\n" +
-                "            __,__\n" +
-                "   .--.  .-\"     \"-.  .--.\n" +
-                "  / .. \\/  .-. .-.  \\/ .. \\\n" +
-                " | |  '|  /   Y   \\  |'  | |\n" +
-                " | \\   \\  \\ 0 | 0 /  /   / |\n" +
-                "  \\ '- ,\\.-\"`` ``\"-./, -' /\n" +
-                "   `'-' /_   ^ ^   _\\ '-'`\n" +
-                "       |  \\._   _./  |\n" +
-                "       \\   \\ `~` /   /\n" +
-                "        '._ '-=-' _.'\n" +
-                "           '~---~'\n");
+                "\n" + asciiArtExpected + "\n");
 
     }
 
