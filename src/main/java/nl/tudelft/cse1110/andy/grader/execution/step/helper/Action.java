@@ -1,5 +1,5 @@
 package nl.tudelft.cse1110.andy.grader.execution.step.helper;
 
 public enum Action {
-    HINTS, NO_HINTS, COVERAGE, TESTS, CUSTOM
+    FULL_WITH_HINTS, FULL_WITHOUT_HINTS, COVERAGE, TESTS, CUSTOM
 }

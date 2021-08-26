@@ -80,8 +80,8 @@ public class FinalGradePrintAsciiArtTest extends IntegrationTestBase {
 
     static Stream<Arguments> testExamActionGenerator() {
         return Stream.of(
-                Arguments.of(Action.HINTS),
-                Arguments.of(Action.NO_HINTS),
+                Arguments.of(Action.FULL_WITH_HINTS),
+                Arguments.of(Action.FULL_WITHOUT_HINTS),
                 Arguments.of(Action.COVERAGE)
         );
     }
@@ -104,8 +104,8 @@ public class FinalGradePrintAsciiArtTest extends IntegrationTestBase {
 
     static Stream<Arguments> testPracticeActionGenerator() {
         return Stream.of(
-                Arguments.of(Action.HINTS),
-                Arguments.of(Action.NO_HINTS)
+                Arguments.of(Action.FULL_WITH_HINTS),
+                Arguments.of(Action.FULL_WITHOUT_HINTS)
         );
     }
 

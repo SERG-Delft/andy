@@ -27,7 +27,7 @@ public class ModeActionSelector {
         return action;
     }
 
-    public List<ExecutionStep> getCorrectSteps() {
+    public List<ExecutionStep> getSteps() {
         switch (mode) {
             case PRACTICE -> {
                 return getPracticeMode();
@@ -43,11 +43,11 @@ public class ModeActionSelector {
     }
 
     public boolean shouldShowHints() {
-        return mode == GRADING || action == HINTS || action == CUSTOM;
+        return mode == GRADING || action == FULL_WITH_HINTS || action == CUSTOM;
     }
 
     private List<ExecutionStep> getPracticeMode() {
-        if (action == HINTS || action == NO_HINTS) {
+        if (action == FULL_WITH_HINTS || action == FULL_WITHOUT_HINTS) {
             return fullMode();
         } else if (action == COVERAGE) {
             return withCoverage();
@@ -57,7 +57,7 @@ public class ModeActionSelector {
     }
 
     private List<ExecutionStep> getExamMode() {
-        if (action == HINTS || action == NO_HINTS || action == COVERAGE) {
+        if (action == FULL_WITH_HINTS || action == FULL_WITHOUT_HINTS || action == COVERAGE) {
             return withCoverage();
         } else {
             return justTests();
@@ -68,11 +68,11 @@ public class ModeActionSelector {
         return fullMode();
     }
 
-    public static List<ExecutionStep> justTests() {
+    static List<ExecutionStep> justTests() {
         return List.of(new RunJUnitTestsStep());
     }
 
-    public static List<ExecutionStep> withCoverage() {
+    static List<ExecutionStep> withCoverage() {
         return List.of(
                 new RunJUnitTestsStep(),
                 new RunJacocoCoverageStep(),
@@ -80,7 +80,7 @@ public class ModeActionSelector {
         );
     }
 
-    public static List<ExecutionStep> fullMode() {
+    static List<ExecutionStep> fullMode() {
         return List.of(
                 new RunJUnitTestsStep(),
                 new RunJacocoCoverageStep(),

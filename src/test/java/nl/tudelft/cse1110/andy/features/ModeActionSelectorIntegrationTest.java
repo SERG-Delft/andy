@@ -17,7 +17,7 @@ public class ModeActionSelectorIntegrationTest extends IntegrationTestBase {
 
     @Test
     void testPracticeHints() {
-        String result = run(Action.HINTS, onlyBasic(),"SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecks");
+        String result = run(Action.FULL_WITH_HINTS, onlyBasic(),"SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecks");
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(2))
@@ -36,7 +36,7 @@ public class ModeActionSelectorIntegrationTest extends IntegrationTestBase {
 
     @Test
     void testPracticeNoHints() {
-        String result = run(Action.NO_HINTS, onlyBasic(), "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecks");
+        String result = run(Action.FULL_WITHOUT_HINTS, onlyBasic(), "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecks");
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(2))
@@ -93,8 +93,8 @@ public class ModeActionSelectorIntegrationTest extends IntegrationTestBase {
 
     static Stream<Arguments> testExamCoverageGenerator() {
         return Stream.of(
-                Arguments.of(Action.HINTS),
-                Arguments.of(Action.NO_HINTS),
+                Arguments.of(Action.FULL_WITH_HINTS),
+                Arguments.of(Action.FULL_WITHOUT_HINTS),
                 Arguments.of(Action.COVERAGE)
         );
     }

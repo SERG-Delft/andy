@@ -72,7 +72,7 @@ public class GetRunConfigurationStep implements ExecutionStep {
             return;
         }
 
-        flow.addSteps(modeActionSelector.getCorrectSteps());
+        flow.addSteps(modeActionSelector.getSteps());
     }
 
     private ModeActionSelector createModeSelector(Context ctx, ResultBuilder result) {

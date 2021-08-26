@@ -18,12 +18,12 @@ public class ModeActionSelectorUnitTest {
     private List<ExecutionStep> run(Mode mode, Action action) {
         ModeActionSelector modeActionSelector = new ModeActionSelector(mode, action);
 
-        return modeActionSelector.getCorrectSteps();
+        return modeActionSelector.getSteps();
     }
 
     @Test
     void testPracticeModeHints() {
-        List<ExecutionStep> result = run(PRACTICE, HINTS);
+        List<ExecutionStep> result = run(PRACTICE, FULL_WITH_HINTS);
 
         assertThat(result)
                 .containsExactlyElementsOf(ModeActionSelector.fullMode());
@@ -31,7 +31,7 @@ public class ModeActionSelectorUnitTest {
 
     @Test
     void testPracticeModeNoHints() {
-        List<ExecutionStep> result = run(PRACTICE, NO_HINTS);
+        List<ExecutionStep> result = run(PRACTICE, FULL_WITHOUT_HINTS);
 
         assertThat(result)
                 .containsExactlyElementsOf(ModeActionSelector.fullMode());
@@ -89,8 +89,8 @@ public class ModeActionSelectorUnitTest {
         return Stream.of(
                 Arguments.of(EXAM, TESTS, false),
                 Arguments.of(GRADING, TESTS, true),
-                Arguments.of(PRACTICE, HINTS, true),
-                Arguments.of(GRADING, HINTS, true),
+                Arguments.of(PRACTICE, FULL_WITH_HINTS, true),
+                Arguments.of(GRADING, FULL_WITH_HINTS, true),
                 Arguments.of(EXAM, CUSTOM, true)
         );
     }
