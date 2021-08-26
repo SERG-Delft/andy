@@ -15,9 +15,7 @@ import org.pitest.mutationtest.tooling.CombinedStatistics;
 
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -38,14 +36,26 @@ public class ResultBuilder {
     private GradeCalculator gradeCalculator; // will be set once weights are injected
     private GradeWeight gradeWeights; // will be injected once configuration is loaded
     private GradeValues grades = new GradeValues();
+    private ModeActionSelector modeActionSelector;
+    private RandomAsciiArtGenerator asciiArtGenerator;
 
     private List<Diagnostic<? extends JavaFileObject>> compilationErrors;
 
-    private ModeActionSelector modeActionSelector;
+
+    // Facilitates testing
+    public ResultBuilder(RandomAsciiArtGenerator asciiArtGenerator, GradeCalculator calculator) {
+        this.asciiArtGenerator = asciiArtGenerator;
+        this.gradeCalculator = calculator;
+    }
+
+    public ResultBuilder() {
+        this.asciiArtGenerator = new RandomAsciiArtGenerator();
+    }
 
     public void setModeSelector(ModeActionSelector modeActionSelector) {
         this.modeActionSelector = modeActionSelector;
     }
+
 
     public void compilationSuccess() {
         l("--- Compilation\nSuccess");
@@ -296,7 +306,16 @@ public class ResultBuilder {
         String grade = String.valueOf(finalGrade());
 
         l("\n--- Final grade");
-        l(grade + "/100");
+        l(grade + "/100\n");
+
+        if (finalGrade() == 100) {
+            printAsciiArt();
+        }
+    }
+
+    private void printAsciiArt() {
+        String randomAsciiArt = asciiArtGenerator.getRandomAsciiArt();
+        l(randomAsciiArt);
     }
 
     public void logConsoleOutput(ByteArrayOutputStream console){

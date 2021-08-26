@@ -2,6 +2,9 @@ package nl.tudelft.cse1110.andy;
 
 import org.assertj.core.api.Condition;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -197,6 +200,7 @@ public class ResultTestAssertions {
                 + "() is static!");
     }
 
+
     public static Condition<String> mode(String mode) {
         return containsRegex(String.format("Andy is running in %s mode.", mode));
     }
@@ -220,5 +224,10 @@ public class ResultTestAssertions {
     public static Condition<String> noPitestCoverage() {
         return not(containsRegex("--- Mutation testing"));
     }
+
+    public static Condition<String> asciiArtPrinted (String asciiArt) {
+        return containsString(asciiArt);
+    }
+
 }
 

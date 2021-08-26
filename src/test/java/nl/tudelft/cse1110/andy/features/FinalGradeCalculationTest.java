@@ -1,10 +1,14 @@
 package nl.tudelft.cse1110.andy.features;
 
 import nl.tudelft.cse1110.andy.IntegrationTestBase;
-import nl.tudelft.cse1110.andy.ResultTestAssertions;
+import nl.tudelft.cse1110.andy.ResultTestAssertions.*;
+import nl.tudelft.cse1110.andy.TestResourceUtils;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+
 import static nl.tudelft.cse1110.andy.ExecutionStepHelper.fullMode;
+import static nl.tudelft.cse1110.andy.ResultTestAssertions.finalGrade;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class FinalGradeCalculationTest extends IntegrationTestBase {
@@ -13,7 +17,21 @@ public class FinalGradeCalculationTest extends IntegrationTestBase {
     @Test
     void calculatesCorrectFinalGrade() {
         String result = run(fullMode(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddConfiguration");
-        assertThat(result).has(ResultTestAssertions.finalGrade(42));
+
+        assertThat(result).has(finalGrade(42));
+    }
+
+
+
+    // 0.1 * 22/22 + 0.3 * 29/29 + 0.4 * 4/4 + 0.2 --> 100
+    @Test
+    void calculatesCorrectFinalGradeFullPoints() {
+
+        String result = run(fullMode(),
+                "NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution",
+                "NumberUtilsAddFullPointsConfiguration");
+
+        assertThat(result).has(finalGrade(100));
     }
 
 }

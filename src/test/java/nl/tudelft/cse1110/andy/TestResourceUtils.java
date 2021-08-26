@@ -3,11 +3,11 @@ package nl.tudelft.cse1110.andy;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 
-public class ResourceUtils {
+public class TestResourceUtils {
 
     public static String resourceFolder(String path) {
         try {
-            return Paths.get(ResourceUtils.class.getResource("/").toURI()) + (path.startsWith("/")?"":"/") + path;
+            return Paths.get(TestResourceUtils.class.getResource("/").toURI()) + (path.startsWith("/")?"":"/") + path;
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
