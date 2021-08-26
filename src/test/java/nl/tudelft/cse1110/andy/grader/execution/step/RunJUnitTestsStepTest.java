@@ -35,6 +35,7 @@ public class RunJUnitTestsStepTest {
                     .has(numberOfJUnitTestsPassing(3))
                     .has(totalNumberOfJUnitTests(4))
                     .has(failingTestName("leapCenturialYears"))
+                    .has(allTestsNeedToPassMessage())
                     .has(errorType("AssertionFailedError"));
         }
 
@@ -51,6 +52,7 @@ public class RunJUnitTestsStepTest {
                     .has(totalNumberOfJUnitTests(2))
                     .has(failingTestName("multipleMatchingWords"))
                     .has(failingTestName("lastWordDoesNotMatch"))
+                    .has(allTestsNeedToPassMessage())
                     .has(errorType("AssertionFailedError"));
         }
 
@@ -70,6 +72,7 @@ public class RunJUnitTestsStepTest {
                     .has(failingTestName("lessPoints"))
                     .has(failingTestName("manyPointsAndManyLives"))
                     .has(failingTestName("manyPointsButLittleLives"))
+                    .has(allTestsNeedToPassMessage())
                     .has(errorType("AssertionFailedError"));
 
         }
@@ -95,7 +98,8 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "NumberUtilsAddLibrary", "NumberUtilsNoTests");
 
             assertThat(result)
-                    .has(errorMessage("We do not see any tests."));
+                    .has(errorMessage("We do not see any tests."))
+                    .doesNotHave(allTestsNeedToPassMessage());
         }
 
         //Check to see if the System.out.printlns are caught from the console
@@ -192,7 +196,8 @@ public class RunJUnitTestsStepTest {
                     .has(numberOfJUnitTestsPassing(4))
                     .has(totalNumberOfJUnitTests(5))
                     .has(parameterizedTestFailing("passed", 3))
-                    .has(errorType("AssertionFailedError"));
+                    .has(errorType("AssertionFailedError"))
+                    .has(allTestsNeedToPassMessage());
         }
 
 
@@ -223,6 +228,7 @@ public class RunJUnitTestsStepTest {
             assertThat(result)
                     .has(numberOfJUnitTestsPassing(0))
                     .has(totalNumberOfJUnitTests(6))
+                    .has(allTestsNeedToPassMessage())
                     .has(parameterizedTestFailing("sumValidCases", 1))
                     .has(parameterizedTestFailing("sumValidCases", 2))
                     .has(parameterizedTestFailing("sumValidCases", 3))
@@ -344,6 +350,7 @@ public class RunJUnitTestsStepTest {
         void testMultiplePropertyTestsFailing() {
             String result = run(onlyJUnitTests(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfMultipleJqwikErrors");
             assertThat(result)
+                    .has(allTestsNeedToPassMessage())
                     .has(propertyTestFailing("testNoElementInWholeArray"))
                     .has(propertyTestFailing("testValueInArrayUniqueElements"));
         }
@@ -373,6 +380,7 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "MathArraysLibrary", "MathArraysForgotProperty");
 
             assertThat(result)
+                    .doesNotHave(allTestsNeedToPassMessage())
                     .has(weDoNotSeeTestsMessage());
         }
 

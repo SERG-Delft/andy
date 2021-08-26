@@ -31,14 +31,17 @@ public class ResultBuilder {
     private int testsRan = 0;
     private int testsSucceeded = 0;
 
-    private int mutationsToConsider;
+    private int mutationsToConsider; // will be injected once configuration is loaded
 
     private GradeCalculator gradeCalculator; // will be set once weights are injected
     private GradeValues grades = new GradeValues();
-    private ModeActionSelector modeActionSelector;
+    private ModeActionSelector modeActionSelector; // will be injected once configuration is loaded
     private RandomAsciiArtGenerator asciiArtGenerator;
 
     private List<Diagnostic<? extends JavaFileObject>> compilationErrors;
+
+    // it will be set in case of a generic failure. It one happens, the output is purely the generic failure
+    private String genericFailureMessage;
 
 
     // Facilitates testing
@@ -111,7 +114,7 @@ public class ResultBuilder {
     }
 
     public void genericFailure(String msg) {
-        l(msg);
+        this.genericFailureMessage = msg;
         d(msg);
 
         failed();
@@ -153,8 +156,10 @@ public class ResultBuilder {
             this.testsRan = (int) summary.getTestsStartedCount();
             this.testsSucceeded = (int) summary.getTestsSucceededCount();
 
-            if(summary.getTestsSucceededCount() < summary.getTestsFoundCount())
+            if(summary.getTestsSucceededCount() < summary.getTestsFoundCount()) {
+                l("You must ensure that all tests are passing! Stopping the assessment.");
                 failed();
+            }
         }
     }
 
@@ -263,7 +268,8 @@ public class ResultBuilder {
     }
 
     public String buildEndUserResult() {
-        return result.toString();
+        boolean wasItAGenericFailure = genericFailureMessage != null;
+        return isFailed() && wasItAGenericFailure ? genericFailureMessage : result.toString();
     }
 
     public String buildDebugResult() {

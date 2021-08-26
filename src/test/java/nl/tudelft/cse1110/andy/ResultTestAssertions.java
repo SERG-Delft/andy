@@ -2,9 +2,6 @@ package nl.tudelft.cse1110.andy;
 
 import org.assertj.core.api.Condition;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -148,6 +145,10 @@ public class ResultTestAssertions {
 
     public static Condition<String> mutationScore(int mutantsKilled, int totalMutants) {
         return containsString("--- Mutation testing\n" + mutantsKilled + "/" + totalMutants);
+    }
+
+    public static Condition<String> allTestsNeedToPassMessage() {
+        return containsString("You must ensure that all tests are passing");
     }
 
     public static Condition<String> scoreOfCodeChecks(int points, int total) {
