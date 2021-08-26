@@ -1,8 +1,6 @@
 package nl.tudelft.cse1110.andy.features;
 
 import nl.tudelft.cse1110.andy.IntegrationTestBase;
-import nl.tudelft.cse1110.andy.ResultTestAssertions;
-import nl.tudelft.cse1110.andy.TestResourceUtils;
 import nl.tudelft.cse1110.andy.grader.execution.step.helper.Action;
 import nl.tudelft.cse1110.andy.grader.grade.GradeCalculator;
 import nl.tudelft.cse1110.andy.grader.grade.GradeValues;
@@ -15,10 +13,10 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.platform.launcher.listeners.TestExecutionSummary;
 
-import java.io.File;
 import java.util.stream.Stream;
 
 import static nl.tudelft.cse1110.andy.ExecutionStepHelper.*;
+import static nl.tudelft.cse1110.andy.ResultTestAssertions.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -62,7 +60,7 @@ public class FinalGradePrintAsciiArtTest extends IntegrationTestBase {
                 "NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution",
                 "NumberUtilsAddFullPointsConfiguration", resultBuilder);
 
-        assertThat(result).has(ResultTestAssertions.asciiArtPrinted(asciiArtExpected));
+        assertThat(result).has(asciiArtPrinted(asciiArtExpected));
     }
 
 
@@ -76,8 +74,8 @@ public class FinalGradePrintAsciiArtTest extends IntegrationTestBase {
                 "NumberUtilsAddFullPointsExamModeConfiguration", resultBuilder);
 
         assertThat(result)
-                .has(ResultTestAssertions.noFinalGrade())
-                .doesNotHave(ResultTestAssertions.asciiArtPrinted(asciiArtExpected));
+                .has(noFinalGrade())
+                .doesNotHave(asciiArtPrinted(asciiArtExpected));
     }
 
     static Stream<Arguments> testExamActionGenerator() {
@@ -100,8 +98,8 @@ public class FinalGradePrintAsciiArtTest extends IntegrationTestBase {
                 "NumberUtilsAddFullPointsPracticeModeConfiguration", resultBuilder);
 
         assertThat(result)
-                .has(ResultTestAssertions.finalGrade(100))
-                .has(ResultTestAssertions.asciiArtPrinted(asciiArtExpected));
+                .has(finalGrade(100))
+                .has(asciiArtPrinted(asciiArtExpected));
     }
 
     static Stream<Arguments> testPracticeActionGenerator() {

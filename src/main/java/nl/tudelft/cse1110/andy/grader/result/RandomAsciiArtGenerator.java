@@ -23,10 +23,9 @@ public class RandomAsciiArtGenerator {
 
 
     /** Picks a random ASCII art .txt file from src/main/resources/congrats
-     * This method is public, to facilitate stubbing in tests, so we can control the random file picked.
      * @return - File containing ASCII art
      */
-    public File pickRandomAsciiArtFile() {
+    private File pickRandomAsciiArtFile() {
 
         String asciiDirPath = ResourceUtils.resourceFolder("congrats");
         File asciiDir = new File(asciiDirPath);
@@ -45,7 +44,7 @@ public class RandomAsciiArtGenerator {
      * @param asciiFile - File containing ASCII art
      * @return String - ASCII art read from .txt fileA
      */
-    public String convertAsciiFileToString(File asciiFile) {
+    private String convertAsciiFileToString(File asciiFile) {
 
         StringBuilder asciiArt = new StringBuilder();
 
