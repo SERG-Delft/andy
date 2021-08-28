@@ -403,13 +403,13 @@ public class ResultBuilder {
 
                     if(fullCoverage) {
                         highlights.add(new Highlight(line, "100% coverage",
-                                Highlight.HighlightLocation.SOLUTION, Highlight.HighlightPurpose.FULL_COVERAGE));
+                                Highlight.HighlightLocation.LIBRARY, Highlight.HighlightPurpose.FULL_COVERAGE));
                     } else if(partialCoverage) {
                         highlights.add(new Highlight(line, "Partial coverage",
-                                Highlight.HighlightLocation.SOLUTION, Highlight.HighlightPurpose.PARTIAL_COVERAGE));
+                                Highlight.HighlightLocation.LIBRARY, Highlight.HighlightPurpose.PARTIAL_COVERAGE));
                     } else {
                         highlights.add(new Highlight(line, "No coverage",
-                                Highlight.HighlightLocation.SOLUTION, Highlight.HighlightPurpose.NO_COVERAGE));
+                                Highlight.HighlightLocation.LIBRARY, Highlight.HighlightPurpose.NO_COVERAGE));
                     }
                 }
             }
