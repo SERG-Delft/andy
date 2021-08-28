@@ -1,6 +1,7 @@
 package nl.tudelft.cse1110.andy.grader.execution.step;
 
 import nl.tudelft.cse1110.andy.IntegrationTestBase;
+import nl.tudelft.cse1110.andy.grader.execution.mode.Action;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -12,10 +13,13 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class CompilationStepTest extends IntegrationTestBase {
 
+
     @Test
     void compilationFails() {
         String result = run(onlyCompilation(), "ArrayUtilsIsSortedLibrary", "ArrayUtilsIsSortedWithCompilationError");
+
         assertThat(result)
+                .has(noFinalGrade())
                 .has(compilationFailure())
                 .has(compilationErrorOnLine(29))
                 .has(compilationErrorType("not a statement"))
@@ -35,6 +39,7 @@ public class CompilationStepTest extends IntegrationTestBase {
     void compilationDifferentFailures() {
         String result = run(onlyCompilation(), "MathArraysLibrary","MathArraysDifferentCompilationErrors");
         assertThat(result)
+                .has(noFinalGrade())
                 .has(compilationFailure())
                 .has(compilationErrorOnLine(21))
                 .has(compilationErrorOnLine(25))
@@ -44,13 +49,14 @@ public class CompilationStepTest extends IntegrationTestBase {
 
     @Test
     void highlightsGeneratedWhenCompilationFails(){
-        run(onlyCompilation(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfImportListCommented");
+        String result = run(onlyCompilation(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfImportListCommented");
 
         File highlights = new File(concatenateDirectories(workDir.toString(), "highlights.json"));
         assertThat(highlights).exists().isFile();
 
         String expected = "[{\"line\":40,\"message\":\"cannot find symbol\\n  symbol:   class List\\n  location: class delft.ArrayUtilsTests\",\"location\":\"SOLUTION\",\"purpose\":\"COMPILATION_ERROR\"},{\"line\":69,\"message\":\"cannot find symbol\\n  symbol:   class List\\n  location: class delft.ArrayUtilsTests\",\"location\":\"SOLUTION\",\"purpose\":\"COMPILATION_ERROR\"}]";
         assertThat(highlights).hasContent(expected);
+        assertThat(result).has(noFinalGrade());
     }
 
     @Test
@@ -58,6 +64,7 @@ public class CompilationStepTest extends IntegrationTestBase {
         String result = run(onlyCompilation(), "NumberUtilsAddLibrary","NumberUtilsAddAllTestsPass","NumberUtilsAddTypoConfiguration");
 
         assertThat(result)
+                .has(noFinalGrade())
                 .has(compilationFailure())
                 .has(failDueToBadConfigurationMessage());
     }
