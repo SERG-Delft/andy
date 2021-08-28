@@ -65,17 +65,17 @@ public class RunJacocoCoverageTest extends IntegrationTestBase {
         List<Highlight> list = new Gson().fromJson(new FileReader(highlights), listType);
 
         for (int line : coveredLines) {
-            boolean lineCovered = list.stream().anyMatch(c -> c.getLine() == line && c.getPurpose() == Highlight.HighlightPurpose.FULL_COVERAGE);
+            boolean lineCovered = list.stream().anyMatch(c -> c.getLine() == line && c.getLocation() == Highlight.HighlightLocation.LIBRARY && c.getPurpose() == Highlight.HighlightPurpose.FULL_COVERAGE);
             assertThat(lineCovered).as("fully covered line %d", line).isTrue();
         }
 
         for (int line : partiallyCovered) {
-            boolean lineCovered = list.stream().anyMatch(c -> c.getLine() == line && c.getPurpose() == Highlight.HighlightPurpose.PARTIAL_COVERAGE);
+            boolean lineCovered = list.stream().anyMatch(c -> c.getLine() == line && c.getLocation() == Highlight.HighlightLocation.LIBRARY && c.getPurpose() == Highlight.HighlightPurpose.PARTIAL_COVERAGE);
             assertThat(lineCovered).as("partially covered line %d", line).isTrue();
         }
 
         for (int line : notCovered) {
-            boolean lineCovered = list.stream().anyMatch(c -> c.getLine() == line && c.getPurpose() == Highlight.HighlightPurpose.NO_COVERAGE);
+            boolean lineCovered = list.stream().anyMatch(c -> c.getLine() == line && c.getLocation() == Highlight.HighlightLocation.LIBRARY && c.getPurpose() == Highlight.HighlightPurpose.NO_COVERAGE);
             assertThat(lineCovered).as("not covered line %d", line).isTrue();
         }
     }
