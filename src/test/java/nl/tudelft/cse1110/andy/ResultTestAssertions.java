@@ -2,6 +2,7 @@ package nl.tudelft.cse1110.andy;
 
 import org.assertj.core.api.Condition;
 
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -89,6 +90,42 @@ public class ResultTestAssertions {
 
     public static Condition<String> failingTestName(String testName) {
         return containsRegex("- Test " + "\"" + testName + "\\(" + "\\)" + "\"" + " failed:");
+    }
+
+    public static Condition<String> partiallyCoveredLine(int line) {
+        return new Condition<>() {
+            @Override
+            public boolean matches(String value) {
+
+                int start = value.indexOf("Partially covered lines: ");
+                if(start == -1)
+                    return false;
+
+                int end = value.indexOf("\n", start);
+
+                String linesAsString = value.substring(start+"Partially covered lines: ".length(), end);
+                String[] listOfLines = linesAsString.split(", ");
+                return Arrays.stream(listOfLines).anyMatch(l -> l.equals(String.valueOf(line)));
+            }
+        };
+    }
+
+    public static Condition<String> notCoveredLine(int line) {
+        return new Condition<>() {
+            @Override
+            public boolean matches(String value) {
+
+                int start = value.indexOf("Lines not covered: ");
+                if(start == -1)
+                    return false;
+
+                int end = value.indexOf("\n", start);
+
+                String linesAsString = value.substring(start+"Lines not covered: ".length(), end);
+                String[] listOfLines = linesAsString.split(", ");
+                return Arrays.stream(listOfLines).anyMatch(l -> l.equals(String.valueOf(line)));
+            }
+        };
     }
 
 

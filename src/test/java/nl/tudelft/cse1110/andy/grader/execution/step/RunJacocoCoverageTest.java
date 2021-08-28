@@ -57,7 +57,7 @@ public class RunJacocoCoverageTest extends IntegrationTestBase {
     @ParameterizedTest
     @MethodSource("highlightsGenerator")
     void highlights(String library, String solution, int[] coveredLines, int[] partiallyCovered, int[] notCovered) throws FileNotFoundException {
-        run(onlyBranchCoverage(), library, solution);
+        String result = run(onlyBranchCoverage(), library, solution);
 
         File highlights = new File(FilesUtils.concatenateDirectories(workDir.toString(), "highlights.json"));
         Type listType = new TypeToken<ArrayList<Highlight>>(){}.getType();
@@ -71,12 +71,18 @@ public class RunJacocoCoverageTest extends IntegrationTestBase {
 
         for (int line : partiallyCovered) {
             boolean lineCovered = list.stream().anyMatch(c -> c.getLine() == line && c.getLocation() == Highlight.HighlightLocation.LIBRARY && c.getPurpose() == Highlight.HighlightPurpose.PARTIAL_COVERAGE);
-            assertThat(lineCovered).as("partially covered line %d", line).isTrue();
+            assertThat(lineCovered).as("partially covered line %d in json", line).isTrue();
+
+            assertThat(result).as("partially covered line %d in result", line)
+                    .has(partiallyCoveredLine(line));
         }
 
         for (int line : notCovered) {
             boolean lineCovered = list.stream().anyMatch(c -> c.getLine() == line && c.getLocation() == Highlight.HighlightLocation.LIBRARY && c.getPurpose() == Highlight.HighlightPurpose.NO_COVERAGE);
-            assertThat(lineCovered).as("not covered line %d", line).isTrue();
+            assertThat(lineCovered).as("not covered line %d in json", line).isTrue();
+
+            assertThat(result).as("not covered line %d in result", line)
+                    .has(notCoveredLine(line));
         }
     }
 

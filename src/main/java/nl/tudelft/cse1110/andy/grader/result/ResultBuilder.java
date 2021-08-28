@@ -20,6 +20,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static javax.tools.Diagnostic.Kind.ERROR;
 
@@ -397,6 +398,9 @@ public class ResultBuilder {
     }
 
     private void highlightCoverage(Collection<IClassCoverage> coverages) {
+        List<Integer> partiallyCoveredLines = new ArrayList<>();
+        List<Integer> notCoveredLines = new ArrayList<>();
+
         for (IClassCoverage coverage : coverages) {
             for (IMethodCoverage method : coverage.getMethods()) {
                 for(int line = method.getFirstLine(); line <= method.getLastLine(); line++) {
@@ -413,12 +417,23 @@ public class ResultBuilder {
                     } else if(partialCoverage) {
                         highlights.add(new Highlight(line, "Partial coverage",
                                 Highlight.HighlightLocation.LIBRARY, Highlight.HighlightPurpose.PARTIAL_COVERAGE));
+                        partiallyCoveredLines.add(line);
                     } else {
                         highlights.add(new Highlight(line, "No coverage",
                                 Highlight.HighlightLocation.LIBRARY, Highlight.HighlightPurpose.NO_COVERAGE));
+                        notCoveredLines.add(line);
                     }
                 }
             }
+        }
+
+        if(!partiallyCoveredLines.isEmpty()) {
+            l(String.format("Partially covered lines: %s",
+                    partiallyCoveredLines.stream().map(i -> String.valueOf(i)).collect(Collectors.joining(", "))));
+        }
+        if(!notCoveredLines.isEmpty()) {
+            l(String.format("Lines not covered: %s",
+                    notCoveredLines.stream().map(i -> String.valueOf(i)).collect(Collectors.joining(", "))));
         }
     }
 
