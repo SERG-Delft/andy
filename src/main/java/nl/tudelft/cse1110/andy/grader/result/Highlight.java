@@ -42,4 +42,13 @@ public class Highlight {
         return purpose;
     }
 
+    @Override
+    public String toString() {
+        return "Highlight{" +
+                "line=" + line +
+                ", message='" + message + '\'' +
+                ", location=" + location +
+                ", purpose=" + purpose +
+                '}';
+    }
 }

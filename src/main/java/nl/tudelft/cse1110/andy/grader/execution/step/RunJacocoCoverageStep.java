@@ -1,17 +1,14 @@
 package nl.tudelft.cse1110.andy.grader.execution.step;
 
 import nl.tudelft.cse1110.andy.grader.config.DirectoryConfiguration;
-import nl.tudelft.cse1110.andy.grader.execution.step.helper.FromBytesClassLoader;
-import nl.tudelft.cse1110.andy.grader.execution.Context;
 import nl.tudelft.cse1110.andy.grader.config.RunConfiguration;
+import nl.tudelft.cse1110.andy.grader.execution.Context;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
+import nl.tudelft.cse1110.andy.grader.execution.step.helper.FromBytesClassLoader;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.grader.util.ClassUtils;
-
 import nl.tudelft.cse1110.andy.grader.util.FilesUtils;
-import org.jacoco.core.analysis.Analyzer;
-import org.jacoco.core.analysis.CoverageBuilder;
-import org.jacoco.core.analysis.IClassCoverage;
+import org.jacoco.core.analysis.*;
 import org.jacoco.core.data.ExecutionDataStore;
 import org.jacoco.core.data.SessionInfoStore;
 import org.jacoco.core.instr.Instrumenter;
@@ -21,14 +18,17 @@ import org.jacoco.core.runtime.RuntimeData;
 import org.jacoco.report.DirectorySourceFileLocator;
 import org.jacoco.report.FileMultiReportOutput;
 import org.jacoco.report.IReportVisitor;
+import org.jacoco.report.html.HTMLFormatter;
 import org.junit.platform.launcher.Launcher;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
 import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
 import org.junit.platform.launcher.core.LauncherFactory;
-import org.jacoco.report.html.HTMLFormatter;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collection;
 
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
@@ -42,7 +42,6 @@ public class RunJacocoCoverageStep implements ExecutionStep {
         try {
             /* Get the names of the test class and the library classes.*/
             String testClass = ClassUtils.getTestClass(ctx.getNewClassNames());
-            List<String> otherClasses = ClassUtils.allClassesButTestingAndConfigOnes(ctx.getNewClassNames());
 
             final IRuntime runtime = new LoggerRuntime();
 

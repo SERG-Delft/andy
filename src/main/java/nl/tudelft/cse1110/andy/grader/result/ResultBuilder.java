@@ -8,6 +8,7 @@ import nl.tudelft.cse1110.andy.grader.grade.GradeValues;
 import nl.tudelft.cse1110.andy.grader.grade.GradeWeight;
 import nl.tudelft.cse1110.andy.grader.util.ImportUtils;
 import org.jacoco.core.analysis.IClassCoverage;
+import org.jacoco.core.analysis.IMethodCoverage;
 import org.junit.platform.engine.reporting.ReportEntry;
 import org.junit.platform.launcher.TestIdentifier;
 import org.junit.platform.launcher.listeners.TestExecutionSummary;
@@ -15,7 +16,8 @@ import org.pitest.mutationtest.tooling.CombinedStatistics;
 
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
-import java.io.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -383,7 +385,35 @@ public class ResultBuilder {
         l(String.format("Instruction coverage: %d/%d", totalCoveredInstructions, totalInstructions));
         l(String.format("Branch coverage: %d/%d", totalCoveredBranches, totalBranches));
 
+        highlightCoverage(coverages);
+
         grades.setBranchGrade(totalCoveredBranches, totalBranches);
+    }
+
+    private void highlightCoverage(Collection<IClassCoverage> coverages) {
+        for (IClassCoverage coverage : coverages) {
+            for (IMethodCoverage method : coverage.getMethods()) {
+                for(int line = method.getFirstLine(); line <= method.getLastLine(); line++) {
+                    int totalBranches = method.getLine(line).getBranchCounter().getTotalCount();
+                    int missedBranches = method.getLine(line).getBranchCounter().getMissedCount();
+                    boolean lineTouched = method.getLine(line).getInstructionCounter().getTotalCount() == 0 || method.getLine(line).getInstructionCounter().getCoveredCount() > 0;
+
+                    boolean fullCoverage = lineTouched && missedBranches == 0;
+                    boolean partialCoverage = lineTouched && missedBranches > 0 && totalBranches > 0;
+
+                    if(fullCoverage) {
+                        highlights.add(new Highlight(line, "100% coverage",
+                                Highlight.HighlightLocation.SOLUTION, Highlight.HighlightPurpose.FULL_COVERAGE));
+                    } else if(partialCoverage) {
+                        highlights.add(new Highlight(line, "Partial coverage",
+                                Highlight.HighlightLocation.SOLUTION, Highlight.HighlightPurpose.PARTIAL_COVERAGE));
+                    } else {
+                        highlights.add(new Highlight(line, "No coverage",
+                                Highlight.HighlightLocation.SOLUTION, Highlight.HighlightPurpose.NO_COVERAGE));
+                    }
+                }
+            }
+        }
     }
 
     public void logMetaTests(int score, int totalTests, List<String> passes, List<String> failures) {
