@@ -46,6 +46,13 @@ public class ModeActionSelector {
         return mode == GRADING || action == FULL_WITH_HINTS || action == CUSTOM;
     }
 
+    public boolean shouldShowGrades() {
+        boolean notExam = !mode.equals(Mode.EXAM);
+        boolean fullRun = action != COVERAGE && action != TESTS;
+
+        return notExam && fullRun;
+    }
+
     private List<ExecutionStep> getPracticeMode() {
         if (action == FULL_WITH_HINTS || action == FULL_WITHOUT_HINTS) {
             return fullMode();
@@ -86,8 +93,7 @@ public class ModeActionSelector {
                 new RunJacocoCoverageStep(),
                 new RunPitestStep(),
                 new RunCodeChecksStep(),
-                new RunMetaTestsStep(),
-                new CalculateFinalGradeStep()
+                new RunMetaTestsStep()
         );
     }
 

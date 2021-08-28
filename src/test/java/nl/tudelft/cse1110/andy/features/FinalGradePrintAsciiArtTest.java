@@ -2,6 +2,7 @@ package nl.tudelft.cse1110.andy.features;
 
 import nl.tudelft.cse1110.andy.IntegrationTestBase;
 import nl.tudelft.cse1110.andy.grader.execution.mode.Action;
+import nl.tudelft.cse1110.andy.grader.execution.mode.ModeActionSelector;
 import nl.tudelft.cse1110.andy.grader.grade.GradeCalculator;
 import nl.tudelft.cse1110.andy.grader.grade.GradeValues;
 import nl.tudelft.cse1110.andy.grader.result.RandomAsciiArtGenerator;
@@ -15,7 +16,8 @@ import org.junit.platform.launcher.listeners.TestExecutionSummary;
 
 import java.util.stream.Stream;
 
-import static nl.tudelft.cse1110.andy.ExecutionStepHelper.*;
+import static nl.tudelft.cse1110.andy.ExecutionStepHelper.fullMode;
+import static nl.tudelft.cse1110.andy.ExecutionStepHelper.onlyBasic;
 import static nl.tudelft.cse1110.andy.ResultTestAssertions.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
@@ -109,23 +111,28 @@ public class FinalGradePrintAsciiArtTest extends IntegrationTestBase {
         );
     }
 
-
-
-
     // This unit test stubs the calculated final grade
     @Test
     void logFinalGradePrintAsciiUnitTest() {
+        // we force mode to print the grade
+        ModeActionSelector modeActionSelector = mock(ModeActionSelector.class);
+        when(modeActionSelector.shouldShowGrades()).thenReturn(true);
+        resultBuilder.setModeSelector(modeActionSelector);
 
+        // we mock JUnit stuff, just so our resultbuilder looks more real
         TestExecutionSummary testExecutionSummary = mock(TestExecutionSummary.class);
 
-        when(gradeCalculator.calculateFinalGrade(any(GradeValues.class)))
+        when(gradeCalculator.calculateFinalGrade(any(GradeValues.class), eq(false)))
                 .thenReturn(100);
         when(testExecutionSummary.getTestsFoundCount()).thenReturn((long)5);
         when(testExecutionSummary.getTestsSucceededCount()).thenReturn((long)5);
         when(testExecutionSummary.getTestsFailedCount()).thenReturn((long)5);
 
         resultBuilder.logJUnitRun(testExecutionSummary);
-        resultBuilder.logFinalGrade();
+
+        // we finally log the final grade
+        resultBuilder.logFinalGrade(100);
+
 
         String result = resultBuilder.buildEndUserResult();
 

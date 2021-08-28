@@ -309,16 +309,22 @@ public class ResultBuilder {
         if (gradeCalculator == null)
             return 0;
 
-        return gradeCalculator.calculateFinalGrade(grades);
+        return gradeCalculator.calculateFinalGrade(grades, failed);
     }
 
-    public void logFinalGrade() {
+    public void logFinalGrade(int finalGrade) {
+        // it may have no mode in case something crashes before, e.g., compilation fails.
+        boolean hasNoMode = modeActionSelector==null;
+        if(hasNoMode)
+            return;
 
-        int finalGrade = finalGrade();
-        String grade = String.valueOf(finalGrade);
+        // we only show grades in specific modes and actions
+        boolean shouldNotShowGrades = !modeActionSelector.shouldShowGrades();
+        if(shouldNotShowGrades)
+            return;
 
         l("\n--- Final grade");
-        l(grade + "/100\n");
+        l(finalGrade + "/100\n");
 
         boolean fullyCorrect = finalGrade == 100;
         if (fullyCorrect) {
@@ -445,15 +451,14 @@ public class ResultBuilder {
 
     public void failed() {
         this.failed = true;
-
-        // The failing can happen before we instantiated a grade calculator
-        // e.g., during compilation time.
-        if (gradeCalculator != null)
-            gradeCalculator.failed();
     }
 
     public List<Highlight> getHighlights() {
         return Collections.unmodifiableList(highlights);
 
+    }
+
+    public GradeValues grades() {
+        return grades;
     }
 }

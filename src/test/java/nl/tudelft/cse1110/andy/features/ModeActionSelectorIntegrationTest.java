@@ -115,7 +115,7 @@ public class ModeActionSelectorIntegrationTest extends IntegrationTestBase {
 
     @Test
     void testGradingMode() {
-        String result = run(Action.TESTS, onlyBasic(),"SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecksGrading");
+        String result = run(Action.FULL_WITH_HINTS, onlyBasic(),"SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecksGrading");
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(2))
