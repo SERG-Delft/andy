@@ -49,7 +49,7 @@ public class CompilationStepTest extends IntegrationTestBase {
         File highlights = new File(concatenateDirectories(workDir.toString(), "highlights.json"));
         assertThat(highlights).exists().isFile();
 
-        String expected = "{\"Error List\":[{\"Line\":40,\"Message\":\"cannot find symbol\\n  symbol:   class List\\n  location: class delft.ArrayUtilsTests\",\"Color\":\"red\"},{\"Line\":69,\"Message\":\"cannot find symbol\\n  symbol:   class List\\n  location: class delft.ArrayUtilsTests\",\"Color\":\"red\"}]}";
+        String expected = "[{\"line\":40,\"message\":\"cannot find symbol\\n  symbol:   class List\\n  location: class delft.ArrayUtilsTests\",\"location\":\"SOLUTION\",\"purpose\":\"COMPILATION_ERROR\"},{\"line\":69,\"message\":\"cannot find symbol\\n  symbol:   class List\\n  location: class delft.ArrayUtilsTests\",\"location\":\"SOLUTION\",\"purpose\":\"COMPILATION_ERROR\"}]";
         assertThat(highlights).hasContent(expected);
     }
 

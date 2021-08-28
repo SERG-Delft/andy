@@ -1,9 +1,6 @@
-package nl.tudelft.cse1110.andy.grader.execution.step.helper;
+package nl.tudelft.cse1110.andy.grader.execution.mode;
 
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
-import nl.tudelft.cse1110.andy.grader.execution.mode.Action;
-import nl.tudelft.cse1110.andy.grader.execution.mode.Mode;
-import nl.tudelft.cse1110.andy.grader.execution.mode.ModeActionSelector;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

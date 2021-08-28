@@ -1,6 +1,7 @@
 package nl.tudelft.cse1110.andy.grader.execution;
 
 import nl.tudelft.cse1110.andy.grader.execution.step.*;
+import nl.tudelft.cse1110.andy.grader.result.OutputGenerator;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 
 import java.util.Arrays;
@@ -8,11 +9,10 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import static nl.tudelft.cse1110.andy.grader.result.OutputGenerator.*;
-
 public class ExecutionFlow {
     private final Context ctx;
     private final ResultBuilder result;
+    private final OutputGenerator outputGenerator;
     private LinkedList<ExecutionStep> steps;
 
     private ExecutionFlow(List<ExecutionStep> plan, Context ctx, ResultBuilder result) {
@@ -21,6 +21,8 @@ public class ExecutionFlow {
         this.ctx = ctx;
         this.result = result;
         this.ctx.setFlow(this);
+
+        this.outputGenerator = new OutputGenerator(ctx);
     }
 
     public void run() {
@@ -50,11 +52,9 @@ public class ExecutionFlow {
         result.logMode();
         result.logTimeToRun(ctx.getStartTime());
 
-        exportOutputFile(ctx, result);
-        exportXMLFile(ctx, result);
-        if(result.containsCompilationErrors()) {
-            exportCompilationHighlights(ctx, result.getCompilationErrors());
-        }
+        outputGenerator.exportOutputFile(result);
+        outputGenerator.exportXMLFile(result);
+        outputGenerator.exportHighlights(result);
     }
 
     public static ExecutionFlow asSteps(List<ExecutionStep> plan, Context ctx, ResultBuilder result) {

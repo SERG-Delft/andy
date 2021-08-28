@@ -39,6 +39,7 @@ public class ResultBuilder {
     private RandomAsciiArtGenerator asciiArtGenerator;
 
     private List<Diagnostic<? extends JavaFileObject>> compilationErrors;
+    private List<Highlight> highlights = new ArrayList<>();
 
     // it will be set in case of a generic failure. It one happens, the output is purely the generic failure
     private String genericFailureMessage;
@@ -70,12 +71,16 @@ public class ResultBuilder {
         for(Diagnostic diagnostic: compilationErrors) {
             if (diagnostic.getKind() == ERROR) {
 
+                String message = diagnostic.getMessage(null);
+                long lineNumber = diagnostic.getLineNumber();
                 l(String.format("- line %d: %s",
-                        diagnostic.getLineNumber(),
-                        diagnostic.getMessage(null)));
+                        lineNumber,
+                        message));
 
-                Optional<String> importLog = ImportUtils.checkMissingImport(diagnostic.getMessage(null));
+                Optional<String> importLog = ImportUtils.checkMissingImport(message);
                 importLog.ifPresent(this::l);
+
+                highlights.add(new Highlight(lineNumber, message, Highlight.HighlightLocation.SOLUTION, Highlight.HighlightPurpose.COMPILATION_ERROR));
             }
         }
 
@@ -417,11 +422,8 @@ public class ResultBuilder {
             gradeCalculator.failed();
     }
 
-    public boolean containsCompilationErrors() {
-        return compilationErrors!=null;
-    }
+    public List<Highlight> getHighlights() {
+        return Collections.unmodifiableList(highlights);
 
-    public List<Diagnostic<? extends JavaFileObject>> getCompilationErrors() {
-        return compilationErrors;
     }
 }
