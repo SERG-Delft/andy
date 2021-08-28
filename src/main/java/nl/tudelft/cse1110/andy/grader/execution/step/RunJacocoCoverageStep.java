@@ -90,7 +90,7 @@ public class RunJacocoCoverageStep implements ExecutionStep {
             }
 
             Collection<IClassCoverage> coverages = coverageBuilder.getClasses();
-            result.logJacoco(coverages);
+            logJacoco(result, coverages);
 
             /* Generate an HTML report.*/
             this.generateReport(dirCfg, testClass, coverageBuilder, executionData, sessionInfos);
@@ -100,6 +100,26 @@ public class RunJacocoCoverageStep implements ExecutionStep {
         } catch (Exception ex) {
             result.genericFailure(this, ex);
         }
+    }
+
+    private void logJacoco(ResultBuilder result, Collection<IClassCoverage> coverages) {
+
+        result.message("\n--- JaCoCo coverage");
+
+        int totalCoveredLines = coverages.stream().mapToInt(coverage -> coverage.getLineCounter().getCoveredCount()).sum();
+        int totalLines = coverages.stream().mapToInt(coverage -> coverage.getLineCounter().getTotalCount()).sum();
+
+        int totalCoveredInstructions = coverages.stream().mapToInt(coverage -> coverage.getInstructionCounter().getCoveredCount()).sum();
+        int totalInstructions = coverages.stream().mapToInt(coverage -> coverage.getInstructionCounter().getTotalCount()).sum();
+
+        int totalCoveredBranches = coverages.stream().mapToInt(coverage -> coverage.getBranchCounter().getCoveredCount()).sum();
+        int totalBranches = coverages.stream().mapToInt(coverage -> coverage.getBranchCounter().getTotalCount()).sum();
+
+        result.message(String.format("Line coverage: %d/%d", totalCoveredLines, totalLines));
+        result.message(String.format("Instruction coverage: %d/%d", totalCoveredInstructions, totalInstructions));
+        result.message(String.format("Branch coverage: %d/%d", totalCoveredBranches, totalBranches));
+
+        result.setBranchGrade(totalCoveredBranches, totalBranches);
     }
 
     /**Instrument all classes in a directory.*/

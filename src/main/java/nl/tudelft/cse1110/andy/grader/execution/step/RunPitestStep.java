@@ -43,8 +43,30 @@ public class RunPitestStep implements ExecutionStep {
 
             extractAndRemoveReportFolder(outputPitestDir);
 
-            result.logPitest(stats);
+            logResults(ctx, result, stats);
         }
+    }
+
+    private void logResults(Context ctx, ResultBuilder result, CombinedStatistics stats) {
+
+        int detectedMutations = (int)(stats.getMutationStatistics().getTotalDetectedMutations());
+
+        /*
+         * If number of mutations is -1, we use the one provided by Pitest.
+         * If it's greater than 0, we use the one provided and ignore Pitest's one.
+         */
+        int numberOfMutationsToConsider = ctx.getRunConfiguration().numberOfMutationsToConsider();
+        boolean numberOfMutantsToConsiderIsOverridden = numberOfMutationsToConsider != -1;
+
+        int totalMutations = numberOfMutantsToConsiderIsOverridden ?
+                numberOfMutationsToConsider :
+                (int) stats.getMutationStatistics().getTotalMutations();
+
+        result.message("\n--- Mutation testing");
+        result.message(String.format("%d/%d killed", detectedMutations, totalMutations));
+
+        result.setMutationGrade(detectedMutations, totalMutations);
+
     }
 
     private String createDirectoryForPitest(Context ctx) {

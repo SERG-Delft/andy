@@ -3,6 +3,7 @@ package nl.tudelft.cse1110.andy.grader.execution;
 import nl.tudelft.cse1110.andy.grader.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.grader.config.RunConfiguration;
 import nl.tudelft.cse1110.andy.grader.execution.mode.Action;
+import nl.tudelft.cse1110.andy.grader.execution.mode.ModeActionSelector;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ public class Context {
     private List<String> fullClassNames;
     private ExecutionFlow flow;
     private Action action;
+    private ModeActionSelector modeActionSelector;
 
     public Context(Action action) {
         this.cleanClassloader = Thread.currentThread().getContextClassLoader();
@@ -62,5 +64,13 @@ public class Context {
 
     public Action getAction() {
         return action;
+    }
+
+    public void setModeSelector(ModeActionSelector modeActionSelector) {
+        this.modeActionSelector = modeActionSelector;
+    }
+
+    public ModeActionSelector getModeActionSelector() {
+        return modeActionSelector;
     }
 }

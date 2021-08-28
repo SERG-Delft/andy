@@ -18,7 +18,25 @@ public class RunCodeChecksStep implements ExecutionStep {
         CheckScript script = runCfg.checkScript();
         script.runChecks(findSolution(dirCfg.getWorkingDir()));
 
-        result.logCodeChecks(script);
+        logCodeChecks(ctx, result, script);
+    }
+
+    private void logCodeChecks(Context ctx, ResultBuilder result, CheckScript script) {
+
+        if (script.hasChecks()) {
+            int weightedChecks = script.weightedChecks();
+            int sumOfWeights = script.weights();
+
+            if (ctx.getModeActionSelector().shouldShowHints()) {
+                result.message("\n--- Code checks");
+                result.message(script.generateReportOFailedChecks().trim());
+
+                result.message(String.format("\n%d/%d passed", weightedChecks, sumOfWeights));
+            }
+
+            result.setCheckGrade(weightedChecks, sumOfWeights);
+        }
+
     }
 
     @Override

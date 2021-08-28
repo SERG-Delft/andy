@@ -2,8 +2,6 @@ package nl.tudelft.cse1110.andy.features;
 
 import nl.tudelft.cse1110.andy.IntegrationTestBase;
 import nl.tudelft.cse1110.andy.grader.execution.mode.Action;
-import nl.tudelft.cse1110.andy.grader.grade.GradeCalculator;
-import nl.tudelft.cse1110.andy.grader.grade.GradeValues;
 import nl.tudelft.cse1110.andy.grader.result.RandomAsciiArtGenerator;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,20 +9,20 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.platform.launcher.listeners.TestExecutionSummary;
 
 import java.util.stream.Stream;
 
-import static nl.tudelft.cse1110.andy.ExecutionStepHelper.*;
+import static nl.tudelft.cse1110.andy.ExecutionStepHelper.fullMode;
+import static nl.tudelft.cse1110.andy.ExecutionStepHelper.onlyBasic;
 import static nl.tudelft.cse1110.andy.ResultTestAssertions.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class FinalGradePrintAsciiArtTest extends IntegrationTestBase {
 
     private String asciiArtExpected;
     private RandomAsciiArtGenerator asciiArtGenerator;
-    private GradeCalculator gradeCalculator;
     private ResultBuilder resultBuilder;
 
     @BeforeEach
@@ -47,8 +45,7 @@ public class FinalGradePrintAsciiArtTest extends IntegrationTestBase {
                 "           '~---~'\n";
         when(asciiArtGenerator.getRandomAsciiArt()).thenReturn(asciiArtExpected);
 
-        gradeCalculator = mock(GradeCalculator.class);
-        resultBuilder = new ResultBuilder(asciiArtGenerator, gradeCalculator);
+        resultBuilder = new ResultBuilder(asciiArtGenerator);
     }
 
 
@@ -116,31 +113,19 @@ public class FinalGradePrintAsciiArtTest extends IntegrationTestBase {
     @Test
     void logFinalGradePrintAsciiUnitTest() {
 
-        TestExecutionSummary testExecutionSummary = mock(TestExecutionSummary.class);
-
-        when(gradeCalculator.calculateFinalGrade(any(GradeValues.class)))
-                .thenReturn(100);
-        when(testExecutionSummary.getTestsFoundCount()).thenReturn((long)5);
-        when(testExecutionSummary.getTestsSucceededCount()).thenReturn((long)5);
-        when(testExecutionSummary.getTestsFailedCount()).thenReturn((long)5);
-
-        resultBuilder.logJUnitRun(testExecutionSummary);
-        resultBuilder.logFinalGrade();
+        resultBuilder.message("line 1");
+        resultBuilder.message("line 2");
+        resultBuilder.printRandomAsciiArt();
 
         String result = resultBuilder.buildEndUserResult();
 
         assertThat(result)
-                .startsWith("\n" +
-                "--- JUnit execution\n" +
-                "5/5 passed")
+                .startsWith("line 1\n" +
+                "line 2\n")
                 .endsWith(
-                "\n--- Final grade\n" +
-                "100/100\n" +
-                "\n" + asciiArtExpected + "\n");
+                asciiArtExpected + "\n");
 
     }
-
-
 
 
 }

@@ -83,13 +83,28 @@ public class RunMetaTestsStep implements ExecutionStep {
                 deleteDirectory(metaWorkingDir);
             }
 
-            result.logMetaTests(score, metaTests.size(), passes, failures);
+            logMetaTests(ctx, result, score, metaTests.size(), passes, failures);
         } catch (Exception ex) {
             result.genericFailure(this, ex);
         } finally {
             /* restore the class loader to the one before meta tests */
             Thread.currentThread().setContextClassLoader(currentClassLoader);
         }
+    }
+
+    private void logMetaTests(Context ctx, ResultBuilder result, int score, int totalTests, List<String> passes, List<String> failures) {
+        if (ctx.getModeActionSelector().shouldShowHints()) {
+            result.message("\n--- Meta tests");
+            result.message(String.format("%d/%d passed", score, totalTests));
+            for (String pass : passes) {
+                result.message(String.format("Meta test: %s PASSED", pass));
+            }
+            for (String failure : failures) {
+                result.message(String.format("Meta test: %s FAILED", failure));
+            }
+        }
+
+        result.setMetaGrade(score, totalTests);
     }
 
     private String generateMetaFileContent(MetaTest metaTest, String originalLibraryContent) {

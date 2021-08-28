@@ -1,102 +1,43 @@
 package nl.tudelft.cse1110.andy.grader.result;
 
-import nl.tudelft.cse1110.andy.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.grader.execution.mode.ModeActionSelector;
-import nl.tudelft.cse1110.andy.grader.grade.GradeCalculator;
 import nl.tudelft.cse1110.andy.grader.grade.GradeValues;
-import nl.tudelft.cse1110.andy.grader.grade.GradeWeight;
-import nl.tudelft.cse1110.andy.grader.util.ImportUtils;
-import org.jacoco.core.analysis.IClassCoverage;
-import org.junit.platform.engine.reporting.ReportEntry;
-import org.junit.platform.launcher.TestIdentifier;
-import org.junit.platform.launcher.listeners.TestExecutionSummary;
-import org.pitest.mutationtest.tooling.CombinedStatistics;
 
-import javax.tools.Diagnostic;
-import javax.tools.JavaFileObject;
-import java.io.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.time.LocalDateTime;
-import java.util.*;
-
-import static javax.tools.Diagnostic.Kind.ERROR;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class ResultBuilder {
-
-    private boolean failed;
     private StringBuilder result = new StringBuilder();
     private StringBuilder debug = new StringBuilder();
-    private Map<TestIdentifier, ReportEntry> additionalReports = new HashMap<>();
-
-    private int testsRan = 0;
-    private int testsSucceeded = 0;
-
-    private int mutationsToConsider; // will be injected once configuration is loaded
-
-    private GradeCalculator gradeCalculator; // will be set once weights are injected
-    private GradeValues grades = new GradeValues();
-    private ModeActionSelector modeActionSelector; // will be injected once configuration is loaded
-    private RandomAsciiArtGenerator asciiArtGenerator;
-
-    private List<Diagnostic<? extends JavaFileObject>> compilationErrors;
     private List<Highlight> highlights = new ArrayList<>();
+    private GradeValues grades = new GradeValues();
+
+    private boolean failed;
+    private RandomAsciiArtGenerator asciiArtGenerator;
 
     // it will be set in case of a generic failure. It one happens, the output is purely the generic failure
     private String genericFailureMessage;
 
+    // we keep the number of tests ran and succeeded for the meta tests step,
+    // as the step needs it to know whether the meta test passed or not
+    private int testsRan;
+    private int testsSucceeded;
+
+    // final grade is set after the CalculateFinalGradeStep
+    private int finalGrade;
 
     // Facilitates testing
-    public ResultBuilder(RandomAsciiArtGenerator asciiArtGenerator, GradeCalculator calculator) {
+    public ResultBuilder(RandomAsciiArtGenerator asciiArtGenerator) {
         this.asciiArtGenerator = asciiArtGenerator;
-        this.gradeCalculator = calculator;
     }
 
     public ResultBuilder() {
         this.asciiArtGenerator = new RandomAsciiArtGenerator();
-    }
-
-    public void setModeSelector(ModeActionSelector modeActionSelector) {
-        this.modeActionSelector = modeActionSelector;
-    }
-
-
-    public void compilationSuccess() {
-        l("--- Compilation\nSuccess");
-    }
-
-    public void compilationFail(List<Diagnostic<? extends JavaFileObject>> compilationErrors) {
-        this.compilationErrors = compilationErrors;
-
-        l("We could not compile the code. See the compilation errors below:");
-        for(Diagnostic diagnostic: compilationErrors) {
-            if (diagnostic.getKind() == ERROR) {
-
-                String message = diagnostic.getMessage(null);
-                long lineNumber = diagnostic.getLineNumber();
-                l(String.format("- line %d: %s",
-                        lineNumber,
-                        message));
-
-                Optional<String> importLog = ImportUtils.checkMissingImport(message);
-                importLog.ifPresent(this::l);
-
-                highlights.add(new Highlight(lineNumber, message, Highlight.HighlightLocation.SOLUTION, Highlight.HighlightPurpose.COMPILATION_ERROR));
-            }
-        }
-
-        if(anyOfTheErrorsAreCausedDueToBadConfiguration(compilationErrors)) {
-            l("\n**WARNING:** There might be a problem with this exercise. "+
-                    "Please contact the teaching staff so they can fix this as quickly" +
-                    "as possible. Thank you for your help! :)");
-        }
-
-        failed();
-    }
-
-    private boolean anyOfTheErrorsAreCausedDueToBadConfiguration(List<Diagnostic<? extends JavaFileObject>> compilationErrors) {
-        return compilationErrors
-                .stream()
-                .anyMatch(c -> c.getKind() == ERROR && c.getSource().getName().endsWith("Configuration.java"));
     }
 
     public void logFinish(ExecutionStep step) {
@@ -146,117 +87,7 @@ public class ResultBuilder {
         return messageToAppend;
     }
 
-    public void logJUnitRun(TestExecutionSummary summary) {
-        if (summary.getTestsFoundCount() == 0) {
-            noTestsFound(summary);
-        } else {
-
-            l("\n--- JUnit execution");
-            l(String.format("%d/%d passed", summary.getTestsSucceededCount(), summary.getTestsFoundCount()));
-
-            for (TestExecutionSummary.Failure failure : summary.getFailures()) {
-                this.logJUnitFailedTest(failure);
-            }
-
-            this.testsRan = (int) summary.getTestsStartedCount();
-            this.testsSucceeded = (int) summary.getTestsSucceededCount();
-
-            if(summary.getTestsSucceededCount() < summary.getTestsFoundCount()) {
-                l("You must ensure that all tests are passing! Stopping the assessment.");
-                failed();
-            }
-        }
-    }
-
-    /** Checks for different error cases possible when tests are not detected
-     * @param summary - JUnit execution summary
-     */
-    private void noTestsFound(TestExecutionSummary summary) {
-
-        if (summary.getContainersFoundCount() > summary.getContainersStartedCount()) {
-            l("--- Warning\nWe do not see any tests.\n" +
-                    "Please check for the following JUnit pre-conditions:\n" +
-                    "- @BeforeAll and @AfterAll methods should be static\n" +
-                    "- @BeforeEach methods should be non-static\n");
-        } else {
-            l("--- Warning\nWe do not see any tests.\n" +
-                    "Please check for the following JUnit pre-conditions:\n" +
-                    "- Normal tests must be annotated with \"@Test\"\n" +
-                    "- Parameterized tests must be annotated with \"@ParameterizedTest\"\n" +
-                    "- Method sources must be static and provided as: \"@MethodSource(\"generator\")\" e.g.\n" +
-                    "- Property based tests must be annotated with \"@Property\"\n");
-        }
-        failed();
-    }
-
-    public int getTestsRan() {
-        return this.testsRan;
-    }
-
-    public int getTestsSucceeded() {
-        return this.testsSucceeded;
-    }
-
-    public void logAdditionalReport(TestIdentifier testIdentifier, ReportEntry report) {
-        this.additionalReports.put(testIdentifier, report);
-    }
-
-    private void logJUnitFailedTest(TestExecutionSummary.Failure failure) {
-        boolean isParameterizedTest = failure.getTestIdentifier().getUniqueId().contains("test-template-invocation");
-        boolean isPBT = failure.getTestIdentifier().getUniqueId().contains("property");
-
-        if(isParameterizedTest) {
-            String methodName = this.getParameterizedMethodName(failure);
-            String testCaseNumber = this.getParameterizedTestCaseNumber(failure);
-            l(String.format("\n- Parameterized test \"%s\", test case #%s failed:", methodName, testCaseNumber));
-            l(String.format("%s", failure.getException()));
-        } else if (isPBT) {
-            l(String.format("\n- Property test \"%s\" failed:", failure.getTestIdentifier().getDisplayName()));
-
-            if (this.additionalReports.containsKey(failure.getTestIdentifier())) {
-                l(this.additionalReports.get(failure.getTestIdentifier()).getKeyValuePairs().toString());
-            }
-        } else {
-            l(String.format("\n- Test \"%s\" failed:", failure.getTestIdentifier().getDisplayName()));
-            l(String.format("%s", simplifyTestErrorMessage(failure)));
-        }
-    }
-
-    private String simplifyTestErrorMessage(TestExecutionSummary.Failure failure) {
-        if (failure.getException().toString()
-                .contains("Cannot invoke non-static method")) {
-            String failingMethod = getFailingMethod(failure);
-
-            return "Make sure your corresponding method " + failingMethod + " is static!";
-        } else if (failure.getException().toString()
-                .contains("You must configure at least one set of arguments"))    {
-            return "Make sure you have provided a @MethodSource for this @ParameterizedTest!";
-        }
-        return failure.getException().toString();
-    }
-
-    private String getParameterizedMethodName(TestExecutionSummary.Failure failure) {
-        int endIndex = failure.getTestIdentifier().getLegacyReportingName().indexOf('(');
-        return failure.getTestIdentifier().getLegacyReportingName().substring(0, endIndex);
-    }
-
-
-    private String getParameterizedTestCaseNumber(TestExecutionSummary.Failure failure) {
-        int open = failure.getTestIdentifier().getLegacyReportingName().lastIndexOf('[');
-        int close = failure.getTestIdentifier().getLegacyReportingName().lastIndexOf(']');
-
-        return failure.getTestIdentifier().getLegacyReportingName().substring(open+1, close);
-    }
-
-
-    private String getFailingMethod(TestExecutionSummary.Failure failure) {
-        int open = failure.getException().toString().indexOf('>');
-        int close = failure.getException().toString().indexOf(']');
-
-        return failure.getException().toString().substring(open+2, close);
-    }
-
-    public void logMode() {
+    public void logMode(ModeActionSelector modeActionSelector) {
         // modeActionSelector can be null if the code did not get to GetRunConfigurationStep.
         // This can happen due to a compilation error for example.
         if (modeActionSelector != null) {
@@ -299,114 +130,12 @@ public class ResultBuilder {
     }
 
     public int getFinalScore(){
-        return isFailed() ? -1 : finalGrade();
-    }
-
-    private int finalGrade() {
-        // this might be called when compilation fails, and we have no grade calculator yet
-        if (gradeCalculator == null)
-            return 0;
-
-        return gradeCalculator.calculateFinalGrade(grades);
-    }
-
-    public void logFinalGrade() {
-
-        int finalGrade = finalGrade();
-        String grade = String.valueOf(finalGrade);
-
-        l("\n--- Final grade");
-        l(grade + "/100\n");
-
-        boolean fullyCorrect = finalGrade == 100;
-        if (fullyCorrect) {
-            String randomAsciiArt = asciiArtGenerator.getRandomAsciiArt();
-            l(randomAsciiArt);
-        }
+        return isFailed() ? -1 : finalGrade;
     }
 
     public void logConsoleOutput(String console){
         l("\n--- Console output");
         l(console);
-    }
-
-    public void logPitest(CombinedStatistics stats) {
-
-        int detectedMutations = (int)(stats.getMutationStatistics().getTotalDetectedMutations());
-
-        int totalMutations;
-        boolean numberOfMutantsToConsiderIsOverridden = this.mutationsToConsider != -1;
-        if (numberOfMutantsToConsiderIsOverridden) {
-            totalMutations = this.mutationsToConsider;
-        } else {
-            totalMutations = (int)(stats.getMutationStatistics().getTotalMutations());
-        }
-
-        l("\n--- Mutation testing");
-        l(String.format("%d/%d killed", detectedMutations, totalMutations));
-
-        grades.setMutationGrade(detectedMutations, totalMutations);
-      
-    }
-
-    public void logCodeChecks(CheckScript script) {
-
-        if (script.hasChecks()) {
-            int weightedChecks = script.weightedChecks();
-            int sumOfWeights = script.weights();
-
-            if (modeActionSelector.shouldShowHints()) {
-                l("\n--- Code checks");
-                l(script.generateReportOFailedChecks().trim());
-
-                l(String.format("\n%d/%d passed", weightedChecks, sumOfWeights));
-            }
-
-            grades.setCheckGrade(weightedChecks, sumOfWeights);
-        }
-
-    }
-
-    public void logJacoco(Collection<IClassCoverage> coverages) {
-        l("\n--- JaCoCo coverage");
-
-        int totalCoveredLines = coverages.stream().mapToInt(coverage -> coverage.getLineCounter().getCoveredCount()).sum();
-        int totalLines = coverages.stream().mapToInt(coverage -> coverage.getLineCounter().getTotalCount()).sum();
-
-        int totalCoveredInstructions = coverages.stream().mapToInt(coverage -> coverage.getInstructionCounter().getCoveredCount()).sum();
-        int totalInstructions = coverages.stream().mapToInt(coverage -> coverage.getInstructionCounter().getTotalCount()).sum();
-
-        int totalCoveredBranches = coverages.stream().mapToInt(coverage -> coverage.getBranchCounter().getCoveredCount()).sum();
-        int totalBranches = coverages.stream().mapToInt(coverage -> coverage.getBranchCounter().getTotalCount()).sum();
-
-        l(String.format("Line coverage: %d/%d", totalCoveredLines, totalLines));
-        l(String.format("Instruction coverage: %d/%d", totalCoveredInstructions, totalInstructions));
-        l(String.format("Branch coverage: %d/%d", totalCoveredBranches, totalBranches));
-
-        grades.setBranchGrade(totalCoveredBranches, totalBranches);
-    }
-
-    public void logMetaTests(int score, int totalTests, List<String> passes, List<String> failures) {
-        if (modeActionSelector.shouldShowHints()) {
-            l("\n--- Meta tests");
-            l(String.format("%d/%d passed", score, totalTests));
-            for (String pass : passes) {
-                l(String.format("Meta test: %s PASSED", pass));
-            }
-            for (String failure : failures) {
-                l(String.format("Meta test: %s FAILED", failure));
-            }
-        }
-
-        grades.setMetaGrade(score, totalTests);
-    }
-
-    public void setGradeWeights(GradeWeight gradeWeights) {
-        this.gradeCalculator = new GradeCalculator(gradeWeights);
-    }
-
-    public void setNumberOfMutationsToConsider(int numberOfMutations) {
-        this.mutationsToConsider = numberOfMutations;
     }
 
     public boolean isFailed() {
@@ -415,15 +144,60 @@ public class ResultBuilder {
 
     public void failed() {
         this.failed = true;
-
-        // The failing can happen before we instantiated a grade calculator
-        // e.g., during compilation time.
-        if (gradeCalculator != null)
-            gradeCalculator.failed();
     }
 
     public List<Highlight> getHighlights() {
         return Collections.unmodifiableList(highlights);
 
+    }
+
+    public void message(String line) {
+        l(line);
+    }
+
+    public void highlight(Highlight highlight) {
+        highlights.add(highlight);
+    }
+
+    public void setMutationGrade(int detectedMutations, int totalMutations) {
+        grades.setMutationGrade(detectedMutations, totalMutations);
+    }
+
+    public void setJUnitResults(int testsRan, int testsSucceeded) {
+        this.testsRan = testsRan;
+        this.testsSucceeded = testsSucceeded;
+    }
+
+    public void setBranchGrade(int totalCoveredBranches, int totalBranches) {
+        grades.setBranchGrade(totalCoveredBranches, totalBranches);
+    }
+
+    public void setCheckGrade(int weightedChecks, int sumOfWeights) {
+        grades.setCheckGrade(weightedChecks, sumOfWeights);
+    }
+
+    public void setMetaGrade(int score, int totalTests) {
+        grades.setMetaGrade(score, totalTests);
+    }
+
+    public int getTestsSucceeded() {
+        return testsSucceeded;
+    }
+
+    public int getTestsRan() {
+        return testsRan;
+    }
+
+    public GradeValues grades() {
+        return grades;
+    }
+
+    public void printRandomAsciiArt() {
+        String randomAsciiArt = asciiArtGenerator.getRandomAsciiArt();
+        l(randomAsciiArt);
+    }
+
+    public void setFinalGrade(int finalGrade) {
+        this.finalGrade = finalGrade;
     }
 }

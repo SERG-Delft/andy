@@ -43,8 +43,7 @@ public class ExecutionStepHelper {
                 new RunJacocoCoverageStep(),
                 new RunPitestStep(),
                 new RunCodeChecksStep(),
-                new RunMetaTestsStep(),
-                new CalculateFinalGradeStep());
+                new RunMetaTestsStep());
     }
 
 

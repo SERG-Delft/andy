@@ -27,7 +27,7 @@ public class GradeCalculatorTest {
         grades.setMetaGrade(metaTestsPassed, totalMetaTests);
         grades.setCheckGrade(checksPassed, totalChecks);
 
-        int finalGrade = new GradeCalculator(weights).calculateFinalGrade(grades);
+        int finalGrade = new GradeCalculator(weights).calculateFinalGrade(grades, false);
 
         assertThat(finalGrade).isEqualTo(expectedGrade);
     }
@@ -60,9 +60,8 @@ public class GradeCalculatorTest {
         grades.setCheckGrade(10, 10);
 
         GradeCalculator calculator = new GradeCalculator(weights);
-        calculator.failed();
 
-        int finalGrade = calculator.calculateFinalGrade(grades);
+        int finalGrade = calculator.calculateFinalGrade(grades, true);
         assertThat(finalGrade).isEqualTo(0);
     }
 
@@ -81,7 +80,7 @@ public class GradeCalculatorTest {
         grades.setMetaGrade(metaTestsPassed, totalMetaTests);
         grades.setCheckGrade(checksPassed, totalChecks);
 
-        int finalGrade = new GradeCalculator(weights).calculateFinalGrade(grades);
+        int finalGrade = new GradeCalculator(weights).calculateFinalGrade(grades, false);
 
         assertThat(finalGrade).isEqualTo(expectedGrade);
     }

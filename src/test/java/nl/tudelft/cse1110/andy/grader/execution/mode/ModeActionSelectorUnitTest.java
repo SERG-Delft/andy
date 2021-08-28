@@ -95,4 +95,27 @@ public class ModeActionSelectorUnitTest {
         );
     }
 
+    @ParameterizedTest
+    @MethodSource("testShowGradesGenerator")
+    void shouldShowGrades(Mode mode, Action action, boolean shouldShowGradeOrNot) {
+        ModeActionSelector modeActionSelector = new ModeActionSelector(mode, action);
+
+        assertThat(modeActionSelector.shouldShowGrades()).isEqualTo(shouldShowGradeOrNot);
+    }
+
+    static Stream<Arguments> testShowGradesGenerator() {
+        return Stream.of(
+            Arguments.of(EXAM, TESTS, false),
+            Arguments.of(EXAM, COVERAGE, false),
+            Arguments.of(EXAM, FULL_WITH_HINTS, false),
+            Arguments.of(EXAM, FULL_WITHOUT_HINTS, false),
+            Arguments.of(PRACTICE, TESTS, false),
+            Arguments.of(PRACTICE, COVERAGE, false),
+            Arguments.of(PRACTICE, FULL_WITH_HINTS, true),
+            Arguments.of(PRACTICE, FULL_WITHOUT_HINTS, true),
+            // grading will only be called with full mode
+            Arguments.of(GRADING, FULL_WITH_HINTS, true)
+        );
+    }
+
 }

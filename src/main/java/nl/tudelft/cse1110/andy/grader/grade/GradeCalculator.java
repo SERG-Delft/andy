@@ -3,7 +3,6 @@ package nl.tudelft.cse1110.andy.grader.grade;
 public class GradeCalculator {
 
     private GradeWeight weights;
-    private boolean failed;
 
     public GradeCalculator(GradeWeight weights) {
         this.weights = weights;
@@ -17,7 +16,7 @@ public class GradeCalculator {
      * Calculates the final grade of the student, in a number between 0 and 100.
      * Final number is rounded up from 0.5.
      */
-    public int calculateFinalGrade(GradeValues gradeValues) {
+    public int calculateFinalGrade(GradeValues gradeValues, boolean failed) {
         if (weights.isFailureGives0() && failed) {
             return 0;
         }
@@ -88,17 +87,6 @@ public class GradeCalculator {
         return (float)checksPassed / totalChecks;
     }
 
-
-    /**
-     * If one of the test fails, field "failed" is set to true.
-     */
-    public void failed() {
-        failed = true;
-    }
-
-    public boolean isFailed() {
-        return failed;
-    }
 
 
 }
