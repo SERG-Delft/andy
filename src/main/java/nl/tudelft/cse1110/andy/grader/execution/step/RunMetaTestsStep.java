@@ -71,11 +71,11 @@ public class RunMetaTestsStep implements ExecutionStep {
                 result.debug(this, String.format("Tests ran with the meta test: %d/%d", testsSucceeded, testsRan));
 
                 if (passesTheMetaTest) {
-                    score++;
-                    String metaName = metaTest.getName();
+                    score+= metaTest.getWeight();
+                    String metaName = metaTest.getNameAndWeight();
                     passes.add(metaName);
                 } else {
-                    String metaName = metaTest.getName();
+                    String metaName = metaTest.getNameAndWeight();
                     failures.add(metaName);
                 }
 
@@ -83,7 +83,8 @@ public class RunMetaTestsStep implements ExecutionStep {
                 deleteDirectory(metaWorkingDir);
             }
 
-            result.logMetaTests(score, metaTests.size(), passes, failures);
+            int totalWeight = metaTests.stream().mapToInt(m -> m.getWeight()).sum();
+            result.logMetaTests(score, totalWeight, passes, failures);
         } catch (Exception ex) {
             result.genericFailure(this, ex);
         } finally {

@@ -6,10 +6,12 @@ import java.util.stream.Collectors;
 
 public class MetaTest {
 
+    private final int weight;
     private String name;
     private MetaEvaluator evaluator;
 
-    private MetaTest(String name, MetaEvaluator evaluator) {
+    private MetaTest(int weight, String name, MetaEvaluator evaluator) {
+        this.weight = weight;
         this.name = name;
         this.evaluator = evaluator;
     }
@@ -18,18 +20,34 @@ public class MetaTest {
         return this.name;
     }
 
-    public static MetaTest withStringReplacement(String name, String old, String replacement) {
+    public int getWeight() {
+        return weight;
+    }
+
+    public static MetaTest withStringReplacement(int weight, String name, String old, String replacement) {
         MetaEvaluator evaluator = new StringReplacementEvaluator(old, replacement);
-        return new MetaTest(name, evaluator);
+        return new MetaTest(weight, name, evaluator);
+    }
+
+    public static MetaTest withStringReplacement(String name, String old, String replacement) {
+        return withStringReplacement(1, name, old, replacement);
+    }
+
+    public static MetaTest withLineReplacement(int weight, String name, int start, int end, String replacement) {
+        MetaEvaluator evaluator = new LineReplacementEvaluator(start, end, replacement);
+        return new MetaTest(weight, name, evaluator);
     }
 
     public static MetaTest withLineReplacement(String name, int start, int end, String replacement) {
-        MetaEvaluator evaluator = new LineReplacementEvaluator(start, end, replacement);
-        return new MetaTest(name, evaluator);
+        return withLineReplacement(1, name, start, end, replacement);
     }
 
     public String evaluate(String oldLibraryCode) {
         return this.evaluator.evaluate(oldLibraryCode);
+    }
+
+    public String getNameAndWeight() {
+        return String.format("%s (weight: %d)", name, weight);
     }
 
     private interface MetaEvaluator {

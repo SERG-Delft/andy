@@ -37,6 +37,19 @@ public class RunMetaTestsStepTest extends IntegrationTestBase {
     }
 
     @Test
+    void testSomeMetaTestFailingWithWeights() {
+        String result = run(onlyMetaTests(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddConfigurationWithWeight");
+
+        assertThat(result)
+                .has(metaTests(7))
+                .has(metaTestsPassing(2))
+                .has(metaTestPassing("DoesNotCheckNumbersOutOfRange"))
+                .has(metaTestFailing("AppliesMultipleCarriesWrongly"))
+                .has(metaTestFailing("DoesNotApplyCarryAtAll"))
+                .has(metaTestFailing("DoesNotApplyLastCarry"));
+    }
+
+    @Test
     void testAllMetaTestsFailing() {
         String result = run(onlyMetaTests(), "NumberUtilsAddLibrary", "NumberUtilsNoTests", "NumberUtilsAddConfiguration");
 

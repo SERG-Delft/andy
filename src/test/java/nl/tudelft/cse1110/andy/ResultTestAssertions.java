@@ -132,11 +132,11 @@ public class ResultTestAssertions {
     }
 
     public static Condition<String> metaTestFailing(String metaTestName) {
-        return containsString("Meta test: " + metaTestName + " FAILED");
+        return containsRegex("Meta test: " + metaTestName + " \\(.*\\) FAILED");
     }
 
     public static Condition<String> metaTestPassing(String metaTestName) {
-        return containsString("Meta test: " + metaTestName + " PASSED");
+        return containsRegex("Meta test: " + metaTestName + " \\(.*\\) PASSED");
     }
 
     public static Condition<String> finalGrade(int score) {
