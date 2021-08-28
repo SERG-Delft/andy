@@ -2,7 +2,7 @@ package nl.tudelft.cse1110.andy.grader.result;
 
 import nl.tudelft.cse1110.andy.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
-import nl.tudelft.cse1110.andy.grader.execution.step.helper.ModeActionSelector;
+import nl.tudelft.cse1110.andy.grader.execution.mode.ModeActionSelector;
 import nl.tudelft.cse1110.andy.grader.grade.GradeCalculator;
 import nl.tudelft.cse1110.andy.grader.grade.GradeValues;
 import nl.tudelft.cse1110.andy.grader.grade.GradeWeight;

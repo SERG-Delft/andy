@@ -1,7 +1,7 @@
 package nl.tudelft.cse1110.andy.features;
 
 import nl.tudelft.cse1110.andy.IntegrationTestBase;
-import nl.tudelft.cse1110.andy.grader.execution.step.helper.Action;
+import nl.tudelft.cse1110.andy.grader.execution.mode.Action;
 import nl.tudelft.cse1110.andy.grader.grade.GradeCalculator;
 import nl.tudelft.cse1110.andy.grader.grade.GradeValues;
 import nl.tudelft.cse1110.andy.grader.result.RandomAsciiArtGenerator;

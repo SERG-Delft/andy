@@ -7,7 +7,7 @@ import nl.tudelft.cse1110.andy.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.andy.codechecker.engine.SingleCheck;
 import nl.tudelft.cse1110.andy.grader.config.MetaTest;
 import nl.tudelft.cse1110.andy.grader.config.RunConfiguration;
-import nl.tudelft.cse1110.andy.grader.execution.step.helper.Mode;
+import nl.tudelft.cse1110.andy.grader.execution.mode.Mode;
 
 import java.util.HashMap;
 import java.util.List;

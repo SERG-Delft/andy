@@ -1,4 +1,4 @@
-package nl.tudelft.cse1110.andy.grader.execution.step.helper;
+package nl.tudelft.cse1110.andy.grader.execution.mode;
 
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.grader.execution.step.*;
@@ -6,8 +6,8 @@ import nl.tudelft.cse1110.andy.grader.execution.step.*;
 import java.util.Collections;
 import java.util.List;
 
-import static nl.tudelft.cse1110.andy.grader.execution.step.helper.Action.*;
-import static nl.tudelft.cse1110.andy.grader.execution.step.helper.Mode.GRADING;
+import static nl.tudelft.cse1110.andy.grader.execution.mode.Action.*;
+import static nl.tudelft.cse1110.andy.grader.execution.mode.Mode.GRADING;
 
 public class ModeActionSelector {
 

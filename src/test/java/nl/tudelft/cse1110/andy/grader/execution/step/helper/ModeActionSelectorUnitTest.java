@@ -1,6 +1,9 @@
 package nl.tudelft.cse1110.andy.grader.execution.step.helper;
 
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
+import nl.tudelft.cse1110.andy.grader.execution.mode.Action;
+import nl.tudelft.cse1110.andy.grader.execution.mode.Mode;
+import nl.tudelft.cse1110.andy.grader.execution.mode.ModeActionSelector;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -9,8 +12,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static nl.tudelft.cse1110.andy.grader.execution.step.helper.Action.*;
-import static nl.tudelft.cse1110.andy.grader.execution.step.helper.Mode.*;
+import static nl.tudelft.cse1110.andy.grader.execution.mode.Action.*;
+import static nl.tudelft.cse1110.andy.grader.execution.mode.Mode.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ModeActionSelectorUnitTest {

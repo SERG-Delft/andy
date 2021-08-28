@@ -2,7 +2,7 @@ package nl.tudelft.cse1110.andy.grader.execution;
 
 import nl.tudelft.cse1110.andy.grader.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.grader.config.RunConfiguration;
-import nl.tudelft.cse1110.andy.grader.execution.step.helper.Action;
+import nl.tudelft.cse1110.andy.grader.execution.mode.Action;
 
 import java.util.List;
 
