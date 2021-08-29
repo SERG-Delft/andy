@@ -314,18 +314,16 @@ public class ResultBuilder {
     }
 
     public void logFinalGrade(int finalGrade) {
-        // it may have no mode in case something crashes before, e.g., compilation fails.
-        boolean hasNoMode = modeActionSelector==null;
-        if(hasNoMode)
-            return;
-
         // we only show grades in specific modes and actions
-        boolean shouldNotShowGrades = !modeActionSelector.shouldShowGrades();
-        if(shouldNotShowGrades)
+        // if ModeActionSelector is not injected yet (i.e., it's null), it's because compilation fail.
+        // in this case, we give it a zero, no matter the mode.
+        boolean thereIsAModeActionSelector = modeActionSelector != null;
+        boolean shouldShowGrades = thereIsAModeActionSelector ? modeActionSelector.shouldShowGrades() : true;
+        if(!shouldShowGrades)
             return;
 
-        l("\n--- Final grade");
-        l(finalGrade + "/100\n");
+        l("--- Final grade");
+        l(finalGrade + "/100");
 
         boolean fullyCorrect = finalGrade == 100;
         if (fullyCorrect) {

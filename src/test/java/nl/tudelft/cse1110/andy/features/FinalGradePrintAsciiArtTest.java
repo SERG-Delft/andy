@@ -133,7 +133,6 @@ public class FinalGradePrintAsciiArtTest extends IntegrationTestBase {
         // we finally log the final grade
         resultBuilder.logFinalGrade(100);
 
-
         String result = resultBuilder.buildEndUserResult();
 
         assertThat(result)
@@ -141,9 +140,9 @@ public class FinalGradePrintAsciiArtTest extends IntegrationTestBase {
                 "--- JUnit execution\n" +
                 "5/5 passed")
                 .endsWith(
-                "\n--- Final grade\n" +
+                "--- Final grade\n" +
                 "100/100\n" +
-                "\n" + asciiArtExpected + "\n");
+                asciiArtExpected + "\n");
 
     }
 
