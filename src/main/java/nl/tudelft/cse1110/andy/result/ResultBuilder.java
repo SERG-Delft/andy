@@ -361,8 +361,8 @@ public class ResultBuilder {
 
             if (modeActionSelector.shouldShowHints()) {
                 l("\n--- Code checks");
+                l(String.format("%d/%d passed", weightedChecks, sumOfWeights));
                 l(script.generateReportOfFailedChecks().trim());
-                l(String.format("\n%d/%d passed", weightedChecks, sumOfWeights));
             }
 
             grades.setCheckGrade(weightedChecks, sumOfWeights);
