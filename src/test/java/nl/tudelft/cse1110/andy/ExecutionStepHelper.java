@@ -1,7 +1,7 @@
 package nl.tudelft.cse1110.andy;
 
-import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
-import nl.tudelft.cse1110.andy.grader.execution.step.*;
+import nl.tudelft.cse1110.andy.execution.ExecutionStep;
+import nl.tudelft.cse1110.andy.execution.step.*;
 
 import java.util.Arrays;
 import java.util.Collections;

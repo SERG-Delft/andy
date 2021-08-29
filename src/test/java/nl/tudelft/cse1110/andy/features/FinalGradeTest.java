@@ -1,10 +1,10 @@
 package nl.tudelft.cse1110.andy.features;
 
 import nl.tudelft.cse1110.andy.IntegrationTestBase;
-import nl.tudelft.cse1110.andy.grader.execution.mode.Action;
-import nl.tudelft.cse1110.andy.grader.grade.GradeCalculator;
-import nl.tudelft.cse1110.andy.grader.result.RandomAsciiArtGenerator;
-import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
+import nl.tudelft.cse1110.andy.execution.mode.Action;
+import nl.tudelft.cse1110.andy.grade.GradeCalculator;
+import nl.tudelft.cse1110.andy.result.RandomAsciiArtGenerator;
+import nl.tudelft.cse1110.andy.result.ResultBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

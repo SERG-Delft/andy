@@ -1,8 +1,8 @@
 package delft;
 
 import nl.tudelft.cse1110.andy.codechecker.engine.CheckScript;
-import nl.tudelft.cse1110.andy.grader.config.RunConfiguration;
-import nl.tudelft.cse1110.andy.grader.config.MetaTest;
+import nl.tudelft.cse1110.andy.config.RunConfiguration;
+import nl.tudelft.cse1110.andy.config.MetaTest;
 
 import java.util.HashMap;
 import java.util.List;

@@ -1,10 +1,10 @@
 package nl.tudelft.cse1110.andy;
 
-import nl.tudelft.cse1110.andy.grader.config.DirectoryConfiguration;
-import nl.tudelft.cse1110.andy.grader.execution.Context;
-import nl.tudelft.cse1110.andy.grader.execution.ExecutionFlow;
-import nl.tudelft.cse1110.andy.grader.execution.mode.Action;
-import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
+import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
+import nl.tudelft.cse1110.andy.execution.Context;
+import nl.tudelft.cse1110.andy.execution.ExecutionFlow;
+import nl.tudelft.cse1110.andy.execution.mode.Action;
+import nl.tudelft.cse1110.andy.result.ResultBuilder;
 
 public class Andy {
 

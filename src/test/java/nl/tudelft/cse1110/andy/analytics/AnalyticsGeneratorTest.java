@@ -2,8 +2,7 @@ package nl.tudelft.cse1110.andy.analytics;
 
 import com.google.gson.Gson;
 import nl.tudelft.cse1110.andy.IntegrationTestBase;
-import nl.tudelft.cse1110.andy.grader.analytics.Submission;
-import nl.tudelft.cse1110.andy.grader.execution.mode.Action;
+import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
 import org.junit.jupiter.api.Test;
 
