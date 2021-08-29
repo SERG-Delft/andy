@@ -37,15 +37,17 @@ public class ResultBuilder {
     private int mutationsToConsider; // will be injected once configuration is loaded
 
     private GradeCalculator gradeCalculator; // will be set once weights are injected
+    private GradeWeight gradeWeights; // will be injected later once run configuration is loaded
+
     private GradeValues grades = new GradeValues();
     private ModeActionSelector modeActionSelector; // will be injected once configuration is loaded
     private RandomAsciiArtGenerator asciiArtGenerator;
 
-    private List<Diagnostic<? extends JavaFileObject>> compilationErrors;
     private List<Highlight> highlights = new ArrayList<>();
 
     // it will be set in case of a generic failure. It one happens, the output is purely the generic failure
     private String genericFailureMessage;
+
 
 
     // Facilitates testing
@@ -68,8 +70,6 @@ public class ResultBuilder {
     }
 
     public void compilationFail(List<Diagnostic<? extends JavaFileObject>> compilationErrors) {
-        this.compilationErrors = compilationErrors;
-
         l("We could not compile the code. See the compilation errors below:");
         for(Diagnostic diagnostic: compilationErrors) {
             if (diagnostic.getKind() == ERROR) {
@@ -313,7 +313,7 @@ public class ResultBuilder {
         return gradeCalculator.calculateFinalGrade(grades, failed);
     }
 
-    public void logFinalGrade(int finalGrade) {
+    public void logFinalGrade() {
         // we only show grades in specific modes and actions
         // if ModeActionSelector is not injected yet (i.e., it's null), it's because compilation fail.
         // in this case, we give it a zero, no matter the mode.
@@ -322,14 +322,37 @@ public class ResultBuilder {
         if(!shouldShowGrades)
             return;
 
-        l("--- Final grade");
-        l(finalGrade + "/100");
+        int finalGrade = finalGrade();
 
+        l("");
+        l("--- Final grade");
+
+        // describe the weights and grades per component
+        if(finalGrade > 0) {
+            printGradeCalculationDetails();
+        }
+
+        // print the final grade
+        l("");
+        l(String.format("Final grade: %d/100", finalGrade));
+
+        // print some nice ascii art if it's full grade!
         boolean fullyCorrect = finalGrade == 100;
         if (fullyCorrect) {
             String randomAsciiArt = asciiArtGenerator.getRandomAsciiArt();
             l(randomAsciiArt);
         }
+    }
+
+    private void printGradeCalculationDetails() {
+        l(String.format("Branch coverage: %d/%d (overall weight=%.2f)%s", grades.getCoveredBranches(), grades.getTotalBranches(), gradeWeights.getBranchCoverageWeight(),
+                (grades.getTotalBranches() == 0 && gradeWeights.getBranchCoverageWeight()==0 ? " (0 gives full points)":"") ));
+        l(String.format("Mutation coverage: %d/%d (overall weight=%.2f)%s", grades.getDetectedMutations(), grades.getTotalMutations(), gradeWeights.getMutationCoverageWeight(),
+                (grades.getTotalMutations() == 0 && gradeWeights.getMutationCoverageWeight()==0 ? " (0 gives full points)":"")));
+        l(String.format("Code checks: %d/%d (overall weight=%.2f)%s", grades.getChecksPassed(), grades.getTotalChecks(), gradeWeights.getCodeChecksWeight(),
+                (grades.getTotalChecks() == 0 && gradeWeights.getCodeChecksWeight()==0 ? " (0 gives full points)":"")));
+        l(String.format("Meta tests: %d/%d (overall weight=%.2f)%s", grades.getMetaTestsPassed(), grades.getTotalMetaTests(), gradeWeights.getMetaTestsWeight(),
+                (grades.getTotalMetaTests() == 0 && gradeWeights.getMetaTestsWeight()==0 ? " (0 gives full points)":"")));
     }
 
     public void logConsoleOutput(String console){
@@ -365,11 +388,15 @@ public class ResultBuilder {
             if (modeActionSelector.shouldShowHints()) {
                 l("\n--- Code checks");
                 l(script.generateReportOFailedChecks().trim());
-
                 l(String.format("\n%d/%d passed", weightedChecks, sumOfWeights));
             }
 
             grades.setCheckGrade(weightedChecks, sumOfWeights);
+        } else {
+            if(modeActionSelector.shouldShowHints()) {
+                l("\n--- Code checks");
+                l("No code checks to be assessed");
+            }
         }
 
     }
@@ -451,6 +478,7 @@ public class ResultBuilder {
     }
 
     public void setGradeWeights(GradeWeight gradeWeights) {
+        this.gradeWeights = gradeWeights;
         this.gradeCalculator = new GradeCalculator(gradeWeights);
     }
 

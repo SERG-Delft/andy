@@ -2,27 +2,20 @@ package nl.tudelft.cse1110.andy.features;
 
 import nl.tudelft.cse1110.andy.IntegrationTestBase;
 import nl.tudelft.cse1110.andy.grader.execution.mode.Action;
-import nl.tudelft.cse1110.andy.grader.execution.mode.ModeActionSelector;
 import nl.tudelft.cse1110.andy.grader.grade.GradeCalculator;
-import nl.tudelft.cse1110.andy.grader.grade.GradeValues;
 import nl.tudelft.cse1110.andy.grader.result.RandomAsciiArtGenerator;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.platform.launcher.listeners.TestExecutionSummary;
-
-import java.util.stream.Stream;
 
 import static nl.tudelft.cse1110.andy.ExecutionStepHelper.fullMode;
 import static nl.tudelft.cse1110.andy.ExecutionStepHelper.onlyBasic;
 import static nl.tudelft.cse1110.andy.ResultTestAssertions.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-public class FinalGradePrintAsciiArtTest extends IntegrationTestBase {
+public class FinalGradeTest extends IntegrationTestBase {
 
     private String asciiArtExpected;
     private RandomAsciiArtGenerator asciiArtGenerator;
@@ -66,12 +59,10 @@ public class FinalGradePrintAsciiArtTest extends IntegrationTestBase {
     }
 
 
-    // In exam mode, no matter what action, the final grade should not be printed
-    @ParameterizedTest
-    @MethodSource("testExamActionGenerator")
-    void noAsciiArtInExamMode(Action action) {
+    @Test
+    void noAsciiArtInExamMode() {
 
-        String result = run(action, onlyBasic(),
+        String result = run(Action.FULL_WITH_HINTS, onlyBasic(),
                 "NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution",
                 "NumberUtilsAddFullPointsExamModeConfiguration", resultBuilder);
 
@@ -80,22 +71,10 @@ public class FinalGradePrintAsciiArtTest extends IntegrationTestBase {
                 .doesNotHave(asciiArtPrinted(asciiArtExpected));
     }
 
-    static Stream<Arguments> testExamActionGenerator() {
-        return Stream.of(
-                Arguments.of(Action.FULL_WITH_HINTS),
-                Arguments.of(Action.FULL_WITHOUT_HINTS),
-                Arguments.of(Action.COVERAGE)
-        );
-    }
+    @Test
+    void asciiArtInPracticeFullMode() {
 
-
-    // In practice mode, grade should be shown for both actions HINTS and NO_HINTS
-
-    @ParameterizedTest
-    @MethodSource("testPracticeActionGenerator")
-    void asciiArtInPracticeFullMode(Action action) {
-
-        String result = run(action, onlyBasic(),
+        String result = run(Action.FULL_WITH_HINTS, onlyBasic(),
                 "NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution",
                 "NumberUtilsAddFullPointsPracticeModeConfiguration", resultBuilder);
 
@@ -104,49 +83,19 @@ public class FinalGradePrintAsciiArtTest extends IntegrationTestBase {
                 .has(asciiArtPrinted(asciiArtExpected));
     }
 
-    static Stream<Arguments> testPracticeActionGenerator() {
-        return Stream.of(
-                Arguments.of(Action.FULL_WITH_HINTS),
-                Arguments.of(Action.FULL_WITHOUT_HINTS)
-        );
-    }
-
-    // This unit test stubs the calculated final grade
+    // 0.1 * 13/22 + 0.3 * 6/30 + 0.4 * 1/4 + 0.2 --> 42
     @Test
-    void logFinalGradePrintAsciiUnitTest() {
-        // we force mode to print the grade
-        ModeActionSelector modeActionSelector = mock(ModeActionSelector.class);
-        when(modeActionSelector.shouldCalculateAndShowGrades()).thenReturn(true);
-        resultBuilder.setModeSelector(modeActionSelector);
-
-        // we mock JUnit stuff, just so our resultbuilder looks more real
-        TestExecutionSummary testExecutionSummary = mock(TestExecutionSummary.class);
-
-        when(gradeCalculator.calculateFinalGrade(any(GradeValues.class), eq(false)))
-                .thenReturn(100);
-        when(testExecutionSummary.getTestsFoundCount()).thenReturn((long)5);
-        when(testExecutionSummary.getTestsSucceededCount()).thenReturn((long)5);
-        when(testExecutionSummary.getTestsFailedCount()).thenReturn((long)5);
-
-        resultBuilder.logJUnitRun(testExecutionSummary);
-
-        // we finally log the final grade
-        resultBuilder.logFinalGrade(100);
-
-        String result = resultBuilder.buildEndUserResult();
+    void showFullDescriptionOfTheGrade() {
+        String result = run(fullMode(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddConfiguration");
+        System.out.println(result);
 
         assertThat(result)
-                .startsWith("\n" +
-                "--- JUnit execution\n" +
-                "5/5 passed")
-                .endsWith(
-                "--- Final grade\n" +
-                "100/100\n" +
-                asciiArtExpected + "\n");
-
+                .has(finalGrade(workDir.toString(), 42))
+                .has(fullGradeDescription("Branch coverage", 13, 22, 0.10))
+                .has(fullGradeDescription("Mutation coverage", 6, 30, 0.30))
+                .has(fullGradeDescription("Code checks", 0, 0, 0.20))
+                .has(fullGradeDescription("Meta tests", 1, 4, 0.40));
     }
-
-
 
 
 }

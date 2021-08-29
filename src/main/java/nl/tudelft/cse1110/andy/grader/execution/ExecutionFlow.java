@@ -40,23 +40,12 @@ public class ExecutionFlow {
         } while(!steps.isEmpty() && !result.isFailed());
         result.logFinish();
 
-        calculateFinalGrade();
+        logFinalGrade();
         generateOutput();
     }
 
-    private void calculateFinalGrade() {
-
-        // if there is no run configuration (i.e., compilation failed), it's a zero.
-        if(ctx.getRunConfiguration() == null) {
-            result.logFinalGrade(0);
-        } else {
-            int finalGrade = finalGrade(
-                    buildGradeWeights(ctx.getRunConfiguration().weights(), ctx.getRunConfiguration().failureGivesZero()),
-                    result.grades(),
-                    result.isFailed());
-
-            result.logFinalGrade(finalGrade);
-        }
+    private void logFinalGrade() {
+        result.logFinalGrade();
     }
 
     private GradeWeight buildGradeWeights(Map<String, Float> weights, boolean failureGivesZero) {

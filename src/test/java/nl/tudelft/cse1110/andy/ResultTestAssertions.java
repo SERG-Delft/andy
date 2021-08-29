@@ -184,7 +184,7 @@ public class ResultTestAssertions {
             @Override
             public boolean matches(String value) {
                 // the message in the output string is correct
-                boolean messageIsCorrect = value.contains("--- Final grade\n" + score + "/100");
+                boolean messageIsCorrect = value.contains("Final grade: " + score + "/100");
 
                 // result xml contains the correct score
                 boolean resultXmlIsCorrect = resultXmlHasCorrectGrade(workDir, score);
@@ -257,6 +257,10 @@ public class ResultTestAssertions {
         return containsString("Make sure you have provided a @MethodSource for this @ParameterizedTest!");
     }
 
+    public static Condition<String> fullGradeDescription(String check, int scored, int total, double weight) {
+        return containsString(String.format("%s: %d/%d (overall weight=%.2f)%s", check, scored, total, weight,
+                (total == 0 && weight == 0 ? " (0 gives full points)" : "")));
+    }
 
     public static Condition<String> hintAtNonStaticMethodSource(String methodSource) {
         return containsString("Make sure your corresponding method " + methodSource
