@@ -22,7 +22,7 @@ import static nl.tudelft.cse1110.andy.ExecutionStepHelper.onlyBranchCoverage;
 import static nl.tudelft.cse1110.andy.ResultTestAssertions.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class RunJacocoCoverageTest extends IntegrationTestBase {
+public class RunJacocoCoverageStepTest extends IntegrationTestBase {
 
     @ParameterizedTest
     @MethodSource("generator")
