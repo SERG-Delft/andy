@@ -5,7 +5,6 @@ import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,7 +15,6 @@ public class AnalyticsGenerator {
         Submission submission = new Submission(
                 new SubmissionMetaData("course", "studentid", "studentname", "exercise"),
                 LocalDate.now(),
-                result.isCompilationSuccess(),
                 result.finalGrade(),
                 buildTests(result),
                 buildMetaTests(result),
@@ -34,9 +32,6 @@ public class AnalyticsGenerator {
     }
 
     private List<SubmissionCodeCheck> buildCodeChecks(ResultBuilder result) {
-        if(result.getCodeChecks()==null)
-            return Collections.emptyList();
-
         return result.getCodeChecks()
                 .stream()
                 .map(c -> new SubmissionCodeCheck(c.getDescription(), c.getFinalResult()))
@@ -46,15 +41,11 @@ public class AnalyticsGenerator {
     private List<SubmissionMetaTest> buildMetaTests(ResultBuilder result) {
         List<SubmissionMetaTest> list = new ArrayList<>();
 
-        if(result.getPassingMetaTests()!=null) {
-            list.addAll(result.getPassingMetaTests().stream().map(x -> new SubmissionMetaTest(x, true))
-                    .collect(Collectors.toList()));
-        }
+        list.addAll(result.getPassingMetaTests().stream().map(x -> new SubmissionMetaTest(x, true))
+                .collect(Collectors.toList()));
 
-        if(result.getFailingMetaTests()!=null) {
-            list.addAll(result.getFailingMetaTests().stream().map(x -> new SubmissionMetaTest(x, false))
-                    .collect(Collectors.toList()));
-        }
+        list.addAll(result.getFailingMetaTests().stream().map(x -> new SubmissionMetaTest(x, false))
+                .collect(Collectors.toList()));
 
         return list;
     }

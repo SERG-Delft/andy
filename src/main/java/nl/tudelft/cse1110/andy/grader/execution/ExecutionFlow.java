@@ -62,7 +62,7 @@ public class ExecutionFlow {
         outputGenerator.exportXMLFile(result);
         outputGenerator.exportHighlights(result);
 
-        if(ctx.getModeActionSelector().shouldGenerateAnalytics())
+        if(ctx.getModeActionSelector()!=null && ctx.getModeActionSelector().shouldGenerateAnalytics())
             outputGenerator.exportAnalyticsPost(result);
     }
 

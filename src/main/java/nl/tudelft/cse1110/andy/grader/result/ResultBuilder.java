@@ -59,7 +59,6 @@ public class ResultBuilder {
     private int totalMutants;
     private int coveredMutants;
     private List<CheckType> codeChecks;
-    private boolean compilationSuccess;
     private int testsRan = 0;
     private int testsSucceeded = 0;
 
@@ -80,12 +79,10 @@ public class ResultBuilder {
 
 
     public void compilationSuccess() {
-        compilationSuccess = true;
         l("--- Compilation\nSuccess");
     }
 
     public void compilationFail(List<Diagnostic<? extends JavaFileObject>> compilationErrors) {
-        compilationSuccess = false;
         l("We could not compile the code. See the compilation errors below:");
         for(Diagnostic diagnostic: compilationErrors) {
             if (diagnostic.getKind() == ERROR) {
@@ -485,10 +482,16 @@ public class ResultBuilder {
     }
 
     public List<String> getFailingMetaTests() {
+        if(metaTestFailures==null)
+            return Collections.emptyList();
         return metaTestFailures;
     }
 
     public List<String> getPassingMetaTests() {
+
+        if(metaTestPasses == null)
+            return Collections.emptyList();
+
         return metaTestPasses;
     }
 
@@ -509,11 +512,10 @@ public class ResultBuilder {
     }
 
     public List<CheckType> getCodeChecks() {
-        return Collections.unmodifiableList(codeChecks);
-    }
+        if(codeChecks == null)
+            return Collections.emptyList();
 
-    public boolean isCompilationSuccess() {
-        return compilationSuccess;
+        return Collections.unmodifiableList(codeChecks);
     }
 
     public int getTestsRan() {
