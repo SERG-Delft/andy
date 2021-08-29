@@ -1,7 +1,7 @@
 package nl.tudelft.cse1110.andy.grader.result;
 
 import nl.tudelft.cse1110.andy.utils.ResourceUtils;
-import nl.tudelft.cse1110.andy.grader.util.FilesUtils;
+import nl.tudelft.cse1110.andy.utils.FilesUtils;
 
 import java.io.BufferedReader;
 import java.io.File;

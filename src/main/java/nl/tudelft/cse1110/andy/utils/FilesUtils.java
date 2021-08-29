@@ -1,4 +1,4 @@
-package nl.tudelft.cse1110.andy.grader.util;
+package nl.tudelft.cse1110.andy.utils;
 
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.RegexFileFilter;

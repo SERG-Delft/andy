@@ -9,7 +9,7 @@ import java.io.File;
 import static nl.tudelft.cse1110.andy.ExecutionStepHelper.onlyBasic;
 import static nl.tudelft.cse1110.andy.ExecutionStepHelper.onlyCompilation;
 import static nl.tudelft.cse1110.andy.ResultTestAssertions.*;
-import static nl.tudelft.cse1110.andy.grader.util.FilesUtils.concatenateDirectories;
+import static nl.tudelft.cse1110.andy.utils.FilesUtils.concatenateDirectories;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class CompilationStepTest extends IntegrationTestBase {

@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import nl.tudelft.cse1110.andy.IntegrationTestBase;
 import nl.tudelft.cse1110.andy.grader.result.Highlight;
-import nl.tudelft.cse1110.andy.grader.util.FilesUtils;
+import nl.tudelft.cse1110.andy.utils.FilesUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

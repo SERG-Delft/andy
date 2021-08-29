@@ -10,9 +10,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-import static nl.tudelft.cse1110.andy.grader.util.ClassUtils.extractPackageName;
-import static nl.tudelft.cse1110.andy.grader.util.ClassUtils.packageToDirectory;
-import static nl.tudelft.cse1110.andy.grader.util.FilesUtils.*;
+import static nl.tudelft.cse1110.andy.utils.ClassUtils.extractPackageName;
+import static nl.tudelft.cse1110.andy.utils.ClassUtils.packageToDirectory;
+import static nl.tudelft.cse1110.andy.utils.FilesUtils.*;
 
 public class OrganizeSourceCodeStep implements ExecutionStep {
 

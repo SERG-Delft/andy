@@ -2,7 +2,7 @@ package nl.tudelft.cse1110.andy.grader.execution.step;
 
 import nl.tudelft.cse1110.andy.grader.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
-import nl.tudelft.cse1110.andy.grader.util.FilesUtils;
+import nl.tudelft.cse1110.andy.utils.FilesUtils;
 import nl.tudelft.cse1110.andy.grader.execution.Context;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
 

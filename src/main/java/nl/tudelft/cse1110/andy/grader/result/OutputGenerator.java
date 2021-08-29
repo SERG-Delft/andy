@@ -5,8 +5,8 @@ import nl.tudelft.cse1110.andy.grader.execution.Context;
 
 import java.io.File;
 
-import static nl.tudelft.cse1110.andy.grader.util.FilesUtils.concatenateDirectories;
-import static nl.tudelft.cse1110.andy.grader.util.FilesUtils.writeToFile;
+import static nl.tudelft.cse1110.andy.utils.FilesUtils.concatenateDirectories;
+import static nl.tudelft.cse1110.andy.utils.FilesUtils.writeToFile;
 
 public class OutputGenerator {
 

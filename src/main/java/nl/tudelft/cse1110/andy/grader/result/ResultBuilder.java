@@ -7,7 +7,7 @@ import nl.tudelft.cse1110.andy.grader.execution.mode.ModeActionSelector;
 import nl.tudelft.cse1110.andy.grader.grade.GradeCalculator;
 import nl.tudelft.cse1110.andy.grader.grade.GradeValues;
 import nl.tudelft.cse1110.andy.grader.grade.GradeWeight;
-import nl.tudelft.cse1110.andy.grader.util.ImportUtils;
+import nl.tudelft.cse1110.andy.utils.ImportUtils;
 import org.jacoco.core.analysis.IClassCoverage;
 import org.jacoco.core.analysis.IMethodCoverage;
 import org.junit.platform.engine.reporting.ReportEntry;

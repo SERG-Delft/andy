@@ -6,7 +6,7 @@ import nl.tudelft.cse1110.andy.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.grader.execution.mode.Action;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
-import nl.tudelft.cse1110.andy.grader.util.FilesUtils;
+import nl.tudelft.cse1110.andy.utils.FilesUtils;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;

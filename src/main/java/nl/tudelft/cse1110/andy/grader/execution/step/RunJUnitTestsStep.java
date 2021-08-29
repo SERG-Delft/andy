@@ -4,7 +4,7 @@ import nl.tudelft.cse1110.andy.grader.execution.Context;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.grader.execution.step.helper.AdditionalReportJUnitListener;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
-import nl.tudelft.cse1110.andy.grader.util.ClassUtils;
+import nl.tudelft.cse1110.andy.utils.ClassUtils;
 import org.junit.platform.launcher.Launcher;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
 import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;

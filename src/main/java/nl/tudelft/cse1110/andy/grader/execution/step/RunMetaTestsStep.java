@@ -8,14 +8,14 @@ import nl.tudelft.cse1110.andy.grader.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.grader.execution.mode.Action;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
-import nl.tudelft.cse1110.andy.grader.util.FilesUtils;
+import nl.tudelft.cse1110.andy.utils.FilesUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static nl.tudelft.cse1110.andy.grader.util.FilesUtils.*;
+import static nl.tudelft.cse1110.andy.utils.FilesUtils.*;
 
 public class RunMetaTestsStep implements ExecutionStep {
 

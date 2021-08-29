@@ -1,6 +1,6 @@
 package nl.tudelft.cse1110.andy;
 
-import nl.tudelft.cse1110.andy.grader.util.FilesUtils;
+import nl.tudelft.cse1110.andy.utils.FilesUtils;
 import org.apache.commons.lang.StringUtils;
 import org.assertj.core.api.Condition;
 
