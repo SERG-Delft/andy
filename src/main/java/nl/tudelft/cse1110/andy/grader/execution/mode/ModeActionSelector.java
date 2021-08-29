@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static nl.tudelft.cse1110.andy.grader.execution.mode.Action.*;
+import static nl.tudelft.cse1110.andy.grader.execution.mode.Mode.EXAM;
 import static nl.tudelft.cse1110.andy.grader.execution.mode.Mode.GRADING;
 
 public class ModeActionSelector {
@@ -44,6 +45,10 @@ public class ModeActionSelector {
 
     public boolean shouldShowHints() {
         return mode == GRADING || action == FULL_WITH_HINTS || action == CUSTOM;
+    }
+
+    public boolean shouldGenerateAnalytics() {
+        return !(mode == EXAM || action == CUSTOM || mode == GRADING);
     }
 
     public boolean shouldCalculateAndShowGrades() {
@@ -96,5 +101,6 @@ public class ModeActionSelector {
                 new RunMetaTestsStep()
         );
     }
+
 
 }

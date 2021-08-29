@@ -61,6 +61,9 @@ public class ExecutionFlow {
         outputGenerator.exportOutputFile(result);
         outputGenerator.exportXMLFile(result);
         outputGenerator.exportHighlights(result);
+
+        if(ctx.getModeActionSelector().shouldGenerateAnalytics())
+            outputGenerator.exportAnalyticsPost(result);
     }
 
     public static ExecutionFlow asSteps(List<ExecutionStep> plan, Context ctx, ResultBuilder result) {

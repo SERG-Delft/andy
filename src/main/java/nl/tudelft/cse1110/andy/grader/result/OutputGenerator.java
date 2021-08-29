@@ -1,6 +1,7 @@
 package nl.tudelft.cse1110.andy.grader.result;
 
 import com.google.gson.Gson;
+import nl.tudelft.cse1110.andy.grader.analytics.AnalyticsGenerator;
 import nl.tudelft.cse1110.andy.grader.execution.Context;
 
 import java.io.File;
@@ -60,5 +61,12 @@ public class OutputGenerator {
 
         File highlightsJson = new File(concatenateDirectories(ctx.getDirectoryConfiguration().getOutputDir(), "highlights.json"));
         writeToFile(highlightsJson, json);
+    }
+
+    public void exportAnalyticsPost(ResultBuilder result) {
+        String json = new AnalyticsGenerator().generate(result);
+
+        File file = new File(concatenateDirectories(ctx.getDirectoryConfiguration().getOutputDir(), "post.json"));
+        writeToFile(file, json);
     }
 }

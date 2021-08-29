@@ -83,6 +83,7 @@ public class GetRunConfigurationStep implements ExecutionStep {
 
         ModeActionSelector modeActionSelector = new ModeActionSelector(mode, action);
         result.setModeSelector(modeActionSelector);
+        ctx.setModeSelector(modeActionSelector);
 
         return modeActionSelector;
     }

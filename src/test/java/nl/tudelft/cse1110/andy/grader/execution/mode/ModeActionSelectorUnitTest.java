@@ -118,4 +118,36 @@ public class ModeActionSelectorUnitTest {
         );
     }
 
+    @ParameterizedTest
+    @MethodSource("shouldGenerateAnalyticsGenerator")
+    void shouldGenerateAnalytics(Mode mode, Action action, boolean expectedResult) {
+        ModeActionSelector modeActionSelector = new ModeActionSelector(mode, action);
+
+        assertThat(modeActionSelector.shouldGenerateAnalytics()).isEqualTo(expectedResult);
+    }
+
+    static Stream<Arguments> shouldGenerateAnalyticsGenerator() {
+        return Stream.of(
+                // not during exam
+                Arguments.of(EXAM, TESTS, false),
+                Arguments.of(EXAM, COVERAGE, false),
+                Arguments.of(EXAM, FULL_WITH_HINTS, false),
+                Arguments.of(EXAM, FULL_WITHOUT_HINTS, false),
+
+                // not when custom
+                Arguments.of(EXAM, CUSTOM, false),
+                Arguments.of(GRADING, CUSTOM, false),
+                Arguments.of(PRACTICE, CUSTOM, false),
+
+                // always during practice
+                Arguments.of(PRACTICE, TESTS, true),
+                Arguments.of(PRACTICE, COVERAGE, true),
+                Arguments.of(PRACTICE, FULL_WITH_HINTS, true),
+                Arguments.of(PRACTICE, FULL_WITHOUT_HINTS, true),
+
+                // never during grading
+                Arguments.of(GRADING, FULL_WITH_HINTS, false)
+        );
+    }
+
 }

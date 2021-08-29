@@ -26,4 +26,8 @@ public class Submission {
         this.codeChecks = codeChecks;
         this.coverage = coverage;
     }
+
+    public int getFinalGrade() {
+        return finalGrade;
+    }
 }
