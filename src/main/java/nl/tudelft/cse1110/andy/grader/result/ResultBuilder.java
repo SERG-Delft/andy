@@ -24,6 +24,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static javax.tools.Diagnostic.Kind.ERROR;
+import static nl.tudelft.cse1110.andy.utils.JUnitUtils.*;
 
 public class ResultBuilder {
 
@@ -224,8 +225,8 @@ public class ResultBuilder {
         boolean isPBT = failure.getTestIdentifier().getUniqueId().contains("property");
 
         if(isParameterizedTest) {
-            String methodName = this.getParameterizedMethodName(failure);
-            String testCaseNumber = this.getParameterizedTestCaseNumber(failure);
+            String methodName = getParameterizedMethodName(failure);
+            String testCaseNumber = getParameterizedTestCaseNumber(failure);
             l(String.format("\n- Parameterized test \"%s\", test case #%s failed:", methodName, testCaseNumber));
             l(String.format("%s", failure.getException()));
         } else if (isPBT) {
@@ -238,39 +239,6 @@ public class ResultBuilder {
             l(String.format("\n- Test \"%s\" failed:", failure.getTestIdentifier().getDisplayName()));
             l(String.format("%s", simplifyTestErrorMessage(failure)));
         }
-    }
-
-    private String simplifyTestErrorMessage(TestExecutionSummary.Failure failure) {
-        if (failure.getException().toString()
-                .contains("Cannot invoke non-static method")) {
-            String failingMethod = getFailingMethod(failure);
-
-            return "Make sure your corresponding method " + failingMethod + " is static!";
-        } else if (failure.getException().toString()
-                .contains("You must configure at least one set of arguments"))    {
-            return "Make sure you have provided a @MethodSource for this @ParameterizedTest!";
-        }
-        return failure.getException().toString();
-    }
-
-    private String getParameterizedMethodName(TestExecutionSummary.Failure failure) {
-        int endIndex = failure.getTestIdentifier().getLegacyReportingName().indexOf('(');
-        return failure.getTestIdentifier().getLegacyReportingName().substring(0, endIndex);
-    }
-
-
-    private String getParameterizedTestCaseNumber(TestExecutionSummary.Failure failure) {
-        int open = failure.getTestIdentifier().getLegacyReportingName().lastIndexOf('[');
-        int close = failure.getTestIdentifier().getLegacyReportingName().lastIndexOf(']');
-
-        return failure.getTestIdentifier().getLegacyReportingName().substring(open+1, close);
-    }
-
-    private String getFailingMethod(TestExecutionSummary.Failure failure) {
-        int open = failure.getException().toString().indexOf('>');
-        int close = failure.getException().toString().indexOf(']');
-
-        return failure.getException().toString().substring(open+2, close);
     }
 
     public void logMode() {
