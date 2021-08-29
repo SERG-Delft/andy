@@ -2,6 +2,7 @@ package nl.tudelft.cse1110.andy.execution.step;
 
 import nl.tudelft.cse1110.andy.IntegrationTestBase;
 import nl.tudelft.cse1110.andy.ResultTestAssertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -59,11 +60,9 @@ public class RunPitestStepTest extends IntegrationTestBase {
      * The default run configuration is used.
      * The test checks whether the report directory is generated and the log shows "See the attached report."
      */
-    @Test
+    @AfterEach
     void reportWasGenerated() {
-        run(onlyMutationCoverage(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass");
         File report = new File(reportDir.toString() + "/pitest");
-
         assertThat(report).exists().isDirectory();
     }
 
