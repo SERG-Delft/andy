@@ -301,13 +301,13 @@ public class ResultBuilder {
         return LocalDateTime.now().toString();
     }
 
-    public int getFinalScore(){
-        return isFailed() ? -1 : finalGrade();
-    }
-
-    private int finalGrade() {
+    public int finalGrade() {
         // this might be called when compilation fails, and we have no grade calculator yet
         if (gradeCalculator == null)
+            return 0;
+
+        // check whether we should actually calculate the grades, depending on the current mode and action
+        if(!modeActionSelector.shouldCalculateAndShowGrades())
             return 0;
 
         return gradeCalculator.calculateFinalGrade(grades, failed);
@@ -318,7 +318,7 @@ public class ResultBuilder {
         // if ModeActionSelector is not injected yet (i.e., it's null), it's because compilation fail.
         // in this case, we give it a zero, no matter the mode.
         boolean thereIsAModeActionSelector = modeActionSelector != null;
-        boolean shouldShowGrades = thereIsAModeActionSelector ? modeActionSelector.shouldShowGrades() : true;
+        boolean shouldShowGrades = thereIsAModeActionSelector ? modeActionSelector.shouldCalculateAndShowGrades() : true;
         if(!shouldShowGrades)
             return;
 

@@ -46,7 +46,7 @@ public class ModeActionSelector {
         return mode == GRADING || action == FULL_WITH_HINTS || action == CUSTOM;
     }
 
-    public boolean shouldShowGrades() {
+    public boolean shouldCalculateAndShowGrades() {
         boolean notExam = !mode.equals(Mode.EXAM);
         boolean fullRun = action != COVERAGE && action != TESTS;
 

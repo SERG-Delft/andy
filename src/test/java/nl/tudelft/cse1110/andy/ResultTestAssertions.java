@@ -187,17 +187,22 @@ public class ResultTestAssertions {
                 boolean messageIsCorrect = value.contains("--- Final grade\n" + score + "/100");
 
                 // result xml contains the correct score
-                File resultXml = new File(FilesUtils.concatenateDirectories(workDir, "results.xml"));
-                String resultXmlContent = FilesUtils.readFile(resultXml);
-
-                int passes = StringUtils.countMatches(resultXmlContent, "<testcase/>");
-                int fails = StringUtils.countMatches(resultXmlContent, "<testcase><failure></failure></testcase>");
-                boolean resultXmlIsCorrect = passes == score && passes+fails==100;
+                boolean resultXmlIsCorrect = resultXmlHasCorrectGrade(workDir, score);
 
                 // assert passes if both are correct
                 return messageIsCorrect && resultXmlIsCorrect;
             }
         };
+    }
+
+    public static boolean resultXmlHasCorrectGrade(String workDir, int score) {
+        File resultXml = new File(FilesUtils.concatenateDirectories(workDir, "results.xml"));
+        String resultXmlContent = FilesUtils.readFile(resultXml);
+
+        int passes = StringUtils.countMatches(resultXmlContent, "<testcase/>");
+        int fails = StringUtils.countMatches(resultXmlContent, "<testcase><failure></failure></testcase>");
+        boolean resultXmlIsCorrect = passes == score && passes+fails==100;
+        return resultXmlIsCorrect;
     }
 
     public static Condition<String> mutationScore(int mutantsKilled, int totalMutants) {

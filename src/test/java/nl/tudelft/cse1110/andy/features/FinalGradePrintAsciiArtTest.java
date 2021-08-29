@@ -116,7 +116,7 @@ public class FinalGradePrintAsciiArtTest extends IntegrationTestBase {
     void logFinalGradePrintAsciiUnitTest() {
         // we force mode to print the grade
         ModeActionSelector modeActionSelector = mock(ModeActionSelector.class);
-        when(modeActionSelector.shouldShowGrades()).thenReturn(true);
+        when(modeActionSelector.shouldCalculateAndShowGrades()).thenReturn(true);
         resultBuilder.setModeSelector(modeActionSelector);
 
         // we mock JUnit stuff, just so our resultbuilder looks more real

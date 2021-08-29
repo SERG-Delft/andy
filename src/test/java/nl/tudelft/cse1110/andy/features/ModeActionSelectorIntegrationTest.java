@@ -60,6 +60,9 @@ public class ModeActionSelectorIntegrationTest extends IntegrationTestBase {
                 .has(noCodeChecks())
                 .has(noFinalGrade())
                 .has(mode("PRACTICE"));
+
+        assertThat(resultXmlHasCorrectGrade(workDir.toString(), 0))
+                .isTrue();
     }
 
     @Test
@@ -74,6 +77,9 @@ public class ModeActionSelectorIntegrationTest extends IntegrationTestBase {
                 .has(noCodeChecks())
                 .has(noFinalGrade())
                 .has(mode("PRACTICE"));
+
+        assertThat(resultXmlHasCorrectGrade(workDir.toString(), 0))
+                .isTrue();
     }
 
     @ParameterizedTest
@@ -89,6 +95,9 @@ public class ModeActionSelectorIntegrationTest extends IntegrationTestBase {
                 .has(noCodeChecks())
                 .has(noFinalGrade())
                 .has(mode("EXAM"));
+
+        assertThat(resultXmlHasCorrectGrade(workDir.toString(), 0))
+                .isTrue();
     }
 
     static Stream<Arguments> testExamCoverageGenerator() {
@@ -111,6 +120,10 @@ public class ModeActionSelectorIntegrationTest extends IntegrationTestBase {
                 .has(noCodeChecks())
                 .has(noFinalGrade())
                 .has(mode("EXAM"));
+
+        assertThat(resultXmlHasCorrectGrade(workDir.toString(), 0))
+                .isTrue();
+
     }
 
     @Test

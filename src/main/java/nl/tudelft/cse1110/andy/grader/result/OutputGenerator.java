@@ -38,7 +38,7 @@ public class OutputGenerator {
         StringBuilder xml = new StringBuilder();
 
         xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<testsuites>\n\t<testsuite>\n");
-        int score = result.getFinalScore();
+        int score = result.finalGrade();
         String failed = "\t\t<testcase><failure></failure></testcase>\n";
         String passed = "\t\t<testcase/>\n";
 

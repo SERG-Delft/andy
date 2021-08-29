@@ -100,7 +100,7 @@ public class ModeActionSelectorUnitTest {
     void shouldShowGrades(Mode mode, Action action, boolean shouldShowGradeOrNot) {
         ModeActionSelector modeActionSelector = new ModeActionSelector(mode, action);
 
-        assertThat(modeActionSelector.shouldShowGrades()).isEqualTo(shouldShowGradeOrNot);
+        assertThat(modeActionSelector.shouldCalculateAndShowGrades()).isEqualTo(shouldShowGradeOrNot);
     }
 
     static Stream<Arguments> testShowGradesGenerator() {
