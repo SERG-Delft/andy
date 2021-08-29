@@ -42,6 +42,15 @@ public class MetaTest {
         return withLineReplacement(1, name, start, end, replacement);
     }
 
+    public static MetaTest insertAt(int weight, String name, int lineToInsertStartingIn1, String contentToAdd) {
+        MetaEvaluator evaluator = new InsertAtEvaluator(lineToInsertStartingIn1, contentToAdd);
+        return new MetaTest(weight, name, evaluator);
+    }
+
+    public static MetaTest insertAt(String name, int lineToInsertStartingIn1, String contentToAdd) {
+        return insertAt(1, name, lineToInsertStartingIn1, contentToAdd);
+    }
+
     public String evaluate(String oldLibraryCode) {
         return this.evaluator.evaluate(oldLibraryCode);
     }
@@ -101,6 +110,33 @@ public class MetaTest {
             String firstPartString = firstPart.stream().collect(Collectors.joining("\n"));
             String secondPartString = secondPart.stream().collect(Collectors.joining("\n"));
             return firstPartString + secondPartString;
+        }
+    }
+
+    private static class InsertAtEvaluator implements MetaEvaluator {
+
+        private final int lineToInsert;
+        private final String contentToAdd;
+
+        public InsertAtEvaluator(int lineToInsertStartingIn1, String contentToAdd) {
+            this.lineToInsert = lineToInsertStartingIn1;
+            this.contentToAdd = contentToAdd;
+        }
+
+        @Override
+        public String evaluate(String oldLibraryCode) {
+            List<String> lines = oldLibraryCode.lines().collect(Collectors.toList());
+
+            // handles possible out of the boundary values
+            int sanitizedLineToInsert = lineToInsert - 1;
+            if(sanitizedLineToInsert<0)
+                sanitizedLineToInsert = 0;
+            if(sanitizedLineToInsert>lines.size())
+                sanitizedLineToInsert = lines.size();
+
+            lines.add(sanitizedLineToInsert, contentToAdd);
+
+            return lines.stream().collect(Collectors.joining("\n"));
         }
     }
 }
