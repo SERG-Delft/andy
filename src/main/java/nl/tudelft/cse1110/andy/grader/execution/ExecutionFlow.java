@@ -1,13 +1,13 @@
 package nl.tudelft.cse1110.andy.grader.execution;
 
 import nl.tudelft.cse1110.andy.grader.execution.step.*;
-import nl.tudelft.cse1110.andy.grader.grade.GradeCalculator;
-import nl.tudelft.cse1110.andy.grader.grade.GradeValues;
-import nl.tudelft.cse1110.andy.grader.grade.GradeWeight;
 import nl.tudelft.cse1110.andy.grader.result.OutputGenerator;
 import nl.tudelft.cse1110.andy.grader.result.ResultBuilder;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ExecutionFlow {
     private final Context ctx;
@@ -46,19 +46,6 @@ public class ExecutionFlow {
 
     private void logFinalGrade() {
         result.logFinalGrade();
-    }
-
-    private GradeWeight buildGradeWeights(Map<String, Float> weights, boolean failureGivesZero) {
-        float coverage = weights.get("coverage");
-        float mutation = weights.get("mutation");
-        float meta = weights.get("meta");
-        float codechecks = weights.get("codechecks");
-
-        return new GradeWeight(failureGivesZero, coverage, mutation, meta, codechecks);
-    }
-
-    private int finalGrade(GradeWeight weights, GradeValues grades, boolean failed) {
-        return new GradeCalculator(weights).calculateFinalGrade(grades, failed);
     }
 
     public void addSteps(List<ExecutionStep> steps) {
