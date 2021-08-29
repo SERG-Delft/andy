@@ -1,6 +1,7 @@
 package nl.tudelft.cse1110.andy.grader.result;
 
 import nl.tudelft.cse1110.andy.codechecker.engine.CheckScript;
+import nl.tudelft.cse1110.andy.codechecker.engine.CheckType;
 import nl.tudelft.cse1110.andy.grader.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.grader.execution.mode.ModeActionSelector;
 import nl.tudelft.cse1110.andy.grader.grade.GradeCalculator;
@@ -31,23 +32,35 @@ public class ResultBuilder {
     private StringBuilder debug = new StringBuilder();
     private Map<TestIdentifier, ReportEntry> additionalReports = new HashMap<>();
 
-    private int testsRan = 0;
-    private int testsSucceeded = 0;
-
     private int mutationsToConsider; // will be injected once configuration is loaded
 
-    private GradeCalculator gradeCalculator; // will be set once weights are injected
-    private GradeWeight gradeWeights; // will be injected later once run configuration is loaded
-
-    private GradeValues grades = new GradeValues();
     private ModeActionSelector modeActionSelector; // will be injected once configuration is loaded
     private RandomAsciiArtGenerator asciiArtGenerator;
 
+    // grade related stuff
+    private GradeCalculator gradeCalculator; // will be set once weights are injected
+    private GradeWeight gradeWeights; // will be injected later once run configuration is loaded
+    private GradeValues grades = new GradeValues();
+
+
+
+    // the list of things to be highlighted later in the IDE
     private List<Highlight> highlights = new ArrayList<>();
 
     // it will be set in case of a generic failure. It one happens, the output is purely the generic failure
     private String genericFailureMessage;
 
+    // results
+    private List<String> metaTestPasses;
+    private List<String> metaTestFailures;
+    private int totalCoveredBranches;
+    private int totalBranches;
+    private int totalMutants;
+    private int coveredMutants;
+    private List<CheckType> codeChecks;
+    private boolean compilationSuccess;
+    private int testsRan = 0;
+    private int testsSucceeded = 0;
 
 
     // Facilitates testing
@@ -66,10 +79,12 @@ public class ResultBuilder {
 
 
     public void compilationSuccess() {
+        compilationSuccess = true;
         l("--- Compilation\nSuccess");
     }
 
     public void compilationFail(List<Diagnostic<? extends JavaFileObject>> compilationErrors) {
+        compilationSuccess = false;
         l("We could not compile the code. See the compilation errors below:");
         for(Diagnostic diagnostic: compilationErrors) {
             if (diagnostic.getKind() == ERROR) {
@@ -251,7 +266,6 @@ public class ResultBuilder {
         return failure.getTestIdentifier().getLegacyReportingName().substring(open+1, close);
     }
 
-
     private String getFailingMethod(TestExecutionSummary.Failure failure) {
         int open = failure.getException().toString().indexOf('>');
         int close = failure.getException().toString().indexOf(']');
@@ -376,6 +390,9 @@ public class ResultBuilder {
         l(String.format("%d/%d killed", detectedMutations, totalMutations));
 
         grades.setMutationGrade(detectedMutations, totalMutations);
+
+        this.totalMutants = totalMutations;
+        this.coveredMutants = detectedMutations;
       
     }
 
@@ -387,11 +404,13 @@ public class ResultBuilder {
 
             if (modeActionSelector.shouldShowHints()) {
                 l("\n--- Code checks");
-                l(script.generateReportOFailedChecks().trim());
+                l(script.generateReportOfFailedChecks().trim());
                 l(String.format("\n%d/%d passed", weightedChecks, sumOfWeights));
             }
 
             grades.setCheckGrade(weightedChecks, sumOfWeights);
+
+            this.codeChecks = script.getChecks();
         } else {
             if(modeActionSelector.shouldShowHints()) {
                 l("\n--- Code checks");
@@ -418,6 +437,9 @@ public class ResultBuilder {
         l(String.format("Branch coverage: %d/%d", totalCoveredBranches, totalBranches));
 
         highlightCoverage(coverages);
+
+        this.totalBranches = totalBranches;
+        this.totalCoveredBranches = totalCoveredBranches;
 
         grades.setBranchGrade(totalCoveredBranches, totalBranches);
     }
@@ -463,6 +485,10 @@ public class ResultBuilder {
     }
 
     public void logMetaTests(int score, int totalTests, List<String> passes, List<String> failures) {
+
+        this.metaTestPasses = passes;
+        this.metaTestFailures = failures;
+
         if (modeActionSelector.shouldShowHints()) {
             l("\n--- Meta tests");
             l(String.format("%d/%d passed", score, totalTests));
@@ -496,10 +522,37 @@ public class ResultBuilder {
 
     public List<Highlight> getHighlights() {
         return Collections.unmodifiableList(highlights);
-
     }
 
-    public GradeValues grades() {
-        return grades;
+    public List<String> getFailingMetaTests() {
+        return metaTestFailures;
+    }
+
+    public List<String> getPassingMetaTests() {
+        return metaTestPasses;
+    }
+
+    public int getTotalBranches() {
+        return totalBranches;
+    }
+
+    public int getBranchesCovered() {
+        return totalCoveredBranches;
+    }
+
+    public int getTotalMutants() {
+        return totalMutants;
+    }
+
+    public int getCoveredMutants() {
+        return coveredMutants;
+    }
+
+    public List<CheckType> getCodeChecks() {
+        return Collections.unmodifiableList(codeChecks);
+    }
+
+    public boolean isCompilationSuccess() {
+        return compilationSuccess;
     }
 }

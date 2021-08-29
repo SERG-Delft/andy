@@ -51,7 +51,7 @@ public class CheckScript {
         return report.toString();
     }
 
-    public String generateReportOFailedChecks() {
+    public String generateReportOfFailedChecks() {
         StringBuilder report = new StringBuilder();
 
         for (CheckType check : checks) {
@@ -83,4 +83,5 @@ public class CheckScript {
     public boolean hasChecks() {
         return !checks.isEmpty();
     }
+
 }

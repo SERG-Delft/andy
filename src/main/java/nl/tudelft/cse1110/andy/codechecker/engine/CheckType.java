@@ -19,6 +19,10 @@ public abstract class CheckType {
     public abstract boolean getFinalResult();
     public abstract void runCheck(CompilationUnit cu);
 
+    public String getDescription() {
+        return description;
+    }
+
     public String reportExecution() {
         return String.format("%s: %s (weight: %d)\n",
                 description,
