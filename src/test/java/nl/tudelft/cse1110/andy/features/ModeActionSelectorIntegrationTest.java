@@ -30,7 +30,7 @@ public class ModeActionSelectorIntegrationTest extends IntegrationTestBase {
                 .has(metaTests(4))
                 .has(metaTestsPassing(3))
                 .has(metaTestFailing("DoesNotCheckInvalidTripId"))
-                .has(finalGrade(91))
+                .has(finalGrade(workDir.toString(), 91))
                 .has(mode("PRACTICE"));
     }
 
@@ -44,7 +44,7 @@ public class ModeActionSelectorIntegrationTest extends IntegrationTestBase {
                 .has(mutationScore(8, 9))
                 .has(noMetaTests())
                 .has(noCodeChecks())
-                .has(finalGrade(91))
+                .has(finalGrade(workDir.toString(), 91))
                 .has(mode("PRACTICE"));
     }
 
@@ -128,7 +128,7 @@ public class ModeActionSelectorIntegrationTest extends IntegrationTestBase {
                 .has(metaTests(4))
                 .has(metaTestsPassing(3))
                 .has(metaTestFailing("DoesNotCheckInvalidTripId"))
-                .has(finalGrade(91))
+                .has(finalGrade(workDir.toString(), 91))
                 .has(mode("GRADING"));
 
     }

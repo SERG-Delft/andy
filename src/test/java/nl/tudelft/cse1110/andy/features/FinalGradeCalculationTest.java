@@ -1,11 +1,7 @@
 package nl.tudelft.cse1110.andy.features;
 
 import nl.tudelft.cse1110.andy.IntegrationTestBase;
-import nl.tudelft.cse1110.andy.ResultTestAssertions.*;
-import nl.tudelft.cse1110.andy.TestResourceUtils;
 import org.junit.jupiter.api.Test;
-
-import java.io.File;
 
 import static nl.tudelft.cse1110.andy.ExecutionStepHelper.fullMode;
 import static nl.tudelft.cse1110.andy.ResultTestAssertions.finalGrade;
@@ -18,7 +14,7 @@ public class FinalGradeCalculationTest extends IntegrationTestBase {
     void calculatesCorrectFinalGrade() {
         String result = run(fullMode(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddConfiguration");
 
-        assertThat(result).has(finalGrade(42));
+        assertThat(result).has(finalGrade(workDir.toString(), 42));
     }
 
 
@@ -31,7 +27,7 @@ public class FinalGradeCalculationTest extends IntegrationTestBase {
                 "NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution",
                 "NumberUtilsAddFullPointsConfiguration");
 
-        assertThat(result).has(finalGrade(100));
+        assertThat(result).has(finalGrade(workDir.toString(), 100));
     }
 
 }

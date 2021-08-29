@@ -33,7 +33,7 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "LeapYearLibrary", "LeapYearSingleTestFails");  // 3/4 normal @Tests passing
 
             assertThat(result)
-                    .has(finalGrade(0))
+                    .has(finalGrade(workDir.toString(), 0))
                     .has(numberOfJUnitTestsPassing(3))
                     .has(totalNumberOfJUnitTests(4))
                     .has(failingTestName("leapCenturialYears"))
@@ -50,7 +50,7 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "CountLettersLibrary", "CountLettersAllTestsFail");
 
             assertThat(result)
-                    .has(finalGrade(0))
+                    .has(finalGrade(workDir.toString(), 0))
                     .has(numberOfJUnitTestsPassing(0))
                     .has(totalNumberOfJUnitTests(2))
                     .has(failingTestName("multipleMatchingWords"))
@@ -70,7 +70,7 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "PlayerPointsLibrary", "PlayerPointsSomeTestsFail");
 
             assertThat(result)
-                    .has(finalGrade(0))
+                    .has(finalGrade(workDir.toString(), 0))
                     .has(numberOfJUnitTestsPassing(1))
                     .has(totalNumberOfJUnitTests(4))
                     .has(failingTestName("lessPoints"))
@@ -102,7 +102,7 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "NumberUtilsAddLibrary", "NumberUtilsNoTests");
 
             assertThat(result)
-                    .has(finalGrade(0))
+                    .has(finalGrade(workDir.toString(), 0))
                     .has(errorMessage("We do not see any tests."))
                     .doesNotHave(allTestsNeedToPassMessage());
         }
@@ -139,7 +139,7 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "PiecewiseLibrary", "PiecewiseNonStaticBeforeAll");
 
             assertThat(result)
-                    .has(finalGrade(0))
+                    .has(finalGrade(workDir.toString(), 0))
                     .has(weDoNotSeeTestsMessage());
         }
 
@@ -151,7 +151,7 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "PiecewiseLibrary", "PiecewiseStaticBeforeEach");
 
             assertThat(result)
-                    .has(finalGrade(0))
+                    .has(finalGrade(workDir.toString(), 0))
                     .has(weDoNotSeeTestsMessage());
         }
 
@@ -167,7 +167,7 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "TodoApplicationLibrary", "TodoApplicationMockitoMethodNotInvoked");  // 2/3 normal @Tests passing
 
             assertThat(result)
-                    .has(finalGrade(0))
+                    .has(finalGrade(workDir.toString(), 0))
                     .has(numberOfJUnitTestsPassing(2))
                     .has(totalNumberOfJUnitTests(3))
                     .has(failingTestName("addTodoTest"))
@@ -182,7 +182,7 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "TheQueueLibrary", "TheQueueMisusingMockitoStub");  // 2/3 normal @Tests passing
 
             assertThat(result)
-                    .has(finalGrade(0))
+                    .has(finalGrade(workDir.toString(), 0))
                     .has(numberOfJUnitTestsPassing(2))
                     .has(totalNumberOfJUnitTests(3))
                     .has(failingTestName("getNextReturnsFirst"))
@@ -202,7 +202,7 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "PassingGradeLibrary", "PassingGradeSingleParameterizedTestFails");  // 4/5 parameterized test cases
 
             assertThat(result)
-                    .has(finalGrade(0))
+                    .has(finalGrade(workDir.toString(), 0))
                     .has(numberOfJUnitTestsPassing(4))
                     .has(totalNumberOfJUnitTests(5))
                     .has(parameterizedTestFailing("passed", 3))
@@ -219,7 +219,7 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "ATMLibrary", "ATMMoreParameterizedTestsFail");  // 11/14 parameterized test cases
 
             assertThat(result)
-                    .has(finalGrade(0))
+                    .has(finalGrade(workDir.toString(), 0))
                     .has(numberOfJUnitTestsPassing(11))
                     .has(totalNumberOfJUnitTests(14))
                     .has(parameterizedTestFailing("validTest", 1))
@@ -237,7 +237,7 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "TwoIntegersLibrary", "TwoIntegersAllParameterizedTestsFail");  // 0/6 parameterized test cases
 
             assertThat(result)
-                    .has(finalGrade(0))
+                    .has(finalGrade(workDir.toString(), 0))
                     .has(numberOfJUnitTestsPassing(0))
                     .has(totalNumberOfJUnitTests(6))
                     .has(allTestsNeedToPassMessage())
@@ -273,7 +273,7 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "MScAdmissionLibrary", "MScAdmissionParameterizedTestThrowsException");  // 0/5 parameterized test cases
 
             assertThat(result)
-                    .has(finalGrade(0))
+                    .has(finalGrade(workDir.toString(), 0))
                     .has(numberOfJUnitTestsPassing(0))
                     .has(totalNumberOfJUnitTests(5))
                     .has(parameterizedTestFailing("validInputs", 1))
@@ -306,7 +306,7 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "MScAdmissionLibrary", "MScAdmissionNonStaticMethodSourceAllFail");
 
             assertThat(result)
-                    .has(finalGrade(0))
+                    .has(finalGrade(workDir.toString(), 0))
                     .has(weDoNotSeeTestsMessage());
         }
 
@@ -318,7 +318,7 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "PassingGradeLibrary", "PassingGradeForgotParameterizedTestAnnotation");
 
             assertThat(result)
-                    .has(finalGrade(0))
+                    .has(finalGrade(workDir.toString(), 0))
                     .has(weDoNotSeeTestsMessage());
         }
 
@@ -330,7 +330,7 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "PassingGradeLibrary", "PassingGradeForgotMethodSourceAnnotationAllFail");
 
             assertThat(result)
-                    .has(finalGrade(0))
+                    .has(finalGrade(workDir.toString(), 0))
                     .has(weDoNotSeeTestsMessage());
         }
 
@@ -359,7 +359,7 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfSimpleJqwikError");
 
             assertThat(result)
-                    .has(finalGrade(0))
+                    .has(finalGrade(workDir.toString(), 0))
                     .has(propertyTestFailing("testNoElementInWholeArray"));
         }
 
@@ -369,7 +369,7 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfMultipleJqwikErrors");
 
             assertThat(result)
-                    .has(finalGrade(0))
+                    .has(finalGrade(workDir.toString(), 0))
                     .has(allTestsNeedToPassMessage())
                     .has(propertyTestFailing("testNoElementInWholeArray"))
                     .has(propertyTestFailing("testValueInArrayUniqueElements"));
@@ -381,7 +381,7 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfJqwikWithParameterized");
 
             assertThat(result)
-                    .has(finalGrade(0))
+                    .has(finalGrade(workDir.toString(), 0))
                     .has(propertyTestFailing("testNoElementInWholeArray"))
                     .has(propertyTestFailing("testValueInArrayUniqueElements"))
                     .has(parameterizedTestFailing("test", 6));
@@ -393,7 +393,7 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "NumberUtilsAddPositiveLibrary", "NumberUtilsAddPositiveJqwikException");
 
             assertThat(result)
-                    .has(finalGrade(0))
+                    .has(finalGrade(workDir.toString(), 0))
                     .has(propertyTestFailing("testAddition"));
         }
 
@@ -404,7 +404,7 @@ public class RunJUnitTestsStepTest {
             String result = run(onlyJUnitTests(), "MathArraysLibrary", "MathArraysForgotProperty");
 
             assertThat(result)
-                    .has(finalGrade(0))
+                    .has(finalGrade(workDir.toString(), 0))
                     .doesNotHave(allTestsNeedToPassMessage())
                     .has(weDoNotSeeTestsMessage());
         }

@@ -20,7 +20,7 @@ public class CompilationStepTest extends IntegrationTestBase {
         String result = run(onlyCompilation(), "ArrayUtilsIsSortedLibrary", "ArrayUtilsIsSortedWithCompilationError");
 
         assertThat(result)
-                .has(finalGrade(0))
+                .has(finalGrade(workDir.toString(), 0))
                 .has(compilationFailure())
                 .has(compilationErrorOnLine(29))
                 .has(compilationErrorType("not a statement"))
@@ -33,7 +33,7 @@ public class CompilationStepTest extends IntegrationTestBase {
         String result = run(Action.FULL_WITH_HINTS, onlyBasic(), "ArrayUtilsIsSortedLibrary", "ArrayUtilsIsSortedWithCompilationError", "ArrayUtilsInGradingMode");
 
         assertThat(result)
-                .has(finalGrade(0))
+                .has(finalGrade(workDir.toString(), 0))
                 .has(compilationFailure())
                 .has(compilationErrorOnLine(29))
                 .has(compilationErrorType("not a statement"))
@@ -53,7 +53,7 @@ public class CompilationStepTest extends IntegrationTestBase {
     void compilationDifferentFailures() {
         String result = run(onlyCompilation(), "MathArraysLibrary","MathArraysDifferentCompilationErrors");
         assertThat(result)
-                .has(finalGrade(0))
+                .has(finalGrade(workDir.toString(), 0))
                 .has(compilationFailure())
                 .has(compilationErrorOnLine(21))
                 .has(compilationErrorOnLine(25))
@@ -70,7 +70,7 @@ public class CompilationStepTest extends IntegrationTestBase {
 
         String expected = "[{\"line\":40,\"message\":\"cannot find symbol\\n  symbol:   class List\\n  location: class delft.ArrayUtilsTests\",\"location\":\"SOLUTION\",\"purpose\":\"COMPILATION_ERROR\"},{\"line\":69,\"message\":\"cannot find symbol\\n  symbol:   class List\\n  location: class delft.ArrayUtilsTests\",\"location\":\"SOLUTION\",\"purpose\":\"COMPILATION_ERROR\"}]";
         assertThat(highlights).hasContent(expected);
-        assertThat(result).has(finalGrade(0));
+        assertThat(result).has(finalGrade(workDir.toString(), 0));
     }
 
     @Test
@@ -78,7 +78,7 @@ public class CompilationStepTest extends IntegrationTestBase {
         String result = run(onlyCompilation(), "NumberUtilsAddLibrary","NumberUtilsAddAllTestsPass","NumberUtilsAddTypoConfiguration");
 
         assertThat(result)
-                .has(finalGrade(0))// not the student's problem, giving a zero is much easier now
+                .has(finalGrade(workDir.toString(), 0))// not the student's problem, giving a zero is much easier now
                 .has(compilationFailure())
                 .has(failDueToBadConfigurationMessage());
     }

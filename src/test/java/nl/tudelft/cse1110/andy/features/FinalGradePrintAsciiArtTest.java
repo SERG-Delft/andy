@@ -100,7 +100,7 @@ public class FinalGradePrintAsciiArtTest extends IntegrationTestBase {
                 "NumberUtilsAddFullPointsPracticeModeConfiguration", resultBuilder);
 
         assertThat(result)
-                .has(finalGrade(100))
+                .has(finalGrade(workDir.toString(), 100))
                 .has(asciiArtPrinted(asciiArtExpected));
     }
 

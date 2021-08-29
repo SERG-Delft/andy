@@ -1,7 +1,10 @@
 package nl.tudelft.cse1110.andy;
 
+import nl.tudelft.cse1110.andy.grader.util.FilesUtils;
+import org.apache.commons.lang.StringUtils;
 import org.assertj.core.api.Condition;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -176,8 +179,25 @@ public class ResultTestAssertions {
         return containsRegex("Meta test: " + metaTestName + " \\(.*\\) PASSED");
     }
 
-    public static Condition<String> finalGrade(int score) {
-        return containsString("--- Final grade\n" + score + "/100");
+    public static Condition<String> finalGrade(String workDir, int score) {
+        return new Condition<>() {
+            @Override
+            public boolean matches(String value) {
+                // the message in the output string is correct
+                boolean messageIsCorrect = value.contains("--- Final grade\n" + score + "/100");
+
+                // result xml contains the correct score
+                File resultXml = new File(FilesUtils.concatenateDirectories(workDir, "results.xml"));
+                String resultXmlContent = FilesUtils.readFile(resultXml);
+
+                int passes = StringUtils.countMatches(resultXmlContent, "<testcase/>");
+                int fails = StringUtils.countMatches(resultXmlContent, "<testcase><failure></failure></testcase>");
+                boolean resultXmlIsCorrect = passes == score && passes+fails==100;
+
+                // assert passes if both are correct
+                return messageIsCorrect && resultXmlIsCorrect;
+            }
+        };
     }
 
     public static Condition<String> mutationScore(int mutantsKilled, int totalMutants) {
