@@ -29,21 +29,21 @@ import static nl.tudelft.cse1110.andy.utils.JUnitUtils.*;
 public class ResultBuilder {
 
     private boolean failed;
+
     private StringBuilder result = new StringBuilder();
     private StringBuilder debug = new StringBuilder();
+
+    // junit callback so that we get extra info from the test runs
     private Map<TestIdentifier, ReportEntry> additionalReports = new HashMap<>();
 
-    private int mutationsToConsider; // will be injected once configuration is loaded
-
     private ModeActionSelector modeActionSelector; // will be injected once configuration is loaded
+    private int mutationsToConsider; // will be injected once configuration is loaded
     private RandomAsciiArtGenerator asciiArtGenerator;
 
     // grade related stuff
     private GradeCalculator gradeCalculator; // will be set once weights are injected
     private GradeWeight gradeWeights; // will be injected later once run configuration is loaded
     private GradeValues grades = new GradeValues();
-
-
 
     // the list of things to be highlighted later in the IDE
     private List<Highlight> highlights = new ArrayList<>();
@@ -206,14 +206,6 @@ public class ResultBuilder {
                     "- Property based tests must be annotated with \"@Property\"\n");
         }
         failed();
-    }
-
-    public int getTestsRan() {
-        return this.testsRan;
-    }
-
-    public int getTestsSucceeded() {
-        return this.testsSucceeded;
     }
 
     public void logAdditionalReport(TestIdentifier testIdentifier, ReportEntry report) {
@@ -523,4 +515,13 @@ public class ResultBuilder {
     public boolean isCompilationSuccess() {
         return compilationSuccess;
     }
+
+    public int getTestsRan() {
+        return this.testsRan;
+    }
+
+    public int getTestsSucceeded() {
+        return this.testsSucceeded;
+    }
+
 }
