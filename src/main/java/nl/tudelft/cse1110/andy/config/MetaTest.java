@@ -102,14 +102,12 @@ public class MetaTest {
         @Override
         public String evaluate(String oldLibraryCode) {
             List<String> lines = oldLibraryCode.lines().collect(Collectors.toList());
-            List<String> firstPart = new ArrayList<>(lines.subList(0, this.start));
-            List<String> secondPart = new ArrayList<>(lines.subList(this.end, lines.size()));
+            List<String> result = new ArrayList<>(lines.subList(0, this.start));
+            result.add(this.replacement);
+            result.addAll(lines.subList(this.end + 1, lines.size()));
 
-            firstPart.add(this.replacement);
-
-            String firstPartString = firstPart.stream().collect(Collectors.joining("\n"));
-            String secondPartString = secondPart.stream().collect(Collectors.joining("\n"));
-            return firstPartString + secondPartString;
+            String resultStr = String.join("\n", result);
+            return resultStr;
         }
     }
 
