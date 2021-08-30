@@ -49,6 +49,9 @@ public abstract class IntegrationTestBase {
         try {
             WebLabResultWriter writer = new WebLabResultWriter(ctx, getAsciiArtGenerator());
             ExecutionFlow flow = ExecutionFlow.build(ctx, resultBuilder, writer);
+
+            addSteps(flow);
+
             flow.run();
         } catch(Exception e) {
             throw e;
@@ -57,6 +60,9 @@ public abstract class IntegrationTestBase {
         }
 
         return readStdOut();
+    }
+
+    protected void addSteps(ExecutionFlow flow) {
     }
 
     protected RandomAsciiArtGenerator getAsciiArtGenerator() {

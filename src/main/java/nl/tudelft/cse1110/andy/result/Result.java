@@ -26,6 +26,9 @@ public class Result {
         this.genericFailure = genericFailure;
         this.timeInSeconds = timeInSeconds;
         this.weights = weights;
+
+        if(finalGrade < 0 || finalGrade>100)
+            throw new RuntimeException("Invalid final grade");
     }
 
     public Result(CompilationResult compilation, double timeInSeconds) {
@@ -68,7 +71,15 @@ public class Result {
         return weights;
     }
 
+    public String getGenericFailure() {
+        return genericFailure;
+    }
+
     public boolean hasFailed() {
-        return !compilation.successful() || tests.hasFailingTests() || genericFailure!=null;
+        return !compilation.successful() || tests.hasFailingTests() || hasGenericFailure();
+    }
+
+    public boolean hasGenericFailure() {
+        return genericFailure!=null;
     }
 }

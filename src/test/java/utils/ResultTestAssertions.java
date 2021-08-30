@@ -336,5 +336,16 @@ public class ResultTestAssertions {
         return containsString(asciiArt);
     }
 
+    public static Condition<String> genericFailure(String failure) {
+        return new Condition<>() {
+            @Override
+            public boolean matches(String value) {
+                boolean p1 = value.contains("we cannot recover from");
+                boolean p2 = value.contains(failure);
+                return p1 && p2;
+            }
+        };
+    }
+
 }
 

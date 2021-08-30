@@ -22,7 +22,7 @@ public class GradeCalculator {
         int finalGrade = Math.round(finalDecimalGrade * 100);
 
         if(finalGrade < 0 || finalGrade > 100)
-            throw new RuntimeException("Invalid grade calculation. Please, report it to the teacher!");
+            throw new RuntimeException("Invalid grade calculation");
 
         return finalGrade;
     }

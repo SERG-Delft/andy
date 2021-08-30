@@ -12,7 +12,7 @@ public class MutationTestingResult {
         this.totalNumberOfMutants = totalNumberOfMutants;
 
         if(killedMutants > totalNumberOfMutants)
-            throw new RuntimeException("Number of killed mutants is greater than the total number of mutants. Please, call the teacher.");
+            throw new RuntimeException("Number of killed mutants is greater than the total number of mutants.");
     }
 
     public static MutationTestingResult build(int killedMutants, int totalNumberOfMutants) {

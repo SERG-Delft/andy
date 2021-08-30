@@ -37,14 +37,19 @@ public class WebLabResultWriter implements ResultWriter {
     }
 
     private void writeStdOutFile(Result result) {
-        printCompilationResult(result.getCompilation());
-        printTestResults(result.getTests());
-        printCoverageResults(result.getCoverage());
-        printMutationTestingResults(result.getMutationTesting());
-        printCodeCheckResults(result.getCodeChecks());
-        printMetaTestResults(result.getMetaTests());
-        printFinalGrade(result);
-        printModeAndTimeToRun(result.getTimeInSeconds());
+
+        if(result.hasGenericFailure()) {
+            toDisplay.append(result.getGenericFailure());
+        } else {
+            printCompilationResult(result.getCompilation());
+            printTestResults(result.getTests());
+            printCoverageResults(result.getCoverage());
+            printMutationTestingResults(result.getMutationTesting());
+            printCodeCheckResults(result.getCodeChecks());
+            printMetaTestResults(result.getMetaTests());
+            printFinalGrade(result);
+            printModeAndTimeToRun(result.getTimeInSeconds());
+        }
 
         File stdoutTxt = new File(concatenateDirectories(ctx.getDirectoryConfiguration().getOutputDir(), "stdout.txt"));
         writeToFile(stdoutTxt, toDisplay.toString());
