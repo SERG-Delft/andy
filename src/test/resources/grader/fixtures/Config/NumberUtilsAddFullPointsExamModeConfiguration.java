@@ -48,7 +48,7 @@ public class Configuration extends RunConfiguration {
                         }
                         result.addFirst(sum % 10);
                         """),
-                MetaTest.withLineReplacement("DoesNotApplyCarryAtAll", 47, 69,
+                MetaTest.withLineReplacement("DoesNotApplyCarryAtAll", 47, 68,
                         """
                         for (int i = 0; i < Math.max(reversedLeft.size(), reversedRight.size()); i++) {
         
@@ -95,7 +95,7 @@ public class Configuration extends RunConfiguration {
         
                         return result;
                         """),
-                MetaTest.withLineReplacement("DoesNotCheckNumbersOutOfRange", 52, 54, "")
+                MetaTest.withLineReplacement("DoesNotChec/kNumbersOutOfRange", 52, 53, "")
         );
     }
 
