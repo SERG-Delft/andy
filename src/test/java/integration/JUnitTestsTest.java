@@ -20,8 +20,8 @@ public class JUnitTestsTest {
 
             assertThat(result)
                     .has(numberOfJUnitTestsPassing(4))
-                    .has(totalNumberOfJUnitTests(4));
-
+                    .has(totalNumberOfJUnitTests(4))
+                    .doesNotHave(consoleOutputExists()); // ensure that if there's no console output, we do not show it
         }
 
         // In test 2, assertFalse should be assertTrue.
@@ -80,20 +80,6 @@ public class JUnitTestsTest {
 
         }
 
-
-        // test class contains normal @Tests, parameterized tests and pbt.
-        @Test
-        void threeDifferentTestTypesUsed() {
-
-            String result = run(Action.TESTS, "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfDifferentTestTypes");  // 5/5 @Tests passing
-
-            assertThat(result)
-                    .has(numberOfJUnitTestsPassing(5))
-                    .has(totalNumberOfJUnitTests(5));
-
-        }
-
-
         // example: student forgets @Test
         // 0/0 normal @Tests passing
         @Test
@@ -107,7 +93,7 @@ public class JUnitTestsTest {
 
         //Check to see if the System.out.printlns are caught from the console
         @Test
-        void consoleOutputCaught(){
+        void showConsoleOutput(){
 
             String result = run(Action.TESTS, "ZagZigLibrary", "ZagZigRandomSysouts");
 
@@ -117,17 +103,6 @@ public class JUnitTestsTest {
                     .has(consoleOutput("HelloWorld2"))
                     .has(consoleOutput("I love SQT3"));
         }
-
-        //Check to see that there're no sysouts
-        @Test
-        void noConsoleOutputToBeCaught(){
-
-            String result = run(Action.TESTS, "ZagZigLibrary", "ZagZigNoSysouts");
-
-            assertThat(result)
-                    .doesNotHave(consoleOutputExists());
-        }
-
 
 
         // @BeforeAll methods should be static -> no tests detected
@@ -154,6 +129,21 @@ public class JUnitTestsTest {
         }
 
 
+    }
+
+    @Nested
+    class MixedTypesOfTests extends IntegrationTestBase {
+
+        // test class contains normal @Tests, parameterized tests and pbt.
+        @Test
+        void threeDifferentTestTypesUsed() {
+
+            String result = run(Action.TESTS, "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfDifferentTestTypes");  // 5/5 @Tests passing
+
+            assertThat(result)
+                    .has(numberOfJUnitTestsPassing(5))
+                    .has(totalNumberOfJUnitTests(5));
+        }
     }
 
     @Nested
@@ -343,8 +333,6 @@ public class JUnitTestsTest {
                     .has(totalNumberOfJUnitTests(3))
                     .has(noMethodSourceProvidedMessage());
         }
-
-
 
     }
 

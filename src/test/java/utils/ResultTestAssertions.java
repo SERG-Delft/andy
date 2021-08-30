@@ -321,7 +321,7 @@ public class ResultTestAssertions {
     }
 
     public static Condition<String> noFinalGrade() {
-        return not(containsRegex("--- Final grade"));
+        return not(containsRegex("--- Assessment"));
     }
 
     public static Condition<String> noJacocoCoverage() {
