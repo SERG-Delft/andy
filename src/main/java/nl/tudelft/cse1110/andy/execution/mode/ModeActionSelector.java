@@ -29,6 +29,11 @@ public class ModeActionSelector {
     }
 
     public List<ExecutionStep> getSteps() {
+        // CUSTOM action means the steps of the flow have already been declared.
+        if (action == CUSTOM) {
+            return Collections.emptyList();
+        }
+
         switch (mode) {
             case PRACTICE -> {
                 return getPracticeMode();

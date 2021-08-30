@@ -67,11 +67,6 @@ public class GetRunConfigurationStep implements ExecutionStep {
 
         ModeActionSelector modeActionSelector = createModeSelector(ctx, result);
 
-        // Custom action means the steps of the flow have already been declared.
-        if (modeActionSelector.getAction() == Action.CUSTOM) {
-            return;
-        }
-
         flow.addSteps(modeActionSelector.getSteps());
     }
 
