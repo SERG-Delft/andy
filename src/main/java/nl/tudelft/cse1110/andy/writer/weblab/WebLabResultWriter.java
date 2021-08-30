@@ -143,7 +143,7 @@ public class WebLabResultWriter implements ResultWriter {
         int finalGrade = result.getFinalGrade();
 
         l("");
-        l("--- Final grade");
+        l("--- Assessment");
 
         // describe the weights and grades per component
         if(finalGrade > 0) {
