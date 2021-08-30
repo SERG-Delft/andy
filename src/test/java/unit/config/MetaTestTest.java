@@ -1,6 +1,7 @@
 package unit.config;
 
 import nl.tudelft.cse1110.andy.config.MetaTest;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -8,6 +9,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class MetaTestTest {
 
@@ -107,5 +109,51 @@ public class MetaTestTest {
                     "extra line 1\nextra line 2\nextra line 3\nextra line 4",
                     "line 1\nline 2\nextra line 1\nextra line 2\nextra line 3\nextra line 4")
         );
+    }
+
+    @ParameterizedTest
+    @MethodSource("withStringReplacementGenerator")
+    void withStringReplacement(String oldCode, String old, String replacement, String expectedResult) {
+        MetaTest metaTest = MetaTest.withStringReplacement("some meta test", old, replacement);
+
+        String result = metaTest.evaluate(oldCode);
+
+        assertThat(result)
+                .isEqualTo(expectedResult);
+    }
+
+    static Stream<Arguments> withStringReplacementGenerator() {
+        return Stream.of(
+            // middle
+            Arguments.of("line 1\nline 2\nline 3\nline 4\nline 5",
+                    "line 2\nline 3",
+                    "extra line 1\nextra line 2",
+                    "line 1\nextra line 1\nextra line 2\nline 4\nline 5"),
+            // beginning
+            Arguments.of("line 1\nline 2\nline 3\nline 4\nline 5",
+                    "line 1\nline 2\nline 3",
+                    "extra line 1\nextra line 2",
+                    "extra line 1\nextra line 2\nline 4\nline 5"),
+            // end
+            Arguments.of("line 1\nline 2\nline 3\nline 4\nline 5",
+                    "line 4\nline 5",
+                    "extra line 1\nextra line 2",
+                    "line 1\nline 2\nline 3\nextra line 1\nextra line 2"),
+            // different amounts of whitespace in library and old code
+            Arguments.of(" line 1\n   \t\t  line 2\nline 3\n\tline 4\n\tline 5",
+                    "\t line 2\n\t\t \tline 3\nline 4",
+                    "extra line 1\nextra line 2",
+                    "line 1\nextra line 1\nextra line 2\nline 5")
+        );
+    }
+
+    @Test
+    void withStringReplacementNotFound() {
+        MetaTest metaTest = MetaTest.withStringReplacement("some meta test",
+                "line 5\nline 6",
+                "extra line 1\nextra line 2");
+
+        assertThrows(RuntimeException.class,
+                () -> metaTest.evaluate("line 1\nline 2\nline 3\nline 4\nline 5"));
     }
 }
