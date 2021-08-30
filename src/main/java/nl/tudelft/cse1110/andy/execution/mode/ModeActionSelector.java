@@ -91,11 +91,11 @@ public class ModeActionSelector {
         return justTests();
     }
 
-    static List<ExecutionStep> justTests() {
+    public static List<ExecutionStep> justTests() {
         return List.of(new RunJUnitTestsStep());
     }
 
-    static List<ExecutionStep> withCoverage() {
+    public static List<ExecutionStep> withCoverage() {
         return List.of(
                 new RunJUnitTestsStep(),
                 new RunJacocoCoverageStep(),
@@ -103,7 +103,7 @@ public class ModeActionSelector {
         );
     }
 
-    static List<ExecutionStep> fullMode() {
+    public static List<ExecutionStep> fullMode() {
         return List.of(
                 new RunJUnitTestsStep(),
                 new RunJacocoCoverageStep(),
