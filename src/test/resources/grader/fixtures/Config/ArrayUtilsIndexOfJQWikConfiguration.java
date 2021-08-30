@@ -33,8 +33,8 @@ public class Configuration extends RunConfiguration {
     @Override
     public List<MetaTest> metaTests() {
         return List.of(
-            MetaTest.withLineReplacement("AlwaysReturnsNotFound", 38, 49, ""),
-            MetaTest.withLineReplacement("AlwaysReturnsStartIndex", 38, 50, "return startIndex;"),
+            MetaTest.withLineReplacement("AlwaysReturnsNotFound", 38, 48, ""),
+            MetaTest.withLineReplacement("AlwaysReturnsStartIndex", 38, 49, "return startIndex;"),
             MetaTest.withStringReplacement("DoesNotUseStartIndex",
                 """
                 if (startIndex < 0) {

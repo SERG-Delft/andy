@@ -47,7 +47,7 @@ public class Configuration extends RunConfiguration {
                 if (capacityLeft(trip) < people.size())
                     return false;
                 """,""),
-            MetaTest.withLineReplacement("DoesNotCheckInvalidTripId", 150, 159,
+            MetaTest.withLineReplacement("DoesNotCheckInvalidTripId", 150, 158,
                 """
                 try {
                     Trip trip = tRepository.getTripById(tripId);
@@ -58,7 +58,7 @@ public class Configuration extends RunConfiguration {
                     throw new RuntimeException("killed the mutant");
                 }
                 """),
-            MetaTest.withLineReplacement("DoesNotCheckSave", 154, 155, "")
+            MetaTest.withLineReplacement("DoesNotCheckSave", 154, 154, "")
         );
     }
 }
