@@ -22,11 +22,4 @@ public abstract class CheckType {
     public String getDescription() {
         return description;
     }
-
-    public String reportExecution() {
-        return String.format("%s: %s (weight: %d)\n",
-                description,
-                getFinalResult() ? "PASS" : "FAIL",
-                weight);
-    }
 }

@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
-import static nl.tudelft.cse1110.andy.ExecutionStepHelper.onlyBasic;
-import static nl.tudelft.cse1110.andy.ExecutionStepHelper.onlyCompilation;
 import static nl.tudelft.cse1110.andy.ResultTestAssertions.*;
 import static nl.tudelft.cse1110.andy.utils.FilesUtils.concatenateDirectories;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -17,10 +15,10 @@ public class CompilationStepTest extends IntegrationTestBase {
 
     @Test
     void compilationFails() {
-        String result = run(onlyCompilation(), "ArrayUtilsIsSortedLibrary", "ArrayUtilsIsSortedWithCompilationError");
+        String result = run("ArrayUtilsIsSortedLibrary", "ArrayUtilsIsSortedWithCompilationError");
 
         assertThat(result)
-                .has(finalGrade(workDir.toString(), 0))
+                .has(finalGradeInXml(workDir.toString(), 0))
                 .has(compilationFailure())
                 .has(compilationErrorOnLine(29))
                 .has(compilationErrorType("not a statement"))
@@ -30,10 +28,10 @@ public class CompilationStepTest extends IntegrationTestBase {
 
     @Test
     void compilationFailsDuringGradingMeans0() {
-        String result = run(Action.FULL_WITH_HINTS, onlyBasic(), "ArrayUtilsIsSortedLibrary", "ArrayUtilsIsSortedWithCompilationError", "ArrayUtilsInGradingMode");
+        String result = run(Action.FULL_WITH_HINTS, "ArrayUtilsIsSortedLibrary", "ArrayUtilsIsSortedWithCompilationError", "ArrayUtilsInGradingMode");
 
         assertThat(result)
-                .has(finalGrade(workDir.toString(), 0))
+                .has(finalGradeInXml(workDir.toString(), 0))
                 .has(compilationFailure())
                 .has(compilationErrorOnLine(29))
                 .has(compilationErrorType("not a statement"))
@@ -44,16 +42,16 @@ public class CompilationStepTest extends IntegrationTestBase {
 
     @Test
     void compilationOk() {
-        String result = run(onlyCompilation(),  "ListUtilsLibrary", "ListUtilsCompilationSuccess");
+        String result = run( "ListUtilsLibrary", "ListUtilsCompilationSuccess");
         assertThat(result)
                 .has(compilationSuccess());
     }
 
     @Test
     void compilationDifferentFailures() {
-        String result = run(onlyCompilation(), "MathArraysLibrary","MathArraysDifferentCompilationErrors");
+        String result = run("MathArraysLibrary","MathArraysDifferentCompilationErrors");
         assertThat(result)
-                .has(finalGrade(workDir.toString(), 0))
+                .has(finalGradeInXml(workDir.toString(), 0))
                 .has(compilationFailure())
                 .has(compilationErrorOnLine(21))
                 .has(compilationErrorOnLine(25))
@@ -63,22 +61,22 @@ public class CompilationStepTest extends IntegrationTestBase {
 
     @Test
     void highlightsGeneratedWhenCompilationFails(){
-        String result = run(onlyCompilation(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfImportListCommented");
+        String result = run( "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfImportListCommented");
 
         File highlights = new File(concatenateDirectories(workDir.toString(), "highlights.json"));
         assertThat(highlights).exists().isFile();
 
         String expected = "[{\"line\":40,\"message\":\"cannot find symbol\\n  symbol:   class List\\n  location: class delft.ArrayUtilsTests\",\"location\":\"SOLUTION\",\"purpose\":\"COMPILATION_ERROR\"},{\"line\":69,\"message\":\"cannot find symbol\\n  symbol:   class List\\n  location: class delft.ArrayUtilsTests\",\"location\":\"SOLUTION\",\"purpose\":\"COMPILATION_ERROR\"}]";
         assertThat(highlights).hasContent(expected);
-        assertThat(result).has(finalGrade(workDir.toString(), 0));
+        assertThat(result).has(finalGradeInXml(workDir.toString(), 0));
     }
 
     @Test
     void configurationFileCompilationFails(){
-        String result = run(onlyCompilation(), "NumberUtilsAddLibrary","NumberUtilsAddAllTestsPass","NumberUtilsAddTypoConfiguration");
+        String result = run( "NumberUtilsAddLibrary","NumberUtilsAddAllTestsPass","NumberUtilsAddTypoConfiguration");
 
         assertThat(result)
-                .has(finalGrade(workDir.toString(), 0))// not the student's problem, giving a zero is much easier now
+                .has(finalGradeInXml(workDir.toString(), 0))// not the student's problem, giving a zero is much easier now
                 .has(compilationFailure())
                 .has(failDueToBadConfigurationMessage());
     }

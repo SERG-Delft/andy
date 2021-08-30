@@ -24,7 +24,7 @@ public class CodeSheriffTest extends CodeSheriffJUnit5 {
                 .methods()
                 .inClassesOfPackage("nl.tudelft.cse1110.andy")
                 .withExceptionOfMethod("execute/2") // the Step methods are a bit long now, we gotta refactor them
-                .withExceptionOfMethod("highlightCoverage/1") // it's long but extracting makes it harder to understand
+                .withExceptionOfMethod("getCoverageLineByLine/1") // it's long but extracting makes it harder to understand
                 .have()
                 .linesOfCode(m -> m <= 25);
 

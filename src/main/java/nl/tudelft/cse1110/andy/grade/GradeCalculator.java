@@ -2,24 +2,11 @@ package nl.tudelft.cse1110.andy.grade;
 
 public class GradeCalculator {
 
-    private GradeWeight weights;
-
-    public GradeCalculator(GradeWeight weights) {
-        this.weights = weights;
-    }
-
-    public void setWeights(GradeWeight weights) {
-        this.weights = weights;
-    }
-
     /*
      * Calculates the final grade of the student, in a number between 0 and 100.
      * Final number is rounded up from 0.5.
      */
-    public int calculateFinalGrade(GradeValues gradeValues, boolean failed) {
-        if (weights.isFailureGives0() && failed) {
-            return 0;
-        }
+    public int calculateFinalGrade(GradeValues gradeValues, GradeWeight weights) {
 
         float branchScore = branchCoverageScore(gradeValues.getCoveredBranches(), gradeValues.getTotalBranches())
                 * weights.getBranchCoverageWeight();

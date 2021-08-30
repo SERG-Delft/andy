@@ -1,14 +1,13 @@
 package nl.tudelft.cse1110.andy.execution.step;
 
 import nl.tudelft.cse1110.andy.IntegrationTestBase;
+import nl.tudelft.cse1110.andy.execution.mode.Action;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static nl.tudelft.cse1110.andy.ExecutionStepHelper.onlyJUnitTests;
 import static nl.tudelft.cse1110.andy.ResultTestAssertions.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-// In our default run configuration, failureGives0 == true --> single test failure leads to grade 0/100
 public class RunJUnitTestsStepTest {
 
     @Nested
@@ -18,7 +17,7 @@ public class RunJUnitTestsStepTest {
         @Test
         void allTestsPassing() {
 
-            String result = run(onlyJUnitTests(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass");
+            String result = run(Action.TESTS, "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass");
 
             assertThat(result)
                     .has(numberOfJUnitTestsPassing(4))
@@ -30,10 +29,10 @@ public class RunJUnitTestsStepTest {
         @Test
         void singleTestFailing() {
 
-            String result = run(onlyJUnitTests(), "LeapYearLibrary", "LeapYearSingleTestFails");  // 3/4 normal @Tests passing
+            String result = run(Action.TESTS, "LeapYearLibrary", "LeapYearSingleTestFails");  // 3/4 normal @Tests passing
 
             assertThat(result)
-                    .has(finalGrade(workDir.toString(), 0))
+                    .has(finalGradeInXml(workDir.toString(), 0))
                     .has(numberOfJUnitTestsPassing(3))
                     .has(totalNumberOfJUnitTests(4))
                     .has(failingTestName("leapCenturialYears"))
@@ -47,10 +46,10 @@ public class RunJUnitTestsStepTest {
         @Test
         void allTestsFailing() {
 
-            String result = run(onlyJUnitTests(), "CountLettersLibrary", "CountLettersAllTestsFail");
+            String result = run(Action.TESTS, "CountLettersLibrary", "CountLettersAllTestsFail");
 
             assertThat(result)
-                    .has(finalGrade(workDir.toString(), 0))
+                    .has(finalGradeInXml(workDir.toString(), 0))
                     .has(numberOfJUnitTestsPassing(0))
                     .has(totalNumberOfJUnitTests(2))
                     .has(failingTestName("multipleMatchingWords"))
@@ -67,10 +66,11 @@ public class RunJUnitTestsStepTest {
         @Test
         void someTestsFailing() {
 
-            String result = run(onlyJUnitTests(), "PlayerPointsLibrary", "PlayerPointsSomeTestsFail");
+            String result = run(Action.TESTS, "PlayerPointsLibrary", "PlayerPointsSomeTestsFail");
+            System.out.println(result);
 
             assertThat(result)
-                    .has(finalGrade(workDir.toString(), 0))
+                    .has(finalGradeInXml(workDir.toString(), 0))
                     .has(numberOfJUnitTestsPassing(1))
                     .has(totalNumberOfJUnitTests(4))
                     .has(failingTestName("lessPoints"))
@@ -86,7 +86,7 @@ public class RunJUnitTestsStepTest {
         @Test
         void threeDifferentTestTypesUsed() {
 
-            String result = run(onlyJUnitTests(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfDifferentTestTypes");  // 5/5 @Tests passing
+            String result = run(Action.TESTS, "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfDifferentTestTypes");  // 5/5 @Tests passing
 
             assertThat(result)
                     .has(numberOfJUnitTestsPassing(5))
@@ -99,19 +99,18 @@ public class RunJUnitTestsStepTest {
         // 0/0 normal @Tests passing
         @Test
         void noTests() {
-            String result = run(onlyJUnitTests(), "NumberUtilsAddLibrary", "NumberUtilsNoTests");
+            String result = run(Action.TESTS, "NumberUtilsAddLibrary", "NumberUtilsNoTests");
 
             assertThat(result)
-                    .has(finalGrade(workDir.toString(), 0))
-                    .has(errorMessage("We do not see any tests."))
-                    .doesNotHave(allTestsNeedToPassMessage());
+                    .has(finalGradeInXml(workDir.toString(), 0))
+                    .has(weDoNotSeeTestsMessage());
         }
 
         //Check to see if the System.out.printlns are caught from the console
         @Test
         void consoleOutputCaught(){
 
-            String result = run(onlyJUnitTests(), "ZagZigLibrary", "ZagZigRandomSysouts");
+            String result = run(Action.TESTS, "ZagZigLibrary", "ZagZigRandomSysouts");
 
             assertThat(result)
                     .has(consoleOutputExists())
@@ -124,7 +123,7 @@ public class RunJUnitTestsStepTest {
         @Test
         void noConsoleOutputToBeCaught(){
 
-            String result = run(onlyJUnitTests(), "ZagZigLibrary", "ZagZigNoSysouts");
+            String result = run(Action.TESTS, "ZagZigLibrary", "ZagZigNoSysouts");
 
             assertThat(result)
                     .doesNotHave(consoleOutputExists());
@@ -136,10 +135,10 @@ public class RunJUnitTestsStepTest {
         @Test
         void nonStaticBeforeAll(){
 
-            String result = run(onlyJUnitTests(), "PiecewiseLibrary", "PiecewiseNonStaticBeforeAll");
+            String result = run(Action.TESTS, "PiecewiseLibrary", "PiecewiseNonStaticBeforeAll");
 
             assertThat(result)
-                    .has(finalGrade(workDir.toString(), 0))
+                    .has(finalGradeInXml(workDir.toString(), 0))
                     .has(weDoNotSeeTestsMessage());
         }
 
@@ -148,10 +147,10 @@ public class RunJUnitTestsStepTest {
         @Test
         void staticBeforeEach(){
 
-            String result = run(onlyJUnitTests(), "PiecewiseLibrary", "PiecewiseStaticBeforeEach");
+            String result = run(Action.TESTS, "PiecewiseLibrary", "PiecewiseStaticBeforeEach");
 
             assertThat(result)
-                    .has(finalGrade(workDir.toString(), 0))
+                    .has(finalGradeInXml(workDir.toString(), 0))
                     .has(weDoNotSeeTestsMessage());
         }
 
@@ -164,10 +163,10 @@ public class RunJUnitTestsStepTest {
         @Test
         void methodVerifiedButNotInvoked() {
 
-            String result = run(onlyJUnitTests(), "TodoApplicationLibrary", "TodoApplicationMockitoMethodNotInvoked");  // 2/3 normal @Tests passing
+            String result = run(Action.TESTS, "TodoApplicationLibrary", "TodoApplicationMockitoMethodNotInvoked");  // 2/3 normal @Tests passing
 
             assertThat(result)
-                    .has(finalGrade(workDir.toString(), 0))
+                    .has(finalGradeInXml(workDir.toString(), 0))
                     .has(numberOfJUnitTestsPassing(2))
                     .has(totalNumberOfJUnitTests(3))
                     .has(failingTestName("addTodoTest"))
@@ -179,10 +178,10 @@ public class RunJUnitTestsStepTest {
         @Test
         void stubbingNonMockClass() {
 
-            String result = run(onlyJUnitTests(), "TheQueueLibrary", "TheQueueMisusingMockitoStub");  // 2/3 normal @Tests passing
+            String result = run(Action.TESTS, "TheQueueLibrary", "TheQueueMisusingMockitoStub");  // 2/3 normal @Tests passing
 
             assertThat(result)
-                    .has(finalGrade(workDir.toString(), 0))
+                    .has(finalGradeInXml(workDir.toString(), 0))
                     .has(numberOfJUnitTestsPassing(2))
                     .has(totalNumberOfJUnitTests(3))
                     .has(failingTestName("getNextReturnsFirst"))
@@ -199,10 +198,10 @@ public class RunJUnitTestsStepTest {
         @Test
         void singleParameterizedTestFails() {
 
-            String result = run(onlyJUnitTests(), "PassingGradeLibrary", "PassingGradeSingleParameterizedTestFails");  // 4/5 parameterized test cases
+            String result = run(Action.TESTS, "PassingGradeLibrary", "PassingGradeSingleParameterizedTestFails");  // 4/5 parameterized test cases
 
             assertThat(result)
-                    .has(finalGrade(workDir.toString(), 0))
+                    .has(finalGradeInXml(workDir.toString(), 0))
                     .has(numberOfJUnitTestsPassing(4))
                     .has(totalNumberOfJUnitTests(5))
                     .has(parameterizedTestFailing("passed", 3))
@@ -216,10 +215,10 @@ public class RunJUnitTestsStepTest {
         @Test
         void moreParameterizedTestsFail() {
 
-            String result = run(onlyJUnitTests(), "ATMLibrary", "ATMMoreParameterizedTestsFail");  // 11/14 parameterized test cases
+            String result = run(Action.TESTS, "ATMLibrary", "ATMMoreParameterizedTestsFail");  // 11/14 parameterized test cases
 
             assertThat(result)
-                    .has(finalGrade(workDir.toString(), 0))
+                    .has(finalGradeInXml(workDir.toString(), 0))
                     .has(numberOfJUnitTestsPassing(11))
                     .has(totalNumberOfJUnitTests(14))
                     .has(parameterizedTestFailing("validTest", 1))
@@ -234,10 +233,10 @@ public class RunJUnitTestsStepTest {
         @Test
         void allParameterizedTestsFail() {
 
-            String result = run(onlyJUnitTests(), "TwoIntegersLibrary", "TwoIntegersAllParameterizedTestsFail");  // 0/6 parameterized test cases
+            String result = run(Action.TESTS, "TwoIntegersLibrary", "TwoIntegersAllParameterizedTestsFail");  // 0/6 parameterized test cases
 
             assertThat(result)
-                    .has(finalGrade(workDir.toString(), 0))
+                    .has(finalGradeInXml(workDir.toString(), 0))
                     .has(numberOfJUnitTestsPassing(0))
                     .has(totalNumberOfJUnitTests(6))
                     .has(allTestsNeedToPassMessage())
@@ -255,7 +254,7 @@ public class RunJUnitTestsStepTest {
         @Test
         void helperMethodInTestShouldPass() {
 
-            String result = run(onlyJUnitTests(), "PiecewiseLibrary", "PiecewiseHelperInTest");  // 26/26 parameterized test cases
+            String result = run(Action.TESTS, "PiecewiseLibrary", "PiecewiseHelperInTest");  // 26/26 parameterized test cases
 
             assertThat(result)
                     .has(numberOfJUnitTestsPassing(26))
@@ -270,10 +269,10 @@ public class RunJUnitTestsStepTest {
         @Test
         void exceptionThrownByTest() {
 
-            String result = run(onlyJUnitTests(), "MScAdmissionLibrary", "MScAdmissionParameterizedTestThrowsException");  // 0/5 parameterized test cases
+            String result = run(Action.TESTS, "MScAdmissionLibrary", "MScAdmissionParameterizedTestThrowsException");  // 0/5 parameterized test cases
 
             assertThat(result)
-                    .has(finalGrade(workDir.toString(), 0))
+                    .has(finalGradeInXml(workDir.toString(), 0))
                     .has(numberOfJUnitTestsPassing(0))
                     .has(totalNumberOfJUnitTests(5))
                     .has(parameterizedTestFailing("validInputs", 1))
@@ -290,7 +289,7 @@ public class RunJUnitTestsStepTest {
         @Test
         void nonStaticMethodSourceSomeFail() {
 
-            String result = run(onlyJUnitTests(), "MScAdmissionLibrary", "MScAdmissionNonStaticMethodSourceSomeFail");
+            String result = run(Action.TESTS, "MScAdmissionLibrary", "MScAdmissionNonStaticMethodSourceSomeFail");
 
             assertThat(result)
                     .has(numberOfJUnitTestsPassing(2))
@@ -303,10 +302,10 @@ public class RunJUnitTestsStepTest {
         @Test
         void nonStaticMethodSourceAllFail() {
 
-            String result = run(onlyJUnitTests(), "MScAdmissionLibrary", "MScAdmissionNonStaticMethodSourceAllFail");
+            String result = run(Action.TESTS, "MScAdmissionLibrary", "MScAdmissionNonStaticMethodSourceAllFail");
 
             assertThat(result)
-                    .has(finalGrade(workDir.toString(), 0))
+                    .has(finalGradeInXml(workDir.toString(), 0))
                     .has(weDoNotSeeTestsMessage());
         }
 
@@ -315,10 +314,10 @@ public class RunJUnitTestsStepTest {
         @Test
         void forgotParameterizedTestAnnotation() {
 
-            String result = run(onlyJUnitTests(), "PassingGradeLibrary", "PassingGradeForgotParameterizedTestAnnotation");
+            String result = run(Action.TESTS, "PassingGradeLibrary", "PassingGradeForgotParameterizedTestAnnotation");
 
             assertThat(result)
-                    .has(finalGrade(workDir.toString(), 0))
+                    .has(finalGradeInXml(workDir.toString(), 0))
                     .has(weDoNotSeeTestsMessage());
         }
 
@@ -327,10 +326,10 @@ public class RunJUnitTestsStepTest {
         @Test
         void forgotMethodSourceAnnotationAllFail() {
 
-            String result = run(onlyJUnitTests(), "PassingGradeLibrary", "PassingGradeForgotMethodSourceAnnotationAllFail");
+            String result = run(Action.TESTS, "PassingGradeLibrary", "PassingGradeForgotMethodSourceAnnotationAllFail");
 
             assertThat(result)
-                    .has(finalGrade(workDir.toString(), 0))
+                    .has(finalGradeInXml(workDir.toString(), 0))
                     .has(weDoNotSeeTestsMessage());
         }
 
@@ -338,7 +337,7 @@ public class RunJUnitTestsStepTest {
         @Test
         void forgotMethodSourceAnnotationSomeFail() {
 
-            String result = run(onlyJUnitTests(), "MScAdmissionLibrary", "MScAdmissionForgotMethodSourceSomeFail");
+            String result = run(Action.TESTS, "MScAdmissionLibrary", "MScAdmissionForgotMethodSourceSomeFail");
 
             assertThat(result)
                     .has(numberOfJUnitTestsPassing(3))
@@ -356,20 +355,20 @@ public class RunJUnitTestsStepTest {
 
         @Test
         void testSimplePropertyTest() {
-            String result = run(onlyJUnitTests(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfSimpleJqwikError");
+            String result = run(Action.TESTS, "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfSimpleJqwikError");
 
             assertThat(result)
-                    .has(finalGrade(workDir.toString(), 0))
+                    .has(finalGradeInXml(workDir.toString(), 0))
                     .has(propertyTestFailing("testNoElementInWholeArray"));
         }
 
 
         @Test
         void testMultiplePropertyTestsFailing() {
-            String result = run(onlyJUnitTests(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfMultipleJqwikErrors");
+            String result = run(Action.TESTS, "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfMultipleJqwikErrors");
 
             assertThat(result)
-                    .has(finalGrade(workDir.toString(), 0))
+                    .has(finalGradeInXml(workDir.toString(), 0))
                     .has(allTestsNeedToPassMessage())
                     .has(propertyTestFailing("testNoElementInWholeArray"))
                     .has(propertyTestFailing("testValueInArrayUniqueElements"));
@@ -378,10 +377,10 @@ public class RunJUnitTestsStepTest {
 
         @Test
         void testMultiplePropertyWithParameterizedTests() {
-            String result = run(onlyJUnitTests(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfJqwikWithParameterized");
+            String result = run(Action.TESTS, "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfJqwikWithParameterized");
 
             assertThat(result)
-                    .has(finalGrade(workDir.toString(), 0))
+                    .has(finalGradeInXml(workDir.toString(), 0))
                     .has(propertyTestFailing("testNoElementInWholeArray"))
                     .has(propertyTestFailing("testValueInArrayUniqueElements"))
                     .has(parameterizedTestFailing("test", 6));
@@ -390,10 +389,10 @@ public class RunJUnitTestsStepTest {
 
         @Test
         void testMessageOtherThanAssertionError() {
-            String result = run(onlyJUnitTests(), "NumberUtilsAddPositiveLibrary", "NumberUtilsAddPositiveJqwikException");
+            String result = run(Action.TESTS, "NumberUtilsAddPositiveLibrary", "NumberUtilsAddPositiveJqwikException");
 
             assertThat(result)
-                    .has(finalGrade(workDir.toString(), 0))
+                    .has(finalGradeInXml(workDir.toString(), 0))
                     .has(propertyTestFailing("testAddition"));
         }
 
@@ -401,10 +400,10 @@ public class RunJUnitTestsStepTest {
         @Test
         void forgotPropertyAnnotation() {
 
-            String result = run(onlyJUnitTests(), "MathArraysLibrary", "MathArraysForgotProperty");
+            String result = run(Action.TESTS, "MathArraysLibrary", "MathArraysForgotProperty");
 
             assertThat(result)
-                    .has(finalGrade(workDir.toString(), 0))
+                    .has(finalGradeInXml(workDir.toString(), 0))
                     .doesNotHave(allTestsNeedToPassMessage())
                     .has(weDoNotSeeTestsMessage());
         }

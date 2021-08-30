@@ -1,10 +1,8 @@
 package nl.tudelft.cse1110.andy.features;
 
 import nl.tudelft.cse1110.andy.IntegrationTestBase;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.api.Test;
 
-import static nl.tudelft.cse1110.andy.ExecutionStepHelper.onlyJUnitTests;
 import static nl.tudelft.cse1110.andy.ResultTestAssertions.totalTimeItTookToExecute;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -13,13 +11,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
  */
 public class ExecutionTimeInfoTest extends IntegrationTestBase {
 
-    @ParameterizedTest
-    @CsvSource({
-        "ZagZigLibrary,ZagZigNotAllMutantsKilled,ZagZigDifferentTotalMutantsConfiguration",
-        "NumberUtilsAddLibrary,NumberUtilsAddAllTestsPass,NumberUtilsAddConfiguration"
-    })
-    void checkTotalTimeToExecute(String library, String solution, String config) {
-        String result = run(onlyJUnitTests(), library, solution, config);
+    @Test
+    void checkTotalTimeToExecute() {
+        String result = run("ZagZigLibrary", "ZagZigNotAllMutantsKilled", "ZagZigDifferentTotalMutantsConfiguration");
         assertThat(result).has(totalTimeItTookToExecute());
     }
 

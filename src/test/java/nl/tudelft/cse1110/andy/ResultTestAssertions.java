@@ -195,6 +195,15 @@ public class ResultTestAssertions {
         };
     }
 
+    public static Condition<String> finalGradeInXml(String workDir, int score) {
+        return new Condition<>() {
+            @Override
+            public boolean matches(String value) {
+                return resultXmlHasCorrectGrade(workDir, score);
+            }
+        };
+    }
+
     public static boolean resultXmlHasCorrectGrade(String workDir, int score) {
         File resultXml = new File(FilesUtils.concatenateDirectories(workDir, "results.xml"));
         String resultXmlContent = FilesUtils.readFile(resultXml);
@@ -235,7 +244,7 @@ public class ResultTestAssertions {
     }
   
     public static Condition<String> totalTimeItTookToExecute() {
-        return containsRegex("Andy took \\d+(.\\d)? seconds to assess your question.");
+        return containsRegex("took \\d+(.\\d)? seconds");
     }
 
 
@@ -248,9 +257,7 @@ public class ResultTestAssertions {
     }
 
     public static Condition<String> weDoNotSeeTestsMessage () {
-        return containsString("--- Warning\n" +
-                "We do not see any tests.\n" +
-                "Please check for the following JUnit pre-conditions:");
+        return containsString("We do not see any tests");
     }
 
     public static Condition<String> noMethodSourceProvidedMessage () {
@@ -275,6 +282,39 @@ public class ResultTestAssertions {
     public static Condition<String> noMetaTests() {
         return not(containsRegex("--- Meta tests"));
     }
+
+    public static Condition<String> metaTestsButNoDetails() {
+        return new Condition<>() {
+            @Override
+            public boolean matches(String value) {
+                int start = value.indexOf("--- Meta tests");
+                if(start==-1)
+                    return false;
+
+                int next = value.indexOf("---", start+4);
+
+                String substring = value.substring(start, next == -1 ? value.length() - 1 : next);
+                return !substring.contains("PASSED") && !substring.contains("FAILED");
+            }
+        };
+    }
+
+    public static Condition<String> codeChecksButNoDetails() {
+        return new Condition<>() {
+            @Override
+            public boolean matches(String value) {
+                int start = value.indexOf("--- Code checks");
+                if(start==-1)
+                    return false;
+
+                int next = value.indexOf("---", start+4);
+
+                String substring = value.substring(start, next == -1 ? value.length() - 1 : next);
+                return !substring.contains("PASSED") && !substring.contains("FAILED");
+            }
+        };
+    }
+
 
     public static Condition<String> noCodeChecks() {
         return not(containsRegex("--- Code checks"));

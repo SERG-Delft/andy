@@ -3,8 +3,9 @@ package nl.tudelft.cse1110.andy.execution.step;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import nl.tudelft.cse1110.andy.IntegrationTestBase;
-import nl.tudelft.cse1110.andy.result.Highlight;
+import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
+import nl.tudelft.cse1110.andy.writer.weblab.Highlight;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -18,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static nl.tudelft.cse1110.andy.ExecutionStepHelper.onlyBranchCoverage;
 import static nl.tudelft.cse1110.andy.ResultTestAssertions.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -27,7 +27,7 @@ public class RunJacocoCoverageStepTest extends IntegrationTestBase {
     @ParameterizedTest
     @MethodSource("generator")
     void test(String library, String solution, int lines, int instructions, int branches) {
-        String result = run(onlyBranchCoverage(), library, solution);
+        String result = run(Action.COVERAGE, library, solution);
 
         assertThat(result)
                 .has(linesCovered(lines))
@@ -43,9 +43,6 @@ public class RunJacocoCoverageStepTest extends IntegrationTestBase {
                 //test when only some branches are covered
                 Arguments.of("NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", 15, 87, 13),
 
-                //test when there are no tests
-                Arguments.of("NumberUtilsAddLibrary", "NumberUtilsNoTests", 0, 0, 0),
-
                 //test multiple classes in the library
                 Arguments.of("SoftWhereLibrary", "SoftWhereTests", 45, 183, 10),
 
@@ -54,10 +51,20 @@ public class RunJacocoCoverageStepTest extends IntegrationTestBase {
         );
     }
 
+    @Test
+    void doesNotHaveTests() {
+        String result = run(Action.COVERAGE, "NumberUtilsAddLibrary", "NumberUtilsNoTests");
+
+        assertThat(result)
+                .doesNotHave(linesCovered(0))
+                .doesNotHave(instructionsCovered(0))
+                .doesNotHave(branchesCovered(0));
+    }
+
     @ParameterizedTest
     @MethodSource("highlightsGenerator")
     void highlights(String library, String solution, int[] coveredLines, int[] partiallyCovered, int[] notCovered) throws FileNotFoundException {
-        String result = run(onlyBranchCoverage(), library, solution);
+        String result = run(Action.COVERAGE, library, solution);
 
         File highlights = new File(FilesUtils.concatenateDirectories(workDir.toString(), "highlights.json"));
         Type listType = new TypeToken<ArrayList<Highlight>>(){}.getType();
@@ -97,16 +104,6 @@ public class RunJacocoCoverageStepTest extends IntegrationTestBase {
                     new int[] {34, 48, 49, 50},
                     new int[] {35, 62, 65, 66, 68})
         );
-    }
-
-    // not really needed, as this was meant to exercise the configuration, but let's keep it for now
-    @Test
-    void specifyingConfigClass() {
-        String result = run(onlyBranchCoverage(), "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfiguration");
-
-        assertThat(result).has(linesCovered(13))
-                .has(instructionsCovered(58))
-                .has(branchesCovered(2));
     }
 
 }

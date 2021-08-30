@@ -1,5 +1,10 @@
 package nl.tudelft.cse1110.andy.grade;
 
+import nl.tudelft.cse1110.andy.result.CodeChecksResult;
+import nl.tudelft.cse1110.andy.result.CoverageResult;
+import nl.tudelft.cse1110.andy.result.MetaTestsResult;
+import nl.tudelft.cse1110.andy.result.MutationTestingResult;
+
 public class GradeValues {
 
     private int coveredBranches;
@@ -64,6 +69,16 @@ public class GradeValues {
     public void setCheckGrade(int checksPassed, int totalChecks) {
         this.checksPassed = checksPassed;
         this.totalChecks = totalChecks;
+    }
+
+    public static GradeValues fromResults(CoverageResult coverageResults, CodeChecksResult codeCheckResults, MutationTestingResult mutationResults, MetaTestsResult metaTestResults) {
+        GradeValues grades = new GradeValues();
+        grades.setBranchGrade(coverageResults.getTotalCoveredBranches(), coverageResults.getTotalBranches());
+        grades.setCheckGrade(codeCheckResults.getPassedWeightedChecks(), codeCheckResults.getTotalWeightedChecks());
+        grades.setMutationGrade(mutationResults.getKilledMutants(), mutationResults.getTotalNumberOfMutants());
+        grades.setMetaGrade(metaTestResults.getPassedMetaTests(), metaTestResults.getTotalTests());
+
+        return grades;
     }
 
 }

@@ -9,11 +9,11 @@ public class GradeWeightTest {
     @Test
     void preCondition() {
         assertThatExceptionOfType(RuntimeException.class).isThrownBy(() ->
-                        new GradeWeight(true, 0.1f, 0.1f, 0.1f, 0.1f)
+                        new GradeWeight(0.1f, 0.1f, 0.1f, 0.1f)
         ).withMessageContaining("weight configuration is wrong");
 
-        new GradeWeight(true, 0.25f, 0.25f, 0.25f, 0.25f);
-        new GradeWeight(true, 0.33f, 0.33f, 0.33f, 0.01f);
-        new GradeWeight(true, 0.33f, 0.33f, 0.34f, 0f);
+        new GradeWeight(0.25f, 0.25f, 0.25f, 0.25f);
+        new GradeWeight(0.33f, 0.33f, 0.33f, 0.01f);
+        new GradeWeight(0.33f, 0.33f, 0.34f, 0f);
     }
 }

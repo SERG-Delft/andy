@@ -1,8 +1,9 @@
 package nl.tudelft.cse1110.andy.execution;
 
 import nl.tudelft.cse1110.andy.execution.step.*;
-import nl.tudelft.cse1110.andy.result.OutputGenerator;
+import nl.tudelft.cse1110.andy.result.Result;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
+import nl.tudelft.cse1110.andy.writer.ResultWriter;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -12,74 +13,39 @@ import java.util.List;
 public class ExecutionFlow {
     private final Context ctx;
     private final ResultBuilder result;
-    private final OutputGenerator outputGenerator;
     private LinkedList<ExecutionStep> steps;
+    private final ResultWriter writer;
 
-    private ExecutionFlow(List<ExecutionStep> plan, Context ctx, ResultBuilder result) {
+    private ExecutionFlow(List<ExecutionStep> plan, Context ctx, ResultBuilder result, ResultWriter writer) {
         this.steps = new LinkedList<>(plan);
+        this.writer = writer;
         steps.addAll(0, basicSteps());
         this.ctx = ctx;
         this.result = result;
         this.ctx.setFlow(this);
-
-        this.outputGenerator = new OutputGenerator(ctx);
     }
 
     public void run() {
-        result.logStart();
         do {
             ExecutionStep currentStep = steps.pollFirst();
-
-            result.logStart(currentStep);
             try {
                 currentStep.execute(ctx, result);
             } catch(Throwable e) {
                 result.genericFailure(currentStep, e);
             }
-            result.logFinish(currentStep);
-        } while(!steps.isEmpty() && !result.isFailed());
-        result.logFinish();
+        } while(!steps.isEmpty() && !result.hasFailed());
 
-        logFinalGrade();
-        generateOutput();
+        Result solutionResult = result.build();
+        writer.write(solutionResult);
     }
 
-    private void logFinalGrade() {
-        result.logFinalGrade();
-    }
 
     public void addSteps(List<ExecutionStep> steps) {
         this.steps.addAll(steps);
     }
 
-    /* In this method we also calculate the total time in seconds our tool took to run.
-     */
-    private void generateOutput() {
-        result.logMode();
-        result.logTimeToRun(ctx.getStartTime());
-
-        outputGenerator.exportOutputFile(result);
-        outputGenerator.exportXMLFile(result);
-        outputGenerator.exportHighlights(result);
-
-        if(ctx.getModeActionSelector()!=null && ctx.getModeActionSelector().shouldGenerateAnalytics())
-            outputGenerator.exportAnalyticsPost(result);
-    }
-
-    public static ExecutionFlow asSteps(List<ExecutionStep> plan, Context ctx, ResultBuilder result) {
-        return new ExecutionFlow(plan, ctx, result);
-    }
-
-    public static ExecutionFlow justTests(Context ctx, ResultBuilder result) {
-        return new ExecutionFlow(
-                Arrays.asList(new RunJUnitTestsStep()),
-                ctx,
-                result
-        );
-    }
-
-    public static ExecutionFlow justBasic(Context ctx, ResultBuilder result) {
-        return new ExecutionFlow(Collections.emptyList(), ctx, result);
+    public static ExecutionFlow build(Context ctx, ResultBuilder result, ResultWriter writer) {
+        return new ExecutionFlow(Collections.emptyList(), ctx, result, writer);
     }
 
     private List<ExecutionStep> basicSteps() {

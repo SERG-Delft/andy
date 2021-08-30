@@ -7,8 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static nl.tudelft.cse1110.andy.execution.mode.Action.*;
-import static nl.tudelft.cse1110.andy.execution.mode.Mode.EXAM;
-import static nl.tudelft.cse1110.andy.execution.mode.Mode.GRADING;
+import static nl.tudelft.cse1110.andy.execution.mode.Mode.*;
 
 public class ModeActionSelector {
 
@@ -29,6 +28,9 @@ public class ModeActionSelector {
     }
 
     public List<ExecutionStep> getSteps() {
+        if(action==META_TEST)
+            return getMetaTestMode();
+
         switch (mode) {
             case PRACTICE -> {
                 return getPracticeMode();
@@ -40,15 +42,20 @@ public class ModeActionSelector {
                 return getGradingMode();
             }
         }
+
         return Collections.emptyList();
     }
 
-    public boolean shouldShowHints() {
-        return mode == GRADING || action == FULL_WITH_HINTS || action == CUSTOM;
+    public boolean shouldShowFullHints() {
+        return (mode == GRADING) || (mode == PRACTICE && action == FULL_WITH_HINTS);
+    }
+
+    public boolean shouldShowPartialHints() {
+        return mode == PRACTICE && action == FULL_WITHOUT_HINTS;
     }
 
     public boolean shouldGenerateAnalytics() {
-        return !(mode == EXAM || action == CUSTOM || mode == GRADING);
+        return !(mode == EXAM || action == META_TEST || mode == GRADING);
     }
 
     public boolean shouldCalculateAndShowGrades() {
@@ -78,6 +85,10 @@ public class ModeActionSelector {
 
     private List<ExecutionStep> getGradingMode() {
         return fullMode();
+    }
+
+    private List<ExecutionStep> getMetaTestMode() {
+        return justTests();
     }
 
     static List<ExecutionStep> justTests() {

@@ -4,7 +4,6 @@ import nl.tudelft.cse1110.andy.IntegrationTestBase;
 import org.junit.jupiter.api.Test;
 
 import static nl.tudelft.cse1110.andy.ResultTestAssertions.*;
-import static nl.tudelft.cse1110.andy.ExecutionStepHelper.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
@@ -12,7 +11,7 @@ public class RunMetaTestsStepTest extends IntegrationTestBase {
 
     @Test
     void testAllMetaTestsPassing() {
-        String result = run(onlyMetaTests(), "NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution", "NumberUtilsAddConfiguration");
+        String result = run("NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution", "NumberUtilsAddConfiguration");
 
         assertThat(result)
                 .has(metaTests(4))
@@ -25,7 +24,7 @@ public class RunMetaTestsStepTest extends IntegrationTestBase {
 
     @Test
     void testSomeMetaTestFailing() {
-        String result = run(onlyMetaTests(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddConfiguration");
+        String result = run("NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddConfiguration");
 
         assertThat(result)
                 .has(metaTests(4))
@@ -38,7 +37,7 @@ public class RunMetaTestsStepTest extends IntegrationTestBase {
 
     @Test
     void testSomeMetaTestFailingWithWeights() {
-        String result = run(onlyMetaTests(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddConfigurationWithWeight");
+        String result = run("NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddConfigurationWithWeight");
 
         assertThat(result)
                 .has(metaTests(7))
@@ -51,7 +50,7 @@ public class RunMetaTestsStepTest extends IntegrationTestBase {
 
     @Test
     void testAllMetaTestsFailing() {
-        String result = run(onlyMetaTests(), "NumberUtilsAddLibrary", "NumberUtilsNoTests", "NumberUtilsAddConfiguration");
+        String result = run("NumberUtilsAddLibrary", "NumberUtilsEmptyTests", "NumberUtilsAddConfiguration");
 
         assertThat(result)
                 .has(metaTests(4))
@@ -64,7 +63,7 @@ public class RunMetaTestsStepTest extends IntegrationTestBase {
 
     @Test
     void testMetaWhenMultipleClassesInLibrary() {
-        String result = run(onlyMetaTests(), "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfiguration");
+        String result = run("SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfiguration");
 
         assertThat(result)
                 .has(metaTests(4))
@@ -77,7 +76,7 @@ public class RunMetaTestsStepTest extends IntegrationTestBase {
 
     @Test
     void testMetaWhenMultipleClassesInSolution() {
-        String result = run(onlyMetaTests(), "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfJQWikPassing", "ArrayUtilsIndexOfJQWikConfiguration");
+        String result = run("ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfJQWikPassing", "ArrayUtilsIndexOfJQWikConfiguration");
 
         assertThat(result)
                 .has(metaTests(3))

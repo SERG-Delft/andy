@@ -1,4 +1,4 @@
-package nl.tudelft.cse1110.andy.analytics;
+package nl.tudelft.cse1110.andy.writer.weblab;
 
 public class SubmissionMetaData {
     private final String course;

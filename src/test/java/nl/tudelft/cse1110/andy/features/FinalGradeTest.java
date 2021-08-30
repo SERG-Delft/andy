@@ -1,92 +1,50 @@
 package nl.tudelft.cse1110.andy.features;
 
 import nl.tudelft.cse1110.andy.IntegrationTestBase;
-import nl.tudelft.cse1110.andy.execution.mode.Action;
-import nl.tudelft.cse1110.andy.grade.GradeCalculator;
-import nl.tudelft.cse1110.andy.result.RandomAsciiArtGenerator;
-import nl.tudelft.cse1110.andy.result.ResultBuilder;
-import org.junit.jupiter.api.BeforeEach;
+import nl.tudelft.cse1110.andy.writer.weblab.RandomAsciiArtGenerator;
 import org.junit.jupiter.api.Test;
 
-import static nl.tudelft.cse1110.andy.ExecutionStepHelper.fullMode;
-import static nl.tudelft.cse1110.andy.ExecutionStepHelper.onlyBasic;
 import static nl.tudelft.cse1110.andy.ResultTestAssertions.*;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class FinalGradeTest extends IntegrationTestBase {
 
-    private String asciiArtExpected;
-    private RandomAsciiArtGenerator asciiArtGenerator;
-    private GradeCalculator gradeCalculator;
-    private ResultBuilder resultBuilder;
+    private String asciiArtExpected = "     Super congrats!\n" +
+            "\n" +
+            "            __,__\n" +
+            "   .--.  .-\"     \"-.  .--.\n" +
+            "  / .. \\/  .-. .-.  \\/ .. \\\n" +
+            " | |  '|  /   Y   \\  |'  | |\n" +
+            " | \\   \\  \\ 0 | 0 /  /   / |\n" +
+            "  \\ '- ,\\.-\"`` ``\"-./, -' /\n" +
+            "   `'-' /_   ^ ^   _\\ '-'`\n" +
+            "       |  \\._   _./  |\n" +
+            "       \\   \\ `~` /   /\n" +
+            "        '._ '-=-' _.'\n" +
+            "           '~---~'\n";
 
-    @BeforeEach
-    void setup() {
-
-        asciiArtGenerator = mock(RandomAsciiArtGenerator.class);
-
-        asciiArtExpected =  "     Super congrats!\n" +
-                "\n" +
-                "            __,__\n" +
-                "   .--.  .-\"     \"-.  .--.\n" +
-                "  / .. \\/  .-. .-.  \\/ .. \\\n" +
-                " | |  '|  /   Y   \\  |'  | |\n" +
-                " | \\   \\  \\ 0 | 0 /  /   / |\n" +
-                "  \\ '- ,\\.-\"`` ``\"-./, -' /\n" +
-                "   `'-' /_   ^ ^   _\\ '-'`\n" +
-                "       |  \\._   _./  |\n" +
-                "       \\   \\ `~` /   /\n" +
-                "        '._ '-=-' _.'\n" +
-                "           '~---~'\n";
+    protected RandomAsciiArtGenerator getAsciiArtGenerator() {
+        RandomAsciiArtGenerator asciiArtGenerator = mock(RandomAsciiArtGenerator.class);
         when(asciiArtGenerator.getRandomAsciiArt()).thenReturn(asciiArtExpected);
 
-        gradeCalculator = mock(GradeCalculator.class);
-        resultBuilder = new ResultBuilder(asciiArtGenerator, gradeCalculator);
+        return asciiArtGenerator;
     }
 
-
-    // 0.1 * 22/22 + 0.3 * 29/29 + 0.4 * 4/4 + 0.2 --> 100
     @Test
     void printAsciiArtWhen100Score() {
 
-        String result = run(fullMode(),
+        String result = run(
                 "NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution",
-                "NumberUtilsAddFullPointsConfiguration", resultBuilder);
+                "NumberUtilsAddFullPointsConfiguration");
 
         assertThat(result).has(asciiArtPrinted(asciiArtExpected));
     }
 
-
-    @Test
-    void noAsciiArtInExamMode() {
-
-        String result = run(Action.FULL_WITH_HINTS, onlyBasic(),
-                "NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution",
-                "NumberUtilsAddFullPointsExamModeConfiguration", resultBuilder);
-
-        assertThat(result)
-                .has(noFinalGrade())
-                .doesNotHave(asciiArtPrinted(asciiArtExpected));
-    }
-
-    @Test
-    void asciiArtInPracticeFullMode() {
-
-        String result = run(Action.FULL_WITH_HINTS, onlyBasic(),
-                "NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution",
-                "NumberUtilsAddFullPointsPracticeModeConfiguration", resultBuilder);
-
-        assertThat(result)
-                .has(finalGrade(workDir.toString(), 100))
-                .has(asciiArtPrinted(asciiArtExpected));
-    }
-
-    // 0.1 * 13/22 + 0.3 * 6/30 + 0.4 * 1/4 + 0.2 --> 42
     @Test
     void showFullDescriptionOfTheGrade() {
-        String result = run(fullMode(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddConfiguration");
+        String result = run("NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddConfiguration");
         System.out.println(result);
 
         assertThat(result)

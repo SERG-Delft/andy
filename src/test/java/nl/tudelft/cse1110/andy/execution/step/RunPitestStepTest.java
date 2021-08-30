@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
-import static nl.tudelft.cse1110.andy.ExecutionStepHelper.onlyMutationCoverage;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class RunPitestStepTest extends IntegrationTestBase {
@@ -17,7 +16,7 @@ public class RunPitestStepTest extends IntegrationTestBase {
      */
     @Test
     void mutantsSurvived() {
-        String result = run(onlyMutationCoverage(), "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddPiTestStrongerConfiguration");
+        String result = run("NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddPiTestStrongerConfiguration");
 
         assertThat(result).has(ResultTestAssertions.mutationScore(7, 33));
     }
@@ -28,7 +27,7 @@ public class RunPitestStepTest extends IntegrationTestBase {
      */
     @Test
     void allMutantsKilled() {
-        String result = run(onlyMutationCoverage(), "NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution", "NumberUtilsAddPiTestStrongerConfiguration");
+        String result = run("NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution", "NumberUtilsAddPiTestStrongerConfiguration");
 
         assertThat(result).has(ResultTestAssertions.mutationScore(32, 33));
     }
@@ -39,7 +38,7 @@ public class RunPitestStepTest extends IntegrationTestBase {
      */
     @Test
     void differentNumberOfTotalMutantsAllKilled() {
-        String result = run(onlyMutationCoverage(), "ZagZigLibrary", "ZagZigAllMutantsKilled", "ZagZigDifferentTotalMutantsConfiguration");
+        String result = run("ZagZigLibrary", "ZagZigAllMutantsKilled", "ZagZigDifferentTotalMutantsConfiguration");
 
         assertThat(result).has(ResultTestAssertions.mutationScore(26, 26));
     }
@@ -50,7 +49,7 @@ public class RunPitestStepTest extends IntegrationTestBase {
      */
     @Test
     void differentNumberOfTotalMutantsNotAllKilled() {
-        String result = run(onlyMutationCoverage(), "ZagZigLibrary", "ZagZigNotAllMutantsKilled", "ZagZigDifferentTotalMutantsConfiguration");
+        String result = run("ZagZigLibrary", "ZagZigNotAllMutantsKilled", "ZagZigDifferentTotalMutantsConfiguration");
 
         assertThat(result).has(ResultTestAssertions.mutationScore(24, 26));
     }

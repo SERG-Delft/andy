@@ -38,29 +38,6 @@ public class CheckScript {
         return sumOfWeights;
     }
 
-    public String generateReport() {
-        StringBuilder report = new StringBuilder();
-
-        report.append(String.format("%d\n", weights()));
-        report.append(String.format("%d\n", weightedChecks()));
-
-        for (CheckType check : checks) {
-            report.append(String.format("%s", check.reportExecution()));
-        }
-
-        return report.toString();
-    }
-
-    public String generateReportOfFailedChecks() {
-        StringBuilder report = new StringBuilder();
-
-        for (CheckType check : checks) {
-            report.append(String.format("%s", check.reportExecution()));
-        }
-
-        return report.toString();
-    }
-
     public void runChecks(String sourceCodePath) {
         ASTParser parser = ASTParser.newParser(AST.JLS15);
         parser.setResolveBindings(true);

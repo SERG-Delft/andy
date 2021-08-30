@@ -39,20 +39,12 @@ public abstract class RunConfiguration {
         return Collections.emptyList();
     }
 
-    public boolean failureGivesZero() {
-        return true;
-    }
-
     public List<String> listOfMutants() {
         return DEFAULTS;
     }
 
     public int numberOfMutationsToConsider() {
         return -1;
-    }
-
-    public boolean debug() {
-        return false;
     }
 
     public Mode mode() {

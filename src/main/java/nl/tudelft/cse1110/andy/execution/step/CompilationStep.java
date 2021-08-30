@@ -1,10 +1,10 @@
 package nl.tudelft.cse1110.andy.execution.step;
 
 import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
-import nl.tudelft.cse1110.andy.result.ResultBuilder;
-import nl.tudelft.cse1110.andy.utils.FilesUtils;
 import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
+import nl.tudelft.cse1110.andy.result.ResultBuilder;
+import nl.tudelft.cse1110.andy.utils.FilesUtils;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
@@ -17,7 +17,6 @@ import javax.lang.model.util.ElementScanner9;
 import javax.tools.*;
 import java.io.File;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * This step compiles the student code and the library code.
@@ -45,8 +44,6 @@ public class CompilationStep implements ExecutionStep {
          * So, all the libraries available (JUnit, etc) will be reused here
          */
         Collection<File> listOfFiles = FilesUtils.getAllJavaFiles(dirCfg.getWorkingDir());
-        result.debug(this, String.format("Files for compilation: %d (%s)", listOfFiles.size(),
-                listOfFiles.stream().map(c -> c.getName()).collect(Collectors.joining(","))));
 
         Iterable<? extends JavaFileObject > sources =
                 manager.getJavaFileObjectsFromFiles(listOfFiles);

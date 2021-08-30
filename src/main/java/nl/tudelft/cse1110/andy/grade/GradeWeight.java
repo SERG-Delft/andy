@@ -1,15 +1,15 @@
 package nl.tudelft.cse1110.andy.grade;
 
+import java.util.Map;
+
 public class GradeWeight {
     // together all weights in [0,1] add up to 1
-    private final boolean failureGives0;
     private final float branchCoverageWeight;
     private final float mutationCoverageWeight;
     private final float metaTestsWeight;
     private final float codeChecksWeight;
 
-    public GradeWeight(boolean failureGives0, float branchCoverageWeight, float mutationCoverageWeight, float metaTestsWeight, float codeChecksWeight) {
-        this.failureGives0 = failureGives0;
+    public GradeWeight(float branchCoverageWeight, float mutationCoverageWeight, float metaTestsWeight, float codeChecksWeight) {
         this.branchCoverageWeight = branchCoverageWeight;
         this.mutationCoverageWeight = mutationCoverageWeight;
         this.metaTestsWeight = metaTestsWeight;
@@ -20,10 +20,6 @@ public class GradeWeight {
         float epsilon = Math.abs(1 - weightSum);
         if(epsilon > 0.001)
             throw new RuntimeException("The weight configuration is wrong! Call the teacher!");
-    }
-
-    public boolean isFailureGives0() {
-        return failureGives0;
     }
 
     public float getBranchCoverageWeight() {
@@ -40,5 +36,14 @@ public class GradeWeight {
 
     public float getCodeChecksWeight() {
         return codeChecksWeight;
+    }
+
+    public static GradeWeight fromConfig(Map<String, Float> weights) {
+        float coverage = weights.get("coverage");
+        float mutation = weights.get("mutation");
+        float meta = weights.get("meta");
+        float codechecks = weights.get("codechecks");
+
+        return new GradeWeight(coverage, mutation, meta, codechecks);
     }
 }

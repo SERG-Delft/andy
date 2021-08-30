@@ -1,4 +1,4 @@
-package nl.tudelft.cse1110.andy.result;
+package nl.tudelft.cse1110.andy.writer.weblab;
 
 public class Highlight {
 

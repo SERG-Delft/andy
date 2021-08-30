@@ -2,11 +2,13 @@ package nl.tudelft.cse1110.andy.execution.step;
 
 import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
-import nl.tudelft.cse1110.andy.execution.step.helper.AdditionalReportJUnitListener;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.utils.ClassUtils;
+import org.junit.platform.engine.reporting.ReportEntry;
 import org.junit.platform.launcher.Launcher;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
+import org.junit.platform.launcher.TestExecutionListener;
+import org.junit.platform.launcher.TestIdentifier;
 import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
 import org.junit.platform.launcher.core.LauncherFactory;
 import org.junit.platform.launcher.listeners.SummaryGeneratingListener;
@@ -28,7 +30,6 @@ public class RunJUnitTestsStep implements ExecutionStep {
 
             String testClass = ClassUtils.getTestClass(ctx.getNewClassNames());
             Class<?> clazz = Class.forName(testClass, false, Thread.currentThread().getContextClassLoader());
-            result.debug(this, String.format("Name of the test class: %s", clazz.getName()));
 
             /* Change the sysout so that we can show it to the student later */
             PrintStream console = System.out;
@@ -46,15 +47,12 @@ public class RunJUnitTestsStep implements ExecutionStep {
             launcher.execute(request);
 
             TestExecutionSummary summary = listener.getSummary();
-            result.debug(this, String.format("JUnit ran %d tests", summary.getTestsFoundCount()));
 
             /* Restore the sysout back, and put it in the result in case there's something */
             System.setOut(console);
-            if(output.size() > 0)
-                result.logConsoleOutput(output.toString());
 
             /* Log the junit result */
-            result.logJUnitRun(summary);
+            result.logJUnitRun(summary, output.toString());
         } catch (Exception e) {
             result.genericFailure(this, e);
         }
@@ -64,6 +62,20 @@ public class RunJUnitTestsStep implements ExecutionStep {
     @Override
     public boolean equals(Object other) {
         return other instanceof RunJUnitTestsStep;
+    }
+
+    public static class AdditionalReportJUnitListener implements TestExecutionListener {
+
+        private ResultBuilder result;
+
+        public AdditionalReportJUnitListener(ResultBuilder result) {
+            this.result = result;
+        }
+
+        @Override
+        public void reportingEntryPublished(TestIdentifier testIdentifier, ReportEntry entry) {
+            this.result.logAdditionalReport(testIdentifier, entry);
+        }
     }
 }
 

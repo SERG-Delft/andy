@@ -3,15 +3,16 @@ package nl.tudelft.cse1110.andy;
 import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionFlow;
-import nl.tudelft.cse1110.andy.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
+import nl.tudelft.cse1110.andy.grade.GradeCalculator;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
+import nl.tudelft.cse1110.andy.writer.weblab.RandomAsciiArtGenerator;
+import nl.tudelft.cse1110.andy.writer.weblab.WebLabResultWriter;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.List;
 
 import static nl.tudelft.cse1110.andy.TestResourceUtils.resourceFolder;
 
@@ -22,9 +23,10 @@ public abstract class IntegrationTestBase {
     @TempDir
     protected Path workDir;
 
-    public String run(Action action, List<ExecutionStep> plan,
-                      String libraryFile, String solutionFile, String configurationFile,
-                      ResultBuilder resultBuilder) {
+    public String run(Action action,
+                      String libraryFile,
+                      String solutionFile,
+                      String configurationFile) {
         if (configurationFile != null) {
             copyConfigurationFile(configurationFile);
         }
@@ -40,17 +42,15 @@ public abstract class IntegrationTestBase {
 
         ctx.setDirectoryConfiguration(dirCfg);
 
-        ResultBuilder result = resultBuilder;
+        ResultBuilder resultBuilder = new ResultBuilder(ctx, new GradeCalculator());
 
         ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
 
         try {
-            ExecutionFlow flow = ExecutionFlow.asSteps(plan, ctx, result);
+            WebLabResultWriter writer = new WebLabResultWriter(ctx, getAsciiArtGenerator());
+            ExecutionFlow flow = ExecutionFlow.build(ctx, resultBuilder, writer);
             flow.run();
         } catch(Exception e) {
-            // something went wrong, let's print the debugging version in the console
-            // and fail the test
-            System.out.println(result.buildDebugResult());
             throw e;
         } finally {
             Thread.currentThread().setContextClassLoader(oldClassLoader);
@@ -59,22 +59,20 @@ public abstract class IntegrationTestBase {
         return readStdOut();
     }
 
-    public String run(List<ExecutionStep> plan, String libraryFile, String solutionFile) {
-        return this.run(Action.CUSTOM, plan, libraryFile, solutionFile, null, new ResultBuilder());
+    protected RandomAsciiArtGenerator getAsciiArtGenerator() {
+        return new RandomAsciiArtGenerator();
     }
 
-    public String run(List<ExecutionStep> plan, String libraryFile, String solutionFile, String configurationFile) {
-        return this.run(Action.CUSTOM, plan, libraryFile, solutionFile, configurationFile, new ResultBuilder());
+    public String run(String libraryFile, String solutionFile) {
+        return this.run(Action.FULL_WITH_HINTS, libraryFile, solutionFile, null);
     }
 
-    public String run(Action action, List<ExecutionStep> plan, String libraryFile, String solutionFile, String configurationFile) {
-        return this.run(action, plan, libraryFile, solutionFile, configurationFile, new ResultBuilder());
+    public String run(Action action, String libraryFile, String solutionFile) {
+        return this.run(action, libraryFile, solutionFile, null);
     }
 
-    public String run(List<ExecutionStep> plan,
-                      String libraryFile, String solutionFile, String configurationFile,
-                      ResultBuilder resultBuilder) {
-        return this.run(Action.CUSTOM, plan, libraryFile, solutionFile, configurationFile, resultBuilder);
+    public String run(String libraryFile, String solutionFile, String configurationFile) {
+        return this.run(Action.FULL_WITH_HINTS, libraryFile, solutionFile, configurationFile);
     }
 
     private String readStdOut() {

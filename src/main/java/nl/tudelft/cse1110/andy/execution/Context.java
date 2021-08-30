@@ -11,8 +11,7 @@ public class Context {
 
     private final ClassLoader cleanClassloader;
     private DirectoryConfiguration directoryConfiguration = null;
-    private RunConfiguration runConfiguration = null;
-    private long startTime;
+    private RunConfiguration runConfiguration;
     private List<String> fullClassNames;
     private ExecutionFlow flow;
     private Action action;
@@ -20,7 +19,6 @@ public class Context {
 
     public Context(Action action) {
         this.cleanClassloader = Thread.currentThread().getContextClassLoader();
-        this.startTime = System.nanoTime();
         this.action = action;
     }
 
@@ -44,10 +42,6 @@ public class Context {
 
     public void setRunConfiguration(RunConfiguration runConfiguration) {
         this.runConfiguration = runConfiguration;
-    }
-
-    public long getStartTime() {
-        return this.startTime;
     }
 
     public ClassLoader getCleanClassloader() {

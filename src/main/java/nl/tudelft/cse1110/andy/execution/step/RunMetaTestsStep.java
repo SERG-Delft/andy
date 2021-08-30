@@ -7,8 +7,11 @@ import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
+import nl.tudelft.cse1110.andy.grade.GradeCalculator;
+import nl.tudelft.cse1110.andy.result.Result;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
+import nl.tudelft.cse1110.andy.writer.EmptyWriter;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,8 +51,6 @@ public class RunMetaTestsStep implements ExecutionStep {
              * We reuse our execution framework to run the code with the meta test.
              */
             for (MetaTest metaTest : metaTests) {
-                result.debug(this, String.format("Preparing meta test %s", metaTest.getName()));
-
                 /* Set the classloader to the cleanest classloader we have */
                 Thread.currentThread().setContextClassLoader(ctx.getCleanClassloader());
 
@@ -60,15 +61,13 @@ public class RunMetaTestsStep implements ExecutionStep {
                 createMetaTestFile(metaWorkingDir, metaFileContent);
 
                 /* We then run the meta test, using our infrastructure */
-                ResultBuilder metaResult = runMetaTest(dirCfg, metaWorkingDir);
+                ResultBuilder metaResultBuilder = runMetaTest(dirCfg, metaWorkingDir);
+                Result metaResult = metaResultBuilder.build();
 
                 /* And check the result. If there's a failing test, the test suite is good! */
-                int testsRan = metaResult.getTestsRan();
-                int testsSucceeded = metaResult.getTestsSucceeded();
+                int testsRan = metaResult.getTests().getTestsRan();
+                int testsSucceeded = metaResult.getTests().getTestsSucceeded();
                 boolean passesTheMetaTest = testsSucceeded < testsRan;
-
-                result.debug(this, metaResult.buildDebugResult());
-                result.debug(this, String.format("Tests ran with the meta test: %d/%d", testsSucceeded, testsRan));
 
                 if (passesTheMetaTest) {
                     score+= metaTest.getWeight();
@@ -117,12 +116,12 @@ public class RunMetaTestsStep implements ExecutionStep {
                 dirCfg.getOutputDir()
         );
 
-        Context metaCtx = new Context(Action.CUSTOM);
+        Context metaCtx = new Context(Action.META_TEST);
         metaCtx.setDirectoryConfiguration(metaDirCfg);
 
-        ResultBuilder metaResult = new ResultBuilder();
+        ResultBuilder metaResult = new ResultBuilder(metaCtx, new GradeCalculator());
 
-        ExecutionFlow flow = ExecutionFlow.justTests(metaCtx, metaResult);
+        ExecutionFlow flow = ExecutionFlow.build(metaCtx, metaResult, new EmptyWriter());
         flow.run();
 
         return metaResult;

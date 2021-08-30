@@ -82,7 +82,7 @@ public class ModeActionSelectorUnitTest {
     void testShowHints(Mode mode, Action action, boolean showHints) {
         ModeActionSelector modeActionSelector = new ModeActionSelector(mode, action);
 
-        assertThat(modeActionSelector.shouldShowHints()).isEqualTo(showHints);
+        assertThat(modeActionSelector.shouldShowFullHints()).isEqualTo(showHints);
     }
 
     static Stream<Arguments> testShowHintsGenerator() {
@@ -91,7 +91,7 @@ public class ModeActionSelectorUnitTest {
                 Arguments.of(GRADING, TESTS, true),
                 Arguments.of(PRACTICE, FULL_WITH_HINTS, true),
                 Arguments.of(GRADING, FULL_WITH_HINTS, true),
-                Arguments.of(EXAM, CUSTOM, true)
+                Arguments.of(EXAM, META_TEST, false)
         );
     }
 
@@ -135,9 +135,9 @@ public class ModeActionSelectorUnitTest {
                 Arguments.of(EXAM, FULL_WITHOUT_HINTS, false),
 
                 // not when custom
-                Arguments.of(EXAM, CUSTOM, false),
-                Arguments.of(GRADING, CUSTOM, false),
-                Arguments.of(PRACTICE, CUSTOM, false),
+                Arguments.of(EXAM, META_TEST, false),
+                Arguments.of(GRADING, META_TEST, false),
+                Arguments.of(PRACTICE, META_TEST, false),
 
                 // always during practice
                 Arguments.of(PRACTICE, TESTS, true),

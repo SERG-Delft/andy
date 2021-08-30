@@ -1,6 +1,5 @@
 package nl.tudelft.cse1110.andy.grade;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -19,7 +18,7 @@ public class GradeCalculatorTest {
                int metaTestsPassed, int totalMetaTests,
                int checksPassed, int totalChecks, int expectedGrade) {
 
-        GradeWeight weights = new GradeWeight(false, 0.25f, 0.25f, 0.25f, 0.25f);
+        GradeWeight weights = new GradeWeight(0.25f, 0.25f, 0.25f, 0.25f);
 
         GradeValues grades = new GradeValues();
         grades.setBranchGrade(coveredBranches, totalBranches);
@@ -27,7 +26,7 @@ public class GradeCalculatorTest {
         grades.setMetaGrade(metaTestsPassed, totalMetaTests);
         grades.setCheckGrade(checksPassed, totalChecks);
 
-        int finalGrade = new GradeCalculator(weights).calculateFinalGrade(grades, false);
+        int finalGrade = new GradeCalculator().calculateFinalGrade(grades, weights);
 
         assertThat(finalGrade).isEqualTo(expectedGrade);
     }
@@ -49,22 +48,6 @@ public class GradeCalculatorTest {
         );
     }
 
-    @Test
-    void failureGives0() {
-        GradeWeight weights = new GradeWeight(true, 0.25f, 0.25f, 0.25f, 0.25f);
-
-        GradeValues grades = new GradeValues();
-        grades.setBranchGrade(10, 10);
-        grades.setMutationGrade(10, 10);
-        grades.setMetaGrade(10, 10);
-        grades.setCheckGrade(10, 10);
-
-        GradeCalculator calculator = new GradeCalculator(weights);
-
-        int finalGrade = calculator.calculateFinalGrade(grades, true);
-        assertThat(finalGrade).isEqualTo(0);
-    }
-
     @ParameterizedTest
     @MethodSource("differentWeights")
     void withDifferentWeights(int coveredBranches, int totalBranches,
@@ -72,7 +55,7 @@ public class GradeCalculatorTest {
                int metaTestsPassed, int totalMetaTests,
                int checksPassed, int totalChecks, int expectedGrade) {
 
-        GradeWeight weights = new GradeWeight(true, 0.4f, 0.3f, 0.2f, 0.1f);
+        GradeWeight weights = new GradeWeight( 0.4f, 0.3f, 0.2f, 0.1f);
 
         GradeValues grades = new GradeValues();
         grades.setBranchGrade(coveredBranches, totalBranches);
@@ -80,7 +63,7 @@ public class GradeCalculatorTest {
         grades.setMetaGrade(metaTestsPassed, totalMetaTests);
         grades.setCheckGrade(checksPassed, totalChecks);
 
-        int finalGrade = new GradeCalculator(weights).calculateFinalGrade(grades, false);
+        int finalGrade = new GradeCalculator().calculateFinalGrade(grades, weights);
 
         assertThat(finalGrade).isEqualTo(expectedGrade);
     }

@@ -4,22 +4,27 @@ import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
+import nl.tudelft.cse1110.andy.grade.GradeCalculator;
+import nl.tudelft.cse1110.andy.writer.weblab.RandomAsciiArtGenerator;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
+import nl.tudelft.cse1110.andy.writer.ResultWriter;
+import nl.tudelft.cse1110.andy.writer.weblab.WebLabResultWriter;
 
 public class Andy {
 
     public static void main(String[] args) {
-        if (System.getenv("ACTION") == null) {
-            throw new RuntimeException("No action has been set.");
+        if (System.getenv("ACTION") == null || System.getenv("WORKING_DIR") == null || System.getenv("OUTPUT_DIR") == null) {
+            System.out.println("Missing configuration.");
+            System.exit(-1);
         }
 
-        Context cfg = buildConfiguration();
+        Context ctx = buildConfiguration();
 
-        ResultBuilder result = new ResultBuilder();
-        ExecutionFlow flow = buildExecutionFlow(cfg, result);
+        ResultBuilder result = new ResultBuilder(ctx, new GradeCalculator());
+        ResultWriter writer = new WebLabResultWriter(ctx, new RandomAsciiArtGenerator());
+        ExecutionFlow flow = ExecutionFlow.build(ctx, result, writer);
 
         flow.run();
-        System.out.println(result.buildEndUserResult());
     }
 
     private static Context buildConfiguration() {
@@ -34,7 +39,4 @@ public class Andy {
         return cfg;
     }
 
-    private static ExecutionFlow buildExecutionFlow(Context cfg, ResultBuilder result) {
-        return ExecutionFlow.justBasic(cfg, result);
-    }
 }

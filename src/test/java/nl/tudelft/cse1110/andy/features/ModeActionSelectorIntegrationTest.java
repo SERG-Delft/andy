@@ -9,7 +9,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-import static nl.tudelft.cse1110.andy.ExecutionStepHelper.onlyBasic;
 import static nl.tudelft.cse1110.andy.ResultTestAssertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,7 +16,7 @@ public class ModeActionSelectorIntegrationTest extends IntegrationTestBase {
 
     @Test
     void testPracticeHints() {
-        String result = run(Action.FULL_WITH_HINTS, onlyBasic(),"SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecks");
+        String result = run(Action.FULL_WITH_HINTS,"SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecks");
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(2))
@@ -36,21 +35,21 @@ public class ModeActionSelectorIntegrationTest extends IntegrationTestBase {
 
     @Test
     void testPracticeNoHints() {
-        String result = run(Action.FULL_WITHOUT_HINTS, onlyBasic(), "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecks");
+        String result = run(Action.FULL_WITHOUT_HINTS, "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecks");
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(2))
                 .has(linesCovered(11))
                 .has(mutationScore(8, 9))
-                .has(noMetaTests())
-                .has(noCodeChecks())
+                .has(metaTestsButNoDetails())
+                .has(codeChecksButNoDetails())
                 .has(finalGrade(workDir.toString(), 91))
                 .has(mode("PRACTICE"));
     }
 
     @Test
     void testPracticeCoverage() {
-        String result = run(Action.COVERAGE, onlyBasic(), "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecks");
+        String result = run(Action.COVERAGE, "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecks");
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(2))
@@ -67,7 +66,7 @@ public class ModeActionSelectorIntegrationTest extends IntegrationTestBase {
 
     @Test
     void testPracticeTests() {
-        String result = run(Action.TESTS, onlyBasic(), "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecks");
+        String result = run(Action.TESTS, "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecks");
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(2))
@@ -85,7 +84,7 @@ public class ModeActionSelectorIntegrationTest extends IntegrationTestBase {
     @ParameterizedTest
     @MethodSource("testExamCoverageGenerator")
     void testExamCoverageGenerator(Action action) {
-        String result = run(action, onlyBasic(),"SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecksExam");
+        String result = run(action, "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecksExam");
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(2))
@@ -110,7 +109,7 @@ public class ModeActionSelectorIntegrationTest extends IntegrationTestBase {
 
     @Test
     void testExamTests() {
-        String result = run(Action.TESTS, onlyBasic(),"SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecksExam");
+        String result = run(Action.TESTS, "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecksExam");
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(2))
@@ -128,7 +127,7 @@ public class ModeActionSelectorIntegrationTest extends IntegrationTestBase {
 
     @Test
     void testGradingMode() {
-        String result = run(Action.FULL_WITH_HINTS, onlyBasic(),"SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecksGrading");
+        String result = run(Action.FULL_WITH_HINTS, "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecksGrading");
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(2))
