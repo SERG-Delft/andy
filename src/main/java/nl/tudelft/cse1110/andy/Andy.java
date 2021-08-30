@@ -36,7 +36,7 @@ public class Andy {
                 System.getenv("OUTPUT_DIR")
         );
         ctx.setDirectoryConfiguration(dirCfg);
-        
+
         return ctx;
     }
 

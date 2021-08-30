@@ -19,7 +19,12 @@ public class GradeCalculator {
 
         float finalDecimalGrade = branchScore + mutationScore + metaScore + checkScore;
 
-        return Math.round(finalDecimalGrade * 100);
+        int finalGrade = Math.round(finalDecimalGrade * 100);
+
+        if(finalGrade < 0 || finalGrade > 100)
+            throw new RuntimeException("Invalid grade calculation. Please, report it to the teacher!");
+
+        return finalGrade;
     }
 
 

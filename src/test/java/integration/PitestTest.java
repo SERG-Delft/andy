@@ -31,6 +31,13 @@ public class PitestTest extends IntegrationTestBase {
         assertThat(result).has(ResultTestAssertions.mutationScore(32, 33));
     }
 
+    @Test
+    void solutionKillsMoreThanOverriddenNumberOfMutants() {
+        // overrides number of mutants by 10, but solution kills 26
+        String result = run("ZagZigLibrary", "ZagZigAllMutantsKilled", "ZagZigDifferentTotalMutantsConfigurationLessThanStudent");
+
+        assertThat(result).has(ResultTestAssertions.mutationScore(10, 10));
+    }
 
     /* Test where a different total number of mutants is specified.
      * All are killed by the solution.

@@ -16,6 +16,12 @@ public class MetaTestsResult {
         this.totalTests = totalTests;
         this.passes = passes;
         this.failures = failures;
+
+        if(this.passes.size() + this.failures.size() > this.totalTests)
+            throw new RuntimeException("Number of meta tests do not match. Please, contact the teacher");
+
+        if(this.score > this.totalTests)
+            throw new RuntimeException("Meta tests score greater than maximum. Please, contact the teacher");
     }
 
     public static MetaTestsResult build(int score, int totalTests, List<String> passes, List<String> failures) {

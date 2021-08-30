@@ -127,19 +127,22 @@ public class ResultBuilder {
      */
     public void logPitest(CombinedStatistics stats) {
 
-        int detectedMutations = (int)(stats.getMutationStatistics().getTotalDetectedMutations());
+        int killedMutants = (int)(stats.getMutationStatistics().getTotalDetectedMutations());
 
         // get the total number of mutants, considering that the teacher may have overriden it
-        int totalMutations;
+        int totalNumberOfMutants;
         int mutationsToConsider = ctx.getRunConfiguration().numberOfMutationsToConsider();
         boolean numberOfMutantsToConsiderIsOverridden = mutationsToConsider != -1;
         if (numberOfMutantsToConsiderIsOverridden) {
-            totalMutations = mutationsToConsider;
+            totalNumberOfMutants = mutationsToConsider;
         } else {
-            totalMutations = (int)(stats.getMutationStatistics().getTotalMutations());
+            totalNumberOfMutants = (int)(stats.getMutationStatistics().getTotalMutations());
         }
 
-        this.mutationResults = MutationTestingResult.build(detectedMutations, totalMutations);
+        // make the number of killed mutants bounded by the total number of mutants
+        killedMutants = Math.min(killedMutants, totalNumberOfMutants);
+
+        this.mutationResults = MutationTestingResult.build(killedMutants, totalNumberOfMutants);
     }
 
     /*
