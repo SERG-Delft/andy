@@ -18,7 +18,7 @@ public class Andy {
             System.exit(-1);
         }
 
-        Context ctx = buildConfiguration();
+        Context ctx = buildContext();
 
         ResultBuilder result = new ResultBuilder(ctx, new GradeCalculator());
         ResultWriter writer = new WebLabResultWriter(ctx, new RandomAsciiArtGenerator());
@@ -27,16 +27,17 @@ public class Andy {
         flow.run();
     }
 
-    private static Context buildConfiguration() {
+    private static Context buildContext() {
         Action action = Action.valueOf(System.getenv("ACTION"));
-        Context cfg = new Context(action);
+        Context ctx = new Context(action);
 
         DirectoryConfiguration dirCfg = new DirectoryConfiguration(
                 System.getenv("WORKING_DIR"),
                 System.getenv("OUTPUT_DIR")
         );
-        cfg.setDirectoryConfiguration(dirCfg);
-        return cfg;
+        ctx.setDirectoryConfiguration(dirCfg);
+        
+        return ctx;
     }
 
 }
