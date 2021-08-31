@@ -1,18 +1,18 @@
 package nl.tudelft.cse1110.andy.result;
 
 public class CompilationErrorInfo {
-    private final String name;
+    private final String fileName;
     private final long lineNumber;
     private final String message;
 
-    public CompilationErrorInfo(String name, long lineNumber, String message) {
-        this.name = name;
+    public CompilationErrorInfo(String fileName, long lineNumber, String message) {
+        this.fileName = fileName;
         this.lineNumber = lineNumber;
         this.message = message;
     }
 
-    public String getName() {
-        return name;
+    public String getFileName() {
+        return fileName;
     }
 
     public long getLineNumber() {

@@ -326,7 +326,7 @@ public class WebLabResultWriter implements ResultWriter {
                 highlights.add(new Highlight(lineNumber, message, Highlight.HighlightLocation.SOLUTION, Highlight.HighlightPurpose.COMPILATION_ERROR));
             }
 
-            if(anyOfTheErrorsAreCausedDueToBadConfiguration(compilationErrors)) {
+            if(compilation.hasConfigurationError()) {
                 l("\n**WARNING:** There might be a problem with this exercise. "+
                         "Please contact the teaching staff so they can fix this as quickly" +
                         "as possible. Thank you for your help! :)");
@@ -334,11 +334,7 @@ public class WebLabResultWriter implements ResultWriter {
         }
     }
 
-    private boolean anyOfTheErrorsAreCausedDueToBadConfiguration(List<CompilationErrorInfo> compilationErrors) {
-        return compilationErrors
-                .stream()
-                .anyMatch(c-> c.getName().endsWith("Configuration.java"));
-    }
+
 
     private void l(String line) {
         toDisplay.append(line);
