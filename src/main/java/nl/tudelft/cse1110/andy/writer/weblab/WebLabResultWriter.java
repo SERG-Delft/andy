@@ -41,7 +41,7 @@ public class WebLabResultWriter implements ResultWriter {
     public void uncaughtError(Throwable t) {
         StringBuilder errorMsg = new StringBuilder();
 
-        errorMsg.append("\n\n**** ERROR ***\n");
+        errorMsg.append("\n\n*** ERROR ***\n");
         errorMsg.append("Something unexpected just happened. Please forward this message to the teacher.\n\n");
         errorMsg.append(ExceptionUtils.exceptionMessage(t));
 
