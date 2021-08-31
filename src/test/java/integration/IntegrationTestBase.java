@@ -14,7 +14,7 @@ import org.junit.jupiter.api.io.TempDir;
 import java.io.File;
 import java.nio.file.Path;
 
-import static testutils.TestResourceUtils.resourceFolder;
+import static nl.tudelft.cse1110.andy.utils.ResourceUtils.resourceFolder;
 
 public abstract class IntegrationTestBase {
     @TempDir
