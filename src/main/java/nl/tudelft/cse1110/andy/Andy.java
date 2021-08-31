@@ -24,11 +24,7 @@ public class Andy {
         ResultWriter writer = new WebLabResultWriter(ctx, new RandomAsciiArtGenerator());
         ExecutionFlow flow = ExecutionFlow.build(ctx, result, writer);
 
-        try {
-            flow.run();
-        } catch(Throwable t) {
-            writer.uncaughtError(t);
-        }
+        flow.run();
     }
 
     private static Context buildContext() {

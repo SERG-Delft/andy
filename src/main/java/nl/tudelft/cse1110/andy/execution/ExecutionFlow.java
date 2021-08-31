@@ -29,19 +29,23 @@ public class ExecutionFlow {
     }
 
     public void run() {
-        do {
-            ExecutionStep currentStep = steps.pollFirst();
-            try {
-                currentStep.execute(ctx, result);
-            } catch(Throwable e) {
-                result.genericFailure(currentStep, e);
-            }
-        } while(!steps.isEmpty() && !result.hasFailed());
+        try {
+            do {
+                ExecutionStep currentStep = steps.pollFirst();
+                try {
+                    currentStep.execute(ctx, result);
+                } catch (Throwable e) {
+                    result.genericFailure(currentStep, e);
+                }
+            } while (!steps.isEmpty() && !result.hasFailed());
 
-        Result solutionResult = result.build();
-        writer.write(solutionResult);
+            Result solutionResult = result.build();
+            writer.write(solutionResult);
+        } catch(Throwable t) {
+            // in case something even totally unexpected happens, we log it.
+            writer.uncaughtError(t);
+        }
     }
-
 
     public void addSteps(List<ExecutionStep> steps) {
         this.steps.addAll(steps);
