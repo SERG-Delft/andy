@@ -214,8 +214,8 @@ public class ResultBuilder {
     /*
      * Meta tests
      */
-    public void logMetaTests(int score, int totalTests, List<String> passes, List<String> failures) {
-        this.metaTestResults = MetaTestsResult.build(score, totalTests, passes, failures);
+    public void logMetaTests(int score, int totalTests, List<MetaTestResult> metaTestResults) {
+        this.metaTestResults = MetaTestsResult.build(score, totalTests, metaTestResults);
     }
 
     /*

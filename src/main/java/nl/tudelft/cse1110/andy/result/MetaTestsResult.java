@@ -7,29 +7,27 @@ public class MetaTestsResult {
     private final boolean wasExecuted;
     private final int score;
     private final int totalTests;
-    private final List<String> passes;
-    private final List<String> failures;
+    private final List<MetaTestResult> metaTestResults;
 
-    private MetaTestsResult(boolean wasExecuted, int score, int totalTests, List<String> passes, List<String> failures) {
+    private MetaTestsResult(boolean wasExecuted, int score, int totalTests, List<MetaTestResult> metaTestResults) {
         this.wasExecuted = wasExecuted;
         this.score = score;
         this.totalTests = totalTests;
-        this.passes = passes;
-        this.failures = failures;
+        this.metaTestResults = metaTestResults;
 
-        if(this.passes.size() + this.failures.size() > this.totalTests)
+        if(this.metaTestResults.size() > this.totalTests)
             throw new RuntimeException("Number of meta tests do not match.");
 
         if(this.score > this.totalTests)
             throw new RuntimeException("Meta tests score greater than maximum.");
     }
 
-    public static MetaTestsResult build(int score, int totalTests, List<String> passes, List<String> failures) {
-        return new MetaTestsResult(true, score, totalTests, passes, failures);
+    public static MetaTestsResult build(int score, int totalTests, List<MetaTestResult> metaTestResults) {
+        return new MetaTestsResult(true, score, totalTests, metaTestResults);
     }
 
     public static MetaTestsResult empty() {
-        return new MetaTestsResult(false, 0, 0, Collections.emptyList(), Collections.emptyList());
+        return new MetaTestsResult(false, 0, 0, Collections.emptyList());
     }
 
     public int getPassedMetaTests() {
@@ -40,12 +38,8 @@ public class MetaTestsResult {
         return totalTests;
     }
 
-    public List<String> getPasses() {
-        return Collections.unmodifiableList(passes);
-    }
-
-    public List<String> getFailures() {
-        return Collections.unmodifiableList(failures);
+    public List<MetaTestResult> getMetaTestResults() {
+        return Collections.unmodifiableList(metaTestResults);
     }
 
     public boolean wasExecuted() {

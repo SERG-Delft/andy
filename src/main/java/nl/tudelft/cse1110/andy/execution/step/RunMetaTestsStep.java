@@ -8,6 +8,7 @@ import nl.tudelft.cse1110.andy.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.grade.GradeCalculator;
+import nl.tudelft.cse1110.andy.result.MetaTestResult;
 import nl.tudelft.cse1110.andy.result.Result;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
@@ -40,8 +41,7 @@ public class RunMetaTestsStep implements ExecutionStep {
             String originalLibraryContent = readFile(libraryFile);
 
             List<MetaTest> metaTests = runCfg.metaTests();
-            List<String> failures = new ArrayList<>();
-            List<String> passes = new ArrayList<>();
+            List<MetaTestResult> metaTestResults = new ArrayList<>();
 
             /*
              * For each meta test, we basically perform a string replace in the
@@ -71,11 +71,9 @@ public class RunMetaTestsStep implements ExecutionStep {
 
                 if (passesTheMetaTest) {
                     score+= metaTest.getWeight();
-                    String metaName = metaTest.getNameAndWeight();
-                    passes.add(metaName);
+                    metaTestResults.add(new MetaTestResult(metaTest.getName(), metaTest.getWeight(), true));
                 } else {
-                    String metaName = metaTest.getNameAndWeight();
-                    failures.add(metaName);
+                    metaTestResults.add(new MetaTestResult(metaTest.getName(), metaTest.getWeight(), false));
                 }
 
                 /* Clean up the directory */
@@ -83,7 +81,7 @@ public class RunMetaTestsStep implements ExecutionStep {
             }
 
             int totalWeight = metaTests.stream().mapToInt(m -> m.getWeight()).sum();
-            result.logMetaTests(score, totalWeight, passes, failures);
+            result.logMetaTests(score, totalWeight, metaTestResults);
         } catch (Exception ex) {
             result.genericFailure(this, ex);
         } finally {
