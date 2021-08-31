@@ -189,7 +189,7 @@ public class WebLabResultWriter implements ResultWriter {
 
     private void printModeAndTimeToRun(double timeInSeconds) {
         if(modeActionSelector()!=null)
-            l(String.format("\nAndy is running in %s mode and took %.1f seconds to assess your question.", modeActionSelector().getMode().toString(), timeInSeconds));
+            l(String.format("\nAndy is running in %s mode and took %.1f seconds to assess your solution.", modeActionSelector().getMode().toString(), timeInSeconds));
         else
             l(String.format("\nAndy took %.1f seconds to assess your question.", timeInSeconds));
     }
