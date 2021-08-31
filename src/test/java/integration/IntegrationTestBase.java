@@ -14,7 +14,7 @@ import org.junit.jupiter.api.io.TempDir;
 import java.io.File;
 import java.nio.file.Path;
 
-import static utils.TestResourceUtils.resourceFolder;
+import static testutils.TestResourceUtils.resourceFolder;
 
 public abstract class IntegrationTestBase {
     @TempDir
@@ -82,7 +82,7 @@ public abstract class IntegrationTestBase {
     }
 
     private String readStdOut() {
-        return FilesUtils.readFile(new File(FilesUtils.concatenateDirectories(workDir.toString(), "stdout.txt")));
+        return FilesUtils.readFile(new File(FilesUtils.concatenateDirectories(reportDir.toString(), "stdout.txt")));
     }
 
 
