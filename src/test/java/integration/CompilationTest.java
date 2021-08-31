@@ -11,18 +11,11 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class CompilationTest extends IntegrationTestBase {
 
-
     @Test
-    void compilationFails() {
-        String result = run("ArrayUtilsIsSortedLibrary", "ArrayUtilsIsSortedWithCompilationError");
-
+    void compilationOk() {
+        String result = run( "ListUtilsLibrary", "ListUtilsCompilationSuccess");
         assertThat(result)
-                .has(finalGradeInXml(workDir.toString(), 0))
-                .has(compilationFailure())
-                .has(compilationErrorOnLine(29))
-                .has(compilationErrorType("not a statement"))
-                .has(compilationErrorType("';' expected"))
-                .doesNotHave(compilationErrorMoreTimes("cannot find symbol", 2));;
+                .has(compilationSuccess());
     }
 
     @Test
@@ -38,16 +31,8 @@ public class CompilationTest extends IntegrationTestBase {
                 .doesNotHave(compilationErrorMoreTimes("cannot find symbol", 2));;
     }
 
-
     @Test
-    void compilationOk() {
-        String result = run( "ListUtilsLibrary", "ListUtilsCompilationSuccess");
-        assertThat(result)
-                .has(compilationSuccess());
-    }
-
-    @Test
-    void compilationDifferentFailures() {
+    void compilationWithManyFailures() {
         String result = run("MathArraysLibrary","MathArraysDifferentCompilationErrors");
         assertThat(result)
                 .has(finalGradeInXml(workDir.toString(), 0))
@@ -71,7 +56,7 @@ public class CompilationTest extends IntegrationTestBase {
     }
 
     @Test
-    void configurationFileCompilationFails(){
+    void configurationFileWithCompilationError(){
         String result = run( "NumberUtilsAddLibrary","NumberUtilsAddAllTestsPass","NumberUtilsAddTypoConfiguration");
 
         assertThat(result)

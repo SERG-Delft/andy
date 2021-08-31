@@ -11,16 +11,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class PitestTest extends IntegrationTestBase {
 
 
-    /* Test where some of the mutants are killed.
-     */
-    @Test
-    void mutantsSurvived() {
-        String result = run("NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddPiTestStrongerConfiguration");
-
-        assertThat(result).has(ResultTestAssertions.mutationScore(7, 33));
-    }
-
-
     /* Test where all mutants are killed.
      * 32 killed mutants means 100%, because 1 of the 33 identified mutants cannot be killed.
      */
@@ -31,12 +21,14 @@ public class PitestTest extends IntegrationTestBase {
         assertThat(result).has(ResultTestAssertions.mutationScore(32, 33));
     }
 
-    @Test
-    void solutionKillsMoreThanOverriddenNumberOfMutants() {
-        // overrides number of mutants by 10, but solution kills 26
-        String result = run("ZagZigLibrary", "ZagZigAllMutantsKilled", "ZagZigDifferentTotalMutantsConfigurationLessThanStudent");
 
-        assertThat(result).has(ResultTestAssertions.mutationScore(10, 10));
+    /* Test where some of the mutants are killed.
+     */
+    @Test
+    void mutantsSurvived() {
+        String result = run("NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddPiTestStrongerConfiguration");
+
+        assertThat(result).has(ResultTestAssertions.mutationScore(7, 33));
     }
 
     /* Test where a different total number of mutants is specified.
@@ -61,8 +53,18 @@ public class PitestTest extends IntegrationTestBase {
     }
 
 
-    /* Test where not all of the identified mutants are killed and a report is generated.
-     * The default run configuration is used.
+    /*
+     * Solution kills more mutants than the overridden number of mutants.
+     */
+    @Test
+    void solutionKillsMoreThanOverriddenNumberOfMutants() {
+        // overrides number of mutants by 10, but solution kills 26
+        String result = run("ZagZigLibrary", "ZagZigAllMutantsKilled", "ZagZigDifferentTotalMutantsConfigurationLessThanStudent");
+
+        assertThat(result).has(ResultTestAssertions.mutationScore(10, 10));
+    }
+
+    /*
      * The test checks whether the report directory is generated and the log shows "See the attached report."
      */
     @AfterEach

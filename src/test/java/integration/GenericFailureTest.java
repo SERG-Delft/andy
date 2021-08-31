@@ -13,7 +13,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
-import static testutils.ResultTestAssertions.genericFailure;
+import static testutils.ResultTestAssertions.*;
+import static testutils.ResultTestAssertions.noFinalGrade;
 
 public class GenericFailureTest extends IntegrationTestBase {
 
@@ -28,11 +29,15 @@ public class GenericFailureTest extends IntegrationTestBase {
     }
 
     @Test
-    void logGenericFailure() {
+    void genericFailureHasPrecedence() {
         String result = run(Action.TESTS, "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass");
 
         assertThat(result)
-                .has(genericFailure("Some super error here"));
+                .has(genericFailure("Some super error here"))
+                .doesNotHave(testResults())
+                .has(noMetaTests())
+                .has(noCodeChecks())
+                .has(noFinalGrade());
 
     }
 

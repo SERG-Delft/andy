@@ -25,7 +25,7 @@ public class JacocoTest extends IntegrationTestBase {
 
     @ParameterizedTest
     @MethodSource("generator")
-    void test(String library, String solution, int lines, int instructions, int branches) {
+    void differentCoverages(String library, String solution, int lines, int instructions, int branches) {
         String result = run(Action.COVERAGE, library, solution);
 
         assertThat(result)
@@ -62,7 +62,7 @@ public class JacocoTest extends IntegrationTestBase {
 
     @ParameterizedTest
     @MethodSource("highlightsGenerator")
-    void highlights(String library, String solution, int[] coveredLines, int[] partiallyCovered, int[] notCovered) throws FileNotFoundException {
+    void coverageHighlightsAreGenerated(String library, String solution, int[] coveredLines, int[] partiallyCovered, int[] notCovered) throws FileNotFoundException {
         String result = run(Action.COVERAGE, library, solution);
 
         File highlights = new File(FilesUtils.concatenateDirectories(workDir.toString(), "highlights.json"));

@@ -55,6 +55,9 @@ public class ResultTestAssertions {
         return containsRegex("--- JUnit execution\\n" + numberOfTestsPassing + "\\/\\d+ passed");
     }
 
+    public static Condition<String> testResults() {
+        return containsString("--- JUnit execution");
+    }
 
     public static Condition<String> totalNumberOfJUnitTests(int numberOfTests) {
         return containsRegex("--- JUnit execution\\n\\d+\\/" + numberOfTests + " passed");
@@ -93,6 +96,10 @@ public class ResultTestAssertions {
 
     public static Condition<String> failingTestName(String testName) {
         return containsRegex("- Test " + "\"" + testName + "\\(" + "\\)" + "\"" + " failed:");
+    }
+
+    public static Condition<String> failingTests() {
+        return containsRegex("- Test " + "\"" + ".*" + "\\(" + "\\)" + "\"" + " failed:");
     }
 
     public static Condition<String> partiallyCoveredLine(int line) {

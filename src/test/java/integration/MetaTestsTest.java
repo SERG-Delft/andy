@@ -9,7 +9,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class MetaTestsTest extends IntegrationTestBase {
 
     @Test
-    void testAllMetaTestsPassing() {
+    void allMetaTestsPassing() {
         String result = run("NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution", "NumberUtilsAddConfiguration");
 
         assertThat(result)
@@ -22,7 +22,7 @@ public class MetaTestsTest extends IntegrationTestBase {
     }
 
     @Test
-    void testSomeMetaTestFailing() {
+    void someMetaTestFailing() {
         String result = run("NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddConfiguration");
 
         assertThat(result)
@@ -35,7 +35,7 @@ public class MetaTestsTest extends IntegrationTestBase {
     }
 
     @Test
-    void testSomeMetaTestFailingWithWeights() {
+    void someMetaTestFailingWithWeights() {
         String result = run("NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddConfigurationWithWeight");
 
         assertThat(result)
@@ -45,19 +45,6 @@ public class MetaTestsTest extends IntegrationTestBase {
                 .has(metaTestFailing("AppliesMultipleCarriesWrongly"))
                 .has(metaTestFailing("DoesNotApplyCarryAtAll"))
                 .has(metaTestFailing("DoesNotApplyLastCarry"));
-    }
-
-    @Test
-    void testAllMetaTestsFailing() {
-        String result = run("NumberUtilsAddLibrary", "NumberUtilsEmptyTests", "NumberUtilsAddConfiguration");
-
-        assertThat(result)
-                .has(metaTests(4))
-                .has(metaTestsPassing(0))
-                .has(metaTestFailing("AppliesMultipleCarriesWrongly"))
-                .has(metaTestFailing("DoesNotApplyCarryAtAll"))
-                .has(metaTestFailing("DoesNotApplyLastCarry"))
-                .has(metaTestFailing("DoesNotCheckNumbersOutOfRange"));
     }
 
     @Test

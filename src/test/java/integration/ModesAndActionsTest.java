@@ -2,19 +2,14 @@ package integration;
 
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.stream.Stream;
-
-import static testutils.ResultTestAssertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static testutils.ResultTestAssertions.*;
 
 public class ModesAndActionsTest extends IntegrationTestBase {
 
     @Test
-    void testPracticeHints() {
+    void showAllHintsWhenInPracticeMode() {
         String result = run(Action.FULL_WITH_HINTS,"SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecks");
 
         assertThat(result)
@@ -33,7 +28,7 @@ public class ModesAndActionsTest extends IntegrationTestBase {
     }
 
     @Test
-    void testPracticeNoHints() {
+    void showPartialHintsWhenInPracticeMode() {
         String result = run(Action.FULL_WITHOUT_HINTS, "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecks");
 
         assertThat(result)
@@ -47,7 +42,7 @@ public class ModesAndActionsTest extends IntegrationTestBase {
     }
 
     @Test
-    void testPracticeCoverage() {
+    void showCoverage() {
         String result = run(Action.COVERAGE, "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecks");
 
         assertThat(result)
@@ -64,7 +59,7 @@ public class ModesAndActionsTest extends IntegrationTestBase {
     }
 
     @Test
-    void testPracticeTests() {
+    void onlyTheTestsRun() {
         String result = run(Action.TESTS, "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecks");
 
         assertThat(result)
@@ -80,10 +75,9 @@ public class ModesAndActionsTest extends IntegrationTestBase {
                 .isTrue();
     }
 
-    @ParameterizedTest
-    @MethodSource("testExamCoverageGenerator")
-    void testExamCoverageGenerator(Action action) {
-        String result = run(action, "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecksExam");
+    @Test
+    void showOnlyTestsRunAndCoverageDuringExam() {
+        String result = run(Action.FULL_WITH_HINTS, "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecksExam");
 
         assertThat(result)
                 .has(numberOfJUnitTestsPassing(2))
@@ -96,36 +90,11 @@ public class ModesAndActionsTest extends IntegrationTestBase {
 
         assertThat(resultXmlHasCorrectGrade(workDir.toString(), 0))
                 .isTrue();
-    }
-
-    static Stream<Arguments> testExamCoverageGenerator() {
-        return Stream.of(
-                Arguments.of(Action.FULL_WITH_HINTS),
-                Arguments.of(Action.FULL_WITHOUT_HINTS),
-                Arguments.of(Action.COVERAGE)
-        );
-    }
-
-    @Test
-    void testExamTests() {
-        String result = run(Action.TESTS, "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecksExam");
-
-        assertThat(result)
-                .has(numberOfJUnitTestsPassing(2))
-                .has(noJacocoCoverage())
-                .has(noPitestCoverage())
-                .has(noMetaTests())
-                .has(noCodeChecks())
-                .has(noFinalGrade())
-                .has(mode("EXAM"));
-
-        assertThat(resultXmlHasCorrectGrade(workDir.toString(), 0))
-                .isTrue();
 
     }
 
     @Test
-    void testGradingMode() {
+    void gradingModeShouldRunEverything() {
         String result = run(Action.FULL_WITH_HINTS, "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecksGrading");
 
         assertThat(result)
@@ -141,7 +110,6 @@ public class ModesAndActionsTest extends IntegrationTestBase {
                 .has(metaTestFailing("DoesNotCheckInvalidTripId"))
                 .has(finalGrade(workDir.toString(), 91))
                 .has(mode("GRADING"));
-
     }
 
 }
