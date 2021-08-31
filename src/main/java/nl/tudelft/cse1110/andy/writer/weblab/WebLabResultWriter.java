@@ -193,7 +193,7 @@ public class WebLabResultWriter implements ResultWriter {
 
         if (allHints) {
             for (MetaTestResult metaTestResult : metaTests.getMetaTestResults()) {
-                if (metaTestResult.isPassed()) {
+                if (metaTestResult.succeeded()) {
                     l(String.format("Meta test: %s (weight: %d) PASSED", metaTestResult.getName(), metaTestResult.getWeight()));
                 } else {
                     l(String.format("Meta test: %s (weight: %d) FAILED", metaTestResult.getName(), metaTestResult.getWeight()));

@@ -3,12 +3,12 @@ package nl.tudelft.cse1110.andy.result;
 public class MetaTestResult {
     private final String name;
     private final int weight;
-    private final boolean passed;
+    private final boolean succeeded;
 
-    public MetaTestResult(String name, int weight, boolean passed) {
+    public MetaTestResult(String name, int weight, boolean succeeded) {
         this.name = name;
         this.weight = weight;
-        this.passed = passed;
+        this.succeeded = succeeded;
     }
 
     public String getName() {
@@ -19,7 +19,7 @@ public class MetaTestResult {
         return weight;
     }
 
-    public boolean isPassed() {
-        return passed;
+    public boolean succeeded() {
+        return succeeded;
     }
 }
