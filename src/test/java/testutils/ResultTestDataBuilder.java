@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public class ResultTestDataBuilder {
 
-    private String genericFailureMessage;
+    private String genericFailureMessage = null;
     private CompilationResult compilation = CompilationResult.empty();
     private UnitTestsResult testResults = UnitTestsResult.empty();
     private MutationTestingResult mutationResults = MutationTestingResult.empty();
