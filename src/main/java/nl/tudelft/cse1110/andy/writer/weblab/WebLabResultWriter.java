@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.execution.mode.ModeActionSelector;
 import nl.tudelft.cse1110.andy.result.*;
+import nl.tudelft.cse1110.andy.utils.ExceptionUtils;
 import nl.tudelft.cse1110.andy.utils.ImportUtils;
 import nl.tudelft.cse1110.andy.writer.ResultWriter;
 
@@ -34,6 +35,18 @@ public class WebLabResultWriter implements ResultWriter {
         writeResultsXmlFile(result);
         writeHighlightsJson(result);
         writeAnalyticsFile(result);
+    }
+
+    @Override
+    public void uncaughtError(Throwable t) {
+        StringBuilder errorMsg = new StringBuilder();
+
+        errorMsg.append("\n\n**** ERROR ***\n");
+        errorMsg.append("Something unexpected just happened. Please forward this message to the teacher.\n\n");
+        errorMsg.append(ExceptionUtils.exceptionMessage(t));
+
+        File stdoutTxt = new File(concatenateDirectories(ctx.getDirectoryConfiguration().getOutputDir(), "stdout.txt"));
+        writeToFile(stdoutTxt, errorMsg.toString());
     }
 
     private void writeStdOutFile(Result result) {

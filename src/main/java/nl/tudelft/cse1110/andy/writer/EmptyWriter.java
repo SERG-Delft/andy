@@ -7,4 +7,9 @@ public class EmptyWriter implements ResultWriter {
     public void write(Result result) {
 
     }
+
+    @Override
+    public void uncaughtError(Throwable t) {
+
+    }
 }

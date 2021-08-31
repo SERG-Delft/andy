@@ -7,6 +7,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -137,7 +138,7 @@ public class FilesUtils {
 
     public static void writeToFile(File destinationFile, String content) {
         try {
-            Files.writeString(destinationFile.toPath(), content);
+            Files.writeString(destinationFile.toPath(), content, StandardOpenOption.APPEND);
         } catch (Exception ex) {
             throw new RuntimeException();
         }
