@@ -161,6 +161,7 @@ public class WebLabResultWriter implements ResultWriter {
         boolean fullyCorrect = finalGrade == 100;
         if (fullyCorrect) {
             String randomAsciiArt = asciiArtGenerator.getRandomAsciiArt();
+            l("");
             l(randomAsciiArt);
         }
     }
