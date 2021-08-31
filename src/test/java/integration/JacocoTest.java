@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static utils.ResultTestAssertions.*;
+import static testutils.ResultTestAssertions.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class JacocoTest extends IntegrationTestBase {

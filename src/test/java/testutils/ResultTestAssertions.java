@@ -1,4 +1,4 @@
-package utils;
+package testutils;
 
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
 import org.apache.commons.lang.StringUtils;

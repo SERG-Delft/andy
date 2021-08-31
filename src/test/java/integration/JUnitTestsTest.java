@@ -4,7 +4,7 @@ import nl.tudelft.cse1110.andy.execution.mode.Action;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static utils.ResultTestAssertions.*;
+import static testutils.ResultTestAssertions.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class JUnitTestsTest {

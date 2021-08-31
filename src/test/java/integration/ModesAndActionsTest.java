@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-import static utils.ResultTestAssertions.*;
+import static testutils.ResultTestAssertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ModesAndActionsTest extends IntegrationTestBase {

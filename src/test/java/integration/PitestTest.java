@@ -2,7 +2,7 @@ package integration;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import utils.ResultTestAssertions;
+import testutils.ResultTestAssertions;
 
 import java.io.File;
 

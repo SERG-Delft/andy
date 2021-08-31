@@ -1,4 +1,4 @@
-package utils;
+package testutils;
 
 import java.net.URISyntaxException;
 import java.nio.file.Paths;

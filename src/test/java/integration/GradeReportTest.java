@@ -3,7 +3,7 @@ package integration;
 import nl.tudelft.cse1110.andy.writer.weblab.RandomAsciiArtGenerator;
 import org.junit.jupiter.api.Test;
 
-import static utils.ResultTestAssertions.*;
+import static testutils.ResultTestAssertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

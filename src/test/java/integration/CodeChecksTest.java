@@ -1,7 +1,7 @@
 package integration;
 
 import org.junit.jupiter.api.Test;
-import utils.ResultTestAssertions;
+import testutils.ResultTestAssertions;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

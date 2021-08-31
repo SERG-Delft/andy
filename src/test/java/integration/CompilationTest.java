@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
-import static utils.ResultTestAssertions.*;
+import static testutils.ResultTestAssertions.*;
 import static nl.tudelft.cse1110.andy.utils.FilesUtils.concatenateDirectories;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
