@@ -120,6 +120,9 @@ public class WebLabResultWriter implements ResultWriter {
     }
 
     private void writeAnalyticsFile(Result result) {
+        if(ctx.getModeActionSelector()==null || !ctx.getModeActionSelector().shouldGenerateAnalytics())
+            return;
+
         Submission submission = new Submission(
                 new SubmissionMetaData("course", "studentid", "studentname", "exercise"),
                 result
