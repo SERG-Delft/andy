@@ -2,7 +2,7 @@ package integration;
 
 import org.junit.jupiter.api.Test;
 
-import static testutils.ResultTestAssertions.*;
+import static testutils.WebLabTestAssertions.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 

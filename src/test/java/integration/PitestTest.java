@@ -2,7 +2,7 @@ package integration;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import testutils.ResultTestAssertions;
+import testutils.WebLabTestAssertions;
 
 import java.io.File;
 
@@ -18,7 +18,7 @@ public class PitestTest extends IntegrationTestBase {
     void allMutantsKilled() {
         String result = run("NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution", "NumberUtilsAddPiTestStrongerConfiguration");
 
-        assertThat(result).has(ResultTestAssertions.mutationScore(32, 33));
+        assertThat(result).has(WebLabTestAssertions.mutationScore(32, 33));
     }
 
 
@@ -28,7 +28,7 @@ public class PitestTest extends IntegrationTestBase {
     void mutantsSurvived() {
         String result = run("NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddPiTestStrongerConfiguration");
 
-        assertThat(result).has(ResultTestAssertions.mutationScore(7, 33));
+        assertThat(result).has(WebLabTestAssertions.mutationScore(7, 33));
     }
 
     /* Test where a different total number of mutants is specified.
@@ -38,7 +38,7 @@ public class PitestTest extends IntegrationTestBase {
     void differentNumberOfTotalMutantsAllKilled() {
         String result = run("ZagZigLibrary", "ZagZigAllMutantsKilled", "ZagZigDifferentTotalMutantsConfiguration");
 
-        assertThat(result).has(ResultTestAssertions.mutationScore(26, 26));
+        assertThat(result).has(WebLabTestAssertions.mutationScore(26, 26));
     }
 
 
@@ -49,7 +49,7 @@ public class PitestTest extends IntegrationTestBase {
     void differentNumberOfTotalMutantsNotAllKilled() {
         String result = run("ZagZigLibrary", "ZagZigNotAllMutantsKilled", "ZagZigDifferentTotalMutantsConfiguration");
 
-        assertThat(result).has(ResultTestAssertions.mutationScore(24, 26));
+        assertThat(result).has(WebLabTestAssertions.mutationScore(24, 26));
     }
 
 
@@ -61,7 +61,7 @@ public class PitestTest extends IntegrationTestBase {
         // overrides number of mutants by 10, but solution kills 26
         String result = run("ZagZigLibrary", "ZagZigAllMutantsKilled", "ZagZigDifferentTotalMutantsConfigurationLessThanStudent");
 
-        assertThat(result).has(ResultTestAssertions.mutationScore(10, 10));
+        assertThat(result).has(WebLabTestAssertions.mutationScore(10, 10));
     }
 
     /*

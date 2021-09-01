@@ -5,6 +5,7 @@ import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.grade.GradeCalculator;
+import nl.tudelft.cse1110.andy.result.Result;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
 import nl.tudelft.cse1110.andy.writer.weblab.RandomAsciiArtGenerator;
@@ -62,6 +63,45 @@ public abstract class IntegrationTestBase {
         return readStdOut();
     }
 
+    public Result run2(Action action,
+                       String libraryFile,
+                       String solutionFile,
+                       String configurationFile) {
+        if (configurationFile != null) {
+            copyConfigurationFile(configurationFile);
+        }
+
+        copyFiles(libraryFile, solutionFile);
+
+        Context ctx = new Context(action);
+
+        DirectoryConfiguration dirCfg = new DirectoryConfiguration(
+                workDir.toString(),
+                reportDir.toString()
+        );
+
+        ctx.setDirectoryConfiguration(dirCfg);
+
+        ResultBuilder resultBuilder = new ResultBuilder(ctx, new GradeCalculator());
+
+        ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
+
+        try {
+            WebLabResultWriter writer = new WebLabResultWriter(ctx, getAsciiArtGenerator());
+            ExecutionFlow flow = ExecutionFlow.build(ctx, resultBuilder, writer);
+
+            addSteps(flow);
+
+            flow.run();
+        } catch(Exception e) {
+            throw e;
+        } finally {
+            Thread.currentThread().setContextClassLoader(oldClassLoader);
+        }
+
+        return resultBuilder.build();
+    }
+
     protected void addSteps(ExecutionFlow flow) {
     }
 
@@ -71,6 +111,10 @@ public abstract class IntegrationTestBase {
 
     public String run(String libraryFile, String solutionFile) {
         return this.run(Action.FULL_WITH_HINTS, libraryFile, solutionFile, null);
+    }
+
+    public Result run2(String libraryFile, String solutionFile) {
+        return this.run2(Action.FULL_WITH_HINTS, libraryFile, solutionFile, null);
     }
 
     public String run(Action action, String libraryFile, String solutionFile) {

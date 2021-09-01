@@ -4,7 +4,7 @@ import nl.tudelft.cse1110.andy.execution.mode.Action;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static testutils.ResultTestAssertions.*;
+import static testutils.WebLabTestAssertions.*;
 
 public class ModesAndActionsTest extends IntegrationTestBase {
 

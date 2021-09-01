@@ -13,8 +13,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
-import static testutils.ResultTestAssertions.*;
-import static testutils.ResultTestAssertions.noFinalGrade;
+import static testutils.WebLabTestAssertions.*;
+import static testutils.WebLabTestAssertions.noFinalGrade;
 
 public class GenericFailureTest extends IntegrationTestBase {
 
