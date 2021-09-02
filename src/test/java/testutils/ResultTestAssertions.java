@@ -5,6 +5,9 @@ import org.assertj.core.api.Condition;
 
 public class ResultTestAssertions {
 
+    /*
+     * Compilation asserts
+     */
     public static Condition<Result> successfulCompilation() {
         return new Condition<>() {
             @Override
@@ -50,14 +53,6 @@ public class ResultTestAssertions {
         };
     }
 
-    public static Condition<Result> testsExecuted() {
-        return new Condition<>() {
-            @Override
-            public boolean matches(Result value) {
-                return value.getTests().wasExecuted();
-            }
-        };
-    }
 
     public static Condition<Result> compilationErrorType(String error) {
         return new Condition<>() {
@@ -67,11 +62,61 @@ public class ResultTestAssertions {
             }
         };
     }
+
     public static Condition<Result> compilationErrorMoreTimes(String errorType, int times) {
         return new Condition<>() {
             @Override
             public boolean matches(Result value) {
                 return value.getCompilation().getErrors().stream().filter(e -> e.getMessage().contains(errorType)).count() == times;
+            }
+        };
+    }
+
+    /*
+     * JUnit Tests
+     */
+    public static Condition<Result> testsExecuted() {
+        return new Condition<>() {
+            @Override
+            public boolean matches(Result value) {
+                return value.getTests().wasExecuted();
+            }
+        };
+    }
+
+    /*
+     * Code checks
+     */
+    public static Condition<Result> codeChecksScoreOf(int passed, int total) {
+        return new Condition<>() {
+            @Override
+            public boolean matches(Result value) {
+                boolean testsPassed = value.getCodeChecks().getPassedWeightedChecks() == passed;
+                boolean totalChecks = value.getCodeChecks().getTotalWeightedChecks() == total;
+
+                return testsPassed && totalChecks;
+            }
+        };
+    }
+
+    public static Condition<Result> codeCheck(String name, boolean pass, int weight) {
+        return new Condition<>() {
+            @Override
+            public boolean matches(Result value) {
+                return value.getCodeChecks().getCheckResults().stream().anyMatch(cc ->
+                        cc.getWeight() == weight &&
+                        cc.passed() == pass &&
+                        cc.getDescription().equals(name));
+
+            }
+        };
+    }
+
+    public static Condition<Result> codeChecks() {
+        return new Condition<>() {
+            @Override
+            public boolean matches(Result value) {
+                return value.getCodeChecks().hasChecks();
             }
         };
     }

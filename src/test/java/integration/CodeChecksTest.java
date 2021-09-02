@@ -1,20 +1,19 @@
 package integration;
 
+import nl.tudelft.cse1110.andy.result.Result;
 import org.junit.jupiter.api.Test;
-import testutils.WebLabTestAssertions;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static testutils.WebLabTestAssertions.codeCheck;
-import static testutils.WebLabTestAssertions.codeCheckScores;
+import static testutils.ResultTestAssertions.*;
 
 public class CodeChecksTest extends IntegrationTestBase {
 
     @Test
     void allChecksPass() {
-        String result = run( "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfigWithCodeChecksConfiguration");
+        Result result = run2( "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfigWithCodeChecksConfiguration");
 
         assertThat(result)
-                .has(WebLabTestAssertions.scoreOfCodeChecks(3,3))
+                .has(codeChecksScoreOf(3,3))
                 .has(codeCheck("Trip Repository should be mocked", true, 1))
                 .has(codeCheck("Trip should not be mocked", true, 1))
                 .has(codeCheck("getTripById should be set up", true, 1));
@@ -22,10 +21,10 @@ public class CodeChecksTest extends IntegrationTestBase {
 
     @Test
     void someChecksFail() {
-        String result = run( "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfigWithCodeChecks2Configuration");
+        Result result = run2( "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfigWithCodeChecks2Configuration");
 
         assertThat(result)
-                .has(WebLabTestAssertions.scoreOfCodeChecks(2,5))
+                .has(codeChecksScoreOf(2,5))
                 .has(codeCheck("Trip Repository should be mocked", true, 1))
                 .has(codeCheck("Trip should be mocked", false, 3)) // this check makes no sense, just for the check to fail
                 .has(codeCheck("getTripById should be set up", true, 1));
@@ -33,8 +32,8 @@ public class CodeChecksTest extends IntegrationTestBase {
 
     @Test
     void noChecks() {
-        String result = run( "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfiguration");
-        assertThat(result).doesNotHave(codeCheckScores());
+        Result result = run2( "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfiguration");
+        assertThat(result).doesNotHave(codeChecks());
     }
 
 }
