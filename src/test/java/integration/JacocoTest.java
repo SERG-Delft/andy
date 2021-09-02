@@ -7,7 +7,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -46,16 +48,12 @@ public class JacocoTest extends IntegrationTestBase {
     void doesNotHaveTests() {
         Result result = run2(Action.COVERAGE, "NumberUtilsAddLibrary", "NumberUtilsNoTests");
 
-        assertThat(result.getCoverage().wasExecuted()).isTrue();
-
-        assertThat(result.getCoverage().getTotalCoveredLines()).isEqualTo(0);
-        assertThat(result.getCoverage().getTotalCoveredInstructions()).isEqualTo(0);
-        assertThat(result.getCoverage().getTotalCoveredBranches()).isEqualTo(0);
+        assertThat(result.getCoverage().wasExecuted()).isFalse();
     }
 
     @ParameterizedTest
     @MethodSource("coveredLinesGenerator")
-    void coveredAndUncoveredLines(String library, String solution, int[] coveredLines, int[] partiallyCovered, int[] notCovered) throws FileNotFoundException {
+    void coveredAndUncoveredLines(String library, String solution, List<Integer> coveredLines, List<Integer> partiallyCovered, List<Integer> notCovered) {
         Result result = run2(Action.COVERAGE, library, solution);
 
         assertThat(result.getCoverage().getFullyCoveredLines()).isEqualTo(coveredLines);
@@ -66,13 +64,13 @@ public class JacocoTest extends IntegrationTestBase {
     static Stream<Arguments> coveredLinesGenerator() {
         return Stream.of(
             Arguments.of("NumberUtilsAddLibrary", "NumberUtilsAddSmoke",
-                    new int[] {34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 61, 62, 63, 64, 65, 66, 67, 68},
-                    new int[] {},
-                    new int[] {}),
+                    Arrays.asList(34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68),
+                    Collections.emptyList(),
+                    Collections.emptyList()),
             Arguments.of("NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass",
-                    new int[] {36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 61, 63, 64, 67},
-                    new int[] {34, 48, 49, 50},
-                    new int[] {35, 62, 65, 66, 68})
+                    Arrays.asList(36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 63, 64, 67),
+                    Arrays.asList(34, 48, 49, 50),
+                    Arrays.asList(35, 62, 65, 66, 68))
         );
     }
 
