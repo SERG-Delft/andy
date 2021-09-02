@@ -22,4 +22,13 @@ public class MetaTestResult {
     public boolean succeeded() {
         return succeeded;
     }
+
+    @Override
+    public String toString() {
+        return "MetaTestResult{" +
+                "name='" + name + '\'' +
+                ", weight=" + weight +
+                ", succeeded=" + succeeded +
+                '}';
+    }
 }

@@ -82,4 +82,20 @@ public class Result {
     public boolean hasGenericFailure() {
         return genericFailure!=null;
     }
+
+    @Override
+    public String toString() {
+        return "Result{" +
+                "compilation=" + compilation +
+                ", tests=" + tests +
+                ", mutationTesting=" + mutationTesting +
+                ", codeChecks=" + codeChecks +
+                ", coverage=" + coverage +
+                ", metaTests=" + metaTests +
+                ", finalGrade=" + finalGrade +
+                ", genericFailure='" + genericFailure + '\'' +
+                ", timeInSeconds=" + timeInSeconds +
+                ", weights=" + weights +
+                '}';
+    }
 }

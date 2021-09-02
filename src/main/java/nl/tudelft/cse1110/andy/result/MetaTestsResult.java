@@ -45,4 +45,14 @@ public class MetaTestsResult {
     public boolean wasExecuted() {
         return wasExecuted;
     }
+
+    @Override
+    public String toString() {
+        return "MetaTestsResult{" +
+                "wasExecuted=" + wasExecuted +
+                ", score=" + score +
+                ", totalTests=" + totalTests +
+                ", metaTestResults=" + metaTestResults +
+                '}';
+    }
 }

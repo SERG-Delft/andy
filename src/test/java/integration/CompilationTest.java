@@ -11,8 +11,8 @@ public class CompilationTest extends IntegrationTestBase {
 
     @Test
     void compilationOk() {
-        Result result = run2("ListUtilsLibrary", "ListUtilsCompilationSuccess");
-        assertThat(result.getCompilation().successful()).isTrue();
+        Result result = run2(Action.TESTS, "ListUtilsLibrary", "ListUtilsCompilationSuccess");
+        assertThat(result).has(successfulCompilation());
     }
 
     @Test
@@ -21,21 +21,35 @@ public class CompilationTest extends IntegrationTestBase {
 
         assertThat(result)
                 .has(failedCompilation())
+                .has(finalGrade(0))
                 .has(compilationErrorInLine(29))
                 .has(compilationErrorType("not a statement"))
                 .has(compilationErrorType("';' expected"))
-                .doesNotHave(compilationErrorMoreTimes("cannot find symbol", 2));
+                .doesNotHave(compilationErrorMoreTimes("cannot find symbol", 2))
+                .doesNotHave(testsExecuted());
     }
 
     @Test
     void compilationWithManyFailures() {
-        Result result = run2("MathArraysLibrary","MathArraysDifferentCompilationErrors");
+        Result result = run2(Action.TESTS,"MathArraysLibrary","MathArraysDifferentCompilationErrors");
         assertThat(result)
                 .has(failedCompilation())
+                .has(finalGrade(0))
                 .has(compilationErrorInLine(21))
                 .has(compilationErrorInLine(25))
                 .has(compilationErrorInLine(33))
-                .has(compilationErrorMoreTimes("cannot find symbol", 3));
+                .has(compilationErrorMoreTimes("cannot find symbol", 3))
+                .doesNotHave(testsExecuted());
     }
+
+    @Test
+    void compilationErrorIsInTheConfigFile() {
+        Result result = run2(Action.TESTS,"ListUtilsLibrary", "ListUtilsCompilationSuccess", "ListUtilsConfigWithCompilationError");
+        assertThat(result)
+                .has(failedCompilation())
+                .has(configurationError())
+                .doesNotHave(testsExecuted());
+    }
+
 
 }

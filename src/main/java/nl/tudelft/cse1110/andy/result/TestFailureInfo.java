@@ -21,4 +21,12 @@ public class TestFailureInfo {
     public boolean hasMessage() {
         return message!=null && !message.isEmpty();
     }
+
+    @Override
+    public String toString() {
+        return "TestFailureInfo{" +
+                "testCase='" + testCase + '\'' +
+                ", message='" + message + '\'' +
+                '}';
+    }
 }

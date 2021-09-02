@@ -48,4 +48,13 @@ public class CompilationResult {
                 .stream()
                 .anyMatch(c-> c.getFileName().endsWith("Configuration.java"));
     }
+
+    @Override
+    public String toString() {
+        return "CompilationResult{" +
+                "errors=" + errors +
+                ", configurationError=" + configurationError +
+                ", wasExecuted=" + wasExecuted +
+                '}';
+    }
 }

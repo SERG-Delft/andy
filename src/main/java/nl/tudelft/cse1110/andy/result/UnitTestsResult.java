@@ -71,4 +71,16 @@ public class UnitTestsResult {
     public boolean noTestsRan() {
         return testsRan == 0;
     }
+
+    @Override
+    public String toString() {
+        return "UnitTestsResult{" +
+                "testsFound=" + testsFound +
+                ", testsRan=" + testsRan +
+                ", testsSucceeded=" + testsSucceeded +
+                ", failures=" + failures +
+                ", console='" + console + '\'' +
+                ", wasExecuted=" + wasExecuted +
+                '}';
+    }
 }

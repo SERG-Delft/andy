@@ -39,4 +39,12 @@ public class CodeChecksResult {
     public boolean wasExecuted() {
         return wasExecuted;
     }
+
+    @Override
+    public String toString() {
+        return "CodeChecksResult{" +
+                "wasExecuted=" + wasExecuted +
+                ", checkResults=" + checkResults +
+                '}';
+    }
 }

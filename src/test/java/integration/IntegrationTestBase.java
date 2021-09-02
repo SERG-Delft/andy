@@ -102,6 +102,19 @@ public abstract class IntegrationTestBase {
         return resultBuilder.build();
     }
 
+    public Result run2(String libraryFile, String solutionFile) {
+        return this.run2(Action.FULL_WITH_HINTS, libraryFile, solutionFile, null);
+    }
+
+    public Result run2(Action action, String libraryFile, String solutionFile) {
+        return this.run2(action, libraryFile, solutionFile, null);
+    }
+
+    public Result run2(String libraryFile, String solutionFile, String configurationFile) {
+        return this.run2(Action.FULL_WITH_HINTS, libraryFile, solutionFile, configurationFile);
+    }
+
+
     protected void addSteps(ExecutionFlow flow) {
     }
 
@@ -111,10 +124,6 @@ public abstract class IntegrationTestBase {
 
     public String run(String libraryFile, String solutionFile) {
         return this.run(Action.FULL_WITH_HINTS, libraryFile, solutionFile, null);
-    }
-
-    public Result run2(String libraryFile, String solutionFile) {
-        return this.run2(Action.FULL_WITH_HINTS, libraryFile, solutionFile, null);
     }
 
     public String run(Action action, String libraryFile, String solutionFile) {

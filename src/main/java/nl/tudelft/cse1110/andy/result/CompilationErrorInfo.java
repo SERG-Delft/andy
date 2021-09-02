@@ -22,4 +22,13 @@ public class CompilationErrorInfo {
     public String getMessage() {
         return message;
     }
+
+    @Override
+    public String toString() {
+        return "CompilationErrorInfo{" +
+                "fileName='" + fileName + '\'' +
+                ", lineNumber=" + lineNumber +
+                ", message='" + message + '\'' +
+                '}';
+    }
 }

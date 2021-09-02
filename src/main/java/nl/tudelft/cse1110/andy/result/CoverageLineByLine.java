@@ -27,4 +27,13 @@ public class CoverageLineByLine {
     public List<Integer> getNotCoveredLines() {
         return Collections.unmodifiableList(notCoveredLines);
     }
+
+    @Override
+    public String toString() {
+        return "CoverageLineByLine{" +
+                "fullyCoveredLines=" + fullyCoveredLines +
+                ", partiallyCoveredLines=" + partiallyCoveredLines +
+                ", notCoveredLines=" + notCoveredLines +
+                '}';
+    }
 }

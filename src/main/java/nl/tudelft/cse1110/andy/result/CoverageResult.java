@@ -72,4 +72,18 @@ public class CoverageResult {
     public boolean wasExecuted() {
         return wasExecuted;
     }
+
+    @Override
+    public String toString() {
+        return "CoverageResult{" +
+                "wasExecuted=" + wasExecuted +
+                ", totalCoveredLines=" + totalCoveredLines +
+                ", totalLines=" + totalLines +
+                ", totalCoveredInstructions=" + totalCoveredInstructions +
+                ", totalInstructions=" + totalInstructions +
+                ", totalCoveredBranches=" + totalCoveredBranches +
+                ", totalBranches=" + totalBranches +
+                ", coverageLineByLine=" + coverageLineByLine +
+                '}';
+    }
 }
