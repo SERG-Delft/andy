@@ -10,7 +10,7 @@ public class CodeChecksTest extends IntegrationTestBase {
 
     @Test
     void allChecksPass() {
-        Result result = run2( "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfigWithCodeChecksConfiguration");
+        Result result = run( "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfigWithCodeChecksConfiguration");
 
         assertThat(result)
                 .has(checksScore(3,3))
@@ -21,7 +21,7 @@ public class CodeChecksTest extends IntegrationTestBase {
 
     @Test
     void someChecksFail() {
-        Result result = run2( "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfigWithCodeChecks2Configuration");
+        Result result = run( "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfigWithCodeChecks2Configuration");
 
         assertThat(result)
                 .has(checksScore(2,5))
@@ -32,7 +32,7 @@ public class CodeChecksTest extends IntegrationTestBase {
 
     @Test
     void noChecks() {
-        Result result = run2( "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfiguration");
+        Result result = run( "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfiguration");
         assertThat(result.getCodeChecks().hasChecks()).isFalse();
     }
 

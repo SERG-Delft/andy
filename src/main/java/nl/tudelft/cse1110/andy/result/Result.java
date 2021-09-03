@@ -76,7 +76,7 @@ public class Result {
     }
 
     public boolean hasFailed() {
-        return !compilation.successful() || tests.hasFailingTests() || hasGenericFailure();
+        return !compilation.successful() || tests.hasTestsFailingOrFailures() || hasGenericFailure();
     }
 
     public boolean hasGenericFailure() {

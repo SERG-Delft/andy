@@ -14,7 +14,7 @@ public class ModesAndActionsTest extends IntegrationTestBase {
 
     @Test
     void practiceModeRunsEverything() {
-        Result result = run2(Action.FULL_WITH_HINTS,"SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecks");
+        Result result = run(Action.FULL_WITH_HINTS,"SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecks");
 
         assertThat(result.getTests().getTestsSucceeded()).isEqualTo(2);
         assertThat(result.getCoverage().getCoveredLines()).isEqualTo(11);
@@ -33,7 +33,7 @@ public class ModesAndActionsTest extends IntegrationTestBase {
 
     @Test
     void runOnlyTests() {
-        Result result = run2(Action.TESTS, "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecks");
+        Result result = run(Action.TESTS, "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecks");
 
         assertThat(result.getTests().wasExecuted()).isTrue();
         assertThat(result.getTests().getTestsSucceeded()).isEqualTo(2);
@@ -48,7 +48,7 @@ public class ModesAndActionsTest extends IntegrationTestBase {
 
     @Test
     void runOnlyTestsAndCoverageToolsDuringExam() {
-        Result result = run2(Action.FULL_WITH_HINTS, "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecksExam");
+        Result result = run(Action.FULL_WITH_HINTS, "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecksExam");
 
         assertThat(result.getTests().wasExecuted()).isTrue();
         assertThat(result.getTests().getTestsSucceeded()).isEqualTo(2);
@@ -69,7 +69,7 @@ public class ModesAndActionsTest extends IntegrationTestBase {
     @ParameterizedTest
     @CsvSource({"TESTS", "COVERAGE", "FULL_WITHOUT_HINTS"})
     void gradingModeShouldRunEverything(Action action) {
-        Result result = run2(action, "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecksGrading");
+        Result result = run(action, "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecksGrading");
 
         assertThat(result.getTests().getTestsSucceeded()).isEqualTo(2);
         assertThat(result.getCoverage().getCoveredLines()).isEqualTo(11);

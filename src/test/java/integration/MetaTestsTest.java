@@ -12,7 +12,7 @@ public class MetaTestsTest extends IntegrationTestBase {
 
     @Test
     void allMetaTestsPassing() {
-        Result result = run2("NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution", "NumberUtilsAddConfiguration");
+        Result result = run("NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution", "NumberUtilsAddConfiguration");
 
         assertThat(result.getMetaTests().getTotalTests()).isEqualTo(4);
         assertThat(result.getMetaTests().getPassedMetaTests()).isEqualTo(4);
@@ -25,7 +25,7 @@ public class MetaTestsTest extends IntegrationTestBase {
 
     @Test
     void someMetaTestFailing() {
-        Result result = run2("NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddConfiguration");
+        Result result = run("NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddConfiguration");
 
         assertThat(result.getMetaTests().getTotalTests()).isEqualTo(4);
         assertThat(result.getMetaTests().getPassedMetaTests()).isEqualTo(1);
@@ -39,7 +39,7 @@ public class MetaTestsTest extends IntegrationTestBase {
 
     @Test
     void someMetaTestFailingWithWeights() {
-        Result result = run2("NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddConfigurationWithWeight");
+        Result result = run("NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddConfigurationWithWeight");
 
         assertThat(result.getMetaTests().getTotalTests()).isEqualTo(7);
         assertThat(result.getMetaTests().getPassedMetaTests()).isEqualTo(2);
@@ -53,7 +53,7 @@ public class MetaTestsTest extends IntegrationTestBase {
 
     @Test
     void testMetaWhenMultipleClassesInLibrary() {
-        Result result = run2("SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfiguration");
+        Result result = run("SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfiguration");
 
         assertThat(result.getMetaTests().getTotalTests()).isEqualTo(4);
         assertThat(result.getMetaTests().getPassedMetaTests()).isEqualTo(3);
@@ -67,7 +67,7 @@ public class MetaTestsTest extends IntegrationTestBase {
 
     @Test
     void testMetaWhenMultipleClassesInSolution() {
-        Result result = run2("ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfJQWikPassing", "ArrayUtilsIndexOfJQWikConfiguration");
+        Result result = run("ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfJQWikPassing", "ArrayUtilsIndexOfJQWikConfiguration");
 
         assertThat(result.getMetaTests().getTotalTests()).isEqualTo(3);
         assertThat(result.getMetaTests().getPassedMetaTests()).isEqualTo(3);

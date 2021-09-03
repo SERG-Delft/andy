@@ -11,13 +11,13 @@ public class CompilationTest extends IntegrationTestBase {
 
     @Test
     void compilationOk() {
-        Result result = run2(Action.TESTS, "ListUtilsLibrary", "ListUtilsCompilationSuccess");
+        Result result = run(Action.TESTS, "ListUtilsLibrary", "ListUtilsCompilationSuccess");
         assertThat(result.getCompilation().successful()).isTrue();
     }
 
     @Test
     void compilationFailsDuringGradingMeans0() {
-        Result result = run2(Action.FULL_WITH_HINTS, "ArrayUtilsIsSortedLibrary", "ArrayUtilsIsSortedWithCompilationError", "ArrayUtilsInGradingMode");
+        Result result = run(Action.FULL_WITH_HINTS, "ArrayUtilsIsSortedLibrary", "ArrayUtilsIsSortedWithCompilationError", "ArrayUtilsInGradingMode");
 
         assertThat(result.getCompilation().successful()).isFalse();
         assertThat(result.getFinalGrade()).isEqualTo(0);
@@ -31,7 +31,7 @@ public class CompilationTest extends IntegrationTestBase {
 
     @Test
     void compilationWithManyFailures() {
-        Result result = run2(Action.TESTS,"MathArraysLibrary","MathArraysDifferentCompilationErrors");
+        Result result = run(Action.TESTS,"MathArraysLibrary","MathArraysDifferentCompilationErrors");
 
         assertThat(result.getCompilation().successful()).isFalse();
         assertThat(result.getFinalGrade()).isEqualTo(0);
@@ -46,7 +46,7 @@ public class CompilationTest extends IntegrationTestBase {
 
     @Test
     void compilationErrorIsInTheConfigFile() {
-        Result result = run2(Action.TESTS,"ListUtilsLibrary", "ListUtilsCompilationSuccess", "ListUtilsConfigWithCompilationError");
+        Result result = run(Action.TESTS,"ListUtilsLibrary", "ListUtilsCompilationSuccess", "ListUtilsConfigWithCompilationError");
 
         assertThat(result.getCompilation().successful()).isFalse();
         assertThat(result.getCompilation().hasConfigurationError()).isTrue();

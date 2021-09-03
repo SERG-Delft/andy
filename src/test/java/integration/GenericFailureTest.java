@@ -4,6 +4,7 @@ import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
+import nl.tudelft.cse1110.andy.result.Result;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
 import org.junit.jupiter.api.Test;
 
@@ -13,8 +14,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
-import static testutils.WebLabTestAssertions.*;
-import static testutils.WebLabTestAssertions.noFinalGrade;
 
 public class GenericFailureTest extends IntegrationTestBase {
 
@@ -30,15 +29,12 @@ public class GenericFailureTest extends IntegrationTestBase {
 
     @Test
     void genericFailureHasPrecedence() {
-        String result = run(Action.TESTS, "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass");
+        Result result = run(Action.TESTS, "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass");
 
-        assertThat(result)
-                .has(genericFailure("Some super error here"))
-                .doesNotHave(testResults())
-                .has(noMetaTests())
-                .has(noCodeChecks())
-                .has(noFinalGrade());
-
+        assertThat(result.hasGenericFailure()).isTrue();
+        assertThat(result.getGenericFailure())
+                .isNotEmpty()
+                .contains("Some super error here");
     }
 
 }

@@ -19,7 +19,7 @@ public class JacocoTest extends IntegrationTestBase {
     @ParameterizedTest
     @MethodSource("generator")
     void differentCoverages(String library, String solution, int lines, int instructions, int branches) {
-        Result result = run2(Action.COVERAGE, library, solution);
+        Result result = run(Action.COVERAGE, library, solution);
 
         assertThat(result.getCoverage().wasExecuted()).isTrue();
 
@@ -46,7 +46,7 @@ public class JacocoTest extends IntegrationTestBase {
 
     @Test
     void doesNotHaveTests() {
-        Result result = run2(Action.COVERAGE, "NumberUtilsAddLibrary", "NumberUtilsNoTests");
+        Result result = run(Action.COVERAGE, "NumberUtilsAddLibrary", "NumberUtilsNoTests");
 
         assertThat(result.getCoverage().wasExecuted()).isFalse();
     }
@@ -54,7 +54,7 @@ public class JacocoTest extends IntegrationTestBase {
     @ParameterizedTest
     @MethodSource("coveredLinesGenerator")
     void coveredAndUncoveredLines(String library, String solution, List<Integer> coveredLines, List<Integer> partiallyCovered, List<Integer> notCovered) {
-        Result result = run2(Action.COVERAGE, library, solution);
+        Result result = run(Action.COVERAGE, library, solution);
 
         assertThat(result.getCoverage().getFullyCoveredLines()).isEqualTo(coveredLines);
         assertThat(result.getCoverage().getPartiallyCoveredLines()).isEqualTo(partiallyCovered);

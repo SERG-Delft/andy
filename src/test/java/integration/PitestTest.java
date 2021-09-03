@@ -14,7 +14,7 @@ public class PitestTest extends IntegrationTestBase {
      */
     @Test
     void allMutantsButOneKilled() {
-        Result result = run2("NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution", "NumberUtilsAddPiTestStrongerConfiguration");
+        Result result = run("NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution", "NumberUtilsAddPiTestStrongerConfiguration");
 
         assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(32);
         assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(33);
@@ -25,7 +25,7 @@ public class PitestTest extends IntegrationTestBase {
      */
     @Test
     void mutantsSurvived() {
-        Result result = run2("NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddPiTestStrongerConfiguration");
+        Result result = run("NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddPiTestStrongerConfiguration");
 
         assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(7);
         assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(33);
@@ -37,7 +37,7 @@ public class PitestTest extends IntegrationTestBase {
      */
     @Test
     void overriddenNumberOfTotalMutantsAllKilled() {
-        Result result = run2("ZagZigLibrary", "ZagZigAllMutantsKilled", "ZagZigDifferentTotalMutantsConfiguration");
+        Result result = run("ZagZigLibrary", "ZagZigAllMutantsKilled", "ZagZigDifferentTotalMutantsConfiguration");
 
         assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(26);
         assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(26);
@@ -50,7 +50,7 @@ public class PitestTest extends IntegrationTestBase {
      */
     @Test
     void overriddenNumberOfTotalMutantsNotAllKilled() {
-        Result result = run2("ZagZigLibrary", "ZagZigNotAllMutantsKilled", "ZagZigDifferentTotalMutantsConfiguration");
+        Result result = run("ZagZigLibrary", "ZagZigNotAllMutantsKilled", "ZagZigDifferentTotalMutantsConfiguration");
 
         assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(24);
         assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(26);
@@ -64,7 +64,7 @@ public class PitestTest extends IntegrationTestBase {
     @Test
     void solutionKillsMoreThanOverriddenNumberOfMutants() {
         // overrides number of mutants by 10, but solution kills 26
-        Result result = run2("ZagZigLibrary", "ZagZigAllMutantsKilled", "ZagZigDifferentTotalMutantsConfigurationLessThanStudent");
+        Result result = run("ZagZigLibrary", "ZagZigAllMutantsKilled", "ZagZigDifferentTotalMutantsConfigurationLessThanStudent");
 
         assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(10);
         assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(10);
