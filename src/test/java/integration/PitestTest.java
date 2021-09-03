@@ -1,10 +1,7 @@
 package integration;
 
-import org.junit.jupiter.api.AfterEach;
+import nl.tudelft.cse1110.andy.result.Result;
 import org.junit.jupiter.api.Test;
-import testutils.WebLabTestAssertions;
-
-import java.io.File;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -13,12 +10,14 @@ public class PitestTest extends IntegrationTestBase {
 
     /* Test where all mutants are killed.
      * 32 killed mutants means 100%, because 1 of the 33 identified mutants cannot be killed.
+     * TODO: replace this test by one that kills all the mutants!!
      */
     @Test
-    void allMutantsKilled() {
-        String result = run("NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution", "NumberUtilsAddPiTestStrongerConfiguration");
+    void allMutantsButOneKilled() {
+        Result result = run2("NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution", "NumberUtilsAddPiTestStrongerConfiguration");
 
-        assertThat(result).has(WebLabTestAssertions.mutationScore(32, 33));
+        assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(32);
+        assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(33);
     }
 
 
@@ -26,19 +25,23 @@ public class PitestTest extends IntegrationTestBase {
      */
     @Test
     void mutantsSurvived() {
-        String result = run("NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddPiTestStrongerConfiguration");
+        Result result = run2("NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddPiTestStrongerConfiguration");
 
-        assertThat(result).has(WebLabTestAssertions.mutationScore(7, 33));
+        assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(7);
+        assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(33);
+
     }
 
     /* Test where a different total number of mutants is specified.
      * All are killed by the solution.
      */
     @Test
-    void differentNumberOfTotalMutantsAllKilled() {
-        String result = run("ZagZigLibrary", "ZagZigAllMutantsKilled", "ZagZigDifferentTotalMutantsConfiguration");
+    void overriddenNumberOfTotalMutantsAllKilled() {
+        Result result = run2("ZagZigLibrary", "ZagZigAllMutantsKilled", "ZagZigDifferentTotalMutantsConfiguration");
 
-        assertThat(result).has(WebLabTestAssertions.mutationScore(26, 26));
+        assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(26);
+        assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(26);
+
     }
 
 
@@ -46,10 +49,12 @@ public class PitestTest extends IntegrationTestBase {
      * Only some of them are killed by the solution.
      */
     @Test
-    void differentNumberOfTotalMutantsNotAllKilled() {
-        String result = run("ZagZigLibrary", "ZagZigNotAllMutantsKilled", "ZagZigDifferentTotalMutantsConfiguration");
+    void overriddenNumberOfTotalMutantsNotAllKilled() {
+        Result result = run2("ZagZigLibrary", "ZagZigNotAllMutantsKilled", "ZagZigDifferentTotalMutantsConfiguration");
 
-        assertThat(result).has(WebLabTestAssertions.mutationScore(24, 26));
+        assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(24);
+        assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(26);
+
     }
 
 
@@ -59,18 +64,10 @@ public class PitestTest extends IntegrationTestBase {
     @Test
     void solutionKillsMoreThanOverriddenNumberOfMutants() {
         // overrides number of mutants by 10, but solution kills 26
-        String result = run("ZagZigLibrary", "ZagZigAllMutantsKilled", "ZagZigDifferentTotalMutantsConfigurationLessThanStudent");
+        Result result = run2("ZagZigLibrary", "ZagZigAllMutantsKilled", "ZagZigDifferentTotalMutantsConfigurationLessThanStudent");
 
-        assertThat(result).has(WebLabTestAssertions.mutationScore(10, 10));
-    }
-
-    /*
-     * The test checks whether the report directory is generated and the log shows "See the attached report."
-     */
-    @AfterEach
-    void reportWasGenerated() {
-        File report = new File(reportDir.toString() + "/pitest");
-        assertThat(report).exists().isDirectory();
+        assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(10);
+        assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(10);
     }
 
 }
