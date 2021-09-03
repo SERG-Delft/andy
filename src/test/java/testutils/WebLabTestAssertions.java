@@ -230,7 +230,7 @@ public class WebLabTestAssertions {
     }
 
     public static Condition<String> scoreOfCodeChecks(int points, int total) {
-        return containsString(points + "/" + total);
+        return containsString("--- Code checks\n"+points + "/" + total + " passed");
     }
 
     public static Condition<String> codeCheck(String description, boolean pass, int weight) {
@@ -325,6 +325,10 @@ public class WebLabTestAssertions {
 
     public static Condition<String> noCodeChecks() {
         return not(containsRegex("--- Code checks"));
+    }
+
+    public static Condition<String> noCodeChecksToBeAssessed() {
+        return containsString("--- Code checks\nNo code checks to be assessed");
     }
 
     public static Condition<String> noFinalGrade() {
