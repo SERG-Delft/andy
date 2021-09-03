@@ -3,6 +3,8 @@ package unit.writer.weblab;
 import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.result.CompilationErrorInfo;
+import nl.tudelft.cse1110.andy.result.CoverageLineByLine;
+import nl.tudelft.cse1110.andy.result.CoverageResult;
 import nl.tudelft.cse1110.andy.result.Result;
 import nl.tudelft.cse1110.andy.writer.weblab.RandomAsciiArtGenerator;
 import nl.tudelft.cse1110.andy.writer.weblab.WebLabResultWriter;
@@ -13,6 +15,7 @@ import testutils.ResultTestDataBuilder;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.List;
 
 import static nl.tudelft.cse1110.andy.utils.FilesUtils.concatenateDirectories;
 import static nl.tudelft.cse1110.andy.utils.FilesUtils.readFile;
@@ -75,6 +78,35 @@ public class WebLabResultWriterTest {
         assertThat(output)
                 .has(finalGradeInXml(reportDir.toString(), 0))
                 .has(genericFailure("test failure"));
+    }
+
+    @Test
+    void testLineCoverage() {
+        Result result = new ResultTestDataBuilder()
+                .withCoverageResult(CoverageResult.build(
+                        4, 7, 5, 8, 1, 2,
+                        new CoverageLineByLine(
+                                List.of(1, 2, 3, 7),
+                                List.of(4),
+                                List.of(5, 6)
+                        )
+                ))
+                .build();
+
+        writer.write(result);
+
+        String output = generatedResult();
+
+        assertThat(output)
+                .has(finalGradeInXml(reportDir.toString(), 0))
+                .has(compilationSuccess())
+                .has(linesCovered(4))
+                .has(instructionsCovered(5))
+                .has(branchesCovered(1))
+                .has(partiallyCoveredLine(4))
+                .has(notCoveredLine(5))
+                .has(notCoveredLine(6))
+        ;
     }
 
 }

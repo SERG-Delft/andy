@@ -28,6 +28,11 @@ public class ResultTestDataBuilder {
         return this;
     }
 
+    public ResultTestDataBuilder withCoverageResult(CoverageResult coverageResult) {
+        coverageResults = coverageResult;
+        return this;
+    }
+
     public Result build() {
         return new Result(compilation, testResults, mutationResults, codeCheckResults, coverageResults, metaTestResults, finalGrade, genericFailureMessage, timeInSeconds, weights);
     }

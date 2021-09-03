@@ -83,13 +83,8 @@ public class WebLabResultWriter implements ResultWriter {
         String failed = "\t\t<testcase><failure></failure></testcase>\n";
         String passed = "\t\t<testcase/>\n";
 
-        //score = -1 means compilation error
-        if(score >= 0){
-            xml.append(failed.repeat(100 - score));
-            xml.append(passed.repeat(score));
-        } else{
-            xml.append(failed.repeat(100));
-        }
+        xml.append(failed.repeat(100 - score));
+        xml.append(passed.repeat(score));
 
         xml.append("\t</testsuite>\n</testsuites>\n");
         return xml.toString();
