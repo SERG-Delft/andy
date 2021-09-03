@@ -162,7 +162,7 @@ public class WebLabResultWriterTest {
         String output = generatedResult();
 
         assertThat(output)
-                .has(finalGradeInXml(reportDir.toString(), 34))
+                .has(finalGrade(reportDir.toString(), 34))
                 .has(compilationSuccess())
                 .has(linesCovered(4))
                 .has(instructionsCovered(5))
@@ -247,7 +247,7 @@ public class WebLabResultWriterTest {
         String output = generatedResult();
 
         assertThat(output)
-                .has(finalGradeInXml(reportDir.toString(), 0))
+                .has(finalGrade(reportDir.toString(), 0))
                 .has(compilationFailure())
                 .has(noCodeChecks())
                 .has(noJacocoCoverage())
@@ -256,6 +256,30 @@ public class WebLabResultWriterTest {
                 .has(noPitestCoverage());
 
         verify(asciiArtGenerator, times(0)).getRandomAsciiArt();
+    }
+
+    @Test
+    void testPrintFinalGradeWithScore100() {
+        ModeActionSelector modeActionSelector = mock(ModeActionSelector.class);
+        when(modeActionSelector.shouldCalculateAndShowGrades()).thenReturn(true);
+        when(modeActionSelector.shouldGenerateAnalytics()).thenReturn(false);
+        when(modeActionSelector.shouldShowFullHints()).thenReturn(false);
+        when(modeActionSelector.shouldShowPartialHints()).thenReturn(false);
+        when(modeActionSelector.getMode()).thenReturn(Mode.PRACTICE);
+
+        when(ctx.getModeActionSelector()).thenReturn(modeActionSelector);
+
+        Result result = new ResultTestDataBuilder()
+                .withGrade(100)
+                .build();
+
+        writer.write(result);
+
+        String output = generatedResult();
+
+        assertThat(output)
+                .has(finalGrade(reportDir.toString(), 100))
+                .contains("random ascii art");
     }
 
 }
