@@ -163,9 +163,9 @@ public class WebLabResultWriter implements ResultWriter {
 
         // describe the weights and grades per component
         if(finalGrade > 0) {
-            printGradeCalculationDetails("Branch coverage", result.getCoverage().getTotalCoveredBranches(), result.getCoverage().getTotalBranches(), result.getWeights().getBranchCoverageWeight());
+            printGradeCalculationDetails("Branch coverage", result.getCoverage().getCoveredBranches(), result.getCoverage().getTotalNumberOfBranches(), result.getWeights().getBranchCoverageWeight());
             printGradeCalculationDetails("Mutation coverage", result.getMutationTesting().getKilledMutants(), result.getMutationTesting().getTotalNumberOfMutants(), result.getWeights().getMutationCoverageWeight());
-            printGradeCalculationDetails("Code checks", result.getCodeChecks().getPassedWeightedChecks(), result.getCodeChecks().getTotalWeightedChecks(), result.getWeights().getCodeChecksWeight());
+            printGradeCalculationDetails("Code checks", result.getCodeChecks().getNumberOfPassedChecks(), result.getCodeChecks().getTotalNumberOfChecks(), result.getWeights().getCodeChecksWeight());
             printGradeCalculationDetails("Meta tests", result.getMetaTests().getPassedMetaTests(), result.getMetaTests().getTotalTests(), result.getWeights().getMetaTestsWeight());
             l("");
         }
@@ -225,9 +225,9 @@ public class WebLabResultWriter implements ResultWriter {
 
         l("\n--- JaCoCo coverage");
 
-        l(String.format("Line coverage: %d/%d", coverage.getTotalCoveredLines(), coverage.getTotalLines()));
-        l(String.format("Instruction coverage: %d/%d", coverage.getTotalCoveredInstructions(), coverage.getTotalInstructions()));
-        l(String.format("Branch coverage: %d/%d", coverage.getTotalCoveredBranches(), coverage.getTotalBranches()));
+        l(String.format("Line coverage: %d/%d", coverage.getCoveredLines(), coverage.getTotalNumberOfLines()));
+        l(String.format("Instruction coverage: %d/%d", coverage.getCoveredInstructions(), coverage.getTotalNumberOfInstructions()));
+        l(String.format("Branch coverage: %d/%d", coverage.getCoveredBranches(), coverage.getTotalNumberOfBranches()));
 
         if(!coverage.getPartiallyCoveredLines().isEmpty()) {
             l(String.format("Partially covered lines: %s",
@@ -257,7 +257,7 @@ public class WebLabResultWriter implements ResultWriter {
         }
         else {
             l("\n--- Code checks");
-            l(String.format("%d/%d passed", codeChecks.getPassedWeightedChecks(), codeChecks.getTotalWeightedChecks()));
+            l(String.format("%d/%d passed", codeChecks.getNumberOfPassedChecks(), codeChecks.getTotalNumberOfChecks()));
 
             if(allHints) {
                 for (CodeCheckResult result : codeChecks.getCheckResults()) {

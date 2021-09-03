@@ -33,27 +33,27 @@ public class CoverageResult {
         return new CoverageResult(false, 0, 0, 0, 0, 0, 0, new CoverageLineByLine(Collections.emptyList(), Collections.emptyList(), Collections.emptyList()));
     }
 
-    public int getTotalCoveredLines() {
+    public int getCoveredLines() {
         return totalCoveredLines;
     }
 
-    public int getTotalLines() {
+    public int getTotalNumberOfLines() {
         return totalLines;
     }
 
-    public int getTotalCoveredInstructions() {
+    public int getCoveredInstructions() {
         return totalCoveredInstructions;
     }
 
-    public int getTotalInstructions() {
+    public int getTotalNumberOfInstructions() {
         return totalInstructions;
     }
 
-    public int getTotalCoveredBranches() {
+    public int getCoveredBranches() {
         return totalCoveredBranches;
     }
 
-    public int getTotalBranches() {
+    public int getTotalNumberOfBranches() {
         return totalBranches;
     }
 

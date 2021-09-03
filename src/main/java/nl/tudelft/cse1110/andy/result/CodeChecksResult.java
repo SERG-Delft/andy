@@ -20,11 +20,11 @@ public class CodeChecksResult {
         return new CodeChecksResult(true, checkResults);
     }
 
-    public int getPassedWeightedChecks() {
+    public int getNumberOfPassedChecks() {
         return checkResults.stream().mapToInt(check -> check.passed() ? check.getWeight() : 0).sum();
     }
 
-    public int getTotalWeightedChecks() {
+    public int getTotalNumberOfChecks() {
         return checkResults.stream().mapToInt(c -> c.getWeight()).sum();
     }
 

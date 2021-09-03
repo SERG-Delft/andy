@@ -23,9 +23,9 @@ public class JacocoTest extends IntegrationTestBase {
 
         assertThat(result.getCoverage().wasExecuted()).isTrue();
 
-        assertThat(result.getCoverage().getTotalCoveredLines()).isEqualTo(lines);
-        assertThat(result.getCoverage().getTotalCoveredInstructions()).isEqualTo(instructions);
-        assertThat(result.getCoverage().getTotalCoveredBranches()).isEqualTo(branches);
+        assertThat(result.getCoverage().getCoveredLines()).isEqualTo(lines);
+        assertThat(result.getCoverage().getCoveredInstructions()).isEqualTo(instructions);
+        assertThat(result.getCoverage().getCoveredBranches()).isEqualTo(branches);
     }
 
     static Stream<Arguments> generator() {

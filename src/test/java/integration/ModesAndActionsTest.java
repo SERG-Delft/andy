@@ -17,11 +17,11 @@ public class ModesAndActionsTest extends IntegrationTestBase {
         Result result = run2(Action.FULL_WITH_HINTS,"SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecks");
 
         assertThat(result.getTests().getTestsSucceeded()).isEqualTo(2);
-        assertThat(result.getCoverage().getTotalCoveredLines()).isEqualTo(11);
+        assertThat(result.getCoverage().getCoveredLines()).isEqualTo(11);
         assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(8);
         assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(9);
-        assertThat(result.getCodeChecks().getPassedWeightedChecks()).isEqualTo(3);
-        assertThat(result.getCodeChecks().getTotalWeightedChecks()).isEqualTo(3);
+        assertThat(result.getCodeChecks().getNumberOfPassedChecks()).isEqualTo(3);
+        assertThat(result.getCodeChecks().getTotalNumberOfChecks()).isEqualTo(3);
         assertThat(result).has(codeCheck("Trip Repository should be mocked", true,1));
         assertThat(result).has(codeCheck("Trip should not be mocked", true,1));
         assertThat(result).has(codeCheck("getTripById should be set up", true,1));
@@ -54,7 +54,7 @@ public class ModesAndActionsTest extends IntegrationTestBase {
         assertThat(result.getTests().getTestsSucceeded()).isEqualTo(2);
 
         assertThat(result.getCoverage().wasExecuted()).isTrue();
-        assertThat(result.getCoverage().getTotalCoveredLines()).isEqualTo(11);
+        assertThat(result.getCoverage().getCoveredLines()).isEqualTo(11);
 
         assertThat(result.getMutationTesting().wasExecuted()).isTrue();
         assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(8);
@@ -72,11 +72,11 @@ public class ModesAndActionsTest extends IntegrationTestBase {
         Result result = run2(action, "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecksGrading");
 
         assertThat(result.getTests().getTestsSucceeded()).isEqualTo(2);
-        assertThat(result.getCoverage().getTotalCoveredLines()).isEqualTo(11);
+        assertThat(result.getCoverage().getCoveredLines()).isEqualTo(11);
         assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(8);
         assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(9);
-        assertThat(result.getCodeChecks().getPassedWeightedChecks()).isEqualTo(3);
-        assertThat(result.getCodeChecks().getTotalWeightedChecks()).isEqualTo(3);
+        assertThat(result.getCodeChecks().getNumberOfPassedChecks()).isEqualTo(3);
+        assertThat(result.getCodeChecks().getTotalNumberOfChecks()).isEqualTo(3);
         assertThat(result).has(codeCheck("Trip Repository should be mocked", true,1));
         assertThat(result).has(codeCheck("Trip should not be mocked", true,1));
         assertThat(result).has(codeCheck("getTripById should be set up", true,1));
