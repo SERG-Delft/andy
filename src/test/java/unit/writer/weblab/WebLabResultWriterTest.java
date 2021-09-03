@@ -226,4 +226,36 @@ public class WebLabResultWriterTest {
         verify(asciiArtGenerator, times(0)).getRandomAsciiArt();
     }
 
+    @Test
+    void testPrintFinalGradeWithCompilationError() {
+        ModeActionSelector modeActionSelector = mock(ModeActionSelector.class);
+        when(modeActionSelector.shouldCalculateAndShowGrades()).thenReturn(true);
+        when(modeActionSelector.shouldGenerateAnalytics()).thenReturn(false);
+        when(modeActionSelector.shouldShowFullHints()).thenReturn(false);
+        when(modeActionSelector.shouldShowPartialHints()).thenReturn(false);
+        when(modeActionSelector.getMode()).thenReturn(Mode.PRACTICE);
+
+        when(ctx.getModeActionSelector()).thenReturn(modeActionSelector);
+
+        Result result = new ResultTestDataBuilder()
+                .withGrade(0)
+                .withCompilationFail(new CompilationErrorInfo("a", 1, "a"))
+                .build();
+
+        writer.write(result);
+
+        String output = generatedResult();
+
+        assertThat(output)
+                .has(finalGradeInXml(reportDir.toString(), 0))
+                .has(compilationFailure())
+                .has(noCodeChecks())
+                .has(noJacocoCoverage())
+                .has(noCodeChecks())
+                .has(noMetaTests())
+                .has(noPitestCoverage());
+
+        verify(asciiArtGenerator, times(0)).getRandomAsciiArt();
+    }
+
 }
