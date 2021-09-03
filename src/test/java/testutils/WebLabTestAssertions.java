@@ -273,7 +273,7 @@ public class WebLabTestAssertions {
 
     public static Condition<String> fullGradeDescription(String check, int scored, int total, double weight) {
         return containsString(String.format("%s: %d/%d (overall weight=%.2f)%s", check, scored, total, weight,
-                (total == 0 && weight == 0 ? " (0 gives full points)" : "")));
+                (total > 0 && weight == 0 ? " (0 gives full points)" : "")));
     }
 
     public static Condition<String> hintAtNonStaticMethodSource(String methodSource) {

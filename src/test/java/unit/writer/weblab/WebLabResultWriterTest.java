@@ -179,6 +179,47 @@ public class WebLabResultWriterTest {
     }
 
     @Test
+    void testPrintFinalGradeWithWeight0() {
+        ModeActionSelector modeActionSelector = mock(ModeActionSelector.class);
+        when(modeActionSelector.shouldCalculateAndShowGrades()).thenReturn(true);
+        when(modeActionSelector.shouldGenerateAnalytics()).thenReturn(false);
+        when(modeActionSelector.shouldShowFullHints()).thenReturn(false);
+        when(modeActionSelector.shouldShowPartialHints()).thenReturn(false);
+        when(modeActionSelector.getMode()).thenReturn(Mode.PRACTICE);
+
+        when(ctx.getModeActionSelector()).thenReturn(modeActionSelector);
+
+        Result result = new ResultTestDataBuilder()
+                .withGrade(34)
+                .withCoverageResult(CoverageResult.build(
+                        4, 7, 5, 8, 1, 2,
+                        new CoverageLineByLine(List.of(), List.of(), List.of())))
+                .withMutationTestingResults(5, 6)
+                .withWeights(1, 0, 0, 0)
+                .build();
+
+        writer.write(result);
+
+        String output = generatedResult();
+
+        assertThat(output)
+                .has(finalGrade(reportDir.toString(), 34))
+                .has(compilationSuccess())
+                .has(linesCovered(4))
+                .has(instructionsCovered(5))
+                .has(branchesCovered(1))
+                .has(fullGradeDescription("Branch coverage", 1, 2, 1))
+                .has(fullGradeDescription("Mutation coverage", 5, 6, 0))
+                .has(fullGradeDescription("Code checks", 0, 0, 0))
+                .has(fullGradeDescription("Meta tests", 0, 0, 0))
+                .has(mutationScore(5, 6))
+                .has(noMetaTests())
+                .has(noCodeChecks());
+
+        verify(asciiArtGenerator, times(0)).getRandomAsciiArt();
+    }
+
+    @Test
     void testPrintFinalGradeWithoutCalculatingGrades() {
         ModeActionSelector modeActionSelector = mock(ModeActionSelector.class);
         when(modeActionSelector.shouldCalculateAndShowGrades()).thenReturn(false);
