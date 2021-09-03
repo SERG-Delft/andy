@@ -63,11 +63,17 @@ public class WebLabResultWriterTest {
                 .has(finalGradeInXml(reportDir.toString(), 0))
                 .has(compilationFailure())
                 .has(compilationErrorOnLine(10))
+                .has(compilationErrorOnLine(11))
                 .has(compilationErrorType("some compilation error"))
                 .has(compilationErrorType("some other compilation error"));
+
+        String highlightsJson = highlightsJson();
+
+        assertThat(highlightsJson)
+                .has(highlightCompilationError(10, "some compilation error"))
+                .has(highlightCompilationError(11, "some other compilation error"));
     }
 
-    // TODO: tests for highlights. Was deleted from Compilation
     // TODO: tests for grade 0 if compilation fails. Was deleted from Compilation.
 
     @Test
