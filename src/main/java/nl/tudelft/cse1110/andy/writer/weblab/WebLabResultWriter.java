@@ -157,7 +157,7 @@ public class WebLabResultWriter implements ResultWriter {
         l("--- Assessment");
 
         // describe the weights and grades per component
-        if(finalGrade > 0) {
+        if(result.getCompilation().successful()) {
             printGradeCalculationDetails("Branch coverage", result.getCoverage().getCoveredBranches(), result.getCoverage().getTotalNumberOfBranches(), result.getWeights().getBranchCoverageWeight());
             printGradeCalculationDetails("Mutation coverage", result.getMutationTesting().getKilledMutants(), result.getMutationTesting().getTotalNumberOfMutants(), result.getWeights().getMutationCoverageWeight());
             printGradeCalculationDetails("Code checks", result.getCodeChecks().getNumberOfPassedChecks(), result.getCodeChecks().getTotalNumberOfChecks(), result.getWeights().getCodeChecksWeight());
