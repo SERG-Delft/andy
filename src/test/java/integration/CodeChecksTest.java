@@ -36,7 +36,7 @@ public class CodeChecksTest extends IntegrationTestBase {
         assertThat(result.getCodeChecks().hasChecks()).isFalse();
     }
 
-    private static Condition<Result> checksScore(int passed, int total) {
+    public static Condition<Result> checksScore(int passed, int total) {
         return new Condition<>() {
             @Override
             public boolean matches(Result value) {
@@ -48,7 +48,7 @@ public class CodeChecksTest extends IntegrationTestBase {
         };
     }
 
-    private static Condition<Result> codeCheck(String name, boolean pass, int weight) {
+    public static Condition<Result> codeCheck(String name, boolean pass, int weight) {
         return new Condition<>() {
             @Override
             public boolean matches(Result value) {

@@ -78,7 +78,7 @@ public class MetaTestsTest extends IntegrationTestBase {
                 .has(passedMetaTest("DoesNotUseStartIndex"));
     }
 
-    private static Condition<? super MetaTestsResult> passedMetaTest(String metaTestName) {
+    public static Condition<? super MetaTestsResult> passedMetaTest(String metaTestName) {
         return new Condition<>() {
             @Override
             public boolean matches(MetaTestsResult value) {
@@ -88,7 +88,7 @@ public class MetaTestsTest extends IntegrationTestBase {
         };
     }
 
-    private static Condition<? super MetaTestsResult> failedMetaTest(String metaTestName) {
+    public static Condition<? super MetaTestsResult> failedMetaTest(String metaTestName) {
         return new Condition<>() {
             @Override
             public boolean matches(MetaTestsResult value) {

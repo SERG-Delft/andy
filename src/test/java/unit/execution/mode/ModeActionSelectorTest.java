@@ -112,12 +112,17 @@ public class ModeActionSelectorTest {
                 Arguments.of(EXAM, COVERAGE, false),
                 Arguments.of(EXAM, FULL_WITH_HINTS, false),
                 Arguments.of(EXAM, FULL_WITHOUT_HINTS, false),
+
                 Arguments.of(PRACTICE, TESTS, false),
                 Arguments.of(PRACTICE, COVERAGE, false),
                 Arguments.of(PRACTICE, FULL_WITH_HINTS, true),
                 Arguments.of(PRACTICE, FULL_WITHOUT_HINTS, true),
-                // grading will only be called with full mode
-                Arguments.of(GRADING, FULL_WITH_HINTS, true)
+
+                // grading should theoretically only be called with FULL_WITH_HINTS, but...
+                Arguments.of(GRADING, FULL_WITH_HINTS, true),
+                Arguments.of(GRADING, FULL_WITHOUT_HINTS, true),
+                Arguments.of(GRADING, COVERAGE, true),
+                Arguments.of(GRADING, TESTS, true)
         );
     }
 

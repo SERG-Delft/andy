@@ -1,115 +1,89 @@
 package integration;
 
 import nl.tudelft.cse1110.andy.execution.mode.Action;
+import nl.tudelft.cse1110.andy.result.Result;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
+import static integration.CodeChecksTest.codeCheck;
+import static integration.MetaTestsTest.failedMetaTest;
 import static org.assertj.core.api.Assertions.assertThat;
-import static testutils.WebLabTestAssertions.*;
 
 public class ModesAndActionsTest extends IntegrationTestBase {
 
     @Test
-    void showAllHintsWhenInPracticeMode() {
-        String result = run(Action.FULL_WITH_HINTS,"SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecks");
+    void practiceModeRunsEverything() {
+        Result result = run2(Action.FULL_WITH_HINTS,"SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecks");
 
-        assertThat(result)
-                .has(numberOfJUnitTestsPassing(2))
-                .has(linesCovered(11))
-                .has(mutationScore(8, 9))
-                .has(scoreOfCodeChecks(3,3))
-                .has(codeCheck("Trip Repository should be mocked", true, 1))
-                .has(codeCheck("Trip should not be mocked", true, 1))
-                .has(codeCheck("getTripById should be set up", true, 1))
-                .has(metaTests(4))
-                .has(metaTestsPassing(3))
-                .has(metaTestFailing("DoesNotCheckInvalidTripId"))
-                .has(finalGrade(workDir.toString(), 91))
-                .has(mode("PRACTICE"));
+        assertThat(result.getTests().getTestsSucceeded()).isEqualTo(2);
+        assertThat(result.getCoverage().getTotalCoveredLines()).isEqualTo(11);
+        assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(8);
+        assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(9);
+        assertThat(result.getCodeChecks().getPassedWeightedChecks()).isEqualTo(3);
+        assertThat(result.getCodeChecks().getTotalWeightedChecks()).isEqualTo(3);
+        assertThat(result).has(codeCheck("Trip Repository should be mocked", true,1));
+        assertThat(result).has(codeCheck("Trip should not be mocked", true,1));
+        assertThat(result).has(codeCheck("getTripById should be set up", true,1));
+        assertThat(result.getMetaTests().getTotalTests()).isEqualTo(4);
+        assertThat(result.getMetaTests().getPassedMetaTests()).isEqualTo(3);
+        assertThat(result.getMetaTests()).has(failedMetaTest("DoesNotCheckInvalidTripId"));
+        assertThat(result.getFinalGrade()).isEqualTo(91);
     }
 
     @Test
-    void showPartialHintsWhenInPracticeMode() {
-        String result = run(Action.FULL_WITHOUT_HINTS, "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecks");
+    void runOnlyTests() {
+        Result result = run2(Action.TESTS, "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecks");
 
-        assertThat(result)
-                .has(numberOfJUnitTestsPassing(2))
-                .has(linesCovered(11))
-                .has(mutationScore(8, 9))
-                .has(metaTestsButNoDetails())
-                .has(codeChecksButNoDetails())
-                .has(finalGrade(workDir.toString(), 91))
-                .has(mode("PRACTICE"));
+        assertThat(result.getTests().wasExecuted()).isTrue();
+        assertThat(result.getTests().getTestsSucceeded()).isEqualTo(2);
+
+        assertThat(result.getCoverage().wasExecuted()).isFalse();
+        assertThat(result.getMetaTests().wasExecuted()).isFalse();
+        assertThat(result.getMutationTesting().wasExecuted()).isFalse();
+        assertThat(result.getCodeChecks().wasExecuted()).isFalse();
+
+        assertThat(result.getFinalGrade()).isEqualTo(0);
     }
 
     @Test
-    void showCoverage() {
-        String result = run(Action.COVERAGE, "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecks");
+    void runOnlyTestsAndCoverageToolsDuringExam() {
+        Result result = run2(Action.FULL_WITH_HINTS, "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecksExam");
 
-        assertThat(result)
-                .has(numberOfJUnitTestsPassing(2))
-                .has(linesCovered(11))
-                .has(mutationScore(8, 9))
-                .has(noMetaTests())
-                .has(noCodeChecks())
-                .has(noFinalGrade())
-                .has(mode("PRACTICE"));
+        assertThat(result.getTests().wasExecuted()).isTrue();
+        assertThat(result.getTests().getTestsSucceeded()).isEqualTo(2);
 
-        assertThat(resultXmlHasCorrectGrade(workDir.toString(), 0))
-                .isTrue();
+        assertThat(result.getCoverage().wasExecuted()).isTrue();
+        assertThat(result.getCoverage().getTotalCoveredLines()).isEqualTo(11);
+
+        assertThat(result.getMutationTesting().wasExecuted()).isTrue();
+        assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(8);
+        assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(9);
+
+        assertThat(result.getMetaTests().wasExecuted()).isFalse();
+        assertThat(result.getCodeChecks().wasExecuted()).isFalse();
+
+        assertThat(result.getFinalGrade()).isEqualTo(0);
     }
 
-    @Test
-    void onlyTheTestsRun() {
-        String result = run(Action.TESTS, "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecks");
+    @ParameterizedTest
+    @CsvSource({"TESTS", "COVERAGE", "FULL_WITHOUT_HINTS"})
+    void gradingModeShouldRunEverything(Action action) {
+        Result result = run2(action, "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecksGrading");
 
-        assertThat(result)
-                .has(numberOfJUnitTestsPassing(2))
-                .has(noJacocoCoverage())
-                .has(noPitestCoverage())
-                .has(noMetaTests())
-                .has(noCodeChecks())
-                .has(noFinalGrade())
-                .has(mode("PRACTICE"));
-
-        assertThat(resultXmlHasCorrectGrade(workDir.toString(), 0))
-                .isTrue();
-    }
-
-    @Test
-    void showOnlyTestsRunAndCoverageDuringExam() {
-        String result = run(Action.FULL_WITH_HINTS, "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecksExam");
-
-        assertThat(result)
-                .has(numberOfJUnitTestsPassing(2))
-                .has(linesCovered(11))
-                .has(mutationScore(8, 9))
-                .has(noMetaTests())
-                .has(noCodeChecks())
-                .has(noFinalGrade())
-                .has(mode("EXAM"));
-
-        assertThat(resultXmlHasCorrectGrade(workDir.toString(), 0))
-                .isTrue();
-
-    }
-
-    @Test
-    void gradingModeShouldRunEverything() {
-        String result = run(Action.FULL_WITH_HINTS, "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigMetaAndCodeChecksGrading");
-
-        assertThat(result)
-                .has(numberOfJUnitTestsPassing(2))
-                .has(linesCovered(11))
-                .has(mutationScore(8, 9))
-                .has(scoreOfCodeChecks(3,3))
-                .has(codeCheck("Trip Repository should be mocked", true, 1))
-                .has(codeCheck("Trip should not be mocked", true, 1))
-                .has(codeCheck("getTripById should be set up", true, 1))
-                .has(metaTests(4))
-                .has(metaTestsPassing(3))
-                .has(metaTestFailing("DoesNotCheckInvalidTripId"))
-                .has(finalGrade(workDir.toString(), 91))
-                .has(mode("GRADING"));
+        assertThat(result.getTests().getTestsSucceeded()).isEqualTo(2);
+        assertThat(result.getCoverage().getTotalCoveredLines()).isEqualTo(11);
+        assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(8);
+        assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(9);
+        assertThat(result.getCodeChecks().getPassedWeightedChecks()).isEqualTo(3);
+        assertThat(result.getCodeChecks().getTotalWeightedChecks()).isEqualTo(3);
+        assertThat(result).has(codeCheck("Trip Repository should be mocked", true,1));
+        assertThat(result).has(codeCheck("Trip should not be mocked", true,1));
+        assertThat(result).has(codeCheck("getTripById should be set up", true,1));
+        assertThat(result.getMetaTests().getTotalTests()).isEqualTo(4);
+        assertThat(result.getMetaTests().getPassedMetaTests()).isEqualTo(3);
+        assertThat(result.getMetaTests()).has(failedMetaTest("DoesNotCheckInvalidTripId"));
+        assertThat(result.getFinalGrade()).isEqualTo(91);
     }
 
 }
