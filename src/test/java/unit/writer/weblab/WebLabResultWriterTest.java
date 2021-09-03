@@ -22,6 +22,7 @@ import static nl.tudelft.cse1110.andy.utils.FilesUtils.readFile;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static testutils.WebLabHighlightsJsonTestAssertions.*;
 import static testutils.WebLabTestAssertions.*;
 
 public class WebLabResultWriterTest {
@@ -41,6 +42,10 @@ public class WebLabResultWriterTest {
 
     private String generatedResult() {
         return readFile(new File(concatenateDirectories(reportDir.toString(), "stdout.txt")));
+    }
+
+    private String highlightsJson() {
+        return readFile(new File(concatenateDirectories(reportDir.toString(), "highlights.json")));
     }
 
     @Test
@@ -105,8 +110,18 @@ public class WebLabResultWriterTest {
                 .has(branchesCovered(1))
                 .has(partiallyCoveredLine(4))
                 .has(notCoveredLine(5))
-                .has(notCoveredLine(6))
-        ;
+                .has(notCoveredLine(6));
+
+        String highlightsJson = highlightsJson();
+
+        assertThat(highlightsJson)
+                .has(highlightLineFullyCovered(1))
+                .has(highlightLineFullyCovered(2))
+                .has(highlightLineFullyCovered(3))
+                .has(highlightLineFullyCovered(7))
+                .has(highlightLinePartiallyCovered(4))
+                .has(highlightLineNotCovered(5))
+                .has(highlightLineNotCovered(6));
     }
 
 }
