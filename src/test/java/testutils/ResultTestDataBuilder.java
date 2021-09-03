@@ -23,6 +23,11 @@ public class ResultTestDataBuilder {
         return this;
     }
 
+    public ResultTestDataBuilder withGenericFailure(String message) {
+        genericFailureMessage = message;
+        return this;
+    }
+
     public Result build() {
         return new Result(compilation, testResults, mutationResults, codeCheckResults, coverageResults, metaTestResults, finalGrade, genericFailureMessage, timeInSeconds, weights);
     }

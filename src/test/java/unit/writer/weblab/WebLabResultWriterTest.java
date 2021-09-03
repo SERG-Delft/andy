@@ -62,4 +62,19 @@ public class WebLabResultWriterTest {
     // TODO: tests for highlights. Was deleted from Compilation
     // TODO: tests for grade 0 if compilation fails. Was deleted from Compilation.
 
+    @Test
+    void reportGenericFailure() {
+        Result result = new ResultTestDataBuilder()
+                .withGenericFailure("test failure")
+                .build();
+
+        writer.write(result);
+
+        String output = generatedResult();
+
+        assertThat(output)
+                .has(finalGradeInXml(reportDir.toString(), 0))
+                .has(genericFailure("test failure"));
+    }
+
 }
