@@ -14,7 +14,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.not;
 
 public class WebLabTestAssertions {
 
-    private static Condition<String> containsRegex(String regex) {
+    protected static Condition<String> containsRegex(String regex) {
         return new Condition<>() {
             @Override
             public boolean matches(String value) {
@@ -25,7 +25,7 @@ public class WebLabTestAssertions {
         };
     }
 
-    private static Condition<String> containsString(String regex) {
+    protected static Condition<String> containsString(String regex) {
         return new Condition<>() {
             @Override
             public boolean matches(String value) {
