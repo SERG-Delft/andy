@@ -5,10 +5,11 @@ import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.grade.GradeCalculator;
+import nl.tudelft.cse1110.andy.result.Result;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
-import nl.tudelft.cse1110.andy.writer.weblab.RandomAsciiArtGenerator;
-import nl.tudelft.cse1110.andy.writer.weblab.WebLabResultWriter;
+import nl.tudelft.cse1110.andy.writer.EmptyWriter;
+import nl.tudelft.cse1110.andy.writer.ResultWriter;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
@@ -23,7 +24,7 @@ public abstract class IntegrationTestBase {
     @TempDir
     protected Path workDir;
 
-    public String run(Action action,
+    public Result run(Action action,
                       String libraryFile,
                       String solutionFile,
                       String configurationFile) {
@@ -47,7 +48,7 @@ public abstract class IntegrationTestBase {
         ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
 
         try {
-            WebLabResultWriter writer = new WebLabResultWriter(ctx, getAsciiArtGenerator());
+            ResultWriter writer = new EmptyWriter();
             ExecutionFlow flow = ExecutionFlow.build(ctx, resultBuilder, writer);
 
             addSteps(flow);
@@ -59,32 +60,20 @@ public abstract class IntegrationTestBase {
             Thread.currentThread().setContextClassLoader(oldClassLoader);
         }
 
-        return readStdOut();
+        return resultBuilder.build();
     }
 
-    protected void addSteps(ExecutionFlow flow) {
-    }
-
-    protected RandomAsciiArtGenerator getAsciiArtGenerator() {
-        return new RandomAsciiArtGenerator();
-    }
-
-    public String run(String libraryFile, String solutionFile) {
-        return this.run(Action.FULL_WITH_HINTS, libraryFile, solutionFile, null);
-    }
-
-    public String run(Action action, String libraryFile, String solutionFile) {
+    public Result run(Action action, String libraryFile, String solutionFile) {
         return this.run(action, libraryFile, solutionFile, null);
     }
 
-    public String run(String libraryFile, String solutionFile, String configurationFile) {
+    public Result run(String libraryFile, String solutionFile, String configurationFile) {
         return this.run(Action.FULL_WITH_HINTS, libraryFile, solutionFile, configurationFile);
     }
 
-    private String readStdOut() {
-        return FilesUtils.readFile(new File(FilesUtils.concatenateDirectories(reportDir.toString(), "stdout.txt")));
-    }
 
+    protected void addSteps(ExecutionFlow flow) {
+    }
 
     protected void copyFiles(String libraryFile, String solutionFile) {
         String dirWithLibrary = resourceFolder("/grader/fixtures/Library/");

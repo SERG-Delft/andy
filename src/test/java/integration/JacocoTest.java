@@ -1,24 +1,17 @@
 package integration;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
-import nl.tudelft.cse1110.andy.utils.FilesUtils;
-import nl.tudelft.cse1110.andy.writer.weblab.Highlight;
+import nl.tudelft.cse1110.andy.result.Result;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static testutils.ResultTestAssertions.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class JacocoTest extends IntegrationTestBase {
@@ -26,12 +19,13 @@ public class JacocoTest extends IntegrationTestBase {
     @ParameterizedTest
     @MethodSource("generator")
     void differentCoverages(String library, String solution, int lines, int instructions, int branches) {
-        String result = run(Action.COVERAGE, library, solution);
+        Result result = run(Action.COVERAGE, library, solution);
 
-        assertThat(result)
-                .has(linesCovered(lines))
-                .has(instructionsCovered(instructions))
-                .has(branchesCovered(branches));
+        assertThat(result.getCoverage().wasExecuted()).isTrue();
+
+        assertThat(result.getCoverage().getCoveredLines()).isEqualTo(lines);
+        assertThat(result.getCoverage().getCoveredInstructions()).isEqualTo(instructions);
+        assertThat(result.getCoverage().getCoveredBranches()).isEqualTo(branches);
     }
 
     static Stream<Arguments> generator() {
@@ -52,56 +46,31 @@ public class JacocoTest extends IntegrationTestBase {
 
     @Test
     void doesNotHaveTests() {
-        String result = run(Action.COVERAGE, "NumberUtilsAddLibrary", "NumberUtilsNoTests");
+        Result result = run(Action.COVERAGE, "NumberUtilsAddLibrary", "NumberUtilsNoTests");
 
-        assertThat(result)
-                .doesNotHave(linesCovered(0))
-                .doesNotHave(instructionsCovered(0))
-                .doesNotHave(branchesCovered(0));
+        assertThat(result.getCoverage().wasExecuted()).isFalse();
     }
 
     @ParameterizedTest
-    @MethodSource("highlightsGenerator")
-    void coverageHighlightsAreGenerated(String library, String solution, int[] coveredLines, int[] partiallyCovered, int[] notCovered) throws FileNotFoundException {
-        String result = run(Action.COVERAGE, library, solution);
+    @MethodSource("coveredLinesGenerator")
+    void coveredAndUncoveredLines(String library, String solution, List<Integer> coveredLines, List<Integer> partiallyCovered, List<Integer> notCovered) {
+        Result result = run(Action.COVERAGE, library, solution);
 
-        File highlights = new File(FilesUtils.concatenateDirectories(workDir.toString(), "highlights.json"));
-        Type listType = new TypeToken<ArrayList<Highlight>>(){}.getType();
-
-        List<Highlight> list = new Gson().fromJson(new FileReader(highlights), listType);
-
-        for (int line : coveredLines) {
-            boolean lineCovered = list.stream().anyMatch(c -> c.getLine() == line && c.getLocation() == Highlight.HighlightLocation.LIBRARY && c.getPurpose() == Highlight.HighlightPurpose.FULL_COVERAGE);
-            assertThat(lineCovered).as("fully covered line %d", line).isTrue();
-        }
-
-        for (int line : partiallyCovered) {
-            boolean lineCovered = list.stream().anyMatch(c -> c.getLine() == line && c.getLocation() == Highlight.HighlightLocation.LIBRARY && c.getPurpose() == Highlight.HighlightPurpose.PARTIAL_COVERAGE);
-            assertThat(lineCovered).as("partially covered line %d in json", line).isTrue();
-
-            assertThat(result).as("partially covered line %d in result", line)
-                    .has(partiallyCoveredLine(line));
-        }
-
-        for (int line : notCovered) {
-            boolean lineCovered = list.stream().anyMatch(c -> c.getLine() == line && c.getLocation() == Highlight.HighlightLocation.LIBRARY && c.getPurpose() == Highlight.HighlightPurpose.NO_COVERAGE);
-            assertThat(lineCovered).as("not covered line %d in json", line).isTrue();
-
-            assertThat(result).as("not covered line %d in result", line)
-                    .has(notCoveredLine(line));
-        }
+        assertThat(result.getCoverage().getFullyCoveredLines()).isEqualTo(coveredLines);
+        assertThat(result.getCoverage().getPartiallyCoveredLines()).isEqualTo(partiallyCovered);
+        assertThat(result.getCoverage().getNotCoveredLines()).isEqualTo(notCovered);
     }
 
-    static Stream<Arguments> highlightsGenerator() {
+    static Stream<Arguments> coveredLinesGenerator() {
         return Stream.of(
             Arguments.of("NumberUtilsAddLibrary", "NumberUtilsAddSmoke",
-                    new int[] {34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 61, 62, 63, 64, 65, 66, 67, 68},
-                    new int[] {},
-                    new int[] {}),
+                    Arrays.asList(34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68),
+                    Collections.emptyList(),
+                    Collections.emptyList()),
             Arguments.of("NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass",
-                    new int[] {36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 61, 63, 64, 67},
-                    new int[] {34, 48, 49, 50},
-                    new int[] {35, 62, 65, 66, 68})
+                    Arrays.asList(36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 63, 64, 67),
+                    Arrays.asList(34, 48, 49, 50),
+                    Arrays.asList(35, 62, 65, 66, 68))
         );
     }
 

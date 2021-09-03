@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 import static org.assertj.core.api.AssertionsForClassTypes.not;
 
 
-public class ResultTestAssertions {
+public class WebLabTestAssertions {
 
     private static Condition<String> containsRegex(String regex) {
         return new Condition<>() {

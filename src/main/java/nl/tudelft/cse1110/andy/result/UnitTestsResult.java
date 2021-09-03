@@ -40,8 +40,8 @@ public class UnitTestsResult {
         return testsFound;
     }
 
-    public boolean hasFailingTests() {
-        return testsSucceeded < testsFound;
+    public boolean hasTestsFailingOrFailures() {
+        return testsSucceeded < testsFound || !getFailures().isEmpty();
     }
 
     public boolean hasFailingMessage() {
@@ -65,10 +65,26 @@ public class UnitTestsResult {
     }
 
     public boolean didNotGoWell() {
-        return wasExecuted && (hasFailingTests() || noTestsRan());
+        return wasExecuted && (hasTestsFailingOrFailures() || noTestsRan());
     }
 
     public boolean noTestsRan() {
         return testsRan == 0;
+    }
+
+    @Override
+    public String toString() {
+        return "UnitTestsResult{" +
+                "testsFound=" + testsFound +
+                ", testsRan=" + testsRan +
+                ", testsSucceeded=" + testsSucceeded +
+                ", failures=" + failures +
+                ", console='" + console + '\'' +
+                ", wasExecuted=" + wasExecuted +
+                '}';
+    }
+
+    public int getNumberOfFailingTests() {
+        return testsFound - testsSucceeded;
     }
 }

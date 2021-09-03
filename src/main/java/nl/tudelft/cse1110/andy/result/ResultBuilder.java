@@ -105,18 +105,20 @@ public class ResultBuilder {
             String methodName = getParameterizedMethodName(failure);
             String testCaseNumber = getParameterizedTestCaseNumber(failure);
 
-            testCase = String.format("Parameterized test \"%s\", test case #%s failed", methodName, testCaseNumber);
+            testCase = String.format("%s (#d)", methodName, testCaseNumber);
             message = failure.getException().toString();
-        } else if (isPBT) {
-            testCase = String.format("Property test \"%s\" failed", failure.getTestIdentifier().getDisplayName());
-
-            if (this.additionalReports.containsKey(failure.getTestIdentifier())) {
-                message = this.additionalReports.get(failure.getTestIdentifier()).getKeyValuePairs().toString();
-            }
-
         } else {
-            testCase = String.format("Test \"%s\" failed", failure.getTestIdentifier().getDisplayName());
-            message = String.format("%s", simplifyTestErrorMessage(failure));
+            String methodName = failure.getTestIdentifier().getDisplayName();
+            testCase = methodName;
+
+            if (isPBT) {
+                if (this.additionalReports.containsKey(failure.getTestIdentifier())) {
+                    message = this.additionalReports.get(failure.getTestIdentifier()).getKeyValuePairs().toString();
+                }
+
+            } else {
+                message = String.format("%s", simplifyTestErrorMessage(failure));
+            }
         }
 
         return new TestFailureInfo(testCase, message);

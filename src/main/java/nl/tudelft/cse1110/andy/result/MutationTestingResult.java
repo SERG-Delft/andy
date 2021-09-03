@@ -38,4 +38,13 @@ public class MutationTestingResult {
     public boolean wasExecuted() {
         return wasExecuted;
     }
+
+    @Override
+    public String toString() {
+        return "MutationTestingResult{" +
+                "wasExecuted=" + wasExecuted +
+                ", killedMutants=" + killedMutants +
+                ", totalNumberOfMutants=" + totalNumberOfMutants +
+                '}';
+    }
 }

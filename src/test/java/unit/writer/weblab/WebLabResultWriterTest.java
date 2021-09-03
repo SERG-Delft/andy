@@ -19,7 +19,7 @@ import static nl.tudelft.cse1110.andy.utils.FilesUtils.readFile;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static testutils.ResultTestAssertions.*;
+import static testutils.WebLabTestAssertions.*;
 
 public class WebLabResultWriterTest {
 
@@ -58,5 +58,8 @@ public class WebLabResultWriterTest {
                 .has(compilationErrorType("some compilation error"))
                 .has(compilationErrorType("some other compilation error"));
     }
+
+    // TODO: tests for highlights. Was deleted from Compilation
+    // TODO: tests for grade 0 if compilation fails. Was deleted from Compilation.
 
 }

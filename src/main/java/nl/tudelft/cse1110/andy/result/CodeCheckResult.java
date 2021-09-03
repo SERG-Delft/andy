@@ -22,4 +22,13 @@ public class CodeCheckResult {
     public boolean passed() {
         return passed;
     }
+
+    @Override
+    public String toString() {
+        return "CodeCheckResult{" +
+                "description='" + description + '\'' +
+                ", weight=" + weight +
+                ", passed=" + passed +
+                '}';
+    }
 }

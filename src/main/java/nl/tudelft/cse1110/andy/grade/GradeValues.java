@@ -73,8 +73,8 @@ public class GradeValues {
 
     public static GradeValues fromResults(CoverageResult coverageResults, CodeChecksResult codeCheckResults, MutationTestingResult mutationResults, MetaTestsResult metaTestResults) {
         GradeValues grades = new GradeValues();
-        grades.setBranchGrade(coverageResults.getTotalCoveredBranches(), coverageResults.getTotalBranches());
-        grades.setCheckGrade(codeCheckResults.getPassedWeightedChecks(), codeCheckResults.getTotalWeightedChecks());
+        grades.setBranchGrade(coverageResults.getCoveredBranches(), coverageResults.getTotalNumberOfBranches());
+        grades.setCheckGrade(codeCheckResults.getNumberOfPassedChecks(), codeCheckResults.getTotalNumberOfChecks());
         grades.setMutationGrade(mutationResults.getKilledMutants(), mutationResults.getTotalNumberOfMutants());
         grades.setMetaGrade(metaTestResults.getPassedMetaTests(), metaTestResults.getTotalTests());
 
