@@ -4,6 +4,7 @@ import nl.tudelft.cse1110.andy.grade.GradeWeight;
 import nl.tudelft.cse1110.andy.result.*;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class ResultTestDataBuilder {
 
@@ -30,6 +31,30 @@ public class ResultTestDataBuilder {
 
     public ResultTestDataBuilder withCoverageResult(CoverageResult coverageResult) {
         coverageResults = coverageResult;
+        return this;
+    }
+
+    public ResultTestDataBuilder withGrade(int grade) {
+        finalGrade = grade;
+        return this;
+    }
+
+    public ResultTestDataBuilder withMutationTestingResults(int passed, int total) {
+        mutationResults = MutationTestingResult.build(passed, total);
+        return this;
+    }
+
+    public ResultTestDataBuilder withCodeCheckResults(List<CodeCheckResult> list) {
+        codeCheckResults = CodeChecksResult.build(list);
+        return this;
+    }
+
+    public ResultTestDataBuilder withMetaTestResults(List<MetaTestResult> list) {
+        metaTestResults = MetaTestsResult.build(
+                (int) list.stream().filter(MetaTestResult::succeeded).count(),
+                list.size(),
+                list
+        );
         return this;
     }
 
