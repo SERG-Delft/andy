@@ -429,4 +429,93 @@ public class WebLabResultWriterTest {
                 .has(metaTests(0));
     }
 
+    @Test
+    void testPrintTestResultsWithNoFailingMessageOrConsoleOutput() {
+        Result result = new ResultTestDataBuilder()
+                .withTestResults(5, 4, 3,
+                        List.of(),
+                        "")
+                .build();
+
+        writer.write(result);
+
+        String output = generatedResult();
+
+        assertThat(output)
+                .has(compilationSuccess())
+                .has(testResults())
+                .has(numberOfJUnitTestsPassing(3))
+                .has(totalNumberOfJUnitTests(5))
+                .has(not(consoleOutputExists()));
+    }
+
+    @Test
+    void testPrintTestResultsWithConsoleOutput() {
+        Result result = new ResultTestDataBuilder()
+                .withTestResults(5, 4, 3,
+                        List.of(),
+                        "test console output")
+                .build();
+
+        writer.write(result);
+
+        String output = generatedResult();
+
+        assertThat(output)
+                .has(compilationSuccess())
+                .has(testResults())
+                .has(numberOfJUnitTestsPassing(3))
+                .has(totalNumberOfJUnitTests(5))
+                .has(consoleOutputExists())
+                .has(consoleOutput("test console output"));
+    }
+
+    @Test
+    void testPrintTestResultsWithFailingMessages() {
+        Result result = new ResultTestDataBuilder()
+                .withTestResults(5, 4, 1,
+                        List.of(
+                                new TestFailureInfo("test case 1", ""),
+                                new TestFailureInfo("test case 2", "test message"),
+                                new TestFailureInfo("test case 3", null)
+                        ),
+                        null)
+                .build();
+
+        writer.write(result);
+
+        String output = generatedResult();
+
+        assertThat(output)
+                .has(compilationSuccess())
+                .has(testResults())
+                .has(numberOfJUnitTestsPassing(1))
+                .has(totalNumberOfJUnitTests(5))
+                .has(jUnitTestFailing("test case 1", ""))
+                .has(jUnitTestFailing("test case 2", "test message"))
+                .has(jUnitTestFailing("test case 3", ""))
+                .has(not(consoleOutputExists()));
+    }
+
+    @Test
+    void testPrintTestResultsWithNoTestsFound() {
+        Result result = new ResultTestDataBuilder()
+                .withTestResults(0, 0, 0,
+                        List.of(),
+                        "test console output")
+                .build();
+
+        writer.write(result);
+
+        String output = generatedResult();
+
+        assertThat(output)
+                .has(compilationSuccess())
+                .has(testResults())
+                .has(noJUnitTestsFound())
+                .has(not(numberOfJUnitTestsPassing(0)))
+                .has(not(totalNumberOfJUnitTests(0)))
+                .has(not(consoleOutputExists()));
+    }
+
 }

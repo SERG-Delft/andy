@@ -63,6 +63,11 @@ public class ResultTestDataBuilder {
         return this;
     }
 
+    public ResultTestDataBuilder withTestResults(int testsFound, int testsRan, int testsSucceeded, List<TestFailureInfo> failures, String console) {
+        testResults = UnitTestsResult.build(testsFound, testsRan, testsSucceeded, failures, console);
+        return this;
+    }
+
     public Result build() {
         return new Result(compilation, testResults, mutationResults, codeCheckResults, coverageResults, metaTestResults, finalGrade, genericFailureMessage, timeInSeconds, weights);
     }

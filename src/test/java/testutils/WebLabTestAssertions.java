@@ -63,6 +63,13 @@ public class WebLabTestAssertions {
         return containsRegex("--- JUnit execution\\n\\d+\\/" + numberOfTests + " passed");
     }
 
+    public static Condition<String> jUnitTestFailing(String testName, String message) {
+        return containsRegex("- " + testName + ":\n" + message);
+    }
+
+    public static Condition<String> noJUnitTestsFound() {
+        return containsString("Warning\nWe do not see any tests.");
+    }
 
     public static Condition<String> propertyTestFailing(String testName) {
         return containsRegex("- Property test \"" + testName + "\" failed:\n\\{.*" + testName);
@@ -249,7 +256,7 @@ public class WebLabTestAssertions {
     public static Condition<String> failDueToBadConfigurationMessage() {
         return containsString("There might be a problem with this exercise.");
     }
-  
+
     public static Condition<String> totalTimeItTookToExecute() {
         return containsRegex("took \\d+(.\\d)? seconds");
     }
