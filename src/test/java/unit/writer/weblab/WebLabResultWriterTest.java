@@ -535,6 +535,21 @@ public class WebLabResultWriterTest {
                 .has(not(consoleOutputExists()));
     }
 
+    @Test
+    void uncaughtError() {
+        Exception ex = new RuntimeException("Some exception");
+
+        writer.uncaughtError(ex);
+
+        String output = generatedResult();
+
+        assertThat(output)
+                .has(unexpectedError())
+                .contains(ex.getClass().getName())
+                .contains(getClass().getName())
+                .contains(ex.getMessage());
+    }
+
     // TODO: Tests for writeAnalyticsFile when it is completed
 
 }

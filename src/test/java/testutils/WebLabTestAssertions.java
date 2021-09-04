@@ -80,6 +80,9 @@ public class WebLabTestAssertions {
         return containsString("- Parameterized test \"" + testName + "\", test case #" + testCaseNumber + " failed:");
     }
 
+    public static Condition<String> unexpectedError() {
+        return containsString("Something unexpected just happened");
+    }
 
     public static Condition<String> compilationFailure() {
         return containsString("We could not compile the code. See the compilation errors below:");
