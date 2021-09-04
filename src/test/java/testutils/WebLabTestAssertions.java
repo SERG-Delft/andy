@@ -85,6 +85,10 @@ public class WebLabTestAssertions {
         return containsString("We could not compile the code. See the compilation errors below:");
     }
 
+    public static Condition<String> compilationFailureConfigurationError() {
+        return containsString("There might be a problem with this exercise");
+    }
+
 
     public static Condition<String> compilationSuccess() {
         return containsString("--- Compilation\nSuccess");

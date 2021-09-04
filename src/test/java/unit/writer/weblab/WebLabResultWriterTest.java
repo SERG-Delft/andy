@@ -77,6 +77,23 @@ public class WebLabResultWriterTest {
     }
 
     @Test
+    void reportCompilationErrorWithConfigurationError() {
+        Result result = new ResultTestDataBuilder()
+                .withCompilationFail(
+                        new CompilationErrorInfo("SomeConfiguration.java", 10, "some compilation error")
+                )
+                .build();
+
+        writer.write(result);
+
+        String output = generatedResult();
+
+        assertThat(output)
+                .has(compilationFailure())
+                .has(compilationFailureConfigurationError());
+    }
+
+    @Test
     void reportGenericFailure() {
         Result result = new ResultTestDataBuilder()
                 .withGenericFailure("test failure")
