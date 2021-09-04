@@ -518,4 +518,6 @@ public class WebLabResultWriterTest {
                 .has(not(consoleOutputExists()));
     }
 
+    // TODO: Tests for writeAnalyticsFile when it is completed
+
 }
