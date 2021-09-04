@@ -83,13 +83,8 @@ public class WebLabResultWriter implements ResultWriter {
         String failed = "\t\t<testcase><failure></failure></testcase>\n";
         String passed = "\t\t<testcase/>\n";
 
-        //score = -1 means compilation error
-        if(score >= 0){
-            xml.append(failed.repeat(100 - score));
-            xml.append(passed.repeat(score));
-        } else{
-            xml.append(failed.repeat(100));
-        }
+        xml.append(failed.repeat(100 - score));
+        xml.append(passed.repeat(score));
 
         xml.append("\t</testsuite>\n</testsuites>\n");
         return xml.toString();
@@ -162,7 +157,7 @@ public class WebLabResultWriter implements ResultWriter {
         l("--- Assessment");
 
         // describe the weights and grades per component
-        if(finalGrade > 0) {
+        if(result.getCompilation().successful()) {
             printGradeCalculationDetails("Branch coverage", result.getCoverage().getCoveredBranches(), result.getCoverage().getTotalNumberOfBranches(), result.getWeights().getBranchCoverageWeight());
             printGradeCalculationDetails("Mutation coverage", result.getMutationTesting().getKilledMutants(), result.getMutationTesting().getTotalNumberOfMutants(), result.getWeights().getMutationCoverageWeight());
             printGradeCalculationDetails("Code checks", result.getCodeChecks().getNumberOfPassedChecks(), result.getCodeChecks().getTotalNumberOfChecks(), result.getWeights().getCodeChecksWeight());
@@ -174,8 +169,7 @@ public class WebLabResultWriter implements ResultWriter {
         l(String.format("Final grade: %d/100", finalGrade));
 
         // print some nice ascii art if it's full grade!
-        boolean fullyCorrect = finalGrade == 100;
-        if (fullyCorrect) {
+        if (result.isFullyCorrect()) {
             String randomAsciiArt = asciiArtGenerator.getRandomAsciiArt();
             l("");
             l(randomAsciiArt);

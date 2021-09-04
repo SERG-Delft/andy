@@ -98,4 +98,8 @@ public class Result {
                 ", weights=" + weights +
                 '}';
     }
+
+    public boolean isFullyCorrect() {
+        return finalGrade == 100;
+    }
 }

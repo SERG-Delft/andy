@@ -14,7 +14,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.not;
 
 public class WebLabTestAssertions {
 
-    private static Condition<String> containsRegex(String regex) {
+    protected static Condition<String> containsRegex(String regex) {
         return new Condition<>() {
             @Override
             public boolean matches(String value) {
@@ -25,28 +25,11 @@ public class WebLabTestAssertions {
         };
     }
 
-    private static Condition<String> containsString(String regex) {
+    protected static Condition<String> containsString(String regex) {
         return new Condition<>() {
             @Override
             public boolean matches(String value) {
                 return value.contains(regex);
-            }
-        };
-    }
-
-    public static Condition<String> compilationErrorMoreTimes(String errorType, int times) {
-        return new Condition<>() {
-            @Override
-            public boolean matches(String value) {
-                String regex = "- line \\d+: " + errorType;
-                Pattern pattern = Pattern.compile(regex);
-                Matcher matcher = pattern.matcher(value);
-                int count = 0;
-                while (matcher.find()) {
-                    count++;
-                }
-
-                return count == times;
             }
         };
     }
@@ -63,19 +46,24 @@ public class WebLabTestAssertions {
         return containsRegex("--- JUnit execution\\n\\d+\\/" + numberOfTests + " passed");
     }
 
-
-    public static Condition<String> propertyTestFailing(String testName) {
-        return containsRegex("- Property test \"" + testName + "\" failed:\n\\{.*" + testName);
+    public static Condition<String> jUnitTestFailing(String testName, String message) {
+        return containsRegex("- " + testName + ":\n" + message);
     }
 
-
-    public static Condition<String> parameterizedTestFailing(String testName, int testCaseNumber) {
-        return containsString("- Parameterized test \"" + testName + "\", test case #" + testCaseNumber + " failed:");
+    public static Condition<String> noJUnitTestsFound() {
+        return containsString("Warning\nWe do not see any tests.");
     }
 
+    public static Condition<String> unexpectedError() {
+        return containsString("Something unexpected just happened");
+    }
 
     public static Condition<String> compilationFailure() {
         return containsString("We could not compile the code. See the compilation errors below:");
+    }
+
+    public static Condition<String> compilationFailureConfigurationError() {
+        return containsString("There might be a problem with this exercise");
     }
 
 
@@ -91,15 +79,6 @@ public class WebLabTestAssertions {
 
     public static Condition<String> compilationErrorType(String errorType) {
         return containsRegex("- line \\d+: " + errorType);
-    }
-
-
-    public static Condition<String> failingTestName(String testName) {
-        return containsRegex("- Test " + "\"" + testName + "\\(" + "\\)" + "\"" + " failed:");
-    }
-
-    public static Condition<String> failingTests() {
-        return containsRegex("- Test " + "\"" + ".*" + "\\(" + "\\)" + "\"" + " failed:");
     }
 
     public static Condition<String> partiallyCoveredLine(int line) {
@@ -136,26 +115,6 @@ public class WebLabTestAssertions {
                 return Arrays.stream(listOfLines).anyMatch(l -> l.equals(String.valueOf(line)));
             }
         };
-    }
-
-
-    public static Condition<String> errorType(String errorType) {
-        return containsRegex("\\w." + errorType);
-    }
-
-
-    public static Condition<String> errorMessage(String errorMessage) {
-        return containsString(errorMessage);
-    }
-
-
-    public static Condition<String> uninvokedMethod(String uninvokedMethod) {
-        return containsString("Wanted but not invoked:\n" + uninvokedMethod);
-    }
-
-
-    public static Condition<String> hintAtInteractionFound(String invokedMethod) {
-        return containsString("However, there was exactly 1 interaction with this mock:\n" + invokedMethod);
     }
 
     public static Condition<String> linesCovered(int numberOfLinesCovered) {
@@ -230,7 +189,7 @@ public class WebLabTestAssertions {
     }
 
     public static Condition<String> scoreOfCodeChecks(int points, int total) {
-        return containsString(points + "/" + total);
+        return containsString("--- Code checks\n"+points + "/" + total + " passed");
     }
 
     public static Condition<String> codeCheck(String description, boolean pass, int weight) {
@@ -242,18 +201,9 @@ public class WebLabTestAssertions {
         return containsString(expectedCheck);
     }
 
-    public static Condition<String> codeCheckScores() {
-        return containsRegex("Code checks score: \\d*/\\d*");
-    }
-
-    public static Condition<String> failDueToBadConfigurationMessage() {
-        return containsString("There might be a problem with this exercise.");
-    }
-  
     public static Condition<String> totalTimeItTookToExecute() {
         return containsRegex("took \\d+(.\\d)? seconds");
     }
-
 
     public static Condition<String> consoleOutput (String output){
         return containsString(output);
@@ -263,24 +213,10 @@ public class WebLabTestAssertions {
         return containsString("- Console output");
     }
 
-    public static Condition<String> weDoNotSeeTestsMessage () {
-        return containsString("We do not see any tests");
-    }
-
-    public static Condition<String> noMethodSourceProvidedMessage () {
-        return containsString("Make sure you have provided a @MethodSource for this @ParameterizedTest!");
-    }
-
     public static Condition<String> fullGradeDescription(String check, int scored, int total, double weight) {
         return containsString(String.format("%s: %d/%d (overall weight=%.2f)%s", check, scored, total, weight,
-                (total == 0 && weight == 0 ? " (0 gives full points)" : "")));
+                (total > 0 && weight == 0 ? " (0 gives full points)" : "")));
     }
-
-    public static Condition<String> hintAtNonStaticMethodSource(String methodSource) {
-        return containsString("Make sure your corresponding method " + methodSource
-                + "() is static!");
-    }
-
 
     public static Condition<String> mode(String mode) {
         return containsRegex(String.format("Andy is running in %s mode.", mode));
@@ -290,41 +226,13 @@ public class WebLabTestAssertions {
         return not(containsRegex("--- Meta tests"));
     }
 
-    public static Condition<String> metaTestsButNoDetails() {
-        return new Condition<>() {
-            @Override
-            public boolean matches(String value) {
-                int start = value.indexOf("--- Meta tests");
-                if(start==-1)
-                    return false;
-
-                int next = value.indexOf("---", start+4);
-
-                String substring = value.substring(start, next == -1 ? value.length() - 1 : next);
-                return !substring.contains("PASSED") && !substring.contains("FAILED");
-            }
-        };
-    }
-
-    public static Condition<String> codeChecksButNoDetails() {
-        return new Condition<>() {
-            @Override
-            public boolean matches(String value) {
-                int start = value.indexOf("--- Code checks");
-                if(start==-1)
-                    return false;
-
-                int next = value.indexOf("---", start+4);
-
-                String substring = value.substring(start, next == -1 ? value.length() - 1 : next);
-                return !substring.contains("PASSED") && !substring.contains("FAILED");
-            }
-        };
-    }
-
 
     public static Condition<String> noCodeChecks() {
         return not(containsRegex("--- Code checks"));
+    }
+
+    public static Condition<String> noCodeChecksToBeAssessed() {
+        return containsString("--- Code checks\nNo code checks to be assessed");
     }
 
     public static Condition<String> noFinalGrade() {
@@ -339,17 +247,11 @@ public class WebLabTestAssertions {
         return not(containsRegex("--- Mutation testing"));
     }
 
-    public static Condition<String> asciiArtPrinted (String asciiArt) {
-        return containsString(asciiArt);
-    }
-
     public static Condition<String> genericFailure(String failure) {
         return new Condition<>() {
             @Override
             public boolean matches(String value) {
-                boolean p1 = value.contains("we cannot recover from");
-                boolean p2 = value.contains(failure);
-                return p1 && p2;
+                return value.contains(failure);
             }
         };
     }

@@ -4,6 +4,7 @@ import nl.tudelft.cse1110.andy.grade.GradeWeight;
 import nl.tudelft.cse1110.andy.result.*;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class ResultTestDataBuilder {
 
@@ -20,6 +21,50 @@ public class ResultTestDataBuilder {
 
     public ResultTestDataBuilder withCompilationFail(CompilationErrorInfo... errors) {
         compilation = CompilationResult.compilationFail(Arrays.asList(errors));
+        return this;
+    }
+
+    public ResultTestDataBuilder withGenericFailure(String message) {
+        genericFailureMessage = message;
+        return this;
+    }
+
+    public ResultTestDataBuilder withCoverageResult(CoverageResult coverageResult) {
+        coverageResults = coverageResult;
+        return this;
+    }
+
+    public ResultTestDataBuilder withGrade(int grade) {
+        finalGrade = grade;
+        return this;
+    }
+
+    public ResultTestDataBuilder withMutationTestingResults(int passed, int total) {
+        mutationResults = MutationTestingResult.build(passed, total);
+        return this;
+    }
+
+    public ResultTestDataBuilder withCodeCheckResults(List<CodeCheckResult> list) {
+        codeCheckResults = CodeChecksResult.build(list);
+        return this;
+    }
+
+    public ResultTestDataBuilder withMetaTestResults(List<MetaTestResult> list) {
+        metaTestResults = MetaTestsResult.build(
+                (int) list.stream().filter(MetaTestResult::succeeded).count(),
+                list.size(),
+                list
+        );
+        return this;
+    }
+
+    public ResultTestDataBuilder withWeights(float branchCoverageWeight, float mutationCoverageWeight, float metaTestsWeight, float codeChecksWeight) {
+        weights = new GradeWeight(branchCoverageWeight, mutationCoverageWeight, metaTestsWeight, codeChecksWeight);
+        return this;
+    }
+
+    public ResultTestDataBuilder withTestResults(int testsFound, int testsRan, int testsSucceeded, List<TestFailureInfo> failures, String console) {
+        testResults = UnitTestsResult.build(testsFound, testsRan, testsSucceeded, failures, console);
         return this;
     }
 
