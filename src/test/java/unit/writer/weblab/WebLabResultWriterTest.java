@@ -63,6 +63,7 @@ public class WebLabResultWriterTest {
 
         assertThat(output)
                 .has(finalGradeInXml(reportDir.toString(), 0))
+                .has(noFinalGrade())
                 .has(compilationFailure())
                 .has(compilationErrorOnLine(10))
                 .has(compilationErrorOnLine(11))
@@ -105,6 +106,7 @@ public class WebLabResultWriterTest {
 
         assertThat(output)
                 .has(finalGradeInXml(reportDir.toString(), 0))
+                .has(noFinalGrade())
                 .has(genericFailure("test failure"));
     }
 
@@ -127,6 +129,7 @@ public class WebLabResultWriterTest {
 
         assertThat(output)
                 .has(finalGradeInXml(reportDir.toString(), 0))
+                .has(noFinalGrade())
                 .has(compilationSuccess())
                 .has(linesCovered(4))
                 .has(instructionsCovered(5))
@@ -273,6 +276,7 @@ public class WebLabResultWriterTest {
 
         assertThat(output)
                 .has(finalGradeInXml(reportDir.toString(), 34))
+                .has(noFinalGrade())
                 .has(compilationSuccess())
                 .has(linesCovered(4))
                 .has(instructionsCovered(5))
@@ -463,6 +467,7 @@ public class WebLabResultWriterTest {
                 .has(testResults())
                 .has(numberOfJUnitTestsPassing(3))
                 .has(totalNumberOfJUnitTests(5))
+                .has(not(allTestsNeedToPassMessage()))
                 .has(not(consoleOutputExists()));
     }
 
@@ -483,6 +488,7 @@ public class WebLabResultWriterTest {
                 .has(testResults())
                 .has(numberOfJUnitTestsPassing(3))
                 .has(totalNumberOfJUnitTests(5))
+                .has(not(allTestsNeedToPassMessage()))
                 .has(consoleOutputExists())
                 .has(consoleOutput("test console output"));
     }
@@ -508,6 +514,7 @@ public class WebLabResultWriterTest {
                 .has(testResults())
                 .has(numberOfJUnitTestsPassing(1))
                 .has(totalNumberOfJUnitTests(5))
+                .has(allTestsNeedToPassMessage())
                 .has(jUnitTestFailing("test case 1", ""))
                 .has(jUnitTestFailing("test case 2", "test message"))
                 .has(jUnitTestFailing("test case 3", ""))
@@ -530,6 +537,7 @@ public class WebLabResultWriterTest {
                 .has(compilationSuccess())
                 .has(testResults())
                 .has(noJUnitTestsFound())
+                .has(not(allTestsNeedToPassMessage()))
                 .has(not(numberOfJUnitTestsPassing(0)))
                 .has(not(totalNumberOfJUnitTests(0)))
                 .has(not(consoleOutputExists()));
