@@ -169,8 +169,7 @@ public class WebLabResultWriter implements ResultWriter {
         l(String.format("Final grade: %d/100", finalGrade));
 
         // print some nice ascii art if it's full grade!
-        boolean fullyCorrect = finalGrade == 100;
-        if (fullyCorrect) {
+        if (result.isFullyCorrect()) {
             String randomAsciiArt = asciiArtGenerator.getRandomAsciiArt();
             l("");
             l(randomAsciiArt);
