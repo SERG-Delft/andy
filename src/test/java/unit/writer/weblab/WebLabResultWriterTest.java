@@ -64,6 +64,7 @@ public class WebLabResultWriterTest {
         assertThat(output)
                 .has(finalGradeInXml(reportDir.toString(), 0))
                 .has(noFinalGrade())
+                .has(not(compilationSuccess()))
                 .has(compilationFailure())
                 .has(compilationErrorOnLine(10))
                 .has(compilationErrorOnLine(11))
@@ -90,6 +91,7 @@ public class WebLabResultWriterTest {
         String output = generatedResult();
 
         assertThat(output)
+                .has(not(compilationSuccess()))
                 .has(compilationFailure())
                 .has(compilationFailureConfigurationError());
     }
@@ -312,6 +314,7 @@ public class WebLabResultWriterTest {
 
         assertThat(output)
                 .has(finalGrade(reportDir.toString(), 0))
+                .has(not(compilationSuccess()))
                 .has(compilationFailure())
                 .has(noCodeChecks())
                 .has(noJacocoCoverage())
