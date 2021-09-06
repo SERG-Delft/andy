@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.not;
 import static testutils.WebLabTestAssertions.*;
 
 public class WebLabSeleniumTest {
@@ -26,7 +27,8 @@ public class WebLabSeleniumTest {
     private static final String COURSE_ID = "cse1110";
     private static final String EDITION_ID = "sandbox";
     private static final String ASSIGNMENT_PRACTICE = "89104";
-    private static final String SUBMISSION_PRACTICE = "36461";
+    private static final String ASSIGNMENT_EXAM = "89106";
+    private static final String USER_ID = "36461";
 
     private static final String WEBLAB_SUBMISSION_PATH = "/" + COURSE_ID +
                                                          "/" + EDITION_ID +
@@ -66,7 +68,7 @@ public class WebLabSeleniumTest {
     @Test
     public void testPracticeSubmission() {
         WebLabSubmissionPage webLabSubmissionPage = new WebLabSubmissionPage(driver,
-                WEBLAB_URL + String.format(WEBLAB_SUBMISSION_PATH, ASSIGNMENT_PRACTICE, SUBMISSION_PRACTICE));
+                WEBLAB_URL + String.format(WEBLAB_SUBMISSION_PATH, ASSIGNMENT_PRACTICE, USER_ID));
 
         webLabSubmissionPage.navigate();
         webLabSubmissionPage.enterSolution(this.submissionContent);
@@ -111,5 +113,46 @@ public class WebLabSeleniumTest {
                 .contains("pitest")
                 .contains("jacoco")
                 .contains("Test score: 84/100");
+    }
+
+    @Test
+    public void testExamSubmission() {
+        WebLabSubmissionPage webLabSubmissionPage = new WebLabSubmissionPage(driver,
+                WEBLAB_URL + String.format(WEBLAB_SUBMISSION_PATH, ASSIGNMENT_EXAM, USER_ID));
+
+        webLabSubmissionPage.navigate();
+        webLabSubmissionPage.enterSolution(this.submissionContent);
+        webLabSubmissionPage.runSpecTests();
+
+        String output = webLabSubmissionPage.getOutput();
+
+        webLabSubmissionPage.submitSolution();
+
+        assertThat(output)
+                .has(compilationSuccess())
+                .has(numberOfJUnitTestsPassing(2))
+                .has(totalNumberOfJUnitTests(2))
+                .has(linesCovered(10))
+                .has(instructionsCovered(31))
+                .has(branchesCovered(2))
+                .has(mutationScore(3, 4))
+                .has(noCodeChecks())
+                .has(not(scoreOfCodeChecks(17, 18)))
+                .has(not(codeCheck("tests should have assertions", false, 1)))
+                .has(noMetaTests())
+                .has(not(metaTestsPassing(2)))
+                .has(not(metaTests(3)))
+                .has(not(metaTestPassing("does not update")))
+                .has(not(metaTestFailing("does not add points if post is not featured")))
+                .has(noFinalGrade())
+                .has(not(fullGradeDescription("Branch coverage", 2, 2, 0.25)))
+                .has(not(fullGradeDescription("Mutation coverage", 3, 4, 0.25)))
+                .has(not(fullGradeDescription("Code checks", 17, 18, 0.25)))
+                .has(not(fullGradeDescription("Meta tests", 2, 3, 0.25)))
+                .doesNotContain("Final grade:")
+                .has(mode("EXAM"))
+                .contains("pitest")
+                .contains("jacoco")
+                .contains("Test score: 0/100");
     }
 }
