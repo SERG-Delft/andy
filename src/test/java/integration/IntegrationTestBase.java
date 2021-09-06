@@ -1,5 +1,6 @@
 package integration;
 
+import com.google.common.io.Files;
 import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionFlow;
@@ -10,19 +11,24 @@ import nl.tudelft.cse1110.andy.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
 import nl.tudelft.cse1110.andy.writer.EmptyWriter;
 import nl.tudelft.cse1110.andy.writer.ResultWriter;
-import org.junit.jupiter.api.io.TempDir;
+import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.AfterEach;
 
 import java.io.File;
-import java.nio.file.Path;
+import java.io.IOException;
 
 import static nl.tudelft.cse1110.andy.utils.ResourceUtils.resourceFolder;
 
 public abstract class IntegrationTestBase {
-    @TempDir
-    protected Path reportDir;
 
-    @TempDir
-    protected Path workDir;
+    private final File workDir   = Files.createTempDir();
+    private final File reportDir = Files.createTempDir();
+
+    @AfterEach
+    public void cleanup() throws IOException {
+        FileUtils.deleteDirectory(workDir);
+        FileUtils.deleteDirectory(reportDir);
+    }
 
     public Result run(Action action,
                       String libraryFile,
