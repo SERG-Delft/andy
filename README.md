@@ -93,7 +93,7 @@ _We are working on a command-line tool that will make Andy easier to be executed
 
 Andy was envisioned by Maurício Aniche and Frank Mulder.
 
-Summer 2021 team: Nadine Kuo, Jan Warchocki, Florena Buse, and Teodor Oprescu
+Summer 2021 team: Nadine Kuo, Jan Warchocki, Florena Buse, Teodor Oprescu, Martin Mladenov, Yoon Hwan Jeong, Thijs Nulle.
 
 ## License
 
