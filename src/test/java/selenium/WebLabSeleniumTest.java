@@ -81,8 +81,6 @@ public class WebLabSeleniumTest {
 
         String output = webLabSubmissionPage.getOutput();
 
-        webLabSubmissionPage.submitSolution();
-
         assertThat(output)
                 .has(compilationSuccess())
                 .has(numberOfJUnitTestsPassing(2))
@@ -130,8 +128,6 @@ public class WebLabSeleniumTest {
         webLabSubmissionPage.runSpecTests();
 
         String output = webLabSubmissionPage.getOutput();
-
-        webLabSubmissionPage.submitSolution();
 
         assertThat(output)
                 .has(compilationSuccess())

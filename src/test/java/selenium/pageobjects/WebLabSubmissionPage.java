@@ -31,9 +31,6 @@ public class WebLabSubmissionPage {
     @FindBy(xpath = "/html/body/div[3]/div[5]/div/div/div[3]/div[2]/div/div[1]/div[2]/a[2]")
     private WebElement specTestButton;
 
-    @FindBy(xpath = "/html/body/div[3]/div[5]/div/div/div[3]/div[2]/div/div[1]/div[2]/a[3]")
-    private WebElement submitButton;
-
     @FindBy(xpath = "/html/body/div[3]/div[5]/div/div/div[3]/div[2]/div/div[1]/div[2]/div[2]/pre")
     private WebElement output;
 
@@ -62,9 +59,5 @@ public class WebLabSubmissionPage {
         wait.until(ExpectedConditions.textMatches(By.id(output.getAttribute("id")),
                 Pattern.compile("Status: Done")));
         return this.output.getText();
-    }
-
-    public void submitSolution() {
-        this.submitButton.click();
     }
 }
