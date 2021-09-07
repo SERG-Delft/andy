@@ -23,15 +23,11 @@ public class WebLabSeleniumTest {
     private static final String WEBLAB_URL = "https://weblab.tudelft.nl";
     private static final String WEBLAB_LOGIN_PATH = "/signin";
 
-    private static final String COURSE_ID = "cse1110";
-    private static final String EDITION_ID = "sandbox";
     private static final String ASSIGNMENT_PRACTICE = "89104";
     private static final String ASSIGNMENT_EXAM = "89106";
     private static final String USER_ID = "36461";
 
-    private static final String WEBLAB_SUBMISSION_PATH = "/" + COURSE_ID +
-                                                         "/" + EDITION_ID +
-                                                         "/assignment/%s/submission/%s/edit";
+    private static final String WEBLAB_SUBMISSION_PATH = "///assignment/%s/submission/%s/edit";
 
     private WebDriver driver;
     private String weblabUsername;
@@ -48,7 +44,7 @@ public class WebLabSeleniumTest {
             fail("WebLab credentials are not set configured. Provide a local WebLab username and " +
                  "password in the \""+ WEBLAB_CREDENTIALS_ENV_VAR + "\" environment variable in the format " +
                  "\"username:password\" or \"email:password\". The provided user has to be enrolled in the " +
-                 COURSE_ID + "/" + EDITION_ID + " course.");
+                 "course containing the test assignments.");
             return;
         }
 
