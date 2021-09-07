@@ -141,6 +141,13 @@
             <version>2.8.8</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>3.141.59</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-dependency-plugin -->
         <dependency>
             <groupId>org.apache.maven.plugins</groupId>
@@ -197,6 +204,9 @@
                         <include>**/*Test.java</include>
                         <include>%regex[.*Test(\d?).*]</include>
                     </includes>
+                    <excludes>
+                        <exclude>**/WebLabSeleniumTest.java</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
 
