@@ -13,8 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.not;
+import static org.assertj.core.api.Assertions.*;
 import static testutils.WebLabTestAssertions.*;
 
 public class WebLabSeleniumTest {
@@ -42,11 +41,21 @@ public class WebLabSeleniumTest {
 
     @BeforeEach
     public void setup() throws IOException {
-        this.driver = new FirefoxDriver();
+        String credentialsString = System.getenv(WEBLAB_CREDENTIALS_ENV_VAR);
+        String[] weblabCredentials = credentialsString != null ? credentialsString.split(":") : null;
 
-        String[] weblabCredentials = System.getenv(WEBLAB_CREDENTIALS_ENV_VAR).split(":");
+        if(weblabCredentials == null || weblabCredentials.length != 2){
+            fail("WebLab credentials are not set configured. Provide a local WebLab username and " +
+                 "password in the \""+ WEBLAB_CREDENTIALS_ENV_VAR + "\" environment variable in the format " +
+                 "\"username:password\" or \"email:password\". The provided user has to be enrolled in the " +
+                 COURSE_ID + "/" + EDITION_ID + " course.");
+            return;
+        }
+
         this.weblabUsername = weblabCredentials[0];
         this.weblabPassword = weblabCredentials[1];
+
+        this.driver = new FirefoxDriver();
 
         this.submissionContent = Files.readString(Path.of(
                 ResourceUtils.resourceFolder("/selenium/solutions/") + "Upvote.java"));
