@@ -2,6 +2,7 @@ package nl.tudelft.cse1110.andy.config;
 
 import nl.tudelft.cse1110.andy.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.andy.execution.mode.Mode;
+import nl.tudelft.cse1110.andy.utils.ExternalProcess;
 
 import java.util.Collections;
 import java.util.List;
@@ -51,8 +52,8 @@ public abstract class RunConfiguration {
         return Mode.PRACTICE;
     }
 
-    public String externalProcess() {
-        return "";
+    public ExternalProcess externalProcess() {
+        return null;
     }
 
 }

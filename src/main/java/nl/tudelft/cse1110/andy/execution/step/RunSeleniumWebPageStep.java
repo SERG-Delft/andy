@@ -5,6 +5,7 @@ import nl.tudelft.cse1110.andy.config.RunConfiguration;
 import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
+import nl.tudelft.cse1110.andy.utils.ExternalProcess;
 
 public class RunSeleniumWebPageStep implements ExecutionStep {
 
@@ -14,13 +15,13 @@ public class RunSeleniumWebPageStep implements ExecutionStep {
             RunConfiguration runConfiguration = ctx.getRunConfiguration();
             DirectoryConfiguration directoryConfiguration = ctx.getDirectoryConfiguration();
 
-            String externalProcess = runConfiguration.externalProcess();
+            ExternalProcess externalProcess = runConfiguration.externalProcess();
 
-            if (externalProcess == null || externalProcess.equals("")) {
+            if (externalProcess == null) {
                 return;
             }
 
-            Process process = Runtime.getRuntime().exec(externalProcess);
+            externalProcess.launch();
 
         } catch (Exception e) {
             result.genericFailure(this, e);
