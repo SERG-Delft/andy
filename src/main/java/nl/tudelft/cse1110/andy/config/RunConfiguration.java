@@ -51,4 +51,8 @@ public abstract class RunConfiguration {
         return Mode.PRACTICE;
     }
 
+    public String externalProcess() {
+        return "";
+    }
+
 }
