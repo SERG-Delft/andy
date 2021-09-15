@@ -4,6 +4,7 @@ import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.config.RunConfiguration;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.execution.mode.ModeActionSelector;
+import nl.tudelft.cse1110.andy.utils.ExternalProcess;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class Context {
     private ExecutionFlow flow;
     private Action action;
     private ModeActionSelector modeActionSelector;
+    private ExternalProcess externalProcess;
 
     public Context(Action action) {
         this.cleanClassloader = Thread.currentThread().getContextClassLoader();
@@ -66,5 +68,19 @@ public class Context {
 
     public ModeActionSelector getModeActionSelector() {
         return modeActionSelector;
+    }
+
+    public ExternalProcess getExternalProcess() {
+        return externalProcess;
+    }
+
+    public void setExternalProcess(ExternalProcess externalProcess) {
+        this.externalProcess = externalProcess;
+    }
+
+    public void killExternalProcess() {
+        if (externalProcess != null) {
+            externalProcess.kill();
+        }
     }
 }

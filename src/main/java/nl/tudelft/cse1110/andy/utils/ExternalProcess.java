@@ -33,7 +33,7 @@ public class ExternalProcess {
             return;
         }
 
-        while (true) {
+        while (process.isAlive()) {
             byte[] bytes = process.getInputStream().readAllBytes();
 
             if (new String(bytes).contains(endSignal)) {
@@ -47,6 +47,6 @@ public class ExternalProcess {
             return;
         }
 
-        process.destroyForcibly();
+        process.destroy();
     }
 }

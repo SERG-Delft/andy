@@ -23,6 +23,8 @@ public class RunSeleniumWebPageStep implements ExecutionStep {
 
             externalProcess.launch();
 
+            ctx.setExternalProcess(externalProcess);
+
         } catch (Exception e) {
             result.genericFailure(this, e);
         }
