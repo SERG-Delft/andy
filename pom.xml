@@ -4,7 +4,7 @@
 
     <groupId>io.github.cse1110</groupId>
     <artifactId>andy</artifactId>
-    <version>0.22-SNAPSHOT</version>
+    <version>0.21-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>15</maven.compiler.source>
