@@ -22,9 +22,6 @@ public class OrganizeSourceCodeStep implements ExecutionStep {
         DirectoryConfiguration dirCfg = ctx.getDirectoryConfiguration();
 
         try {
-            /* Delete the output directory since it will be newly generated. */
-            FileUtils.deleteDirectory(new File(dirCfg.getOutputDir()));
-
             List<String> listOfFiles = filePathsAsString(getAllJavaFiles(dirCfg.getWorkingDir()));
             for(String pathOfJavaClass : listOfFiles) {
                 String content = new String(Files.readAllBytes(Paths.get(pathOfJavaClass)));

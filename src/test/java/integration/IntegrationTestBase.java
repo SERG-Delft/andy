@@ -21,8 +21,9 @@ import static nl.tudelft.cse1110.andy.utils.ResourceUtils.resourceFolder;
 
 public abstract class IntegrationTestBase {
 
-    private final File workDir   = Files.createTempDir();
-    private final File reportDir = Files.createTempDir();
+    protected final File workDir   = Files.createTempDir();
+    protected final File reportDir = Files.createTempDir();
+    protected Context ctx;
 
     @AfterEach
     public void cleanup() throws IOException {
@@ -40,7 +41,7 @@ public abstract class IntegrationTestBase {
 
         copyFiles(libraryFile, solutionFile);
 
-        Context ctx = new Context(action);
+        this.ctx = new Context(action);
 
         DirectoryConfiguration dirCfg = new DirectoryConfiguration(
                 workDir.toString(),
@@ -54,7 +55,7 @@ public abstract class IntegrationTestBase {
         ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
 
         try {
-            ResultWriter writer = new EmptyWriter();
+            ResultWriter writer = getWriter();
             ExecutionFlow flow = ExecutionFlow.build(ctx, resultBuilder, writer);
 
             addSteps(flow);
@@ -67,6 +68,10 @@ public abstract class IntegrationTestBase {
         }
 
         return resultBuilder.build();
+    }
+
+    protected ResultWriter getWriter() {
+        return new EmptyWriter();
     }
 
     public Result run(Action action, String libraryFile, String solutionFile) {
