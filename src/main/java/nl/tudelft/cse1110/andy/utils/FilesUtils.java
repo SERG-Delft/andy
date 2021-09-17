@@ -131,19 +131,11 @@ public class FilesUtils {
         deleteFile(directory);
     }
 
-    public static String pathCombinator(String ...args){
-        String path = "";
-        for(String a : args)
-            path += File.separator + a;
-
-        return path;
-    }
-
     public static String readFile(File fileToRead) {
         try {
             return Files.readAllLines(fileToRead.toPath()).stream().collect(Collectors.joining("\n"));
         } catch (Exception ex) {
-            throw new RuntimeException();
+            throw new RuntimeException(ex);
         }
 
     }
@@ -152,7 +144,7 @@ public class FilesUtils {
         try {
             Files.writeString(destinationFile.toPath(), content);
         } catch (Exception ex) {
-            throw new RuntimeException();
+            throw new RuntimeException(ex);
         }
     }
 }
