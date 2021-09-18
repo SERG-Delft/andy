@@ -61,7 +61,7 @@ public class RunMetaTestsStep implements ExecutionStep {
                 createMetaTestFile(metaWorkingDir, metaFileContent);
 
                 /* We then run the meta test, using our infrastructure */
-                ResultBuilder metaResultBuilder = runMetaTest(dirCfg, metaWorkingDir);
+                ResultBuilder metaResultBuilder = runMetaTest(ctx, dirCfg, metaWorkingDir);
                 Result metaResult = metaResultBuilder.build();
 
                 /* And check the result. If there's a failing test, the test suite is good! */
@@ -108,7 +108,7 @@ public class RunMetaTestsStep implements ExecutionStep {
         FilesUtils.writeToFile(metaFile, metaFileContent);
     }
 
-    private ResultBuilder runMetaTest(DirectoryConfiguration dirCfg, File metaWorkingDir) {
+    private ResultBuilder runMetaTest(Context ctx, DirectoryConfiguration dirCfg, File metaWorkingDir) {
         DirectoryConfiguration metaDirCfg = new DirectoryConfiguration(
                 metaWorkingDir.toString(),
                 dirCfg.getOutputDir()
@@ -116,6 +116,7 @@ public class RunMetaTestsStep implements ExecutionStep {
 
         Context metaCtx = new Context(Action.META_TEST);
         metaCtx.setDirectoryConfiguration(metaDirCfg);
+        metaCtx.setLibrariesToBeIncluded(ctx.getLibrariesToBeIncluded());
 
         ResultBuilder metaResult = new ResultBuilder(metaCtx, new GradeCalculator());
 
