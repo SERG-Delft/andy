@@ -20,9 +20,12 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static nl.tudelft.cse1110.andy.utils.ClassUtils.asClassPath;
 
 public class RunPitestStep implements ExecutionStep {
 
@@ -75,12 +78,22 @@ public class RunPitestStep implements ExecutionStep {
         args.add("false");
 
         args.add("--classPath");
-        args.add(dirCfg.getWorkingDir());
+        String classPath = createClassPath(ctx, dirCfg);
+        args.add(classPath);
 
         args.add("--mutators");
         args.add(commaSeparated(runCfg.listOfMutants()));
 
         return args.stream().toArray(String[]::new);
+    }
+
+    private String createClassPath(Context ctx, DirectoryConfiguration dirCfg) {
+        List<String> toAddToClassPath = new ArrayList<>();
+        toAddToClassPath.add(dirCfg.getWorkingDir());
+        if(ctx.hasLibrariesToBeIncluded()) {
+            toAddToClassPath.addAll(ctx.getLibrariesToBeIncluded());
+        }
+        return asClassPath(toAddToClassPath);
     }
 
     private String commaSeparated(List<String> list) {

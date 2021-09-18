@@ -45,21 +45,12 @@ public class ClassUtils {
     }
 
     /**
-     * Receives the directory containing jar libraries, and returns
-     * their list in the format that the JVM wants as classpath.
+     * Receives the list of jar files and puts them in a classpath format
      *
-     * @param librariesDir the full directory
+     * @param libraries the list of libraries
      * @return string in the format of "/dir/dir/lib1.jar:/dir/dir/lib2.jar..."
      */
-    public static String asClassPath(String librariesDir) {
-        List<String> libraries = new ArrayList<>();
-
-        File directoryPath = new File(librariesDir);
-        File filesList[] = directoryPath.listFiles();
-        for(File file : filesList) {
-            libraries.add(file.getAbsolutePath());
-        }
-
+    public static String asClassPath(List<String> libraries) {
         return libraries.stream().collect(Collectors.joining(classSeparator()));
     }
 

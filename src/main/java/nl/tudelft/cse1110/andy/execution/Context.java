@@ -16,6 +16,7 @@ public class Context {
     private ExecutionFlow flow;
     private Action action;
     private ModeActionSelector modeActionSelector;
+    private List<String> librariesToBeIncluded;
 
     public Context(Action action) {
         this.cleanClassloader = Thread.currentThread().getContextClassLoader();
@@ -66,5 +67,17 @@ public class Context {
 
     public ModeActionSelector getModeActionSelector() {
         return modeActionSelector;
+    }
+
+    public void setLibrariesToBeIncluded(List<String> librariesToBeIncluded) {
+        this.librariesToBeIncluded = librariesToBeIncluded;
+    }
+
+    public List<String> getLibrariesToBeIncluded() {
+        return librariesToBeIncluded;
+    }
+
+    public boolean hasLibrariesToBeIncluded() {
+        return librariesToBeIncluded!=null && !librariesToBeIncluded.isEmpty();
     }
 }
