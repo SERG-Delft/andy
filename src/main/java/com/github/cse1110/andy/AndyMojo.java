@@ -1,21 +1,19 @@
 package com.github.cse1110.andy;
 
 import com.google.common.io.Files;
-import nl.tudelft.cse1110.andy.utils.FilesUtils;
+import nl.tudelft.cse1110.andy.Andy;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import nl.tudelft.cse1110.andy.Andy;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 
 import java.io.File;
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static nl.tudelft.cse1110.andy.utils.FilesUtils.*;
 
-@Mojo(name = "andy")
+@Mojo(name = "andy", requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME)
 public class AndyMojo extends AbstractMojo {
 
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
@@ -30,7 +28,6 @@ public class AndyMojo extends AbstractMojo {
 
         File workDir = null;
         try {
-
             /**
              * We should first create a temporary work directory and
              * copy the student solution, the config file, and the library code
