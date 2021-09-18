@@ -18,7 +18,9 @@ import org.pitest.mutationtest.tooling.EntryPoint;
 import org.pitest.util.Unchecked;
 import org.apache.commons.io.FileUtils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -42,10 +44,17 @@ public class RunPitestStep implements ExecutionStep {
             result.genericFailure("PITEST: " + pr.getErrorMessage().get());
         } else {
             final ReportOptions data = pr.getOptions();
+
+            // let's silence the sysout
+            PrintStream console = System.out;
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            System.setOut(new PrintStream(output));
+
             final CombinedStatistics stats = runReport(ctx, data, plugins);
 
-            extractAndRemoveReportFolder(outputPitestDir);
+            System.setOut(console);
 
+            extractAndRemoveReportFolder(outputPitestDir);
             result.logPitest(stats);
         }
     }
