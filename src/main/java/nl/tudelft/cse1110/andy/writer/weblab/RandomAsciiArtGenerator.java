@@ -1,10 +1,10 @@
 package nl.tudelft.cse1110.andy.writer.weblab;
 
-import nl.tudelft.cse1110.andy.utils.FilesUtils;
-import nl.tudelft.cse1110.andy.utils.ResourceUtils;
-
-import java.io.File;
+import java.util.List;
 import java.util.Random;
+
+import static nl.tudelft.cse1110.andy.utils.ResourceUtils.listOfCongratsFiles;
+import static nl.tudelft.cse1110.andy.utils.ResourceUtils.readCongratsFile;
 
 public class RandomAsciiArtGenerator {
 
@@ -12,26 +12,14 @@ public class RandomAsciiArtGenerator {
      * @return String - ASCII art read from .txt file
      */
     public String getRandomAsciiArt() {
-        File randomAsciiFile = pickRandomAsciiArtFile();
-        String asciiArt = FilesUtils.readFile(randomAsciiFile);
-        return asciiArt;
-    }
+        List<String> congratsFiles = listOfCongratsFiles();
 
-    /** Picks a random ASCII art .txt file from src/main/resources/congrats
-     * @return - File containing ASCII art
-     */
-    private File pickRandomAsciiArtFile() {
-
-        String asciiDirPath = ResourceUtils.resourceFolder("congrats");
-        File asciiDir = new File(asciiDirPath);
-
-        File[] listOfAscii = FilesUtils.getAllFiles(asciiDir);
-
-        // Randomly pick one of the .txt files under resources/congrats
+        // Randomly pick one of the .txt files
         Random random = new Random();
-        File randomAsciiFile = listOfAscii[random.nextInt(listOfAscii.length)];
+        String randomAsciiFile = congratsFiles.get(random.nextInt(congratsFiles.size()));
 
-        return randomAsciiFile;
+        return readCongratsFile(randomAsciiFile);
     }
+
 
 }
