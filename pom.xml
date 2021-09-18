@@ -6,7 +6,7 @@
 
     <groupId>io.github.cse1110</groupId>
     <artifactId>andy-maven-plugin</artifactId>
-    <version>0.2-SNAPSHOT</version>
+    <version>0.1-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
     <name>Andy Maven Plugin</name>
     <url>https://github.com/cse1110/andy-maven-plugin</url>
