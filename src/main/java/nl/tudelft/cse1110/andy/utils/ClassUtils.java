@@ -125,4 +125,33 @@ public class ClassUtils {
         return ":";
     }
 
+    /**
+     * Get the name of the .class file.
+     * If the full name contains a subclass, we should replace
+     * the dot (.) by a ($), so that we find the file.
+     *
+     * @param name the full name
+     * @return the full name with subclasses using $
+     */
+    public static String clazzName(String name) {
+        String[] parts = name.split("\\.");
+
+        StringBuilder finalName = new StringBuilder();
+        for(int i = 0; i < parts.length; i++) {
+            String part = parts[i];
+            if(i>0) {
+                String previousPart = parts[i-1];
+                if(Character.isUpperCase(previousPart.charAt(0)))
+                    finalName.append("$");
+                else
+                    finalName.append("/");
+            }
+
+            finalName.append(part);
+        }
+
+        finalName.append(".class");
+        return finalName.toString();
+    }
+
 }
