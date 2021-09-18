@@ -60,9 +60,9 @@ public class JacocoTest extends IntegrationTestBase {
 
         assertThat(result.getCoverage().wasExecuted()).isTrue();
 
-//        assertThat(result.getCoverage().getCoveredLines()).isEqualTo(lines);
-//        assertThat(result.getCoverage().getCoveredInstructions()).isEqualTo(instructions);
-//        assertThat(result.getCoverage().getCoveredBranches()).isEqualTo(branches);
+        assertThat(result.getCoverage().getCoveredLines()).isEqualTo(28);
+        assertThat(result.getCoverage().getCoveredInstructions()).isEqualTo(119);
+        assertThat(result.getCoverage().getCoveredBranches()).isEqualTo(14);
     }
 
     @ParameterizedTest
