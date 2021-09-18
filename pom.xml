@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.cse1110</groupId>
     <artifactId>andy-maven-plugin</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.1</version>
     <packaging>maven-plugin</packaging>
     <name>Andy Maven Plugin</name>
     <url>https://github.com/cse1110/andy-maven-plugin</url>
@@ -42,7 +40,7 @@
         <url>http://github.com/cse1110/andy-maven-plugin</url>
         <connection>scm:git:git://github.com/cse1110/andy-maven-plugin.git</connection>
         <developerConnection>scm:git:git@github.com:cse1110/andy-maven-plugin.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>andy-maven-plugin-0.1</tag>
     </scm>
 
     <dependencies>
