@@ -90,10 +90,13 @@ public class RunPitestStep implements ExecutionStep {
     private String createClassPath(Context ctx, DirectoryConfiguration dirCfg) {
         List<String> toAddToClassPath = new ArrayList<>();
         toAddToClassPath.add(dirCfg.getWorkingDir());
+
         if(ctx.hasLibrariesToBeIncluded()) {
             toAddToClassPath.addAll(ctx.getLibrariesToBeIncluded());
         }
-        return asClassPath(toAddToClassPath);
+
+        // yes, it's comma separated!
+        return toAddToClassPath.stream().collect(Collectors.joining(","));
     }
 
     private String commaSeparated(List<String> list) {
