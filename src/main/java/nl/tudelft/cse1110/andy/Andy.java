@@ -28,7 +28,7 @@ public class Andy {
         if (workDir == null) { System.out.println("No WORKING_DIR environment variable."); System.exit(-1); }
         if (outputDir == null) { System.out.println("No OUTPUT_DIR environment variable.");  System.exit(-1); }
 
-        new Andy(action, workDir, outputDir, null).assess();
+        new Andy(action, workDir, outputDir, null).run();
     }
 
     public Andy(String action, String workDir, String outputDir, List<String> librariesToBeIncluded) {
@@ -42,7 +42,7 @@ public class Andy {
         this.librariesToBeIncluded = librariesToBeIncluded;
     }
 
-    public void assess() {
+    public void run() {
         Context ctx = buildContext();
 
         ResultBuilder result = new ResultBuilder(ctx, new GradeCalculator());
