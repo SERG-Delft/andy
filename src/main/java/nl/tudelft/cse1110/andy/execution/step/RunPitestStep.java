@@ -42,7 +42,7 @@ public class RunPitestStep implements ExecutionStep {
             result.genericFailure("PITEST: " + pr.getErrorMessage().get());
         } else {
             final ReportOptions data = pr.getOptions();
-            final CombinedStatistics stats = runReport(data, plugins);
+            final CombinedStatistics stats = runReport(ctx, data, plugins);
 
             extractAndRemoveReportFolder(outputPitestDir);
 
@@ -100,12 +100,12 @@ public class RunPitestStep implements ExecutionStep {
         return list.stream().collect(Collectors.joining(","));
     }
 
-    private static CombinedStatistics runReport(ReportOptions data,
+    private static CombinedStatistics runReport(Context ctx, ReportOptions data,
                                                 PluginServices plugins) {
 
         final EntryPoint e = new EntryPoint();
-        final AnalysisResult result = e.execute(null, data, plugins,
-                new HashMap<>());
+        File baseDir = new File(ctx.getDirectoryConfiguration().getWorkingDir());
+        final AnalysisResult result = e.execute(baseDir, data, plugins, new HashMap<>());
         if (result.getError().isPresent()) {
             throw Unchecked.translateCheckedException(result.getError().get());
         }
