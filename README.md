@@ -103,5 +103,5 @@ This code is licensed under the MIT license.
 
 Andy is named after [Andy Zaidman](https://azaidman.github.io), professor in Software Quality at the
 Delft University of Technology in the Netherlands. Andy is a strong proponent of software testing, and
-even teaches in his 1st year introduction to programming course. 
+even teaches it in his 1st year introduction to programming course! 
 Have you seen [Andy's TED talk](https://www.youtube.com/watch?v=IfXVEz_mMHI) on testing?
