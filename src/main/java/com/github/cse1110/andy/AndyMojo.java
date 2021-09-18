@@ -15,7 +15,7 @@ import java.util.List;
 
 import static nl.tudelft.cse1110.andy.utils.FilesUtils.*;
 
-@Mojo(name = "andy",
+@Mojo(name = "run",
     requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME,
     defaultPhase = LifecyclePhase.CLEAN)
 public class AndyMojo extends AbstractMojo {
@@ -55,7 +55,7 @@ public class AndyMojo extends AbstractMojo {
             }
             createDirIfNeeded(outputDir.getAbsolutePath());
 
-            /* We get the list of dependencies, so help the Java compiler to find them all */
+            /* We get the list of dependencies, to help the Andy's Java compiler to find them all */
             List<String> compileClasspathElements = project.getCompileClasspathElements();
 
             /* Run Andy! */
@@ -64,7 +64,7 @@ public class AndyMojo extends AbstractMojo {
                 workDir.getAbsolutePath(),
                 outputDir.getAbsolutePath(),
                 compileClasspathElements
-            ).assess();
+            ).run();
 
             /* Read output file */
             String output = readFile(new File(concatenateDirectories(outputDir.getAbsolutePath(), "stdout.txt")));
