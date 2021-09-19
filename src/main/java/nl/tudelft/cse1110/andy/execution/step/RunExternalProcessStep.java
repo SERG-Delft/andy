@@ -31,4 +31,9 @@ public class RunExternalProcessStep implements ExecutionStep {
             result.genericFailure(this, e);
         }
     }
+
+    @Override
+    public boolean equals(Object other) {
+        return other instanceof RunExternalProcessStep;
+    }
 }
