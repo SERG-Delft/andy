@@ -1,5 +1,6 @@
 package nl.tudelft.cse1110.andy;
 
+import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.writer.standard.RandomAsciiArtGenerator;
 import nl.tudelft.cse1110.andy.writer.weblab.WebLabResultWriter;
 
@@ -15,7 +16,7 @@ public class AndyOnWebLab {
         if (outputDir == null) { System.out.println("No OUTPUT_DIR environment variable.");  System.exit(-1); }
 
         WebLabResultWriter writer = new WebLabResultWriter(new RandomAsciiArtGenerator());
-        new Andy(action, workDir, outputDir, writer).run();
+        new Andy(Action.valueOf(action), workDir, outputDir, writer).run();
     }
 
 }

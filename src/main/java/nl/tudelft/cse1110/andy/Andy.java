@@ -12,13 +12,13 @@ import java.util.List;
 
 public class Andy {
 
-    private final String action;
+    private final Action action;
     private final String workDir;
     private final String outputDir;
     private final List<String> librariesToBeIncluded;
     private final ResultWriter writer;
 
-    public Andy(String action, String workDir, String outputDir, List<String> librariesToBeIncluded, ResultWriter writer) {
+    public Andy(Action action, String workDir, String outputDir, List<String> librariesToBeIncluded, ResultWriter writer) {
         this.writer = writer;
         assert action!=null;
         assert workDir!=null;
@@ -30,7 +30,7 @@ public class Andy {
         this.librariesToBeIncluded = librariesToBeIncluded;
     }
 
-    public Andy(String action, String workDir, String outputDir, ResultWriter writer) {
+    public Andy(Action action, String workDir, String outputDir, ResultWriter writer) {
         this(action, workDir, outputDir, null, writer);
     }
 
@@ -44,7 +44,7 @@ public class Andy {
     }
 
     private Context buildContext() {
-        Context ctx = new Context(Action.valueOf(action));
+        Context ctx = new Context(action);
 
         DirectoryConfiguration dirCfg = new DirectoryConfiguration(
                 workDir,
