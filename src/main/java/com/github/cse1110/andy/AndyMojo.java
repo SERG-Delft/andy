@@ -2,6 +2,8 @@ package com.github.cse1110.andy;
 
 import com.google.common.io.Files;
 import nl.tudelft.cse1110.andy.Andy;
+import nl.tudelft.cse1110.andy.execution.mode.Action;
+import nl.tudelft.cse1110.andy.writer.standard.StandardResultWriter;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -10,6 +12,7 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -23,8 +26,11 @@ public class AndyMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
     protected MavenProject project;
 
-    @Parameter(property = "action", defaultValue = "FULL_WITHOUT_HINTS")
-    private String action;
+    @Parameter(property = "full")
+    private boolean full;
+
+    @Parameter(property = "coverage")
+    private boolean coverage;
 
     @Override
     public void execute() {
@@ -39,7 +45,7 @@ public class AndyMojo extends AbstractMojo {
              */
             workDir = Files.createTempDir();
 
-            Collection<File> javaFiles = getAllJavaFiles(basedir.getAbsolutePath());
+            Collection<File> javaFiles = getJavaFiles(basedir);
             for (File javaFile : javaFiles) {
                 copyFile(javaFile.getAbsolutePath(), workDir.getAbsolutePath());
             }
@@ -60,15 +66,17 @@ public class AndyMojo extends AbstractMojo {
 
             /* Run Andy! */
             new Andy(
-                action,
+                action(),
                 workDir.getAbsolutePath(),
                 outputDir.getAbsolutePath(),
-                compileClasspathElements
+                compileClasspathElements,
+                new StandardResultWriter()
             ).run();
 
             /* Read output file */
             String output = readFile(new File(concatenateDirectories(outputDir.getAbsolutePath(), "stdout.txt")));
             System.out.println(output);
+            System.out.println("\nCheck branch and mutation coverage in the /output folder!");
 
         } catch (Exception ex) {
             ex.printStackTrace(System.err);
@@ -78,6 +86,24 @@ public class AndyMojo extends AbstractMojo {
             if(workDir!=null)
                 deleteDirectory(workDir);
         }
+    }
+
+    private Action action() {
+        if(full)
+            return Action.FULL_WITH_HINTS;
+        if(coverage)
+            return Action.COVERAGE;
+
+        return Action.FULL_WITHOUT_HINTS;
+    }
+
+    private Collection<File> getJavaFiles(File basedir) {
+        Collection<File> javaFilesInSrc = getAllJavaFiles(basedir.getAbsolutePath() + "/src");
+        Collection<File> javaFilesInConfig = getAllJavaFiles(basedir.getAbsolutePath() + "/config");
+        Collection<File> javaFiles = new ArrayList<>();
+        javaFiles.addAll(javaFilesInSrc);
+        javaFiles.addAll(javaFilesInConfig);
+        return javaFiles;
     }
 
 }
