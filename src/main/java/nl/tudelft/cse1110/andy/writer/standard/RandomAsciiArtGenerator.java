@@ -1,4 +1,4 @@
-package nl.tudelft.cse1110.andy.writer.weblab;
+package nl.tudelft.cse1110.andy.writer.standard;
 
 import nl.tudelft.cse1110.andy.utils.ResourceUtils;
 import org.apache.commons.io.IOUtils;

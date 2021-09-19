@@ -14,7 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.*;
-import static testutils.WebLabTestAssertions.*;
+import static unit.writer.standard.StandardResultTestAssertions.*;
 
 public class WebLabSeleniumTest {
     // Remember to set the credentials as an environment variable ("username:password")

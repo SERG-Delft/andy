@@ -7,8 +7,6 @@ import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.grade.GradeCalculator;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.writer.ResultWriter;
-import nl.tudelft.cse1110.andy.writer.weblab.RandomAsciiArtGenerator;
-import nl.tudelft.cse1110.andy.writer.weblab.WebLabResultWriter;
 
 import java.util.List;
 
@@ -18,20 +16,10 @@ public class Andy {
     private final String workDir;
     private final String outputDir;
     private final List<String> librariesToBeIncluded;
+    private final ResultWriter writer;
 
-    public static void main(String[] args) {
-        String action = args[0];
-        String workDir = args[1];
-        String outputDir = args[2];
-
-        if (action == null) { System.out.println("No ACTION environment variable.");      System.exit(-1); }
-        if (workDir == null) { System.out.println("No WORKING_DIR environment variable."); System.exit(-1); }
-        if (outputDir == null) { System.out.println("No OUTPUT_DIR environment variable.");  System.exit(-1); }
-
-        new Andy(action, workDir, outputDir, null).run();
-    }
-
-    public Andy(String action, String workDir, String outputDir, List<String> librariesToBeIncluded) {
+    public Andy(String action, String workDir, String outputDir, List<String> librariesToBeIncluded, ResultWriter writer) {
+        this.writer = writer;
         assert action!=null;
         assert workDir!=null;
         assert outputDir!=null;
@@ -42,11 +30,14 @@ public class Andy {
         this.librariesToBeIncluded = librariesToBeIncluded;
     }
 
+    public Andy(String action, String workDir, String outputDir, ResultWriter writer) {
+        this(action, workDir, outputDir, null, writer);
+    }
+
     public void run() {
         Context ctx = buildContext();
 
         ResultBuilder result = new ResultBuilder(ctx, new GradeCalculator());
-        ResultWriter writer = new WebLabResultWriter(ctx, new RandomAsciiArtGenerator());
         ExecutionFlow flow = ExecutionFlow.build(ctx, result, writer);
 
         flow.run();

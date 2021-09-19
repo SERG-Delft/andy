@@ -40,10 +40,10 @@ public class ExecutionFlow {
             } while (!steps.isEmpty() && !result.hasFailed());
 
             Result solutionResult = result.build();
-            writer.write(solutionResult);
+            writer.write(ctx, solutionResult);
         } catch(Throwable t) {
             // in case something even totally unexpected happens, we log it.
-            writer.uncaughtError(t);
+            writer.uncaughtError(ctx, t);
         }
     }
 
