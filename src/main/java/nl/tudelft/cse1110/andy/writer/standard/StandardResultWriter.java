@@ -28,6 +28,10 @@ public class StandardResultWriter implements ResultWriter {
         this.asciiArtGenerator = asciiArtGenerator;
     }
 
+    public StandardResultWriter() {
+        this.asciiArtGenerator = new RandomAsciiArtGenerator();
+    }
+
     @Override
     public void write(Context ctx, Result result) {
         writeStdOutFile(ctx, result);
