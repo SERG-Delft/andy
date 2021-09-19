@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.LogManager;
 import java.util.stream.Collectors;
 
 import static nl.tudelft.cse1110.andy.utils.ClassUtils.asClassPath;
@@ -45,11 +46,15 @@ public class RunPitestStep implements ExecutionStep {
         } else {
             final ReportOptions data = pr.getOptions();
 
-            // let's silence the sysout
+            // let's silence the sysout and java logging
+            // silencing the java logging may hide other logs, but we don't use them anyways
+            // if this becomes a hassle, we gotta find out another way of doing it!
             PrintStream console = System.out;
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             System.setOut(new PrintStream(output));
+            LogManager.getLogManager().reset();
 
+            // run!
             final CombinedStatistics stats = runReport(ctx, data, plugins);
 
             System.setOut(console);
