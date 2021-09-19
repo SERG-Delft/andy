@@ -4,7 +4,7 @@ import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.config.RunConfiguration;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.execution.mode.ModeActionSelector;
-import nl.tudelft.cse1110.andy.utils.ExternalProcess;
+import nl.tudelft.cse1110.andy.execution.process.ExternalProcess;
 
 import java.util.List;
 
