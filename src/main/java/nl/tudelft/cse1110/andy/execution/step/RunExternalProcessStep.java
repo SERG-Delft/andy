@@ -7,7 +7,7 @@ import nl.tudelft.cse1110.andy.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.utils.ExternalProcess;
 
-public class RunSeleniumWebPageStep implements ExecutionStep {
+public class RunExternalProcessStep implements ExecutionStep {
 
     @Override
     public void execute(Context ctx, ResultBuilder result) {
