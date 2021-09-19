@@ -4,7 +4,7 @@
 
     <groupId>io.github.cse1110</groupId>
     <artifactId>andy</artifactId>
-    <version>0.25-SNAPSHOT</version>
+    <version>0.25</version>
     <name>Andy</name>
     <url>https://github.com/cse1110/andy</url>
     <description>Andy, a tool that assesses your test suites</description>
@@ -40,7 +40,7 @@
         <url>http://github.com/cse1110/andy</url>
         <connection>scm:git:git://github.com/cse1110/andy.git</connection>
         <developerConnection>scm:git:git@github.com:cse1110/andy.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>andy-0.25</tag>
     </scm>
 
     <dependencies>
