@@ -25,12 +25,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-
-import static nl.tudelft.cse1110.andy.utils.ClassUtils.asClassPath;
 
 public class RunPitestStep implements ExecutionStep {
 
@@ -89,8 +85,8 @@ public class RunPitestStep implements ExecutionStep {
         args.add("false");
 
         args.add("--classPath");
-        String classPath = createClassPath(ctx, dirCfg);
-        args.add(classPath);
+        List<String> librariesToInclude = compiledClassesPlusLibraries(ctx, dirCfg);
+        args.add(commaSeparated(librariesToInclude));
 
         args.add("--mutators");
         args.add(commaSeparated(runCfg.listOfMutants()));
@@ -98,7 +94,7 @@ public class RunPitestStep implements ExecutionStep {
         return args.stream().toArray(String[]::new);
     }
 
-    private String createClassPath(Context ctx, DirectoryConfiguration dirCfg) {
+    private List<String> compiledClassesPlusLibraries(Context ctx, DirectoryConfiguration dirCfg) {
         List<String> toAddToClassPath = new ArrayList<>();
         toAddToClassPath.add(dirCfg.getWorkingDir());
 
@@ -106,8 +102,7 @@ public class RunPitestStep implements ExecutionStep {
             toAddToClassPath.addAll(ctx.getLibrariesToBeIncluded());
         }
 
-        // yes, it's comma separated!
-        return toAddToClassPath.stream().collect(Collectors.joining(","));
+        return toAddToClassPath;
     }
 
     private String commaSeparated(List<String> list) {
