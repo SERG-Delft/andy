@@ -133,7 +133,7 @@ public class ClassUtils {
      * @param name the full name
      * @return the full name with subclasses using $
      */
-    public static String clazzName(String name) {
+    public static String clazzNameAsPath(String name) {
         String[] parts = name.split("\\.");
 
         StringBuilder finalName = new StringBuilder();

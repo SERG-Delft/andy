@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 
-import static nl.tudelft.cse1110.andy.utils.ClassUtils.clazzName;
+import static nl.tudelft.cse1110.andy.utils.ClassUtils.clazzNameAsPath;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
 public class RunJacocoCoverageStep implements ExecutionStep {
@@ -126,7 +126,7 @@ public class RunJacocoCoverageStep implements ExecutionStep {
 
     /* Get a compiled Java class as an InputStream. */
     private InputStream getClassAsInputStream(String filepath, String className) throws IOException {
-        String nameOfTheClassFile = clazzName(className);
+        String nameOfTheClassFile = clazzNameAsPath(className);
         String pathToClass = filepath + "/" + nameOfTheClassFile;
         return new FileInputStream(pathToClass);
     }

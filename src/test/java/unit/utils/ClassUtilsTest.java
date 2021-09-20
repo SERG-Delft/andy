@@ -61,7 +61,7 @@ public class ClassUtilsTest {
             "a.b.C.D,a/b/C$D.class"
     })
     void clazzName(String input, String output) {
-        assertThat(ClassUtils.clazzName(input))
+        assertThat(ClassUtils.clazzNameAsPath(input))
                 .isEqualTo(output);
     }
 
