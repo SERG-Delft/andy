@@ -70,7 +70,7 @@ public class FilesUtils {
     }
 
     public static String concatenateDirectories(String dir1, String dir2) {
-        return dir1 + (dir1.endsWith("/")?"":"/") + dir2;
+        return dir1 + (dir1.endsWith(File.pathSeparator) ? "" : File.pathSeparator) + dir2;
     }
 
     public static String findSolution(String workdir) throws FileNotFoundException {

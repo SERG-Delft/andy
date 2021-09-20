@@ -31,6 +31,7 @@ import java.io.InputStream;
 import java.util.Collection;
 
 import static nl.tudelft.cse1110.andy.utils.ClassUtils.clazzNameAsPath;
+import static nl.tudelft.cse1110.andy.utils.FilesUtils.concatenateDirectories;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
 public class RunJacocoCoverageStep implements ExecutionStep {
@@ -127,7 +128,7 @@ public class RunJacocoCoverageStep implements ExecutionStep {
     /* Get a compiled Java class as an InputStream. */
     private InputStream getClassAsInputStream(String filepath, String className) throws IOException {
         String nameOfTheClassFile = clazzNameAsPath(className);
-        String pathToClass = filepath + "/" + nameOfTheClassFile;
+        String pathToClass = concatenateDirectories(filepath, nameOfTheClassFile);
         return new FileInputStream(pathToClass);
     }
 
@@ -147,7 +148,7 @@ public class RunJacocoCoverageStep implements ExecutionStep {
                                 SessionInfoStore sessionInfos) throws IOException {
         final HTMLFormatter htmlFormatter = new HTMLFormatter();
 
-        String outputJacocoDir = FilesUtils.concatenateDirectories(dirCfg.getOutputDir(), "jacoco");
+        String outputJacocoDir = concatenateDirectories(dirCfg.getOutputDir(), "jacoco");
         FilesUtils.createDirIfNeeded(outputJacocoDir);
 
         final IReportVisitor visitor = htmlFormatter
