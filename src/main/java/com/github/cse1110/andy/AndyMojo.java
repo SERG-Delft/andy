@@ -55,7 +55,7 @@ public class AndyMojo extends AbstractMojo {
              * We delete it first, because there might be one already, from a
              * previous execution.
              */
-            File outputDir = new File(concatenateDirectories(basedir.getAbsolutePath(), "output"));
+            File outputDir = new File(concatenateDirectories(basedir.getAbsolutePath(), "andy"));
             if(outputDir.exists()) {
                 deleteDirectory(outputDir);
             }
@@ -76,7 +76,7 @@ public class AndyMojo extends AbstractMojo {
             /* Read output file */
             String output = readFile(new File(concatenateDirectories(outputDir.getAbsolutePath(), "stdout.txt")));
             System.out.println(output);
-            System.out.println("\nCheck branch and mutation coverage in the /output folder!");
+            System.out.println("\nCheck branch and mutation coverage in the /andy folder!");
 
         } catch (Exception ex) {
             ex.printStackTrace(System.err);
