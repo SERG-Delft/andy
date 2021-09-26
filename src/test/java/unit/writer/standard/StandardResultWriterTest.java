@@ -70,6 +70,7 @@ public class StandardResultWriterTest {
         String output = generatedResult();
 
         assertThat(output)
+                .has(versionInformation(versionInformation))
                 .has(finalGradeNotOnScreen(0))
                 .has(noFinalGrade())
                 .has(not(compilationSuccess()))
@@ -93,6 +94,7 @@ public class StandardResultWriterTest {
         String output = generatedResult();
 
         assertThat(output)
+                .has(versionInformation(versionInformation))
                 .has(not(compilationSuccess()))
                 .has(compilationFailure())
                 .has(compilationFailureConfigurationError());
@@ -109,6 +111,7 @@ public class StandardResultWriterTest {
         String output = generatedResult();
 
         assertThat(output)
+                .has(versionInformation(versionInformation))
                 .has(finalGradeNotOnScreen(0))
                 .has(noFinalGrade())
                 .has(genericFailure("test failure"));
@@ -132,6 +135,7 @@ public class StandardResultWriterTest {
         String output = generatedResult();
 
         assertThat(output)
+                .has(versionInformation(versionInformation))
                 .has(finalGradeNotOnScreen(0))
                 .has(noFinalGrade())
                 .has(compilationSuccess())
@@ -179,6 +183,7 @@ public class StandardResultWriterTest {
         String output = generatedResult();
 
         assertThat(output)
+                .has(versionInformation(versionInformation))
                 .has(finalGradeOnScreen(34))
                 .has(compilationSuccess())
                 .has(linesCovered(4))
@@ -220,6 +225,7 @@ public class StandardResultWriterTest {
         String output = generatedResult();
 
         assertThat(output)
+                .has(versionInformation(versionInformation))
                 .has(finalGradeOnScreen(34))
                 .has(compilationSuccess())
                 .has(linesCovered(4))
@@ -270,6 +276,7 @@ public class StandardResultWriterTest {
         String output = generatedResult();
 
         assertThat(output)
+                .has(versionInformation(versionInformation))
                 .has(finalGradeNotOnScreen(34))
                 .has(noFinalGrade())
                 .has(compilationSuccess())
@@ -306,6 +313,7 @@ public class StandardResultWriterTest {
         String output = generatedResult();
 
         assertThat(output)
+                .has(versionInformation(versionInformation))
                 .has(finalGradeOnScreen(0))
                 .has(not(compilationSuccess()))
                 .has(compilationFailure())
@@ -338,6 +346,7 @@ public class StandardResultWriterTest {
         String output = generatedResult();
 
         assertThat(output)
+                .has(versionInformation(versionInformation))
                 .has(finalGradeOnScreen(100))
                 .contains("random ascii art");
     }
@@ -381,6 +390,7 @@ public class StandardResultWriterTest {
         String output = generatedResult();
 
         assertThat(output)
+                .has(versionInformation(versionInformation))
                 .has(finalGradeOnScreen(34))
                 .has(compilationSuccess())
                 .has(linesCovered(4))
@@ -432,6 +442,7 @@ public class StandardResultWriterTest {
         String output = generatedResult();
 
         assertThat(output)
+                .has(versionInformation(versionInformation))
                 .has(finalGradeOnScreen(34))
                 .has(compilationSuccess())
                 .has(linesCovered(4))
@@ -459,6 +470,7 @@ public class StandardResultWriterTest {
         String output = generatedResult();
 
         assertThat(output)
+                .has(versionInformation(versionInformation))
                 .has(compilationSuccess())
                 .has(testResults())
                 .has(numberOfJUnitTestsPassing(3))
@@ -480,6 +492,7 @@ public class StandardResultWriterTest {
         String output = generatedResult();
 
         assertThat(output)
+                .has(versionInformation(versionInformation))
                 .has(compilationSuccess())
                 .has(testResults())
                 .has(numberOfJUnitTestsPassing(3))
@@ -506,6 +519,7 @@ public class StandardResultWriterTest {
         String output = generatedResult();
 
         assertThat(output)
+                .has(versionInformation(versionInformation))
                 .has(compilationSuccess())
                 .has(testResults())
                 .has(numberOfJUnitTestsPassing(1))
@@ -530,6 +544,7 @@ public class StandardResultWriterTest {
         String output = generatedResult();
 
         assertThat(output)
+                .has(versionInformation(versionInformation))
                 .has(compilationSuccess())
                 .has(testResults())
                 .has(noJUnitTestsFound())
