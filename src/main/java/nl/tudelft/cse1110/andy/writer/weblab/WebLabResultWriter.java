@@ -5,6 +5,7 @@ import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.result.*;
 import nl.tudelft.cse1110.andy.writer.standard.RandomAsciiArtGenerator;
 import nl.tudelft.cse1110.andy.writer.standard.StandardResultWriter;
+import nl.tudelft.cse1110.andy.writer.standard.VersionInformation;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -15,8 +16,8 @@ import static nl.tudelft.cse1110.andy.utils.FilesUtils.writeToFile;
 
 public class WebLabResultWriter extends StandardResultWriter {
 
-    public WebLabResultWriter(RandomAsciiArtGenerator asciiArtGenerator) {
-        super(asciiArtGenerator);
+    public WebLabResultWriter(VersionInformation versionInformation, RandomAsciiArtGenerator asciiArtGenerator) {
+        super(versionInformation, asciiArtGenerator);
     }
 
     @Override
