@@ -3,6 +3,7 @@ package integration;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.writer.ResultWriter;
 import nl.tudelft.cse1110.andy.writer.standard.RandomAsciiArtGenerator;
+import nl.tudelft.cse1110.andy.writer.standard.VersionInformation;
 import nl.tudelft.cse1110.andy.writer.weblab.WebLabResultWriter;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +16,8 @@ public class WebLabTest extends IntegrationTestBase {
 
     protected ResultWriter getWriter() {
         RandomAsciiArtGenerator generator = new RandomAsciiArtGenerator();
-        return new WebLabResultWriter(generator);
+        VersionInformation versionInformation = new VersionInformation("testVersion", "testBuildTimestamp", "testCommitId");
+        return new WebLabResultWriter(versionInformation, generator);
     }
 
     @Test

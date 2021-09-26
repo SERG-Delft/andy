@@ -8,6 +8,7 @@ import nl.tudelft.cse1110.andy.result.*;
 import nl.tudelft.cse1110.andy.writer.ResultWriter;
 import nl.tudelft.cse1110.andy.writer.standard.RandomAsciiArtGenerator;
 import nl.tudelft.cse1110.andy.writer.standard.StandardResultWriter;
+import nl.tudelft.cse1110.andy.writer.standard.VersionInformation;
 import org.assertj.core.api.Condition;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,11 +30,12 @@ import static unit.writer.standard.StandardResultTestAssertions.*;
 
 public class StandardResultWriterTest {
     protected Context ctx = mock(Context.class);
+    protected VersionInformation versionInformation = new VersionInformation("testVersion", "testBuildTimestamp", "testCommitId");
     protected RandomAsciiArtGenerator asciiArtGenerator = mock(RandomAsciiArtGenerator.class);
     protected ResultWriter writer;
 
     protected ResultWriter buildWriter() {
-        return new StandardResultWriter(asciiArtGenerator);
+        return new StandardResultWriter(versionInformation, asciiArtGenerator);
     }
 
     @TempDir
