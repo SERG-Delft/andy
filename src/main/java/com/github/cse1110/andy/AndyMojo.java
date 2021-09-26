@@ -34,6 +34,38 @@ public class AndyMojo extends AbstractMojo {
 
     @Override
     public void execute() {
+        System.out.println(
+            """
+
+
+            */(##%#*.
+            //**(/////(/*/*/.
+         ,/*****,,,,,,,,,,***/#(
+       ,#***,,,,,,,,,,,,,*,***//%
+       (/***,,,.......,,,,,,**//(
+       %/***,,............,,,*///(
+       (#****,,.........,*##/,/(/(
+       (((*,**,,(,(/*..,#/*%#/#//###
+      **#/**,,,,,***,,,,/*,,,*,,/#((
+     ,,,,/***,.....,,*.,*(*,,,,*/((
+       ,,.,(**,...*,*/,,(%#/***#(#/
+         ,,/#/**//*,**.(*///(#*/(.
+           /(/**,*/#.. . ,*//*,##
+            *(((/,..,,,,*/#**.%(
+         %&*/*#,(#,....,,,,,,,#
+        %%%%%////&%*.**.*,**(@@&%#
+       %%#%%%%%#//*/%&&&%&%(#@@&&&%(%&%/
+    #%%%%%%%%%%%%%///**/(#&#&@@@&%%%@/%&
+ ##%%%%%%%%%%%%%%%&&%//*/%@@(@&%#@@@%&&& 
+#########################################
+#                                       #
+#                A N D Y                #
+#                                       #
+#########################################
+
+
+        """);
+
         File basedir = project.getBasedir();
 
         File workDir = null;
@@ -76,7 +108,7 @@ public class AndyMojo extends AbstractMojo {
             /* Read output file */
             String output = readFile(new File(concatenateDirectories(outputDir.getAbsolutePath(), "stdout.txt")));
             System.out.println(output);
-            System.out.println("\nCheck branch and mutation coverage in the /andy folder!");
+            System.out.println("\n\n\nCheck branch and mutation coverage in the /andy folder!\n\n");
 
         } catch (Exception ex) {
             ex.printStackTrace(System.err);
