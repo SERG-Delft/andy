@@ -69,6 +69,6 @@ public class ResultTestDataBuilder {
     }
 
     public Result build() {
-        return new Result(compilation, testResults, mutationResults, codeCheckResults, coverageResults, metaTestResults, finalGrade, genericFailureMessage, timeInSeconds, weights);
+        return new Result(compilation, testResults, mutationResults, codeCheckResults, coverageResults, metaTestResults, finalGrade, genericFailureMessage, timeInSeconds, weights, null);
     }
 }

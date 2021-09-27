@@ -60,4 +60,8 @@ public class ExternalProcess extends Thread {
 
         process.destroy();
     }
+
+    public String getOutput(){
+        return output.toString();
+    }
 }

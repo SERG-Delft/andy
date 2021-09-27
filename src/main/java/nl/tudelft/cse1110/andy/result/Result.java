@@ -14,8 +14,9 @@ public class Result {
     private final String genericFailure;
     private final double timeInSeconds;
     private final GradeWeight weights;
+    private final String externalProcessOutput;
 
-    public Result(CompilationResult compilation, UnitTestsResult tests, MutationTestingResult mutationTesting, CodeChecksResult codeChecks, CoverageResult coverage, MetaTestsResult metaTests, int finalGrade, String genericFailure, double timeInSeconds, GradeWeight weights) {
+    public Result(CompilationResult compilation, UnitTestsResult tests, MutationTestingResult mutationTesting, CodeChecksResult codeChecks, CoverageResult coverage, MetaTestsResult metaTests, int finalGrade, String genericFailure, double timeInSeconds, GradeWeight weights, String externalProcessOutput) {
         this.compilation = compilation;
         this.tests = tests;
         this.mutationTesting = mutationTesting;
@@ -26,13 +27,14 @@ public class Result {
         this.genericFailure = genericFailure;
         this.timeInSeconds = timeInSeconds;
         this.weights = weights;
+        this.externalProcessOutput = externalProcessOutput;
 
         if(finalGrade < 0 || finalGrade>100)
             throw new RuntimeException("Invalid final grade");
     }
 
     public Result(CompilationResult compilation, double timeInSeconds) {
-        this(compilation, UnitTestsResult.empty(), MutationTestingResult.empty(), CodeChecksResult.empty(), CoverageResult.empty(), MetaTestsResult.empty(), 0, null, timeInSeconds, null);
+        this(compilation, UnitTestsResult.empty(), MutationTestingResult.empty(), CodeChecksResult.empty(), CoverageResult.empty(), MetaTestsResult.empty(), 0, null, timeInSeconds, null, null);
     }
 
     public CompilationResult getCompilation() {
@@ -73,6 +75,10 @@ public class Result {
 
     public String getGenericFailure() {
         return genericFailure;
+    }
+
+    public String getExternalProcessOutput() {
+        return externalProcessOutput;
     }
 
     public boolean hasFailed() {
