@@ -5,6 +5,7 @@ import nl.tudelft.cse1110.andy.execution.mode.ModeActionSelector;
 import nl.tudelft.cse1110.andy.result.*;
 import nl.tudelft.cse1110.andy.utils.ExceptionUtils;
 import nl.tudelft.cse1110.andy.utils.ImportUtils;
+import nl.tudelft.cse1110.andy.utils.PropertyUtils;
 import nl.tudelft.cse1110.andy.writer.ResultWriter;
 import nl.tudelft.cse1110.andy.writer.weblab.Highlight;
 
@@ -31,8 +32,11 @@ public class StandardResultWriter implements ResultWriter {
     }
 
     public StandardResultWriter(VersionInformation versionInformation) {
-        this.versionInformation = versionInformation;
-        this.asciiArtGenerator = new RandomAsciiArtGenerator();
+        this(versionInformation, new RandomAsciiArtGenerator());
+    }
+
+    public StandardResultWriter() {
+        this(PropertyUtils.getVersionInformation());
     }
 
     @Override
