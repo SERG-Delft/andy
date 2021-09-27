@@ -45,21 +45,12 @@ public class ClassUtils {
     }
 
     /**
-     * Receives the directory containing jar libraries, and returns
-     * their list in the format that the JVM wants as classpath.
+     * Receives the list of jar files and puts them in a classpath format
      *
-     * @param librariesDir the full directory
+     * @param libraries the list of libraries
      * @return string in the format of "/dir/dir/lib1.jar:/dir/dir/lib2.jar..."
      */
-    public static String asClassPath(String librariesDir) {
-        List<String> libraries = new ArrayList<>();
-
-        File directoryPath = new File(librariesDir);
-        File filesList[] = directoryPath.listFiles();
-        for(File file : filesList) {
-            libraries.add(file.getAbsolutePath());
-        }
-
+    public static String asClassPath(List<String> libraries) {
         return libraries.stream().collect(Collectors.joining(classSeparator()));
     }
 
@@ -132,6 +123,35 @@ public class ClassUtils {
             return ";";
         }
         return ":";
+    }
+
+    /**
+     * Get the name of the .class file.
+     * If the full name contains a subclass, we should replace
+     * the dot (.) by a ($), so that we find the file.
+     *
+     * @param name the full name
+     * @return the full name with subclasses using $
+     */
+    public static String clazzNameAsPath(String name) {
+        String[] parts = name.split("\\.");
+
+        StringBuilder finalName = new StringBuilder();
+        for(int i = 0; i < parts.length; i++) {
+            String part = parts[i];
+            if(i>0) {
+                String previousPart = parts[i-1];
+                if(Character.isUpperCase(previousPart.charAt(0)))
+                    finalName.append("$");
+                else
+                    finalName.append("/");
+            }
+
+            finalName.append(part);
+        }
+
+        finalName.append(".class");
+        return finalName.toString();
     }
 
 }

@@ -51,6 +51,20 @@ public class JacocoTest extends IntegrationTestBase {
         assertThat(result.getCoverage().wasExecuted()).isFalse();
     }
 
+    @Test
+    void nestedClassesInLibrary() {
+        Result result = run(Action.COVERAGE,
+                "CollectionUtilsIsEqualCollectionLibrary",
+                "CollectionUtilsIsEqualCollectionFullCoverage",
+                "CollectionUtilsIsEqualCollectionCoverageConfiguration");
+
+        assertThat(result.getCoverage().wasExecuted()).isTrue();
+
+        assertThat(result.getCoverage().getCoveredLines()).isEqualTo(28);
+        assertThat(result.getCoverage().getCoveredInstructions()).isEqualTo(119);
+        assertThat(result.getCoverage().getCoveredBranches()).isEqualTo(14);
+    }
+
     @ParameterizedTest
     @MethodSource("coveredLinesGenerator")
     void coveredAndUncoveredLines(String library, String solution, List<Integer> coveredLines, List<Integer> partiallyCovered, List<Integer> notCovered) {

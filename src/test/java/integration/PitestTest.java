@@ -21,7 +21,7 @@ public class PitestTest extends IntegrationTestBase {
     }
 
 
-    /* Test where some of the mutants are killed.
+    /* Test where some mutants are killed.
      */
     @Test
     void mutantsSurvived() {

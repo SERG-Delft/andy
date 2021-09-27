@@ -1,4 +1,4 @@
-package testutils;
+package unit.writer.standard;
 
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
 import org.apache.commons.lang.StringUtils;
@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 import static org.assertj.core.api.AssertionsForClassTypes.not;
 
 
-public class WebLabTestAssertions {
+public class StandardResultTestAssertions {
 
     protected static Condition<String> containsRegex(String regex) {
         return new Condition<>() {
@@ -25,7 +25,7 @@ public class WebLabTestAssertions {
         };
     }
 
-    protected static Condition<String> containsString(String regex) {
+    public static Condition<String> containsString(String regex) {
         return new Condition<>() {
             @Override
             public boolean matches(String value) {
@@ -145,32 +145,28 @@ public class WebLabTestAssertions {
         return containsRegex("Meta test: " + metaTestName + " \\(.*\\) PASSED");
     }
 
-    public static Condition<String> finalGrade(String workDir, int score) {
+    public static Condition<String> finalGrade(int score) {
         return new Condition<>() {
             @Override
             public boolean matches(String value) {
                 // the message in the output string is correct
                 boolean messageIsCorrect = value.contains("Final grade: " + score + "/100");
 
-                // result xml contains the correct score
-                boolean resultXmlIsCorrect = resultXmlHasCorrectGrade(workDir, score);
-
-                // assert passes if both are correct
-                return messageIsCorrect && resultXmlIsCorrect;
+                return messageIsCorrect;
             }
         };
     }
 
-    public static Condition<String> finalGradeInXml(String workDir, int score) {
+    public static Condition<String> finalGradeInXml(String reportDir, int score) {
         return new Condition<>() {
             @Override
             public boolean matches(String value) {
-                return resultXmlHasCorrectGrade(workDir, score);
+                return resultXmlHasCorrectGrade(reportDir, score);
             }
         };
     }
 
-    public static boolean resultXmlHasCorrectGrade(String workDir, int score) {
+    private static boolean resultXmlHasCorrectGrade(String workDir, int score) {
         File resultXml = new File(FilesUtils.concatenateDirectories(workDir, "results.xml"));
         String resultXmlContent = FilesUtils.readFile(resultXml);
 

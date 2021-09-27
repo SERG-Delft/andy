@@ -2,6 +2,8 @@ package unit.utils;
 
 import nl.tudelft.cse1110.andy.utils.ClassUtils;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -48,6 +50,19 @@ public class ClassUtilsTest {
 
         assertThrows(RuntimeException.class,
                 () -> ClassUtils.extractPackageName(sourceCode));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "A,A.class",
+            "a.B,a/B.class",
+            "a.b.C,a/b/C.class",
+            "a.C.D,a/C$D.class",
+            "a.b.C.D,a/b/C$D.class"
+    })
+    void clazzName(String input, String output) {
+        assertThat(ClassUtils.clazzNameAsPath(input))
+                .isEqualTo(output);
     }
 
 

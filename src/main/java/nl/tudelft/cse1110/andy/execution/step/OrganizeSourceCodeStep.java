@@ -4,6 +4,7 @@ import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -22,7 +23,6 @@ public class OrganizeSourceCodeStep implements ExecutionStep {
 
         try {
             List<String> listOfFiles = filePathsAsString(getAllJavaFiles(dirCfg.getWorkingDir()));
-
             for(String pathOfJavaClass : listOfFiles) {
                 String content = new String(Files.readAllBytes(Paths.get(pathOfJavaClass)));
 

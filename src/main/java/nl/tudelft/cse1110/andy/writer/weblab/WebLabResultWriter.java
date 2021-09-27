@@ -2,73 +2,34 @@ package nl.tudelft.cse1110.andy.writer.weblab;
 
 import com.google.gson.Gson;
 import nl.tudelft.cse1110.andy.execution.Context;
-import nl.tudelft.cse1110.andy.execution.mode.ModeActionSelector;
 import nl.tudelft.cse1110.andy.result.*;
-import nl.tudelft.cse1110.andy.utils.ExceptionUtils;
-import nl.tudelft.cse1110.andy.utils.ImportUtils;
-import nl.tudelft.cse1110.andy.writer.ResultWriter;
+import nl.tudelft.cse1110.andy.writer.standard.RandomAsciiArtGenerator;
+import nl.tudelft.cse1110.andy.writer.standard.StandardResultWriter;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static nl.tudelft.cse1110.andy.utils.FilesUtils.concatenateDirectories;
 import static nl.tudelft.cse1110.andy.utils.FilesUtils.writeToFile;
 
-public class WebLabResultWriter implements ResultWriter {
-    private final Context ctx;
-    private final RandomAsciiArtGenerator asciiArtGenerator;
+public class WebLabResultWriter extends StandardResultWriter {
 
-    private StringBuilder toDisplay = new StringBuilder();
-    private List<Highlight> highlights = new ArrayList<>();
-
-    public WebLabResultWriter(Context ctx, RandomAsciiArtGenerator asciiArtGenerator) {
-        this.ctx = ctx;
-        this.asciiArtGenerator = asciiArtGenerator;
+    public WebLabResultWriter(RandomAsciiArtGenerator asciiArtGenerator) {
+        super(asciiArtGenerator);
     }
 
     @Override
-    public void write(Result result) {
-        writeStdOutFile(result);
-        writeResultsXmlFile(result);
-        writeHighlightsJson(result);
-        writeAnalyticsFile(result);
+    public void write(Context ctx, Result result) {
+
+        super.write(ctx, result);
+
+        writeResultsXmlFile(ctx, result);
+        writeHighlightsJson(ctx, result);
+        writeAnalyticsFile(ctx, result);
     }
 
-    @Override
-    public void uncaughtError(Throwable t) {
-        StringBuilder errorMsg = new StringBuilder();
-
-        errorMsg.append("\n\n*** ERROR ***\n");
-        errorMsg.append("Something unexpected just happened. Please forward this message to the teacher.\n\n");
-        errorMsg.append(ExceptionUtils.exceptionMessage(t));
-
-        File stdoutTxt = new File(concatenateDirectories(ctx.getDirectoryConfiguration().getOutputDir(), "stdout.txt"));
-        writeToFile(stdoutTxt, errorMsg.toString());
-    }
-
-    private void writeStdOutFile(Result result) {
-
-        if(result.hasGenericFailure()) {
-            toDisplay.append(result.getGenericFailure());
-        } else {
-            printCompilationResult(result.getCompilation());
-            printTestResults(result.getTests());
-            printCoverageResults(result.getCoverage());
-            printMutationTestingResults(result.getMutationTesting());
-            printCodeCheckResults(result.getCodeChecks());
-            printMetaTestResults(result.getMetaTests());
-            printFinalGrade(result);
-            printModeAndTimeToRun(result.getTimeInSeconds());
-        }
-
-        File stdoutTxt = new File(concatenateDirectories(ctx.getDirectoryConfiguration().getOutputDir(), "stdout.txt"));
-        writeToFile(stdoutTxt, toDisplay.toString());
-    }
-
-    private void writeResultsXmlFile(Result result) {
+    private void writeResultsXmlFile(Context ctx, Result result) {
         String xml = buildResultsXml(result);
 
         File resultsXml = new File(concatenateDirectories(ctx.getDirectoryConfiguration().getOutputDir(), "results.xml"));
@@ -91,7 +52,7 @@ public class WebLabResultWriter implements ResultWriter {
     }
 
 
-    private void writeHighlightsJson(Result result){
+    private void writeHighlightsJson(Context ctx, Result result){
 
         List<Highlight> highlights = buildHighlights(result);
         String json = new Gson().toJson(highlights);
@@ -127,7 +88,7 @@ public class WebLabResultWriter implements ResultWriter {
         return highlights;
     }
 
-    private void writeAnalyticsFile(Result result) {
+    private void writeAnalyticsFile(Context ctx, Result result) {
         if(ctx.getModeActionSelector()==null || !ctx.getModeActionSelector().shouldGenerateAnalytics())
             return;
 
@@ -142,220 +103,6 @@ public class WebLabResultWriter implements ResultWriter {
         writeToFile(file, json);
     }
 
-
-    private void printFinalGrade(Result result) {
-        // we only show grades in specific modes and actions
-        // if ModeActionSelector is not injected yet (i.e., it's null), it's because compilation fail.
-        // in this case, we give it a zero, no matter the mode.
-        boolean shouldShowGrades = modeActionSelector()!=null && modeActionSelector().shouldCalculateAndShowGrades();
-        if(!shouldShowGrades)
-            return;
-
-        int finalGrade = result.getFinalGrade();
-
-        l("");
-        l("--- Assessment");
-
-        // describe the weights and grades per component
-        if(result.getCompilation().successful()) {
-            printGradeCalculationDetails("Branch coverage", result.getCoverage().getCoveredBranches(), result.getCoverage().getTotalNumberOfBranches(), result.getWeights().getBranchCoverageWeight());
-            printGradeCalculationDetails("Mutation coverage", result.getMutationTesting().getKilledMutants(), result.getMutationTesting().getTotalNumberOfMutants(), result.getWeights().getMutationCoverageWeight());
-            printGradeCalculationDetails("Code checks", result.getCodeChecks().getNumberOfPassedChecks(), result.getCodeChecks().getTotalNumberOfChecks(), result.getWeights().getCodeChecksWeight());
-            printGradeCalculationDetails("Meta tests", result.getMetaTests().getPassedMetaTests(), result.getMetaTests().getTotalTests(), result.getWeights().getMetaTestsWeight());
-            l("");
-        }
-
-        // print the final grade
-        l(String.format("Final grade: %d/100", finalGrade));
-
-        // print some nice ascii art if it's full grade!
-        if (result.isFullyCorrect()) {
-            String randomAsciiArt = asciiArtGenerator.getRandomAsciiArt();
-            l("");
-            l(randomAsciiArt);
-        }
-    }
-
-    private void printGradeCalculationDetails(String what, int score, int total, double weight) {
-        l(String.format("%s: %d/%d (overall weight=%.2f)%s", what, score, total, weight,
-                (total > 0 && weight==0 ? " (0 gives full points)":"") ));
-    }
-
-    private void printModeAndTimeToRun(double timeInSeconds) {
-        if(modeActionSelector()!=null)
-            l(String.format("\nAndy is running in %s mode and took %.1f seconds to assess your solution.", modeActionSelector().getMode().toString(), timeInSeconds));
-        else
-            l(String.format("\nAndy took %.1f seconds to assess your question.", timeInSeconds));
-    }
-
-    private void printMetaTestResults(MetaTestsResult metaTests) {
-        if(!metaTests.wasExecuted())
-            return;
-
-        boolean allHints = modeActionSelector().shouldShowFullHints();
-        boolean onlyResult = modeActionSelector().shouldShowPartialHints();
-
-        if(!allHints && !onlyResult)
-            return;
-
-        l("\n--- Meta tests");
-        l(String.format("%d/%d passed", metaTests.getPassedMetaTests(), metaTests.getTotalTests()));
-
-        if (allHints) {
-            for (MetaTestResult metaTestResult : metaTests.getMetaTestResults()) {
-                if (metaTestResult.succeeded()) {
-                    l(String.format("Meta test: %s (weight: %d) PASSED", metaTestResult.getName(), metaTestResult.getWeight()));
-                } else {
-                    l(String.format("Meta test: %s (weight: %d) FAILED", metaTestResult.getName(), metaTestResult.getWeight()));
-                }
-            }
-        }
-
-    }
-
-    private void printCoverageResults(CoverageResult coverage) {
-        if(!coverage.wasExecuted())
-            return;
-
-        l("\n--- JaCoCo coverage");
-
-        l(String.format("Line coverage: %d/%d", coverage.getCoveredLines(), coverage.getTotalNumberOfLines()));
-        l(String.format("Instruction coverage: %d/%d", coverage.getCoveredInstructions(), coverage.getTotalNumberOfInstructions()));
-        l(String.format("Branch coverage: %d/%d", coverage.getCoveredBranches(), coverage.getTotalNumberOfBranches()));
-
-        if(!coverage.getPartiallyCoveredLines().isEmpty()) {
-            l(String.format("Partially covered lines: %s",
-                    coverage.getPartiallyCoveredLines().stream().map(i -> String.valueOf(i)).collect(Collectors.joining(", "))));
-        }
-
-        if(!coverage.getNotCoveredLines().isEmpty()) {
-            l(String.format("Lines not covered: %s",
-                    coverage.getNotCoveredLines().stream().map(i -> String.valueOf(i)).collect(Collectors.joining(", "))));
-        }
-
-    }
-
-    private void printCodeCheckResults(CodeChecksResult codeChecks) {
-        if(!codeChecks.wasExecuted())
-            return;
-
-        boolean allHints = modeActionSelector().shouldShowFullHints();
-        boolean onlyResult = modeActionSelector().shouldShowPartialHints();
-
-        if(!allHints && !onlyResult)
-            return;
-
-        if(!codeChecks.hasChecks()) {
-            l("\n--- Code checks");
-            l("No code checks to be assessed");
-        }
-        else {
-            l("\n--- Code checks");
-            l(String.format("%d/%d passed", codeChecks.getNumberOfPassedChecks(), codeChecks.getTotalNumberOfChecks()));
-
-            if(allHints) {
-                for (CodeCheckResult result : codeChecks.getCheckResults()) {
-                    l(String.format("%s: %s (weight: %d)",
-                            result.getDescription(),
-                            result.passed() ? "PASS" : "FAIL",
-                            result.getWeight()));
-                }
-
-            }
-        }
-
-    }
-
-    private void printMutationTestingResults(MutationTestingResult mutationTesting) {
-        if(!mutationTesting.wasExecuted())
-            return;
-
-        l("\n--- Mutation testing");
-        l(String.format("%d/%d killed", mutationTesting.getKilledMutants(), mutationTesting.getTotalNumberOfMutants()));
-    }
-
-    private void printTestResults(UnitTestsResult tests) {
-
-        if(!tests.wasExecuted())
-            return;
-
-        l("\n--- JUnit execution");
-        if (tests.getTestsFound() == 0) {
-            noTestsFound(tests);
-        } else {
-            l(String.format("%d/%d passed", tests.getTestsSucceeded(), tests.getTestsFound()));
-
-            if(tests.hasFailingMessage()) {
-                l("");
-
-                for (TestFailureInfo failure : tests.getFailures()) {
-                    l("- " + failure.getTestCase() + ":");
-                    if(failure.hasMessage())
-                        l(failure.getMessage());
-                }
-
-                l("You must ensure that all tests are passing! Stopping the assessment.");
-            }
-
-            if(tests.hasConsoleOutput()) {
-                l("\n--- Console output");
-                l(tests.getConsole());
-            }
-
-        }
-    }
-
-    private void noTestsFound(UnitTestsResult tests) {
-        l(
-        "Warning\nWe do not see any tests.\n" +
-        "Please check for the following JUnit pre-conditions:\n" +
-        "- Normal tests must be annotated with \"@Test\"\n" +
-        "- Parameterized tests must be annotated with \"@ParameterizedTest\"\n" +
-        "- Method sources must be static and provided as: \"@MethodSource(\"generator\")\" e.g.\n" +
-        "- Property based tests must be annotated with \"@Property\"\n" +
-        "- @BeforeAll and @AfterAll methods should be static\n" +
-        "- @BeforeEach methods should be non-static");
-    }
-
-    private void printCompilationResult(CompilationResult compilation) {
-        if(compilation.successful()) {
-            l("--- Compilation\nSuccess");
-        } else {
-            l("We could not compile the code. See the compilation errors below:");
-            List<CompilationErrorInfo> compilationErrors = compilation.getErrors();
-
-            for(CompilationErrorInfo error : compilationErrors) {
-
-                String message = error.getMessage();
-                long lineNumber = error.getLineNumber();
-                l(String.format("- line %d: %s",
-                        lineNumber,
-                        message));
-
-                Optional<String> importLog = ImportUtils.checkMissingImport(message);
-                importLog.ifPresent(this::l);
-
-                highlights.add(new Highlight(lineNumber, message, Highlight.HighlightLocation.SOLUTION, Highlight.HighlightPurpose.COMPILATION_ERROR));
-            }
-
-            if(compilation.hasConfigurationError()) {
-                l("\n**WARNING:** There might be a problem with this exercise. "+
-                        "Please contact the teaching staff so they can fix this as quickly" +
-                        "as possible. Thank you for your help! :)");
-            }
-        }
-    }
-
-
-
-    private void l(String line) {
-        toDisplay.append(line);
-        toDisplay.append("\n");
-    }
-
-    private ModeActionSelector modeActionSelector() {
-        return ctx.getModeActionSelector();
-    }
 
 
 }

@@ -1,8 +1,8 @@
-package testutils;
+package unit.writer.weblab;
 
 import org.assertj.core.api.Condition;
 
-import static testutils.WebLabTestAssertions.containsString;
+import static unit.writer.standard.StandardResultTestAssertions.containsString;
 
 public class WebLabHighlightsJsonTestAssertions {
 

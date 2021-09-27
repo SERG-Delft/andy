@@ -18,10 +18,14 @@ import org.pitest.mutationtest.tooling.EntryPoint;
 import org.pitest.util.Unchecked;
 import org.apache.commons.io.FileUtils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class RunPitestStep implements ExecutionStep {
@@ -39,10 +43,16 @@ public class RunPitestStep implements ExecutionStep {
             result.genericFailure("PITEST: " + pr.getErrorMessage().get());
         } else {
             final ReportOptions data = pr.getOptions();
-            final CombinedStatistics stats = runReport(data, plugins);
+
+            // let's silence the sysout and java logging
+            PrintStream console = silencePitest();
+
+            // run!
+            final CombinedStatistics stats = runReport(ctx, data, plugins);
+
+            System.setOut(console);
 
             extractAndRemoveReportFolder(outputPitestDir);
-
             result.logPitest(stats);
         }
     }
@@ -75,7 +85,8 @@ public class RunPitestStep implements ExecutionStep {
         args.add("false");
 
         args.add("--classPath");
-        args.add(dirCfg.getWorkingDir());
+        List<String> librariesToInclude = compiledClassesPlusLibraries(ctx, dirCfg);
+        args.add(commaSeparated(librariesToInclude));
 
         args.add("--mutators");
         args.add(commaSeparated(runCfg.listOfMutants()));
@@ -83,16 +94,27 @@ public class RunPitestStep implements ExecutionStep {
         return args.stream().toArray(String[]::new);
     }
 
+    private List<String> compiledClassesPlusLibraries(Context ctx, DirectoryConfiguration dirCfg) {
+        List<String> toAddToClassPath = new ArrayList<>();
+        toAddToClassPath.add(dirCfg.getWorkingDir());
+
+        if(ctx.hasLibrariesToBeIncluded()) {
+            toAddToClassPath.addAll(ctx.getLibrariesToBeIncluded());
+        }
+
+        return toAddToClassPath;
+    }
+
     private String commaSeparated(List<String> list) {
         return list.stream().collect(Collectors.joining(","));
     }
 
-    private static CombinedStatistics runReport(ReportOptions data,
+    private static CombinedStatistics runReport(Context ctx, ReportOptions data,
                                                 PluginServices plugins) {
 
         final EntryPoint e = new EntryPoint();
-        final AnalysisResult result = e.execute(null, data, plugins,
-                new HashMap<>());
+        File baseDir = new File(ctx.getDirectoryConfiguration().getWorkingDir());
+        final AnalysisResult result = e.execute(baseDir, data, plugins, new HashMap<>());
         if (result.getError().isPresent()) {
             throw Unchecked.translateCheckedException(result.getError().get());
         }
@@ -123,6 +145,15 @@ public class RunPitestStep implements ExecutionStep {
             throw new RuntimeException(e);
         }
 
+    }
+
+    private PrintStream silencePitest() {
+        PrintStream console = System.out;
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(output));
+        Logger pit = Logger.getLogger("PIT");
+        Arrays.stream(pit.getHandlers()).forEach(h -> pit.removeHandler(h));
+        return console;
     }
 
     @Override

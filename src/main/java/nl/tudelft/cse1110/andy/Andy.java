@@ -5,37 +5,53 @@ import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.grade.GradeCalculator;
-import nl.tudelft.cse1110.andy.writer.weblab.RandomAsciiArtGenerator;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.writer.ResultWriter;
-import nl.tudelft.cse1110.andy.writer.weblab.WebLabResultWriter;
+
+import java.util.List;
 
 public class Andy {
 
-    public static void main(String[] args) {
-        if (System.getenv("ACTION") == null || System.getenv("WORKING_DIR") == null || System.getenv("OUTPUT_DIR") == null) {
-            System.out.println("Missing configuration.");
-            System.exit(-1);
-        }
+    private final Action action;
+    private final String workDir;
+    private final String outputDir;
+    private final List<String> librariesToBeIncluded;
+    private final ResultWriter writer;
 
+    public Andy(Action action, String workDir, String outputDir, List<String> librariesToBeIncluded, ResultWriter writer) {
+        this.writer = writer;
+        assert action!=null;
+        assert workDir!=null;
+        assert outputDir!=null;
+
+        this.action = action;
+        this.workDir = workDir;
+        this.outputDir = outputDir;
+        this.librariesToBeIncluded = librariesToBeIncluded;
+    }
+
+    public Andy(Action action, String workDir, String outputDir, ResultWriter writer) {
+        this(action, workDir, outputDir, null, writer);
+    }
+
+    public void run() {
         Context ctx = buildContext();
 
         ResultBuilder result = new ResultBuilder(ctx, new GradeCalculator());
-        ResultWriter writer = new WebLabResultWriter(ctx, new RandomAsciiArtGenerator());
         ExecutionFlow flow = ExecutionFlow.build(ctx, result, writer);
 
         flow.run();
     }
 
-    private static Context buildContext() {
-        Action action = Action.valueOf(System.getenv("ACTION"));
+    private Context buildContext() {
         Context ctx = new Context(action);
 
         DirectoryConfiguration dirCfg = new DirectoryConfiguration(
-                System.getenv("WORKING_DIR"),
-                System.getenv("OUTPUT_DIR")
-        );
+                workDir,
+                outputDir);
+
         ctx.setDirectoryConfiguration(dirCfg);
+        ctx.setLibrariesToBeIncluded(librariesToBeIncluded);
 
         return ctx;
     }
