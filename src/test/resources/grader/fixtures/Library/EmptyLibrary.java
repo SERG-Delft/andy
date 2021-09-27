@@ -1,0 +1,4 @@
+package delft;
+
+class EmptyLibrary {
+}
