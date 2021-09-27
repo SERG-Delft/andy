@@ -34,37 +34,7 @@ public class AndyMojo extends AbstractMojo {
 
     @Override
     public void execute() {
-        System.out.println(
-            """
-
-
-            */(##%#*.
-            //**(/////(/*/*/.
-         ,/*****,,,,,,,,,,***/#(
-       ,#***,,,,,,,,,,,,,*,***//%
-       (/***,,,.......,,,,,,**//(
-       %/***,,............,,,*///(
-       (#****,,.........,*##/,/(/(
-       (((*,**,,(,(/*..,#/*%#/#//###
-      **#/**,,,,,***,,,,/*,,,*,,/#((
-     ,,,,/***,.....,,*.,*(*,,,,*/((
-       ,,.,(**,...*,*/,,(%#/***#(#/
-         ,,/#/**//*,**.(*///(#*/(.
-           /(/**,*/#.. . ,*//*,##
-            *(((/,..,,,,*/#**.%(
-         %&*/*#,(#,....,,,,,,,#
-        %%%%%////&%*.**.*,**(@@&%#
-       %%#%%%%%#//*/%&&&%&%(#@@&&&%(%&%/
-    #%%%%%%%%%%%%%///**/(#&#&@@@&%%%@/%&
- ##%%%%%%%%%%%%%%%&&%//*/%@@(@&%#@@@%&&& 
-#########################################
-#                                       #
-#                A N D Y                #
-#                                       #
-#########################################
-
-
-        """);
+        this.printHeader();
 
         File basedir = project.getBasedir();
 
@@ -108,7 +78,7 @@ public class AndyMojo extends AbstractMojo {
             /* Read output file */
             String output = readFile(new File(concatenateDirectories(outputDir.getAbsolutePath(), "stdout.txt")));
             System.out.println(output);
-            System.out.println("\n\n\nCheck branch and mutation coverage in the /andy folder!\n\n");
+            System.out.println("\n\nCheck branch and mutation coverage in the /andy folder!\n\n");
 
         } catch (Exception ex) {
             ex.printStackTrace(System.err);
@@ -136,6 +106,19 @@ public class AndyMojo extends AbstractMojo {
         javaFiles.addAll(javaFilesInSrc);
         javaFiles.addAll(javaFilesInConfig);
         return javaFiles;
+    }
+
+    private void printHeader() {
+        System.out.println(
+            """
+
+
+#########################################
+#                                       #
+#                A N D Y                #
+#                                       #
+#########################################
+        """);
     }
 
 }
