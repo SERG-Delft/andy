@@ -27,6 +27,7 @@ public class Configuration extends RunConfiguration {
 
     @Override
     public ExternalProcess externalProcess() {
-        return new ExternalProcess("echo hello", "endme");
+        return new ExternalProcess("sh /tmp/andy_test_external_process_graceful_exit.sh",
+                "endme");
     }
 }
