@@ -24,7 +24,7 @@ public class AndyOnWebLab {
         if (workDir == null) { System.out.println("No WORKING_DIR environment variable."); System.exit(-1); }
         if (outputDir == null) { System.out.println("No OUTPUT_DIR environment variable.");  System.exit(-1); }
 
-        WebLabResultWriter writer = new WebLabResultWriter(PropertyUtils.getVersionInformation(), new RandomAsciiArtGenerator());
+        WebLabResultWriter writer = new WebLabResultWriter();
         new Andy(getAction(action), workDir, outputDir, writer).run();
     }
 
