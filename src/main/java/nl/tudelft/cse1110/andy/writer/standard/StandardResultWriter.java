@@ -31,12 +31,8 @@ public class StandardResultWriter implements ResultWriter {
         this.asciiArtGenerator = asciiArtGenerator;
     }
 
-    public StandardResultWriter(VersionInformation versionInformation) {
-        this(versionInformation, new RandomAsciiArtGenerator());
-    }
-
     public StandardResultWriter() {
-        this(PropertyUtils.getVersionInformation());
+        this(PropertyUtils.getVersionInformation(), new RandomAsciiArtGenerator());
     }
 
     @Override

@@ -20,6 +20,10 @@ public class WebLabResultWriter extends StandardResultWriter {
         super(versionInformation, asciiArtGenerator);
     }
 
+    public WebLabResultWriter() {
+        super();
+    }
+
     @Override
     public void write(Context ctx, Result result) {
 
