@@ -257,6 +257,11 @@ public class ResultBuilder {
             String externalProcessOutput = null;
             if (ctx.getExternalProcess() != null) {
                 externalProcessOutput = ctx.getExternalProcess().getOutput();
+
+                String errMsg = ctx.getExternalProcess().getErr();
+                if (errMsg != null) {
+                    genericFailureMessage = "External process: " + errMsg;
+                }
             }
 
             return new Result(compilation, testResults, mutationResults, codeCheckResults, coverageResults, metaTestResults, finalGrade, genericFailureMessage, timeInSeconds, weights, externalProcessOutput);

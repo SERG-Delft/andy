@@ -53,6 +53,8 @@ public class ExternalProcessTest extends IntegrationTestBase {
         Result result = run("EmptyLibrary", "EmptySolution",
                 "ExternalProcessGracefulExitConfiguration");
 
+        assertThat(result.getGenericFailure()).isNull();
+
         assertThat(result.getExternalProcessOutput()).isEqualTo("hello\n");
     }
 
@@ -62,6 +64,8 @@ public class ExternalProcessTest extends IntegrationTestBase {
 
             Result result = run("EmptyLibrary", "EmptySolution",
                     "ExternalProcessEndSignalConfiguration");
+
+            assertThat(result.getGenericFailure()).isNull();
 
             assertThat(result.getExternalProcessOutput())
                     .contains("test 123\nendsignal\n")

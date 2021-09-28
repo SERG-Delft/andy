@@ -1,7 +1,6 @@
 package nl.tudelft.cse1110.andy.execution.process;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Scanner;
 
 public class ExternalProcess extends Thread {
@@ -53,15 +52,28 @@ public class ExternalProcess extends Thread {
     }
 
     public void kill() {
-        if (process == null) {
+        if (process == null || !process.isAlive()) {
             return;
         }
-
 
         process.destroy();
     }
 
     public String getOutput(){
         return output.toString();
+    }
+
+    public String getErr(){
+        StringBuilder sb = new StringBuilder();
+        Scanner error = new Scanner(process.getErrorStream());
+        while(error.hasNextLine()){
+            sb.append(error.nextLine());
+        }
+
+        if(sb.isEmpty()){
+            return null;
+        }
+
+        return sb.toString();
     }
 }
