@@ -28,7 +28,7 @@ public class Configuration extends RunConfiguration {
     @Override
     public ExternalProcess externalProcess() {
         return new ExternalProcess(
-                "sh -c \"echo hello hello endsignal hello hello hello && sleep 10000\"",
+                "sh /tmp/andy_test_external_process_end_signal.sh",
                 "endsignal");
     }
 }
