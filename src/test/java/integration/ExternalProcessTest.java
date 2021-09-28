@@ -18,9 +18,11 @@ import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 @EnabledOnOs({OS.LINUX, OS.MAC})
 public class ExternalProcessTest extends IntegrationTestBase {
 
+    private static final String END_SIGNAL_SHELL_SCRIPT_PATH = "/tmp/andy_test_external_process_end_signal.sh";
+
     @BeforeAll
     static void copyShellScripts() throws IOException {
-        Files.writeString(Path.of("/tmp/andy_test_external_process_end_signal.sh"), """
+        Files.writeString(Path.of(END_SIGNAL_SHELL_SCRIPT_PATH), """
                 echo "test 123"
                 echo "endsignal"
                 sleep 15
@@ -30,7 +32,7 @@ public class ExternalProcessTest extends IntegrationTestBase {
 
     @AfterAll
     static void shellCleanup() throws IOException {
-        Files.deleteIfExists(Path.of("/tmp/andy_test_external_process_end_signal.sh"));
+        Files.deleteIfExists(Path.of(END_SIGNAL_SHELL_SCRIPT_PATH));
     }
 
     @Test
