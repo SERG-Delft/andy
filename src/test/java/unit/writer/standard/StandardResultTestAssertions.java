@@ -1,6 +1,7 @@
 package unit.writer.standard;
 
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
+import nl.tudelft.cse1110.andy.writer.standard.VersionInformation;
 import org.apache.commons.lang.StringUtils;
 import org.assertj.core.api.Condition;
 
@@ -79,6 +80,16 @@ public class StandardResultTestAssertions {
 
     public static Condition<String> compilationErrorType(String errorType) {
         return containsRegex("- line \\d+: " + errorType);
+    }
+
+    public static Condition<String> versionInformation(String version, String commitId, String timestamp) {
+        return containsString(String.format("Andy v%s-%s (%s)\n", version, commitId, timestamp));
+    }
+
+    public static Condition<String> versionInformation(VersionInformation versionInformation) {
+        return versionInformation(versionInformation.getVersion(),
+                versionInformation.getCommitId(),
+                versionInformation.getBuildTimestamp());
     }
 
     public static Condition<String> partiallyCoveredLine(int line) {

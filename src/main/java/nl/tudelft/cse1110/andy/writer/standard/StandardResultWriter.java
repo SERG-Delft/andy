@@ -5,6 +5,7 @@ import nl.tudelft.cse1110.andy.execution.mode.ModeActionSelector;
 import nl.tudelft.cse1110.andy.result.*;
 import nl.tudelft.cse1110.andy.utils.ExceptionUtils;
 import nl.tudelft.cse1110.andy.utils.ImportUtils;
+import nl.tudelft.cse1110.andy.utils.PropertyUtils;
 import nl.tudelft.cse1110.andy.writer.ResultWriter;
 import nl.tudelft.cse1110.andy.writer.weblab.Highlight;
 
@@ -19,17 +20,19 @@ import static nl.tudelft.cse1110.andy.utils.FilesUtils.writeToFile;
 
 public class StandardResultWriter implements ResultWriter {
 
+    private final VersionInformation versionInformation;
     private final RandomAsciiArtGenerator asciiArtGenerator;
 
     private StringBuilder toDisplay = new StringBuilder();
     private List<Highlight> highlights = new ArrayList<>();
 
-    public StandardResultWriter(RandomAsciiArtGenerator asciiArtGenerator) {
+    public StandardResultWriter(VersionInformation versionInformation, RandomAsciiArtGenerator asciiArtGenerator) {
+        this.versionInformation = versionInformation;
         this.asciiArtGenerator = asciiArtGenerator;
     }
 
     public StandardResultWriter() {
-        this.asciiArtGenerator = new RandomAsciiArtGenerator();
+        this(PropertyUtils.getVersionInformation(), new RandomAsciiArtGenerator());
     }
 
     @Override
@@ -50,6 +53,7 @@ public class StandardResultWriter implements ResultWriter {
     }
 
     private void writeStdOutFile(Context ctx, Result result) {
+        printVersionInformation();
 
         if(result.hasGenericFailure()) {
             toDisplay.append(result.getGenericFailure());
@@ -272,7 +276,13 @@ public class StandardResultWriter implements ResultWriter {
         }
     }
 
-
+    private void printVersionInformation() {
+        l(String.format("Andy v%s-%s (%s)\n",
+                versionInformation.getVersion(),
+                versionInformation.getCommitId(),
+                versionInformation.getBuildTimestamp()
+        ));
+    }
 
     private void l(String line) {
         toDisplay.append(line);
