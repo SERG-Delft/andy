@@ -27,7 +27,9 @@ public class Configuration extends RunConfiguration {
 
     @Override
     public ExternalProcess externalProcess() {
-        return new ExternalProcess("sh /tmp/andy_test_external_process_graceful_exit.sh",
+        String tmp = System.getProperty("java.io.tmpdir");
+        return new ExternalProcess(
+                "sh " + tmp + "/andy_test_external_process_graceful_exit.sh",
                 "endme");
     }
 }

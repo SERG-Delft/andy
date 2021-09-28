@@ -27,8 +27,9 @@ public class Configuration extends RunConfiguration {
 
     @Override
     public ExternalProcess externalProcess() {
+        String tmp = System.getProperty("java.io.tmpdir");
         return new ExternalProcess(
-                "sh /tmp/andy_test_external_process_end_signal.sh",
+                "sh " + tmp + "/andy_test_external_process_end_signal.sh",
                 "endsignal");
     }
 }

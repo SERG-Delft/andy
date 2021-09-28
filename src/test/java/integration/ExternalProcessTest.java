@@ -18,27 +18,34 @@ import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 @EnabledOnOs({OS.LINUX, OS.MAC})
 public class ExternalProcessTest extends IntegrationTestBase {
 
-    private static final String END_SIGNAL_SHELL_SCRIPT_PATH = "/tmp/andy_test_external_process_end_signal.sh";
-    private static final String GRACEFUL_EXIT_SHELL_SCRIPT_PATH = "/tmp/andy_test_external_process_graceful_exit.sh";
+    private static final String END_SIGNAL_SHELL_SCRIPT_PATH = "/andy_test_external_process_end_signal.sh";
+    private static final String GRACEFUL_EXIT_SHELL_SCRIPT_PATH = "/andy_test_external_process_graceful_exit.sh";
 
     @BeforeAll
     static void copyShellScripts() throws IOException {
-        Files.writeString(Path.of(END_SIGNAL_SHELL_SCRIPT_PATH), """
+        String tmp = getTempDirectory();
+
+        Files.writeString(Path.of(tmp + END_SIGNAL_SHELL_SCRIPT_PATH), """
                 echo "test 123"
                 echo "endsignal"
                 sleep 15
                 echo "should be killed before this"
                 """);
 
-        Files.writeString(Path.of(GRACEFUL_EXIT_SHELL_SCRIPT_PATH), """
+        Files.writeString(Path.of(tmp + GRACEFUL_EXIT_SHELL_SCRIPT_PATH), """
                 echo "hello"
                 """);
     }
 
     @AfterAll
     static void shellCleanup() throws IOException {
-        Files.deleteIfExists(Path.of(END_SIGNAL_SHELL_SCRIPT_PATH));
-        Files.deleteIfExists(Path.of(GRACEFUL_EXIT_SHELL_SCRIPT_PATH));
+        String tmp = getTempDirectory();
+        Files.deleteIfExists(Path.of(tmp + END_SIGNAL_SHELL_SCRIPT_PATH));
+        Files.deleteIfExists(Path.of(tmp + GRACEFUL_EXIT_SHELL_SCRIPT_PATH));
+    }
+
+    private static String getTempDirectory() {
+        return System.getProperty("java.io.tmpdir");
     }
 
     @Test
