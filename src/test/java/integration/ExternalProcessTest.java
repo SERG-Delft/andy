@@ -15,7 +15,7 @@ public class ExternalProcessTest extends IntegrationTestBase {
         Result result = run("EmptyLibrary", "EmptySolution",
                 "ExternalProcessGracefulExitConfiguration");
 
-        assertThat(result.getExternalProcessOutput()).isEqualTo("hello");
+        assertThat(result.getExternalProcessOutput()).isEqualTo("hello\n");
     }
 
     @Test

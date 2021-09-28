@@ -39,7 +39,7 @@ public class ExternalProcess extends Thread {
 
         while (data.hasNextLine()) {
             String line = data.nextLine();
-            output.append(line);
+            output.append(line).append('\n');
         }
     }
 
