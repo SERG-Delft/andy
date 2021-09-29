@@ -52,7 +52,8 @@ public class ExternalProcess extends Thread {
     }
 
     public void kill() {
-        if (process == null || !process.isAlive()) {
+        boolean processIsRunning = process != null && process.isAlive();
+        if (!processIsRunning) {
             return;
         }
 
