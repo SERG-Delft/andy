@@ -24,9 +24,9 @@ public class ExternalProcessTest extends IntegrationTestBase {
     private static final String EXTERNAL_PROCESS_ERROR = "/andy_test_external_process_error.sh";
     private static final String EXTERNAL_PROCESS_CRASHES = "/andy_test_external_process_crashes.sh";
 
-    private static final String END_SIGNAL_GENERATED_FILE_PATH = "/andy_test_external_process_generated";
-    private static final String END_SIGNAL_GENERATED_FILE_PATH_2 = "/andy_test_external_process_generated_2";
-    private static final String GRACEFUL_EXIT_GENERATED_FILE_PATH = "/andy_test_external_process_generated";
+    private static final String END_SIGNAL_GENERATED_FILE_PATH = "/andy_test_external_process_end_signal_generated";
+    private static final String END_SIGNAL_GENERATED_FILE_PATH_2 = "/andy_test_external_process_end_signal_generated_2";
+    private static final String GRACEFUL_EXIT_GENERATED_FILE_PATH = "/andy_test_external_process_graceful_exit_generated";
 
     @BeforeAll
     static void copyShellScripts() throws IOException {
