@@ -60,10 +60,6 @@ public class ExternalProcess extends Thread {
         process.destroy();
     }
 
-    public String getOutput(){
-        return output.toString();
-    }
-
     public String getErr(){
         StringBuilder sb = new StringBuilder();
         Scanner error = new Scanner(process.getErrorStream());
