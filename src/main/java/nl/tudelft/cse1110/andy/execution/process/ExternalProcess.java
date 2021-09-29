@@ -9,14 +9,14 @@ public class ExternalProcess {
 
     private final String command;
     private final String endSignal;
-    private final StringBuilder output;
+    private boolean endSignalFound;
 
     private Process process;
 
     public ExternalProcess(String command, String endSignal) {
         this.command = command;
         this.endSignal = endSignal;
-        this.output = new StringBuilder();
+        this.endSignalFound = false;
     }
 
     public String getCommand() {
@@ -40,8 +40,7 @@ public class ExternalProcess {
             return;
         }
 
-        while (process.isAlive() && !output.toString().contains(endSignal)) {
-        }
+        while (process.isAlive() && !endSignalFound) ;
     }
 
     public void kill() {
@@ -80,7 +79,9 @@ public class ExternalProcess {
 
             while (data.hasNextLine()) {
                 String line = data.nextLine();
-                output.append(line).append('\n');
+                if (line.contains(endSignal)) {
+                    endSignalFound = true;
+                }
             }
         }
     }
