@@ -1,6 +1,8 @@
 package nl.tudelft.cse1110.andy.execution.process;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Scanner;
 
 public class ExternalProcess extends Thread {
@@ -60,17 +62,23 @@ public class ExternalProcess extends Thread {
         process.destroy();
     }
 
-    public String getErr(){
-        StringBuilder sb = new StringBuilder();
-        Scanner error = new Scanner(process.getErrorStream());
-        while(error.hasNextLine()){
-            sb.append(error.nextLine());
-        }
+    public String getErr() {
+        try {
+            StringBuilder sb = new StringBuilder();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+            while (reader.ready()) {
+                String next = reader.readLine();
+                sb.append(next);
+            }
 
-        if(sb.isEmpty()){
-            return null;
-        }
+            if (sb.isEmpty()) {
+                return null;
+            }
 
-        return sb.toString();
+            return sb.toString();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return ex.getMessage();
+        }
     }
 }
