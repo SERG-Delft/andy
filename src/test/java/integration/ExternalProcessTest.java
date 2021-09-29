@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,20 +22,26 @@ public class ExternalProcessTest extends IntegrationTestBase {
     private static final String END_SIGNAL_SHELL_SCRIPT_PATH = "/andy_test_external_process_end_signal.sh";
     private static final String GRACEFUL_EXIT_SHELL_SCRIPT_PATH = "/andy_test_external_process_graceful_exit.sh";
 
+    private static final String END_SIGNAL_GENERATED_FILE_PATH = "/andy_test_external_process_generated";
+    private static final String END_SIGNAL_GENERATED_FILE_PATH_2 = "/andy_test_external_process_generated_2";
+    private static final String GRACEFUL_EXIT_GENERATED_FILE_PATH = "/andy_test_external_process_generated";
+
     @BeforeAll
     static void copyShellScripts() throws IOException {
         String tmp = getTempDirectory();
 
-        Files.writeString(Path.of(tmp + END_SIGNAL_SHELL_SCRIPT_PATH), """
-                echo "test 123"
-                echo "endsignal"
-                sleep 15
-                echo "should be killed before this"
-                """);
+        Files.writeString(Path.of(tmp + END_SIGNAL_SHELL_SCRIPT_PATH), String.format("""
+                        echo "hello" > %s
+                        echo "endsignal"
+                        sleep 30
+                        echo "should be killed before this line is executed" > %s
+                        """,
+                tmp + END_SIGNAL_GENERATED_FILE_PATH,
+                tmp + END_SIGNAL_GENERATED_FILE_PATH_2));
 
-        Files.writeString(Path.of(tmp + GRACEFUL_EXIT_SHELL_SCRIPT_PATH), """
-                echo "hello"
-                """);
+        Files.writeString(Path.of(tmp + GRACEFUL_EXIT_SHELL_SCRIPT_PATH), String.format("""
+                echo "hello" > %s
+                """, tmp + GRACEFUL_EXIT_GENERATED_FILE_PATH));
     }
 
     @AfterAll
@@ -42,6 +49,9 @@ public class ExternalProcessTest extends IntegrationTestBase {
         String tmp = getTempDirectory();
         Files.deleteIfExists(Path.of(tmp + END_SIGNAL_SHELL_SCRIPT_PATH));
         Files.deleteIfExists(Path.of(tmp + GRACEFUL_EXIT_SHELL_SCRIPT_PATH));
+        Files.deleteIfExists(Path.of(tmp + END_SIGNAL_GENERATED_FILE_PATH));
+        Files.deleteIfExists(Path.of(tmp + END_SIGNAL_GENERATED_FILE_PATH_2));
+        Files.deleteIfExists(Path.of(tmp + GRACEFUL_EXIT_GENERATED_FILE_PATH));
     }
 
     private static String getTempDirectory() {
@@ -55,7 +65,8 @@ public class ExternalProcessTest extends IntegrationTestBase {
 
         assertThat(result.getGenericFailure()).isNull();
 
-        assertThat(result.getExternalProcessOutput()).isEqualTo("hello\n");
+        String tmp = getTempDirectory();
+        assertThat(new File(tmp + GRACEFUL_EXIT_GENERATED_FILE_PATH)).exists();
     }
 
     @Test
@@ -67,9 +78,9 @@ public class ExternalProcessTest extends IntegrationTestBase {
 
             assertThat(result.getGenericFailure()).isNull();
 
-            assertThat(result.getExternalProcessOutput())
-                    .contains("test 123\nendsignal\n")
-                    .doesNotContain("should be killed before this");
+            String tmp = getTempDirectory();
+            assertThat(new File(tmp + END_SIGNAL_GENERATED_FILE_PATH)).exists();
+            assertThat(new File(tmp + END_SIGNAL_GENERATED_FILE_PATH_2)).doesNotExist();
 
         });
     }
