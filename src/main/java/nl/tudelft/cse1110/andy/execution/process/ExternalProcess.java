@@ -8,23 +8,23 @@ import java.util.Scanner;
 public class ExternalProcess {
 
     private final String command;
-    private final String endSignal;
-    private boolean endSignalFound;
+    private final String initSignal;
+    private boolean initSignalFound;
 
     private Process process;
 
-    public ExternalProcess(String command, String endSignal) {
+    public ExternalProcess(String command, String initSignal) {
         this.command = command;
-        this.endSignal = endSignal;
-        this.endSignalFound = false;
+        this.initSignal = initSignal;
+        this.initSignalFound = false;
     }
 
     public String getCommand() {
         return command;
     }
 
-    public String getEndSignal() {
-        return endSignal;
+    public String getInitSignal() {
+        return initSignal;
     }
 
     public void launch() throws IOException {
@@ -40,7 +40,7 @@ public class ExternalProcess {
             return;
         }
 
-        while (process.isAlive() && !endSignalFound) ;
+        while (process.isAlive() && !initSignalFound) ;
     }
 
     public void kill() {
@@ -79,8 +79,8 @@ public class ExternalProcess {
 
             while (data.hasNextLine()) {
                 String line = data.nextLine();
-                if (line.contains(endSignal)) {
-                    endSignalFound = true;
+                if (line.contains(initSignal)) {
+                    initSignalFound = true;
                 }
             }
         }

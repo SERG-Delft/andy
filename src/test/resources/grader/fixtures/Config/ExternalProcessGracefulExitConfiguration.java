@@ -30,6 +30,6 @@ public class Configuration extends RunConfiguration {
         String tmp = System.getProperty("java.io.tmpdir");
         return new ExternalProcess(
                 "sh " + tmp + "/andy_test_external_process_graceful_exit.sh",
-                "endsignal");
+                "initSignal");
     }
 }

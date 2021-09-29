@@ -19,27 +19,27 @@ import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 @EnabledOnOs({OS.LINUX, OS.MAC})
 public class ExternalProcessTest extends IntegrationTestBase {
 
-    private static final String END_SIGNAL_SHELL_SCRIPT_PATH = "/andy_test_external_process_end_signal.sh";
+    private static final String INIT_SIGNAL_SHELL_SCRIPT_PATH = "/andy_test_external_process_init_signal.sh";
     private static final String GRACEFUL_EXIT_SHELL_SCRIPT_PATH = "/andy_test_external_process_graceful_exit.sh";
     private static final String EXTERNAL_PROCESS_ERROR = "/andy_test_external_process_error.sh";
     private static final String EXTERNAL_PROCESS_CRASHES = "/andy_test_external_process_crashes.sh";
 
-    private static final String END_SIGNAL_GENERATED_FILE_PATH = "/andy_test_external_process_end_signal_generated";
-    private static final String END_SIGNAL_GENERATED_FILE_PATH_2 = "/andy_test_external_process_end_signal_generated_2";
+    private static final String INIT_SIGNAL_GENERATED_FILE_PATH = "/andy_test_external_process_init_signal_generated";
+    private static final String INIT_SIGNAL_GENERATED_FILE_PATH_2 = "/andy_test_external_process_init_signal_generated_2";
     private static final String GRACEFUL_EXIT_GENERATED_FILE_PATH = "/andy_test_external_process_graceful_exit_generated";
 
     @BeforeAll
     static void copyShellScripts() throws IOException {
         String tmp = getTempDirectory();
 
-        Files.writeString(Path.of(tmp + END_SIGNAL_SHELL_SCRIPT_PATH), String.format("""
+        Files.writeString(Path.of(tmp + INIT_SIGNAL_SHELL_SCRIPT_PATH), String.format("""
                         echo "hello" > %s
-                        echo "endsignal"
+                        echo "initSignal"
                         sleep 30
                         echo "should be killed before this line is executed" > %s
                         """,
-                tmp + END_SIGNAL_GENERATED_FILE_PATH,
-                tmp + END_SIGNAL_GENERATED_FILE_PATH_2));
+                tmp + INIT_SIGNAL_GENERATED_FILE_PATH,
+                tmp + INIT_SIGNAL_GENERATED_FILE_PATH_2));
 
         Files.writeString(Path.of(tmp + GRACEFUL_EXIT_SHELL_SCRIPT_PATH), String.format("""
                 echo "hello" > %s
@@ -47,7 +47,7 @@ public class ExternalProcessTest extends IntegrationTestBase {
 
         Files.writeString(Path.of(tmp + EXTERNAL_PROCESS_ERROR), """
                 echo "some error" 1>&2
-                echo "endsignal"
+                echo "initSignal"
                 sleep 30
                 """);
 
@@ -60,13 +60,13 @@ public class ExternalProcessTest extends IntegrationTestBase {
     @AfterAll
     static void shellCleanup() throws IOException {
         String tmp = getTempDirectory();
-        Files.deleteIfExists(Path.of(tmp + END_SIGNAL_SHELL_SCRIPT_PATH));
+        Files.deleteIfExists(Path.of(tmp + INIT_SIGNAL_SHELL_SCRIPT_PATH));
         Files.deleteIfExists(Path.of(tmp + GRACEFUL_EXIT_SHELL_SCRIPT_PATH));
         Files.deleteIfExists(Path.of(tmp + EXTERNAL_PROCESS_ERROR));
         Files.deleteIfExists(Path.of(tmp + EXTERNAL_PROCESS_CRASHES));
 
-        Files.deleteIfExists(Path.of(tmp + END_SIGNAL_GENERATED_FILE_PATH));
-        Files.deleteIfExists(Path.of(tmp + END_SIGNAL_GENERATED_FILE_PATH_2));
+        Files.deleteIfExists(Path.of(tmp + INIT_SIGNAL_GENERATED_FILE_PATH));
+        Files.deleteIfExists(Path.of(tmp + INIT_SIGNAL_GENERATED_FILE_PATH_2));
         Files.deleteIfExists(Path.of(tmp + GRACEFUL_EXIT_GENERATED_FILE_PATH));
     }
 
@@ -86,17 +86,17 @@ public class ExternalProcessTest extends IntegrationTestBase {
     }
 
     @Test
-    void externalProcessEndSignal() {
+    void externalProcessInitSignal() {
         assertTimeoutPreemptively(ofSeconds(10), () -> {
 
             Result result = run("EmptyLibrary", "EmptySolution",
-                    "ExternalProcessEndSignalConfiguration");
+                    "ExternalProcessInitSignalConfiguration");
 
             assertThat(result.getGenericFailure()).isNull();
 
             String tmp = getTempDirectory();
-            assertThat(new File(tmp + END_SIGNAL_GENERATED_FILE_PATH)).exists();
-            assertThat(new File(tmp + END_SIGNAL_GENERATED_FILE_PATH_2)).doesNotExist();
+            assertThat(new File(tmp + INIT_SIGNAL_GENERATED_FILE_PATH)).exists();
+            assertThat(new File(tmp + INIT_SIGNAL_GENERATED_FILE_PATH_2)).doesNotExist();
 
         });
     }
