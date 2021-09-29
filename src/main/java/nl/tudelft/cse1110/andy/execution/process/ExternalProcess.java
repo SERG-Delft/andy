@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Scanner;
 
-public class ExternalProcess extends Thread {
+public class ExternalProcess {
 
     private final String command;
     private final String endSignal;
@@ -28,20 +28,10 @@ public class ExternalProcess extends Thread {
     }
 
     public void launch() throws IOException {
-        Thread thread = new Thread(this);
+        Thread thread = new Thread(new OutputHandler());
         process = Runtime.getRuntime().exec(command);
 
         thread.start();
-    }
-
-    @Override
-    public void run() {
-        Scanner data = new Scanner(process.getInputStream());
-
-        while (data.hasNextLine()) {
-            String line = data.nextLine();
-            output.append(line).append('\n');
-        }
     }
 
     public void await() {
@@ -50,7 +40,8 @@ public class ExternalProcess extends Thread {
             return;
         }
 
-        while (process.isAlive() && !output.toString().contains(endSignal)) { }
+        while (process.isAlive() && !output.toString().contains(endSignal)) {
+        }
     }
 
     public void kill() {
@@ -79,6 +70,18 @@ public class ExternalProcess extends Thread {
         } catch (IOException ex) {
             ex.printStackTrace();
             return ex.getMessage();
+        }
+    }
+
+    private class OutputHandler implements Runnable {
+        @Override
+        public void run() {
+            Scanner data = new Scanner(process.getInputStream());
+
+            while (data.hasNextLine()) {
+                String line = data.nextLine();
+                output.append(line).append('\n');
+            }
         }
     }
 }
