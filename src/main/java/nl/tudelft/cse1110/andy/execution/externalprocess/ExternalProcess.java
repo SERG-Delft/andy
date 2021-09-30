@@ -26,7 +26,7 @@ public class ExternalProcess {
         thread.start();
     }
 
-    public void await() {
+    public void awaitInitialization() {
         // In case await was called but no process was launched.
         if (process == null) {
             return;

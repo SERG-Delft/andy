@@ -25,7 +25,7 @@ public class RunExternalProcessStep implements ExecutionStep {
 
             ctx.setExternalProcess(externalProcess);
 
-            externalProcess.await();
+            externalProcess.awaitInitialization();
 
         } catch (Exception e) {
             result.genericFailure(this, e);
