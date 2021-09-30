@@ -1,6 +1,7 @@
 package delft;
 
 import nl.tudelft.cse1110.andy.config.RunConfiguration;
+import nl.tudelft.cse1110.andy.execution.externalprocess.CommandExternalProcess;
 import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
 
 import java.util.HashMap;
@@ -27,7 +28,7 @@ public class Configuration extends RunConfiguration {
     @Override
     public ExternalProcess externalProcess() {
         String tmp = System.getProperty("java.io.tmpdir");
-        return new ExternalProcess(
+        return new CommandExternalProcess(
                 "sh " + tmp + "/andy_test_external_process_graceful_exit.sh",
                 "initSignal");
     }
