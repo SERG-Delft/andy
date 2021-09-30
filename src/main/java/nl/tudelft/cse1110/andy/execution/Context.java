@@ -2,6 +2,7 @@ package nl.tudelft.cse1110.andy.execution;
 
 import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.config.RunConfiguration;
+import nl.tudelft.cse1110.andy.execution.externalprocess.EmptyExternalProcess;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.execution.mode.ModeActionSelector;
 import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
@@ -23,6 +24,7 @@ public class Context {
     public Context(Action action) {
         this.cleanClassloader = Thread.currentThread().getContextClassLoader();
         this.action = action;
+        this.externalProcess = new EmptyExternalProcess();
     }
 
     public void setFlow(ExecutionFlow flow) {this.flow = flow;}
