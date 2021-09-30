@@ -1,8 +1,7 @@
 package delft;
 
 import nl.tudelft.cse1110.andy.config.RunConfiguration;
-import nl.tudelft.cse1110.andy.config.MetaTest;
-import nl.tudelft.cse1110.andy.execution.process.ExternalProcess;
+import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
 
 import java.util.HashMap;
 import java.util.List;

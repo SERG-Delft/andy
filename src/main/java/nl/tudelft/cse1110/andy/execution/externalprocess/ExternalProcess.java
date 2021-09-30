@@ -1,4 +1,4 @@
-package nl.tudelft.cse1110.andy.execution.process;
+package nl.tudelft.cse1110.andy.execution.externalprocess;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,14 +17,6 @@ public class ExternalProcess {
         this.command = command;
         this.initSignal = initSignal;
         this.initSignalFound = false;
-    }
-
-    public String getCommand() {
-        return command;
-    }
-
-    public String getInitSignal() {
-        return initSignal;
     }
 
     public void launch() throws IOException {
