@@ -1,6 +1,5 @@
 package nl.tudelft.cse1110.andy.execution.step;
 
-import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.config.RunConfiguration;
 import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
@@ -13,13 +12,8 @@ public class RunExternalProcessStep implements ExecutionStep {
     public void execute(Context ctx, ResultBuilder result) {
         try {
             RunConfiguration runConfiguration = ctx.getRunConfiguration();
-            DirectoryConfiguration directoryConfiguration = ctx.getDirectoryConfiguration();
 
             ExternalProcess externalProcess = runConfiguration.externalProcess();
-
-            if (externalProcess == null) {
-                return;
-            }
 
             externalProcess.launch();
 

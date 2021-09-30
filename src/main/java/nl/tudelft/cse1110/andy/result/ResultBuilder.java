@@ -254,11 +254,9 @@ public class ResultBuilder {
 
             int finalGrade = calculateFinalGrade(grades, weights);
 
-            if (ctx.getExternalProcess() != null) {
-                String errMsg = ctx.getExternalProcess().getErr();
-                if (errMsg != null) {
-                    genericFailureMessage = "External process: " + errMsg;
-                }
+            String errMsg = ctx.getExternalProcess().getErr();
+            if (errMsg != null) {
+                genericFailureMessage = "External process: " + errMsg;
             }
 
             return new Result(compilation, testResults, mutationResults, codeCheckResults, coverageResults, metaTestResults, finalGrade, genericFailureMessage, timeInSeconds, weights);

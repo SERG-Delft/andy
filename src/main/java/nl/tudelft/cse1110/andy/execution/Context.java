@@ -80,9 +80,7 @@ public class Context {
     }
 
     public void killExternalProcess() {
-        if (externalProcess != null) {
-            externalProcess.kill();
-        }
+        externalProcess.kill();
     }
 
     public void setLibrariesToBeIncluded(List<String> librariesToBeIncluded) {
