@@ -1,5 +1,6 @@
 package integration;
 
+import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.result.Result;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -23,6 +24,7 @@ public class ExternalProcessTest extends IntegrationTestBase {
     private static final String GRACEFUL_EXIT_SHELL_SCRIPT_PATH = "/andy_test_external_process_graceful_exit.sh";
     private static final String EXTERNAL_PROCESS_ERROR = "/andy_test_external_process_error.sh";
     private static final String EXTERNAL_PROCESS_CRASHES = "/andy_test_external_process_crashes.sh";
+    private static final String EXTERNAL_PROCESS_LOCAL_CONNECTION = "/andy_test_external_process_local_connection.sh";
 
     private static final String INIT_SIGNAL_GENERATED_FILE_PATH = "/andy_test_external_process_init_signal_generated";
     private static final String INIT_SIGNAL_GENERATED_FILE_PATH_2 = "/andy_test_external_process_init_signal_generated_2";
@@ -55,6 +57,11 @@ public class ExternalProcessTest extends IntegrationTestBase {
                 echo "some error" 1>&2
                 exit 1
                 """);
+
+        Files.writeString(Path.of(tmp + EXTERNAL_PROCESS_LOCAL_CONNECTION), """
+                echo "initSignal"
+                while true; do echo "HTTP/1.1 200 OK\\nContent-Length: 5\\n\\nhello" | nc -l 8086; done
+                """);
     }
 
     @AfterAll
@@ -64,6 +71,7 @@ public class ExternalProcessTest extends IntegrationTestBase {
         Files.deleteIfExists(Path.of(tmp + GRACEFUL_EXIT_SHELL_SCRIPT_PATH));
         Files.deleteIfExists(Path.of(tmp + EXTERNAL_PROCESS_ERROR));
         Files.deleteIfExists(Path.of(tmp + EXTERNAL_PROCESS_CRASHES));
+        Files.deleteIfExists(Path.of(tmp + EXTERNAL_PROCESS_LOCAL_CONNECTION));
 
         Files.deleteIfExists(Path.of(tmp + INIT_SIGNAL_GENERATED_FILE_PATH));
         Files.deleteIfExists(Path.of(tmp + INIT_SIGNAL_GENERATED_FILE_PATH_2));
@@ -119,5 +127,16 @@ public class ExternalProcessTest extends IntegrationTestBase {
                 "ExternalProcessCrashesConfiguration");
 
         assertThat(result.getGenericFailure()).contains("exit code 1: some error");
+    }
+
+    @Test
+    void localConnectionTest() {
+        assertTimeoutPreemptively(ofSeconds(10), () -> {
+            Result result = run(Action.TESTS, "EmptyLibrary", "ExternalProcessLocalConnectionSolution",
+                    "ExternalProcessLocalConnectionConfiguration");
+
+            assertThat(result.hasFailed()).isFalse();
+            assertThat(result.getGenericFailure()).isNull();
+        });
     }
 }
