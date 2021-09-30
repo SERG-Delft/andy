@@ -4,25 +4,28 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Scanner;
+import java.util.concurrent.CountDownLatch;
 
 public class CommandExternalProcess implements ExternalProcess {
 
     private final String command;
     private final String initSignal;
-    private boolean initSignalFound;
+    private final CountDownLatch initSignalLatch;
 
     private Process process;
 
     public CommandExternalProcess(String command, String initSignal) {
         this.command = command;
         this.initSignal = initSignal;
-        this.initSignalFound = false;
+        this.initSignalLatch = new CountDownLatch(1);
     }
 
     @Override
     public void launch() throws IOException {
         Thread thread = new Thread(new OutputHandler());
         process = Runtime.getRuntime().exec(command);
+
+        process.onExit().thenAccept(p -> initSignalLatch.countDown());
 
         thread.start();
     }
@@ -34,7 +37,12 @@ public class CommandExternalProcess implements ExternalProcess {
             return;
         }
 
-        while (process.isAlive() && !initSignalFound) ;
+        // Block thread until process has initialized
+        try {
+            this.initSignalLatch.await();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     @Override
@@ -76,7 +84,7 @@ public class CommandExternalProcess implements ExternalProcess {
             while (data.hasNextLine()) {
                 String line = data.nextLine();
                 if (line.contains(initSignal)) {
-                    initSignalFound = true;
+                    initSignalLatch.countDown();
                 }
             }
         }
