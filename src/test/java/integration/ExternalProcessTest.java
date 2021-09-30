@@ -108,7 +108,7 @@ public class ExternalProcessTest extends IntegrationTestBase {
             Result result = run("EmptyLibrary", "EmptySolution",
                     "ExternalProcessErrorConfiguration");
 
-            assertThat(result.getGenericFailure()).contains("some error");
+            assertThat(result.getGenericFailure()).isNull();
 
         });
     }
@@ -118,6 +118,6 @@ public class ExternalProcessTest extends IntegrationTestBase {
         Result result = run("EmptyLibrary", "EmptySolution",
                 "ExternalProcessCrashesConfiguration");
 
-        assertThat(result.getGenericFailure()).contains("some error");
+        assertThat(result.getGenericFailure()).contains("exit code 1: some error");
     }
 }

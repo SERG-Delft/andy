@@ -4,7 +4,14 @@ import java.io.IOException;
 
 public interface ExternalProcess {
     void launch() throws IOException;
+
     void awaitInitialization();
+
     void kill();
-    String getErr();
+
+    String getErrorMessages();
+
+    boolean hasExitedNormally();
+
+    int getExitCode();
 }

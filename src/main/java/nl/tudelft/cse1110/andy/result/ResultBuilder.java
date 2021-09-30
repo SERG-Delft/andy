@@ -4,6 +4,7 @@ import nl.tudelft.cse1110.andy.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.andy.codechecker.engine.CheckType;
 import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
+import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
 import nl.tudelft.cse1110.andy.grade.GradeCalculator;
 import nl.tudelft.cse1110.andy.grade.GradeValues;
 import nl.tudelft.cse1110.andy.grade.GradeWeight;
@@ -254,9 +255,10 @@ public class ResultBuilder {
 
             int finalGrade = calculateFinalGrade(grades, weights);
 
-            String errMsg = ctx.getExternalProcess().getErr();
-            if (errMsg != null) {
-                genericFailureMessage = "External process: " + errMsg;
+            ExternalProcess process = ctx.getExternalProcess();
+            if (!process.hasExitedNormally()) {
+                genericFailureMessage = String.format("External process crashed with exit code %d: %s",
+                        process.getExitCode(), process.getErrorMessages());
             }
 
             return new Result(compilation, testResults, mutationResults, codeCheckResults, coverageResults, metaTestResults, finalGrade, genericFailureMessage, timeInSeconds, weights);

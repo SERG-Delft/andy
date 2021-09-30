@@ -17,7 +17,17 @@ public class EmptyExternalProcess implements ExternalProcess {
     }
 
     @Override
-    public String getErr() {
+    public String getErrorMessages() {
         return null;
+    }
+
+    @Override
+    public boolean hasExitedNormally() {
+        return true;
+    }
+
+    @Override
+    public int getExitCode() {
+        return 0;
     }
 }

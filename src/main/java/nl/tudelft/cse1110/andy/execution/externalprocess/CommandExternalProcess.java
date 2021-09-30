@@ -11,6 +11,7 @@ public class CommandExternalProcess implements ExternalProcess {
     private final String command;
     private final String initSignal;
     private final CountDownLatch initSignalLatch;
+    private String errorMessages;
 
     private Process process;
 
@@ -56,24 +57,44 @@ public class CommandExternalProcess implements ExternalProcess {
     }
 
     @Override
-    public String getErr() {
-        try {
-            StringBuilder sb = new StringBuilder();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-            while (reader.ready()) {
-                String next = reader.readLine();
-                sb.append(next);
-            }
+    public int getExitCode() {
+        // Crashes after the tests have executed do not affect anything, so assume that the process exited normally
+        boolean aliveOrTerminated = this.process.isAlive() || this.process.exitValue() == 143;
 
-            if (sb.isEmpty()) {
-                return null;
-            }
-
-            return sb.toString();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return ex.getMessage();
+        if (aliveOrTerminated) {
+            return 0;
         }
+
+        return this.process.exitValue();
+    }
+
+    @Override
+    public boolean hasExitedNormally() {
+        return this.getExitCode() == 0;
+    }
+
+    @Override
+    public String getErrorMessages() {
+        if (errorMessages == null) {
+            // stderr messages can only be retrieved from the process once
+
+            try {
+                StringBuilder sb = new StringBuilder();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+                while (reader.ready()) {
+                    String next = reader.readLine();
+                    sb.append(next);
+                }
+                errorMessages = sb.toString();
+
+                return sb.toString();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                return ex.getMessage();
+            }
+        }
+
+        return errorMessages;
     }
 
     private class OutputHandler implements Runnable {
