@@ -2,8 +2,10 @@ package nl.tudelft.cse1110.andy.execution;
 
 import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.config.RunConfiguration;
+import nl.tudelft.cse1110.andy.execution.externalprocess.EmptyExternalProcess;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.execution.mode.ModeActionSelector;
+import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
 
 import java.util.List;
 
@@ -16,11 +18,13 @@ public class Context {
     private ExecutionFlow flow;
     private Action action;
     private ModeActionSelector modeActionSelector;
+    private ExternalProcess externalProcess;
     private List<String> librariesToBeIncluded;
 
     public Context(Action action) {
         this.cleanClassloader = Thread.currentThread().getContextClassLoader();
         this.action = action;
+        this.externalProcess = new EmptyExternalProcess();
     }
 
     public void setFlow(ExecutionFlow flow) {this.flow = flow;}
@@ -67,6 +71,18 @@ public class Context {
 
     public ModeActionSelector getModeActionSelector() {
         return modeActionSelector;
+    }
+
+    public ExternalProcess getExternalProcess() {
+        return externalProcess;
+    }
+
+    public void setExternalProcess(ExternalProcess externalProcess) {
+        this.externalProcess = externalProcess;
+    }
+
+    public void killExternalProcess() {
+        externalProcess.kill();
     }
 
     public void setLibrariesToBeIncluded(List<String> librariesToBeIncluded) {

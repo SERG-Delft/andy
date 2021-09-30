@@ -1,7 +1,9 @@
 package nl.tudelft.cse1110.andy.config;
 
 import nl.tudelft.cse1110.andy.codechecker.engine.CheckScript;
+import nl.tudelft.cse1110.andy.execution.externalprocess.EmptyExternalProcess;
 import nl.tudelft.cse1110.andy.execution.mode.Mode;
+import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
 
 import java.util.Collections;
 import java.util.List;
@@ -49,6 +51,10 @@ public abstract class RunConfiguration {
 
     public Mode mode() {
         return Mode.PRACTICE;
+    }
+
+    public ExternalProcess externalProcess() {
+        return new EmptyExternalProcess();
     }
 
 }

@@ -93,11 +93,12 @@ public class ModeActionSelector {
     }
 
     public static List<ExecutionStep> justTests() {
-        return List.of(new RunJUnitTestsStep());
+        return List.of(new RunExternalProcessStep(), new RunJUnitTestsStep());
     }
 
     public static List<ExecutionStep> withCoverage() {
         return List.of(
+                new RunExternalProcessStep(),
                 new RunJUnitTestsStep(),
                 new RunJacocoCoverageStep(),
                 new RunPitestStep()
@@ -106,6 +107,7 @@ public class ModeActionSelector {
 
     public static List<ExecutionStep> fullMode() {
         return List.of(
+                new RunExternalProcessStep(),
                 new RunJUnitTestsStep(),
                 new RunJacocoCoverageStep(),
                 new RunPitestStep(),

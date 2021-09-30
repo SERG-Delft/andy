@@ -41,6 +41,8 @@ public class ExecutionFlow {
 
             Result solutionResult = result.build();
             writer.write(ctx, solutionResult);
+
+            ctx.killExternalProcess();
         } catch(Throwable t) {
             // in case something even totally unexpected happens, we log it.
             writer.uncaughtError(ctx, t);
