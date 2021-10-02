@@ -34,6 +34,8 @@ public class AndyMojo extends AbstractMojo {
 
     @Override
     public void execute() {
+        this.printHeader();
+
         File basedir = project.getBasedir();
 
         File workDir = null;
@@ -76,7 +78,7 @@ public class AndyMojo extends AbstractMojo {
             /* Read output file */
             String output = readFile(new File(concatenateDirectories(outputDir.getAbsolutePath(), "stdout.txt")));
             System.out.println(output);
-            System.out.println("\nCheck branch and mutation coverage in the /andy folder!");
+            System.out.println("\n\nCheck branch and mutation coverage in the /andy folder!\n\n");
 
         } catch (Exception ex) {
             ex.printStackTrace(System.err);
@@ -104,6 +106,20 @@ public class AndyMojo extends AbstractMojo {
         javaFiles.addAll(javaFilesInSrc);
         javaFiles.addAll(javaFilesInConfig);
         return javaFiles;
+    }
+
+    private void printHeader() {
+        System.out.println(
+            """
+
+     _              _       
+    / \\   _ __   __| |_   _ 
+   / _ \\ | '_ \\ / _` | | | |
+  / ___ \\| | | | (_| | |_| |
+ /_/   \\_\\_| |_|\\__,_|\\__, |
+                      |___/ 
+
+        """);
     }
 
 }
