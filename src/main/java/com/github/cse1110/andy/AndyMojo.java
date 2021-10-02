@@ -15,6 +15,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static nl.tudelft.cse1110.andy.utils.FilesUtils.*;
 
@@ -66,6 +68,9 @@ public class AndyMojo extends AbstractMojo {
             /* We get the list of dependencies, to help the Andy's Java compiler to find them all */
             List<String> compileClasspathElements = project.getCompileClasspathElements();
 
+            /* Start printing dots */
+            Timer workingIndicator = this.startWorkingIndicationTimer();
+
             /* Run Andy! */
             new Andy(
                 action(),
@@ -77,6 +82,12 @@ public class AndyMojo extends AbstractMojo {
 
             /* Read output file */
             String output = readFile(new File(concatenateDirectories(outputDir.getAbsolutePath(), "stdout.txt")));
+
+            /* Stop printing dots */
+            workingIndicator.cancel();
+            System.out.println("\n\n");
+
+            /* Print output */
             System.out.println(output);
             System.out.println("\n\nCheck branch and mutation coverage in the /andy folder!\n\n");
 
@@ -120,6 +131,19 @@ public class AndyMojo extends AbstractMojo {
                       |___/ 
 
         """);
+    }
+
+    private Timer startWorkingIndicationTimer() {
+        Timer timer = new Timer(true);
+
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                System.out.print('.');
+            }
+        }, 0, 1000);
+
+        return timer;
     }
 
 }
