@@ -1,6 +1,8 @@
 package nl.tudelft.cse1110.andy.writer.standard;
 
 import nl.tudelft.cse1110.andy.execution.Context;
+import nl.tudelft.cse1110.andy.execution.mode.Action;
+import nl.tudelft.cse1110.andy.execution.mode.Mode;
 import nl.tudelft.cse1110.andy.execution.mode.ModeActionSelector;
 import nl.tudelft.cse1110.andy.result.*;
 import nl.tudelft.cse1110.andy.utils.ExceptionUtils;
@@ -77,9 +79,11 @@ public class StandardResultWriter implements ResultWriter {
         // we only show grades in specific modes and actions
         // if ModeActionSelector is not injected yet (i.e., it's null), it's because compilation fail.
         // in this case, we give it a zero, no matter the mode.
-        boolean shouldShowGrades = modeActionSelector(ctx)!=null && modeActionSelector(ctx).shouldCalculateAndShowGrades();
-        if(!shouldShowGrades)
+        boolean shouldShowGrades = modeActionSelector(ctx) != null && modeActionSelector(ctx).shouldCalculateAndShowGrades();
+        if (!shouldShowGrades) {
+            printZeroGradeReason(ctx);
             return;
+        }
 
         int finalGrade = result.getFinalGrade();
 
@@ -104,6 +108,37 @@ public class StandardResultWriter implements ResultWriter {
             l("");
             l(randomAsciiArt);
         }
+    }
+
+    private void printZeroGradeReason(Context ctx) {
+        var mas = modeActionSelector(ctx);
+        if (mas == null) {
+            return;
+        }
+
+        StringBuilder reason = new StringBuilder();
+
+        reason.append("\nFinal test score is ");
+
+        if (mas.getMode() == Mode.EXAM) {
+            reason.append("shown as 0/100 during the exam and will be calculated after the exam is over.");
+        } else {
+            reason.append("0/100 ");
+            if (mas.getAction() != Action.FULL_WITH_HINTS && mas.getAction() != Action.FULL_WITHOUT_HINTS) {
+                reason.append("as you are only ");
+                if (mas.getAction() == Action.TESTS)
+                    reason.append("checking if your tests pass");
+                else if (mas.getAction() == Action.META_TEST)
+                    reason.append("checking what the meta test score is");
+                else if (mas.getAction() == Action.COVERAGE)
+                    reason.append("running code coverage");
+            }
+            reason.append(". ");
+
+            reason.append("To have your code graded, click on one of the buttons to assess your submission (with or without hints).");
+        }
+
+        l(reason.toString());
     }
 
     private void printGradeCalculationDetails(String what, int score, int total, double weight) {
