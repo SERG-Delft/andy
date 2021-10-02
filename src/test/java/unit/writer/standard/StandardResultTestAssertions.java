@@ -246,6 +246,10 @@ public class StandardResultTestAssertions {
         return not(containsRegex("--- Assessment"));
     }
 
+    public static Condition<String> zeroScoreExplanation() {
+        return containsRegex("Final test score is (shown as )?0/100");
+    }
+
     public static Condition<String> noJacocoCoverage() {
         return not(containsRegex("--- JaCoCo coverage"));
     }

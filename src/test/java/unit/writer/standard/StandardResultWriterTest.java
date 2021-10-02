@@ -2,6 +2,7 @@ package unit.writer.standard;
 
 import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.execution.Context;
+import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.execution.mode.Mode;
 import nl.tudelft.cse1110.andy.execution.mode.ModeActionSelector;
 import nl.tudelft.cse1110.andy.result.*;
@@ -195,7 +196,8 @@ public class StandardResultWriterTest {
                 .has(fullGradeDescription("Meta tests", 2, 3, 0.25))
                 .has(mutationScore(5, 6))
                 .has(noMetaTests())
-                .has(noCodeChecks());
+                .has(noCodeChecks())
+                .has(not(zeroScoreExplanation()));
 
         verify(asciiArtGenerator, times(0)).getRandomAsciiArt();
     }
@@ -250,6 +252,7 @@ public class StandardResultWriterTest {
         when(modeActionSelector.shouldShowFullHints()).thenReturn(false);
         when(modeActionSelector.shouldShowPartialHints()).thenReturn(false);
         when(modeActionSelector.getMode()).thenReturn(Mode.PRACTICE);
+        when(modeActionSelector.getAction()).thenReturn(Action.TESTS);
 
         when(ctx.getModeActionSelector()).thenReturn(modeActionSelector);
 
@@ -287,7 +290,9 @@ public class StandardResultWriterTest {
                 .has(not(fullGradeDescription("Mutation coverage", 5, 6, 0.25)))
                 .has(not(fullGradeDescription("Code checks", 3, 4, 0.25)))
                 .has(not(fullGradeDescription("Meta tests", 2, 3, 0.25)))
-                .has(mutationScore(5, 6));
+                .has(mutationScore(5, 6))
+                .has(zeroScoreExplanation())
+                .contains("only checking if your tests pass");
 
         verify(asciiArtGenerator, times(0)).getRandomAsciiArt();
     }
@@ -321,7 +326,8 @@ public class StandardResultWriterTest {
                 .has(noJacocoCoverage())
                 .has(noCodeChecks())
                 .has(noMetaTests())
-                .has(noPitestCoverage());
+                .has(noPitestCoverage())
+                .has(not(zeroScoreExplanation()));
 
         verify(asciiArtGenerator, times(0)).getRandomAsciiArt();
     }
@@ -348,6 +354,7 @@ public class StandardResultWriterTest {
         assertThat(output)
                 .has(versionInformation(versionInformation))
                 .has(finalGradeOnScreen(100))
+                .has(not(zeroScoreExplanation()))
                 .contains("random ascii art");
     }
 
@@ -403,7 +410,8 @@ public class StandardResultWriterTest {
                 .has(mutationScore(5, 6))
                 .has(scoreOfCodeChecks(3, 4))
                 .has(metaTestsPassing(2))
-                .has(metaTests(3));
+                .has(metaTests(3))
+                .has(not(zeroScoreExplanation()));
 
         if (fullHints) {
             assertThat(output)
@@ -454,7 +462,8 @@ public class StandardResultWriterTest {
                 .has(fullGradeDescription("Meta tests", 0, 0, 0.25))
                 .has(mutationScore(5, 6))
                 .has(noCodeChecksToBeAssessed())
-                .has(metaTests(0));
+                .has(metaTests(0))
+                .has(not(zeroScoreExplanation()));
     }
 
     @Test
