@@ -1,9 +1,6 @@
 package nl.tudelft.cse1110.andy.execution;
 
-import nl.tudelft.cse1110.andy.execution.step.CompilationStep;
-import nl.tudelft.cse1110.andy.execution.step.GetRunConfigurationStep;
-import nl.tudelft.cse1110.andy.execution.step.OrganizeSourceCodeStep;
-import nl.tudelft.cse1110.andy.execution.step.ReplaceClassloaderStep;
+import nl.tudelft.cse1110.andy.execution.step.*;
 import nl.tudelft.cse1110.andy.result.Result;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.writer.ResultWriter;
@@ -43,7 +40,7 @@ public class ExecutionFlow {
             writer.write(ctx, solutionResult);
 
             ctx.killExternalProcess();
-        } catch(Throwable t) {
+        } catch (Throwable t) {
             // in case something even totally unexpected happens, we log it.
             writer.uncaughtError(ctx, t);
         }
@@ -58,8 +55,11 @@ public class ExecutionFlow {
     }
 
     private List<ExecutionStep> basicSteps() {
-        return Arrays.asList(new OrganizeSourceCodeStep(), new CompilationStep(), new ReplaceClassloaderStep(), new GetRunConfigurationStep());
+        return Arrays.asList(
+                new SetSecurityManagerStep(),
+                new OrganizeSourceCodeStep(),
+                new CompilationStep(),
+                new ReplaceClassloaderStep(),
+                new GetRunConfigurationStep());
     }
-
-
 }
