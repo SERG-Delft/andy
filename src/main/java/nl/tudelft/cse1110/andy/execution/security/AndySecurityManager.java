@@ -38,16 +38,6 @@ public class AndySecurityManager extends SecurityManager {
                                     perm.getClass().getName() + " " +
                                     perm.getName() + " " +
                                     perm.getActions());
-
-//        if (perm instanceof RuntimePermission) {
-//            if (perm.getName().equals("setSecurityManager")) {
-//                throw new SecurityException("Replacing the SecurityManager is not permitted.");
-//            }
-//
-//            if (perm.getName().startsWith("exitVM")) {
-//                throw new SecurityException("Killing the process is not permitted.");
-//            }
-//        }
     }
 
     private boolean checkPermissionsUntrusted(Permission perm, boolean mockitoInternal) {
