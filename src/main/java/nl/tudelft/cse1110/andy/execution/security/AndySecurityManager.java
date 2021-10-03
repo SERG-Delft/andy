@@ -34,10 +34,12 @@ public class AndySecurityManager extends SecurityManager {
 
         if (checkPermissionsUntrusted(perm, mockitoInternal)) return;
 
-        throw new SecurityException("Operation not permitted: " +
+        var ex =  new SecurityException("Operation not permitted: " +
                                     perm.getClass().getName() + " " +
                                     perm.getName() + " " +
                                     perm.getActions());
+        ex.printStackTrace();
+        throw ex;
     }
 
     private boolean checkPermissionsUntrusted(Permission perm, boolean mockitoInternal) {
