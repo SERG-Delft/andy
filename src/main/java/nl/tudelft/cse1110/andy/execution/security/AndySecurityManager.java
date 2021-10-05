@@ -19,9 +19,13 @@ public class AndySecurityManager extends SecurityManager {
     public void checkPermission(Permission perm) {
         boolean untrusted = false;
         boolean mockitoInternal = false;
+        boolean jdkInternalLoader = false;
         for (StackTraceElement elem : Thread.currentThread().getStackTrace()) {
             if (elem.getClassName().startsWith("org.mockito.internal")) {
                 mockitoInternal = true;
+            }
+            if (elem.getClassName().startsWith("jdk.internal.loader.") && !untrusted) {
+                jdkInternalLoader = true;
             }
             if (elem.getClassName().startsWith("delft.")) {
                 untrusted = true;
@@ -32,18 +36,18 @@ public class AndySecurityManager extends SecurityManager {
             return;
         }
 
-        if (checkPermissionsUntrusted(perm, mockitoInternal)) return;
+        if (checkPermissionsUntrusted(perm, mockitoInternal, jdkInternalLoader)) return;
 
-        var ex =  new SecurityException("Operation not permitted: " +
-                                    perm.getClass().getName() + " " +
-                                    perm.getName() + " " +
-                                    perm.getActions());
+        var ex = new SecurityException("Operation not permitted: " +
+                                       perm.getClass().getName() + " " +
+                                       perm.getName() + " " +
+                                       perm.getActions());
         ex.printStackTrace();
         throw ex;
     }
 
-    private boolean checkPermissionsUntrusted(Permission perm, boolean mockitoInternal) {
-        if (checkFilePermission(perm)) return true;
+    private boolean checkPermissionsUntrusted(Permission perm, boolean mockitoInternal, boolean jdkInternalLoader) {
+        if (checkFilePermission(perm, mockitoInternal, jdkInternalLoader)) return true;
 
         if (checkPropertyPermission(perm)) return true;
 
@@ -138,9 +142,15 @@ public class AndySecurityManager extends SecurityManager {
         return false;
     }
 
-    private boolean checkFilePermission(Permission perm) {
+    private boolean checkFilePermission(Permission perm, boolean mockitoInternal, boolean jdkInternalLoader) {
         if (perm instanceof FilePermission) {
-            if (perm.getActions().equals("read")) {
+            if (perm.getActions().equals("read") &&
+                !perm.getName().endsWith(".java") &&
+                (perm.getName().endsWith(".jar") ||
+                 perm.getName().endsWith(".class") ||
+                 perm.getName().contains("mockito")) &&
+                !perm.getName().contains("..") &&
+                (mockitoInternal || jdkInternalLoader)) {
                 return true;
             }
         }
