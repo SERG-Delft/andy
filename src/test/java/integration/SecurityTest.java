@@ -2,6 +2,7 @@ package integration;
 
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.result.Result;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -29,5 +30,14 @@ public class SecurityTest extends IntegrationTestBase {
                 .contains("Operation not permitted")
                 .contains(expectedMessage);
     }
+
+    @Test
+    void staticBlock() {
+        Result result = run(Action.FULL_WITHOUT_HINTS, "EmptyLibrary", "securitytests/StaticBlock", "EmptyConfiguration");
+
+        assertThat(result.getTests().getFailures().get(0).getMessage())
+                .startsWith(ExceptionInInitializerError.class.getName());
+    }
+
 
 }
