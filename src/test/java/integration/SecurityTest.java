@@ -14,7 +14,8 @@ public class SecurityTest extends IntegrationTestBase {
             "WriteResultsXml,results.xml write",
             "SystemExit,exitVM.",
             "SetProperty,test write",
-            "RuntimeExec,execute"
+            "RuntimeExec,execute",
+            "ReadConfiguration,Configuration.java read"
     })
     void securityTest(String exploitFile, String expectedMessage) {
         Result result = run(Action.TESTS, "EmptyLibrary", "securitytests/" + exploitFile, "EmptyConfiguration");
