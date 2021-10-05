@@ -15,9 +15,13 @@ public class SecurityTest extends IntegrationTestBase {
             "SystemExit,exitVM.",
             "SetProperty,test write",
             "RuntimeExec,execute",
-            "ReadConfiguration,Configuration.java read"
+            "ReadConfiguration,Configuration.java read",
+            "ReadConfigurationClass,Configuration$1.class read"
     })
     void securityTest(String exploitFile, String expectedMessage) {
+        // Provide working directory path to user code for testing purposes
+        System.setProperty("andy.securitytest.workdir", workDir.getAbsolutePath());
+
         Result result = run(Action.TESTS, "EmptyLibrary", "securitytests/" + exploitFile, "EmptyConfiguration");
 
         assertThat(result.getTests().getFailures().get(0).getMessage())
