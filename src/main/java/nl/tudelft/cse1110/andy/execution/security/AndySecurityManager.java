@@ -49,7 +49,7 @@ public class AndySecurityManager extends SecurityManager {
 
         if (checkRuntimePermission(perm, mockitoInternal)) return true;
 
-        if (checkLoginPermission(perm)) return true;
+        if (checkLoggingPermission(perm)) return true;
 
         if (checkReflectPermission(perm)) return true;
 
@@ -69,12 +69,7 @@ public class AndySecurityManager extends SecurityManager {
     private boolean checkSecurityPermission(Permission perm) {
         if (perm instanceof SecurityPermission) {
             if (perm.getName().startsWith("putProviderProperty.") ||
-                perm.getName().startsWith("getProperty.crypto.") ||
-                perm.getName().startsWith("getProperty.ssl.") ||
-                perm.getName().startsWith("getProperty.keystore.") ||
-                perm.getName().startsWith("getProperty.jdk.tls.") ||
-                perm.getName().startsWith("getProperty.jdk.certpath.") ||
-                perm.getName().startsWith("getProperty.networkaddress.")) {
+                perm.getName().startsWith("getProperty.")) {
                 return true;
             }
         }
@@ -90,7 +85,7 @@ public class AndySecurityManager extends SecurityManager {
         return false;
     }
 
-    private boolean checkLoginPermission(Permission perm) {
+    private boolean checkLoggingPermission(Permission perm) {
         if (perm instanceof LoggingPermission) {
             if (perm.getName().equals("control")) {
                 return true;
