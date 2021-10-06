@@ -1,4 +1,4 @@
-package fixtures;
+package delft;
 
 import net.jqwik.api.*;
 import net.jqwik.api.constraints.Negative;

@@ -1,6 +1,5 @@
-//Random student solution
-
 package delft;
+//Random student solution
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;

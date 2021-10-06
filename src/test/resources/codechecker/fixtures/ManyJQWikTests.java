@@ -1,4 +1,4 @@
-package fixtures;
+package delft;
 
 import net.jqwik.api.Property;
 import net.jqwik.api.Provide;
