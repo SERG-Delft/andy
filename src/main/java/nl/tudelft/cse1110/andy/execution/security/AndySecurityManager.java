@@ -24,7 +24,7 @@ public class AndySecurityManager extends SecurityManager {
             if (elem.getClassName().startsWith("org.mockito.internal")) {
                 mockitoInternal = true;
             }
-            if (elem.getClassName().startsWith("jdk.internal.loader.") && !untrusted) {
+            if (elem.getClassName().startsWith("jdk.internal.") && !untrusted) {
                 jdkInternalLoader = true;
             }
             if (elem.getClassName().startsWith("delft.")) {
@@ -146,15 +146,28 @@ public class AndySecurityManager extends SecurityManager {
         if (perm instanceof FilePermission) {
             if (perm.getActions().equals("read") &&
                 !perm.getName().endsWith(".java") &&
-                (perm.getName().endsWith(".jar") ||
-                 perm.getName().endsWith(".class") ||
-                 perm.getName().contains("mockito")) &&
+                (checkFilePermissionAllowedExtensions(perm) ||
+                 checkFilePermissionAllowedPaths(perm)) &&
                 !perm.getName().contains("..") &&
                 (mockitoInternal || jdkInternalLoader)) {
                 return true;
             }
         }
         return false;
+    }
+
+    private boolean checkFilePermissionAllowedExtensions(Permission perm) {
+        return perm.getName().endsWith(".jar") ||
+               perm.getName().endsWith(".class") ||
+               perm.getName().endsWith("net.properties");
+    }
+
+    private boolean checkFilePermissionAllowedPaths(Permission perm) {
+        return perm.getName().contains("META-INF") ||
+               perm.getName().contains("jdk") ||
+               perm.getName().contains("jre") ||
+               perm.getName().contains("jvm") ||
+               perm.getName().contains("mockito");
     }
 
     @Override
