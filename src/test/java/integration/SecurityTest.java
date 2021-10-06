@@ -39,5 +39,15 @@ public class SecurityTest extends IntegrationTestBase {
                 .startsWith(ExceptionInInitializerError.class.getName());
     }
 
+    @Test
+    void otherPackageName() {
+        Result result = run(Action.FULL_WITHOUT_HINTS, "EmptyLibrary", "securitytests/OtherPackageName", "EmptyConfiguration");
+
+        assertThat(result.getCompilation().successful()).isFalse();
+        assertThat(result.getCompilation().getErrors())
+                .hasSize(1)
+                .allMatch(err -> err.getMessage().contains("package name of your solution"));
+    }
+
 
 }

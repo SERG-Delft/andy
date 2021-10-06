@@ -58,6 +58,7 @@ public class ExecutionFlow {
         return Arrays.asList(
                 new SetSecurityManagerStep(),
                 new OrganizeSourceCodeStep(),
+                new SourceCodeSecurityCheckStep(),
                 new CompilationStep(),
                 new ReplaceClassloaderStep(),
                 new GetRunConfigurationStep());
