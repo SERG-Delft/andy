@@ -24,9 +24,8 @@ public class SourceCodeSecurityCheckStep implements ExecutionStep {
         List<File> solutionFile = FilesUtils.getAllJavaFiles(dirCfg.getWorkingDir()).stream()
                 .filter(f -> f.getName().equals("Solution.java"))
                 .collect(Collectors.toList());
-
         if (solutionFile.size() != 1) {
-            result.genericFailure("Could not find solution file in SourceCodeSecurityCheckStep");
+            // Could not find solution file
             return;
         }
 
