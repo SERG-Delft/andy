@@ -64,7 +64,6 @@ public class SourceCodeSecurityCheckStep implements ExecutionStep {
                 "getDeclaredMethods",
                 "getField",
                 "getModifiers",
-                "invoke",
                 "reflect",
                 "setAccessible"
         );
