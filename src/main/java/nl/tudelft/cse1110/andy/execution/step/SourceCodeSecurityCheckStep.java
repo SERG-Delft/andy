@@ -41,8 +41,6 @@ public class SourceCodeSecurityCheckStep implements ExecutionStep {
 
         if (!checkPackageName(code, result)) return;
 
-        if (!checkForReflection(code, result)) return;
-
         if (!checkForKeywords(code, result)) return;
     }
 
@@ -56,30 +54,18 @@ public class SourceCodeSecurityCheckStep implements ExecutionStep {
         return true;
     }
 
-    private boolean checkForReflection(String code, ResultBuilder result) {
-        var keywords = List.of(
-                "forName",
-                "getClass",
-                "getDeclaredConstructor",
-                "getDeclaredMethods",
-                "getField",
-                "getModifiers",
-                "reflect",
-                "setAccessible"
-        );
-        for (String keyword : keywords) {
-            if (code.contains(keyword)) {
-                result.compilationSecurityFail("Using reflection in your code is not allowed");
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     private boolean checkForKeywords(String code, ResultBuilder result) {
+        String reflectionMsg = "Using reflection in your code is not allowed";
         var keywords = Map.of(
-                "Configuration", "Accessing the task configuration in your code is not allowed"
+                "Configuration", "Accessing the task configuration in your code is not allowed",
+                "forName", reflectionMsg,
+                "getClass", reflectionMsg,
+                "getDeclaredConstructor", reflectionMsg,
+                "getDeclaredMethods", reflectionMsg,
+                "getField", reflectionMsg,
+                "getModifiers", reflectionMsg,
+                "reflect", reflectionMsg,
+                "setAccessible", reflectionMsg
         );
         for (String keyword : keywords.keySet()) {
             if (code.contains(keyword)) {
