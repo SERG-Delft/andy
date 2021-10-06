@@ -146,10 +146,15 @@ public class AndySecurityManager extends SecurityManager {
         if (perm instanceof FilePermission) {
             if (perm.getActions().equals("read") &&
                 !perm.getName().endsWith(".java") &&
-                (checkFilePermissionAllowedExtensions(perm) ||
-                 checkFilePermissionAllowedPaths(perm)) &&
-                !perm.getName().contains("..") &&
-                (mockitoInternal || jdkInternalLoader)) {
+                (
+                        (
+                                checkFilePermissionAllowedExtensions(perm) ||
+                                checkFilePermissionAllowedPaths(perm)
+                        )
+                        && (mockitoInternal || jdkInternalLoader) ||
+                        (perm.getName().contains("/repository/"))
+                )
+                && !perm.getName().contains("..")) {
                 return true;
             }
         }
