@@ -1,4 +1,4 @@
-package tudelft.domain;
+package delft;
 
 class ATM {
 

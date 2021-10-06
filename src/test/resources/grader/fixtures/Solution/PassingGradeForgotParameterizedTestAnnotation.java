@@ -1,9 +1,9 @@
-package tudelft.domain;
+package delft;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import tudelft.domain.PassingGrade;
+import delft.PassingGrade;
 
 import java.util.stream.Stream;
 

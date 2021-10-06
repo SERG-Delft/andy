@@ -1,4 +1,4 @@
-package domain.addingnumbers;
+package delft;
 
 import nl.tudelft.cse1110.andy.config.RunConfiguration;
 import nl.tudelft.cse1110.andy.config.MetaTest;
@@ -22,7 +22,7 @@ public class Configuration extends RunConfiguration {
 
     @Override
     public List<String> classesUnderTest() {
-        return List.of("domain.addingnumbers.NumberUtils");
+        return List.of("delft.NumberUtils");
     }
 
     @Override

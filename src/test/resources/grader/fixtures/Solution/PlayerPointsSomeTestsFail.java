@@ -1,7 +1,7 @@
-package tudelft.domain;
+package delft;
 
 import org.junit.jupiter.api.Test;
-import tudelft.domain.PlayerPoints;
+import delft.PlayerPoints;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

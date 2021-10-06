@@ -1,4 +1,4 @@
-package domain.numberutils;
+package delft;
 
 import nl.tudelft.cse1110.andy.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.andy.config.RunConfiguration;
@@ -28,7 +28,7 @@ public class Configuration extends RunConfiguration {
 
     @Override
     public List<String> classesUnderTest() {
-        return List.of("domain.addingnumbers.NumberUtils");
+        return List.of("delft.NumberUtils");
     }
 
     @Override

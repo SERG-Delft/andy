@@ -1,4 +1,4 @@
-package domain.addingnumbers;
+package delft;
 
 import java.util.ArrayList;
 import java.util.Collections;
