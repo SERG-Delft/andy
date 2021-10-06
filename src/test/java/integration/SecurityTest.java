@@ -16,8 +16,8 @@ public class SecurityTest extends IntegrationTestBase {
             "SystemExit,exitVM.",
             "SetProperty,test write",
             "RuntimeExec,execute",
-            "ReadConfiguration,Configuration.java read",
-            "ReadConfigurationClass,Configuration$1.class read"
+            "ReadSource,ExploitTest.java read",
+            "ReadClass,ExploitTest$1.class read"
     })
     void securityTest(String exploitFile, String expectedMessage) {
         // Provide working directory path to user code for testing purposes
@@ -39,14 +39,19 @@ public class SecurityTest extends IntegrationTestBase {
                 .startsWith(ExceptionInInitializerError.class.getName());
     }
 
-    @Test
-    void otherPackageName() {
-        Result result = run(Action.FULL_WITHOUT_HINTS, "EmptyLibrary", "securitytests/OtherPackageName", "EmptyConfiguration");
+    @ParameterizedTest
+    @CsvSource({
+            "OtherPackageName,package name of your solution",
+            "InstantiateConfiguration,Accessing the task configuration",
+            "UseReflection,Using reflection"
+    })
+    void failingSecurityCheck(String exploitFile, String expectedMessage) {
+        Result result = run(Action.FULL_WITHOUT_HINTS, "EmptyLibrary", "securitytests/"+exploitFile, "EmptyConfiguration");
 
         assertThat(result.getCompilation().successful()).isFalse();
         assertThat(result.getCompilation().getErrors())
                 .hasSize(1)
-                .allMatch(err -> err.getMessage().contains("package name of your solution"));
+                .allMatch(err -> err.getMessage().contains(expectedMessage));
     }
 
 

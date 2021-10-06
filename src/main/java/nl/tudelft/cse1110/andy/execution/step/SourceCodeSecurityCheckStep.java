@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -39,6 +40,10 @@ public class SourceCodeSecurityCheckStep implements ExecutionStep {
         }
 
         if (!checkPackageName(code, result)) return;
+
+        if (!checkForReflection(code, result)) return;
+
+        if (!checkForKeywords(code, result)) return;
     }
 
     private boolean checkPackageName(String code, ResultBuilder result) {
@@ -46,6 +51,42 @@ public class SourceCodeSecurityCheckStep implements ExecutionStep {
         if (!pattern.matcher(code).find()) {
             result.compilationSecurityFail("The package name of your solution must be \"delft\"");
             return false;
+        }
+
+        return true;
+    }
+
+    private boolean checkForReflection(String code, ResultBuilder result) {
+        var keywords = List.of(
+                "forName",
+                "getClass",
+                "getDeclaredConstructor",
+                "getDeclaredMethods",
+                "getField",
+                "getModifiers",
+                "invoke",
+                "reflect",
+                "setAccessible"
+        );
+        for (String keyword : keywords) {
+            if (code.contains(keyword)) {
+                result.compilationSecurityFail("Using reflection in your code is not allowed");
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean checkForKeywords(String code, ResultBuilder result) {
+        var keywords = Map.of(
+                "Configuration", "Accessing the task configuration in your code is not allowed"
+        );
+        for (String keyword : keywords.keySet()) {
+            if (code.contains(keyword)) {
+                result.compilationSecurityFail(keywords.get(keyword));
+                return false;
+            }
         }
 
         return true;

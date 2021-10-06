@@ -12,7 +12,7 @@ class ExploitTest {
     void exploitTest() throws IOException {
         try {
             String workDir = System.getProperty("andy.securitytest.workdir");
-            String config = Files.readString(new File(workDir + "/delft/Configuration.java").toPath());
+            byte[] config = Files.readAllBytes(new File(workDir + "/delft/ExploitTest$1.class").toPath());
         } catch (IOException e) {
             e.printStackTrace();
         }
