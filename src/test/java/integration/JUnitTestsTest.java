@@ -341,7 +341,7 @@ public class JUnitTestsTest {
             public boolean matches(UnitTestsResult value) {
                 return
                         value.getFailures().stream()
-                                .anyMatch(t -> t.getTestCase().equals(String.format("%s (#d)", testName, number)));
+                                .anyMatch(t -> t.getTestCase().equals(String.format("%s (%d)", testName, number)));
             }
         };
     }
