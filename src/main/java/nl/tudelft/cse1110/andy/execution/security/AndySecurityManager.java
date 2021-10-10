@@ -17,6 +17,12 @@ public class AndySecurityManager extends SecurityManager {
 
     @Override
     public void checkPermission(Permission perm) {
+        /*
+         * Determine whether the current code should be trusted based on the package name.
+         * If the code is trusted, all permissions are automatically granted.
+         * As the solution file appears in the stacktrace of certain internal JDK methods as well as Mockito,
+         * check if this is the case and grant some more dangerous permissions.
+         */
         boolean untrusted = false;
         boolean mockitoInternal = false;
         boolean jdkInternalLoader = false;
@@ -32,17 +38,29 @@ public class AndySecurityManager extends SecurityManager {
             }
         }
 
+        /*
+         * If this method returns without throwing an exception, the requested permission will be granted.
+         * If a SecurityException is thrown, it will be denied.
+         */
+
+        // If the code is trusted, grant all permissions
         if (!untrusted) {
             return;
         }
 
+        // Determine if the currently requested permission should be granted
         if (checkPermissionsUntrusted(perm, mockitoInternal, jdkInternalLoader)) return;
 
+        // If the currently requested permission should not be allowed,
+        // throw an exception to block the execution
         var ex = new SecurityException("Operation not permitted: " +
                                        perm.getClass().getName() + " " +
                                        perm.getName() + " " +
                                        perm.getActions());
+
+        // Print the stack trace to make debugging easier
         ex.printStackTrace();
+
         throw ex;
     }
 
@@ -60,10 +78,13 @@ public class AndySecurityManager extends SecurityManager {
         if (checkSecurityPermission(perm)) return true;
 
         if (checkNetworkPermissions(perm)) return true;
+
         return false;
     }
 
     private boolean checkNetworkPermissions(Permission perm) {
+        // Allow network access as it is needed for Selenium tests
+        // External connections are not blocked here as they are prevented via other means
         if (perm instanceof NetPermission || perm instanceof URLPermission || perm instanceof SocketPermission) {
             return true;
         }
@@ -71,6 +92,7 @@ public class AndySecurityManager extends SecurityManager {
     }
 
     private boolean checkSecurityPermission(Permission perm) {
+        // Allow property access as it is needed in order to execute the tests
         if (perm instanceof SecurityPermission) {
             if (perm.getName().startsWith("putProviderProperty.") ||
                 perm.getName().startsWith("getProperty.")) {
@@ -81,6 +103,8 @@ public class AndySecurityManager extends SecurityManager {
     }
 
     private boolean checkReflectPermission(Permission perm) {
+        // Allow overriding access checks via reflection as it is needed in order to execute the tests
+        // Using reflection in solution code is blocked via other means
         if (perm instanceof ReflectPermission) {
             if (perm.getName().equals("suppressAccessChecks")) {
                 return true;
@@ -90,6 +114,7 @@ public class AndySecurityManager extends SecurityManager {
     }
 
     private boolean checkLoggingPermission(Permission perm) {
+        // Allow log control permissions as they are needed in order to execute the tests
         if (perm instanceof LoggingPermission) {
             if (perm.getName().equals("control")) {
                 return true;
@@ -99,6 +124,7 @@ public class AndySecurityManager extends SecurityManager {
     }
 
     private boolean checkRuntimePermission(Permission perm, boolean mockitoInternal) {
+        // Allow various runtime permissions as they are needed in order to execute the tests
         if (perm instanceof RuntimePermission) {
             if (mockitoInternal && checkMockitoInternalRuntimePermission(perm)
                 || checkReflectionRuntimePermissions(perm)
@@ -126,6 +152,7 @@ public class AndySecurityManager extends SecurityManager {
     }
 
     private boolean checkMockitoInternalRuntimePermission(Permission perm) {
+        // Allow those permissions only if they are requested by internal Mockito classes
         return perm.getName().equals("accessSystemModules") ||
                perm.getName().equals("accessClassInPackage.sun.misc") ||
                perm.getName().startsWith("accessClassInPackage.") ||
@@ -143,6 +170,9 @@ public class AndySecurityManager extends SecurityManager {
     }
 
     private boolean checkFilePermission(Permission perm, boolean mockitoInternal, boolean jdkInternalLoader) {
+        // Allow reading certain files based on their path and extension.
+        // This is needed in order to execute the tests.
+        // Block writing or executing files.
         if (perm instanceof FilePermission) {
             if (perm.getActions().equals("read") &&
                 !perm.getName().endsWith(".java") &&
