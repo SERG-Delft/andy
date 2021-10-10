@@ -128,8 +128,6 @@ public class StandardResultWriter implements ResultWriter {
                 reason.append("as you are only ");
                 if (mas.getAction() == Action.TESTS)
                     reason.append("checking if your tests pass");
-                else if (mas.getAction() == Action.META_TEST)
-                    reason.append("checking what the meta test score is");
                 else if (mas.getAction() == Action.COVERAGE)
                     reason.append("running code coverage");
             }
