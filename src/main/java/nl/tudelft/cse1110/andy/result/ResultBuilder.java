@@ -112,7 +112,7 @@ public class ResultBuilder {
             String methodName = getParameterizedMethodName(failure);
             String testCaseNumber = getParameterizedTestCaseNumber(failure);
 
-            testCase = String.format("%s (#d)", methodName, testCaseNumber);
+            testCase = String.format("%s (%d)", methodName, Integer.parseInt(testCaseNumber));
             message = failure.getException().toString();
         } else {
             String methodName = failure.getTestIdentifier().getDisplayName();
