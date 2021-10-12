@@ -4,6 +4,9 @@ import nl.tudelft.cse1110.andy.utils.ResourceUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import selenium.pageobjects.WebLabLoginPage;
@@ -12,6 +15,8 @@ import selenium.pageobjects.WebLabSubmissionPage;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.*;
 import static unit.writer.standard.StandardResultTestAssertions.*;
@@ -211,14 +216,15 @@ public class WebLabSeleniumTest {
                 .contains("Test score: 84/100");
     }
 
-    @Test
-    public void testExamSubmission() {
+    @ParameterizedTest
+    @MethodSource("testExamSubmissionGenerator")
+    public void testExamSubmission(Consumer<WebLabSubmissionPage> action) {
         WebLabSubmissionPage webLabSubmissionPage = new WebLabSubmissionPage(driver,
                 WEBLAB_URL + String.format(WEBLAB_SUBMISSION_PATH, ASSIGNMENT_EXAM, USER_ID));
 
         webLabSubmissionPage.navigate();
         webLabSubmissionPage.enterSolution(this.submissionContent);
-        webLabSubmissionPage.assessWithHints();
+        action.accept(webLabSubmissionPage);
 
         String output = webLabSubmissionPage.getOutput();
 
@@ -243,10 +249,19 @@ public class WebLabSeleniumTest {
                 .has(not(fullGradeDescription("Mutation coverage", 3, 4, 0.25)))
                 .has(not(fullGradeDescription("Code checks", 17, 18, 0.25)))
                 .has(not(fullGradeDescription("Meta tests", 2, 3, 0.25)))
+                // .has(zeroScoreExplanation()) TODO
                 .doesNotContain("Final grade:")
                 .has(mode("EXAM"))
                 .contains("pitest")
                 .contains("jacoco")
                 .contains("Test score: 0/100");
+    }
+
+    private static Stream<Arguments> testExamSubmissionGenerator() {
+        return Stream.of(
+                Arguments.of((Consumer<WebLabSubmissionPage>) WebLabSubmissionPage::runWithCoverage),
+                Arguments.of((Consumer<WebLabSubmissionPage>) WebLabSubmissionPage::assessWithoutHints),
+                Arguments.of((Consumer<WebLabSubmissionPage>) WebLabSubmissionPage::assessWithHints)
+        );
     }
 }
