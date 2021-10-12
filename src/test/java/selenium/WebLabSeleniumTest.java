@@ -40,9 +40,9 @@ public class WebLabSeleniumTest {
         String credentialsString = System.getenv(WEBLAB_CREDENTIALS_ENV_VAR);
         String[] weblabCredentials = credentialsString != null ? credentialsString.split(":") : null;
 
-        if(weblabCredentials == null || weblabCredentials.length != 2){
+        if (weblabCredentials == null || weblabCredentials.length != 2) {
             fail("WebLab credentials are not set configured. Provide a local WebLab username and " +
-                 "password in the \""+ WEBLAB_CREDENTIALS_ENV_VAR + "\" environment variable in the format " +
+                 "password in the \"" + WEBLAB_CREDENTIALS_ENV_VAR + "\" environment variable in the format " +
                  "\"username:password\" or \"email:password\". The provided user has to be enrolled in the " +
                  "course containing the test assignments.");
             return;
@@ -68,6 +68,43 @@ public class WebLabSeleniumTest {
         WebLabLoginPage loginPage = new WebLabLoginPage(this.driver, WEBLAB_URL + WEBLAB_LOGIN_PATH);
         loginPage.navigate();
         loginPage.login(this.weblabUsername, this.weblabPassword);
+    }
+
+    @Test
+    public void testPracticeSubmissionWithoutHints() {
+        WebLabSubmissionPage webLabSubmissionPage = new WebLabSubmissionPage(driver,
+                WEBLAB_URL + String.format(WEBLAB_SUBMISSION_PATH, ASSIGNMENT_PRACTICE, USER_ID));
+
+        webLabSubmissionPage.navigate();
+        webLabSubmissionPage.enterSolution(this.submissionContent);
+        webLabSubmissionPage.assessWithoutHints();
+
+        String output = webLabSubmissionPage.getOutput();
+
+        assertThat(output)
+                .has(compilationSuccess())
+                .has(numberOfJUnitTestsPassing(2))
+                .has(totalNumberOfJUnitTests(2))
+                .has(linesCovered(10))
+                .has(instructionsCovered(31))
+                .has(branchesCovered(2))
+                .has(mutationScore(3, 4))
+                .has(scoreOfCodeChecks(17, 18))
+                .has(not(codeCheck("tests should have assertions", false, 1)))
+                .has(not(codeCheck("getPoints should have an assertion", true, 3)))
+                .has(metaTestsPassing(2))
+                .has(metaTests(3))
+                .has(not(metaTestPassing("does not update")))
+                .has(not(metaTestFailing("does not add points if post is not featured")))
+                .has(fullGradeDescription("Branch coverage", 2, 2, 0.25))
+                .has(fullGradeDescription("Mutation coverage", 3, 4, 0.25))
+                .has(fullGradeDescription("Code checks", 17, 18, 0.25))
+                .has(fullGradeDescription("Meta tests", 2, 3, 0.25))
+                .contains("Final grade: 84/100")
+                .has(mode("PRACTICE"))
+                .contains("pitest")
+                .contains("jacoco")
+                .contains("Test score: 84/100");
     }
 
     @Test
