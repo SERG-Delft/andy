@@ -29,7 +29,7 @@ public class WebLabSubmissionPage {
     private WebElement saveButton;
 
     @FindBy(xpath = "/html/body/div[3]/div[5]/div/div/div[3]/div[2]/div/div[1]/div/span/div/a[2]")
-    private WebElement runTestsBtn;
+    private WebElement runOnlyTestsBtn;
 
     @FindBy(xpath = "/html/body/div[3]/div[5]/div/div/div[3]/div[2]/div/div[1]/div/span/div/a[3]")
     private WebElement runWithCoverageBtn;
@@ -47,8 +47,8 @@ public class WebLabSubmissionPage {
         this.driver.navigate().to(url);
     }
 
-    public void runTests() {
-        this.runTestsBtn.click();
+    public void runOnlyTests() {
+        this.runOnlyTestsBtn.click();
     }
 
     public void runWithCoverage() {
