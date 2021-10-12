@@ -28,8 +28,17 @@ public class WebLabSubmissionPage {
     @FindBy(xpath = "/html/body/div[3]/div[5]/div/div/div[3]/div[2]/div/div[1]/div/span/span")
     private WebElement saveButton;
 
+    @FindBy(xpath = "/html/body/div[3]/div[5]/div/div/div[3]/div[2]/div/div[1]/div/span/div/a[2]")
+    private WebElement runTestsBtn;
+
+    @FindBy(xpath = "/html/body/div[3]/div[5]/div/div/div[3]/div[2]/div/div[1]/div/span/div/a[3]")
+    private WebElement runWithCoverageBtn;
+
+    @FindBy(xpath = "/html/body/div[3]/div[5]/div/div/div[3]/div[2]/div/div[1]/div/span/div/a[4]")
+    private WebElement assessWithoutHintsBtn;
+
     @FindBy(xpath = "/html/body/div[3]/div[5]/div/div/div[3]/div[2]/div/div[1]/div/span/div/a[5]")
-    private WebElement specTestButton;
+    private WebElement assessWithHintsBtn;
 
     @FindBy(xpath = "/html/body/div[3]/div[5]/div/div/div[3]/div[2]/div/div[1]/div/div/div/pre")
     private WebElement output;
@@ -38,8 +47,20 @@ public class WebLabSubmissionPage {
         this.driver.navigate().to(url);
     }
 
-    public void runSpecTests() {
-        this.specTestButton.click();
+    public void runTests() {
+        this.runTestsBtn.click();
+    }
+
+    public void runWithCoverage() {
+        this.runWithCoverageBtn.click();
+    }
+
+    public void assessWithoutHints() {
+        this.assessWithoutHintsBtn.click();
+    }
+
+    public void assessWithHints() {
+        this.assessWithHintsBtn.click();
     }
 
     public void enterSolution(String solution) {

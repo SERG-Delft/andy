@@ -71,13 +71,13 @@ public class WebLabSeleniumTest {
     }
 
     @Test
-    public void testPracticeSubmission() {
+    public void testPracticeSubmissionWithHints() {
         WebLabSubmissionPage webLabSubmissionPage = new WebLabSubmissionPage(driver,
                 WEBLAB_URL + String.format(WEBLAB_SUBMISSION_PATH, ASSIGNMENT_PRACTICE, USER_ID));
 
         webLabSubmissionPage.navigate();
         webLabSubmissionPage.enterSolution(this.submissionContent);
-        webLabSubmissionPage.runSpecTests();
+        webLabSubmissionPage.assessWithHints();
 
         String output = webLabSubmissionPage.getOutput();
 
@@ -125,7 +125,7 @@ public class WebLabSeleniumTest {
 
         webLabSubmissionPage.navigate();
         webLabSubmissionPage.enterSolution(this.submissionContent);
-        webLabSubmissionPage.runSpecTests();
+        webLabSubmissionPage.assessWithHints();
 
         String output = webLabSubmissionPage.getOutput();
 
