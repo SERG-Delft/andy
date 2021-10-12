@@ -72,6 +72,12 @@ public class ResultBuilder {
         this.compilation = CompilationResult.compilationFail(compilationErrors);
     }
 
+    public void compilationSecurityFail(String message) {
+        this.compilation = CompilationResult.compilationFail(List.of(
+                new CompilationErrorInfo("Solution.java", 1, message)
+        ));
+    }
+
     /*
      * JUnit tests
      */

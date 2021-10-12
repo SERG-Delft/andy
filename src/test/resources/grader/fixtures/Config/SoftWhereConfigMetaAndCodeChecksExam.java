@@ -1,4 +1,4 @@
-package domain.addingnumbers;
+package delft;
 
 import nl.tudelft.cse1110.andy.codechecker.checks.Comparison;
 import nl.tudelft.cse1110.andy.codechecker.checks.MockClass;

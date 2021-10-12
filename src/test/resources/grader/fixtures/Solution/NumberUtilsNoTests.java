@@ -1,4 +1,4 @@
-package domain.addingnumbers;
+package delft;
 
 class NumberUtilsTest {
     void t1(){}

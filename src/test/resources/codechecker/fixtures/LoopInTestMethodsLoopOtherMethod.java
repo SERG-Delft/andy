@@ -1,4 +1,4 @@
-package fixtures;
+package delft;
 
 public class LoopInTestMethodsLoopOtherMethod {
 
