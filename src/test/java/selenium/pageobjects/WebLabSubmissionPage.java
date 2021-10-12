@@ -25,13 +25,13 @@ public class WebLabSubmissionPage {
     @FindBy(xpath = "/html/body/div[3]/div[5]/div/div/div[3]/div[1]/div")
     private WebElement solutionDiv;
 
-    @FindBy(xpath = "/html/body/div[3]/div[5]/div/div/div[3]/div[2]/div/div[1]/span")
+    @FindBy(xpath = "/html/body/div[3]/div[5]/div/div/div[3]/div[2]/div/div[1]/div/span/span")
     private WebElement saveButton;
 
-    @FindBy(xpath = "/html/body/div[3]/div[5]/div/div/div[3]/div[2]/div/div[1]/div[2]/a[2]")
+    @FindBy(xpath = "/html/body/div[3]/div[5]/div/div/div[3]/div[2]/div/div[1]/div/span/div/a[5]")
     private WebElement specTestButton;
 
-    @FindBy(xpath = "/html/body/div[3]/div[5]/div/div/div[3]/div[2]/div/div[1]/div[2]/div[2]/pre")
+    @FindBy(xpath = "/html/body/div[3]/div[5]/div/div/div[3]/div[2]/div/div[1]/div/div/div/pre")
     private WebElement output;
 
     public void navigate() {
