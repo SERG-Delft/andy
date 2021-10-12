@@ -216,6 +216,44 @@ public class WebLabSeleniumTest {
                 .contains("Test score: 84/100");
     }
 
+    @Test
+    public void testExamSubmissionOnlyTests() {
+        WebLabSubmissionPage webLabSubmissionPage = new WebLabSubmissionPage(driver,
+                WEBLAB_URL + String.format(WEBLAB_SUBMISSION_PATH, ASSIGNMENT_EXAM, USER_ID));
+
+        webLabSubmissionPage.navigate();
+        webLabSubmissionPage.enterSolution(this.submissionContent);
+        webLabSubmissionPage.runOnlyTests();
+
+        String output = webLabSubmissionPage.getOutput();
+
+        assertThat(output)
+                .has(compilationSuccess())
+                .has(numberOfJUnitTestsPassing(2))
+                .has(totalNumberOfJUnitTests(2))
+                .has(noJacocoCoverage())
+                .has(noPitestCoverage())
+                .has(noCodeChecks())
+                .has(not(scoreOfCodeChecks(17, 18)))
+                .has(not(codeCheck("tests should have assertions", false, 1)))
+                .has(noMetaTests())
+                .has(not(metaTestsPassing(2)))
+                .has(not(metaTests(3)))
+                .has(not(metaTestPassing("does not update")))
+                .has(not(metaTestFailing("does not add points if post is not featured")))
+                .has(noFinalGrade())
+                .has(not(fullGradeDescription("Branch coverage", 2, 2, 0.25)))
+                .has(not(fullGradeDescription("Mutation coverage", 3, 4, 0.25)))
+                .has(not(fullGradeDescription("Code checks", 17, 18, 0.25)))
+                .has(not(fullGradeDescription("Meta tests", 2, 3, 0.25)))
+                // .has(zeroScoreExplanation()) TODO
+                .doesNotContain("Final grade:")
+                .has(mode("EXAM"))
+                .doesNotContain("pitest")
+                .doesNotContain("jacoco")
+                .contains("Test score: 0/100");
+    }
+
     @ParameterizedTest
     @MethodSource("testExamSubmissionGenerator")
     public void testExamSubmission(Consumer<WebLabSubmissionPage> action) {
