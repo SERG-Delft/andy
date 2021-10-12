@@ -71,6 +71,35 @@ public class WebLabSeleniumTest {
     }
 
     @Test
+    public void testPracticeSubmissionCoverage() {
+        WebLabSubmissionPage webLabSubmissionPage = new WebLabSubmissionPage(driver,
+                WEBLAB_URL + String.format(WEBLAB_SUBMISSION_PATH, ASSIGNMENT_PRACTICE, USER_ID));
+
+        webLabSubmissionPage.navigate();
+        webLabSubmissionPage.enterSolution(this.submissionContent);
+        webLabSubmissionPage.runWithCoverage();
+
+        String output = webLabSubmissionPage.getOutput();
+
+        assertThat(output)
+                .has(compilationSuccess())
+                .has(numberOfJUnitTestsPassing(2))
+                .has(totalNumberOfJUnitTests(2))
+                .has(linesCovered(10))
+                .has(instructionsCovered(31))
+                .has(branchesCovered(2))
+                .has(mutationScore(3, 4))
+                .has(noCodeChecks())
+                .has(noMetaTests())
+                .has(noFinalGrade())
+                // .has(zeroScoreExplanation()) TODO
+                .has(mode("PRACTICE"))
+                .contains("pitest")
+                .contains("jacoco")
+                .contains("Test score: 0/100");
+    }
+
+    @Test
     public void testPracticeSubmissionWithoutHints() {
         WebLabSubmissionPage webLabSubmissionPage = new WebLabSubmissionPage(driver,
                 WEBLAB_URL + String.format(WEBLAB_SUBMISSION_PATH, ASSIGNMENT_PRACTICE, USER_ID));
