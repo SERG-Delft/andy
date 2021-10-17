@@ -296,7 +296,7 @@ public class ResultBuilder {
     public boolean hasFailed() {
         boolean compilationFailed = compilation!=null && !compilation.successful();
         boolean unitTestsFailed = testResults != null && testResults.didNotGoWell();
-        boolean genericFailureHappened = genericFailureMessage != null && genericFailureStep != null && genericFailureException != null;
+        boolean genericFailureHappened = genericFailureMessage != null || genericFailureStep != null || genericFailureException != null;
 
         return compilationFailed || unitTestsFailed || genericFailureHappened;
     }
