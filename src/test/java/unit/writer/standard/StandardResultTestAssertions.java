@@ -262,7 +262,7 @@ public class StandardResultTestAssertions {
         return new Condition<>() {
             @Override
             public boolean matches(String value) {
-                return value.contains(failure);
+                return value.contains("we are facing a failure") && value.contains(failure);
             }
         };
     }

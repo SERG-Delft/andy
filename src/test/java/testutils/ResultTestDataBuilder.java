@@ -1,5 +1,6 @@
 package testutils;
 
+import nl.tudelft.cse1110.andy.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.grade.GradeWeight;
 import nl.tudelft.cse1110.andy.result.*;
 
@@ -9,6 +10,8 @@ import java.util.List;
 public class ResultTestDataBuilder {
 
     private String genericFailureMessage = null;
+    private ExecutionStep genericFailureStep = null;
+    private Throwable genericFailureException = null;
     private CompilationResult compilation = CompilationResult.empty();
     private UnitTestsResult testResults = UnitTestsResult.empty();
     private MutationTestingResult mutationResults = MutationTestingResult.empty();
@@ -69,6 +72,6 @@ public class ResultTestDataBuilder {
     }
 
     public Result build() {
-        return new Result(compilation, testResults, mutationResults, codeCheckResults, coverageResults, metaTestResults, finalGrade, genericFailureMessage, timeInSeconds, weights);
+        return new Result(compilation, testResults, mutationResults, codeCheckResults, coverageResults, metaTestResults, finalGrade, genericFailureMessage, genericFailureStep, genericFailureException, timeInSeconds, weights);
     }
 }

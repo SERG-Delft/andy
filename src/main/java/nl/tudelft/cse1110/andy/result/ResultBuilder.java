@@ -20,7 +20,6 @@ import javax.tools.JavaFileObject;
 import java.util.*;
 
 import static javax.tools.Diagnostic.Kind.ERROR;
-import static nl.tudelft.cse1110.andy.utils.ExceptionUtils.exceptionMessage;
 import static nl.tudelft.cse1110.andy.utils.JUnitUtils.*;
 
 public class ResultBuilder {
@@ -33,6 +32,8 @@ public class ResultBuilder {
 
     // it will be set in case of a generic failure. If one happens, the output is purely the generic failure
     private String genericFailureMessage;
+    private ExecutionStep genericFailureStep;
+    private Throwable genericFailureException;
 
     // just so we know the time it took
     private long startTime = System.nanoTime();
@@ -235,16 +236,8 @@ public class ResultBuilder {
     }
 
     public void genericFailure(ExecutionStep step, Throwable e) {
-
-        StringBuilder failureMsg = new StringBuilder();
-
-        failureMsg.append(String.format("Oh, we are facing a failure in %s that we cannot recover from.\n", step.getClass().getSimpleName()));
-        failureMsg.append("Please, send the message below to the teaching team:\n");
-        failureMsg.append("---\n");
-        failureMsg.append(exceptionMessage(e));
-        failureMsg.append("---\n");
-
-        genericFailure(failureMsg.toString());
+        this.genericFailureStep = step;
+        this.genericFailureException = e;
     }
 
     /*
@@ -267,7 +260,18 @@ public class ResultBuilder {
                         process.getExitCode(), process.getErrorMessages());
             }
 
-            return new Result(compilation, testResults, mutationResults, codeCheckResults, coverageResults, metaTestResults, finalGrade, genericFailureMessage, timeInSeconds, weights);
+            return new Result(compilation,
+                    testResults,
+                    mutationResults,
+                    codeCheckResults,
+                    coverageResults,
+                    metaTestResults,
+                    finalGrade,
+                    genericFailureMessage,
+                    genericFailureStep,
+                    genericFailureException,
+                    timeInSeconds,
+                    weights);
         }
     }
 
@@ -292,7 +296,7 @@ public class ResultBuilder {
     public boolean hasFailed() {
         boolean compilationFailed = compilation!=null && !compilation.successful();
         boolean unitTestsFailed = testResults != null && testResults.didNotGoWell();
-        boolean genericFailureHappened = genericFailureMessage != null;
+        boolean genericFailureHappened = genericFailureMessage != null && genericFailureStep != null && genericFailureException != null;
 
         return compilationFailed || unitTestsFailed || genericFailureHappened;
     }

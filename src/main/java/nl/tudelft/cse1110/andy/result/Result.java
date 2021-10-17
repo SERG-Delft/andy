@@ -1,5 +1,6 @@
 package nl.tudelft.cse1110.andy.result;
 
+import nl.tudelft.cse1110.andy.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.grade.GradeWeight;
 
 public class Result {
@@ -12,10 +13,12 @@ public class Result {
     private final MetaTestsResult metaTests;
     private final int finalGrade;
     private final String genericFailure;
+    private final ExecutionStep genericFailureStep;
+    private final Throwable genericFailureException;
     private final double timeInSeconds;
     private final GradeWeight weights;
 
-    public Result(CompilationResult compilation, UnitTestsResult tests, MutationTestingResult mutationTesting, CodeChecksResult codeChecks, CoverageResult coverage, MetaTestsResult metaTests, int finalGrade, String genericFailure, double timeInSeconds, GradeWeight weights) {
+    public Result(CompilationResult compilation, UnitTestsResult tests, MutationTestingResult mutationTesting, CodeChecksResult codeChecks, CoverageResult coverage, MetaTestsResult metaTests, int finalGrade, String genericFailure, ExecutionStep genericFailureStep, Throwable genericFailureException, double timeInSeconds, GradeWeight weights) {
         this.compilation = compilation;
         this.tests = tests;
         this.mutationTesting = mutationTesting;
@@ -24,6 +27,8 @@ public class Result {
         this.metaTests = metaTests;
         this.finalGrade = finalGrade;
         this.genericFailure = genericFailure;
+        this.genericFailureStep = genericFailureStep;
+        this.genericFailureException = genericFailureException;
         this.timeInSeconds = timeInSeconds;
         this.weights = weights;
 
@@ -32,7 +37,7 @@ public class Result {
     }
 
     public Result(CompilationResult compilation, double timeInSeconds) {
-        this(compilation, UnitTestsResult.empty(), MutationTestingResult.empty(), CodeChecksResult.empty(), CoverageResult.empty(), MetaTestsResult.empty(), 0, null, timeInSeconds, null);
+        this(compilation, UnitTestsResult.empty(), MutationTestingResult.empty(), CodeChecksResult.empty(), CoverageResult.empty(), MetaTestsResult.empty(), 0, null, null, null, timeInSeconds, null);
     }
 
     public CompilationResult getCompilation() {
@@ -75,12 +80,20 @@ public class Result {
         return genericFailure;
     }
 
+    public ExecutionStep getGenericFailureStep() {
+        return genericFailureStep;
+    }
+
+    public Throwable getGenericFailureException() {
+        return genericFailureException;
+    }
+
     public boolean hasFailed() {
         return !compilation.successful() || tests.hasTestsFailingOrFailures() || hasGenericFailure();
     }
 
     public boolean hasGenericFailure() {
-        return genericFailure!=null;
+        return genericFailure != null || genericFailureStep != null || genericFailureException != null;
     }
 
     @Override
