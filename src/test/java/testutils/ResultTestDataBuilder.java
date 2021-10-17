@@ -12,6 +12,8 @@ public class ResultTestDataBuilder {
     private String genericFailureMessage = null;
     private ExecutionStep genericFailureStep = null;
     private Throwable genericFailureException = null;
+    private Integer genericFailureExternalProcessExitCode = null;
+    private String genericFailureExternalProcessErrorMessages = null;
     private CompilationResult compilation = CompilationResult.empty();
     private UnitTestsResult testResults = UnitTestsResult.empty();
     private MutationTestingResult mutationResults = MutationTestingResult.empty();
@@ -82,6 +84,6 @@ public class ResultTestDataBuilder {
     }
 
     public Result build() {
-        return new Result(compilation, testResults, mutationResults, codeCheckResults, coverageResults, metaTestResults, finalGrade, genericFailureMessage, genericFailureStep, genericFailureException, timeInSeconds, weights);
+        return new Result(compilation, testResults, mutationResults, codeCheckResults, coverageResults, metaTestResults, finalGrade, genericFailureMessage, genericFailureStep, genericFailureException, genericFailureExternalProcessExitCode, genericFailureExternalProcessErrorMessages, timeInSeconds, weights);
     }
 }

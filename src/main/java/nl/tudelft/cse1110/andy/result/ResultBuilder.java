@@ -34,6 +34,8 @@ public class ResultBuilder {
     private String genericFailureMessage;
     private ExecutionStep genericFailureStep;
     private Throwable genericFailureException;
+    private Integer genericFailureExternalProcessExitCode;
+    private String genericFailureExternalProcessErrorMessages;
 
     // just so we know the time it took
     private long startTime = System.nanoTime();
@@ -252,13 +254,9 @@ public class ResultBuilder {
             GradeValues grades = GradeValues.fromResults(coverageResults, codeCheckResults, mutationResults, metaTestResults);
             GradeWeight weights = GradeWeight.fromConfig(ctx.getRunConfiguration().weights());
 
-            int finalGrade = calculateFinalGrade(grades, weights);
+            this.checkExternalProcessExit();
 
-            ExternalProcess process = ctx.getExternalProcess();
-            if (!process.hasExitedNormally()) {
-                genericFailureMessage = String.format("External process crashed with exit code %d: %s",
-                        process.getExitCode(), process.getErrorMessages());
-            }
+            int finalGrade = calculateFinalGrade(grades, weights);
 
             return new Result(compilation,
                     testResults,
@@ -270,8 +268,18 @@ public class ResultBuilder {
                     genericFailureMessage,
                     genericFailureStep,
                     genericFailureException,
+                    genericFailureExternalProcessExitCode,
+                    genericFailureExternalProcessErrorMessages,
                     timeInSeconds,
                     weights);
+        }
+    }
+
+    private void checkExternalProcessExit() {
+        ExternalProcess process = ctx.getExternalProcess();
+        if (!process.hasExitedNormally()) {
+            this.genericFailureExternalProcessExitCode = process.getExitCode();
+            this.genericFailureExternalProcessErrorMessages = process.getErrorMessages();
         }
     }
 
@@ -297,7 +305,8 @@ public class ResultBuilder {
         boolean compilationFailed = compilation!=null && !compilation.successful();
         boolean unitTestsFailed = testResults != null && testResults.didNotGoWell();
         boolean genericFailureHappened = genericFailureMessage != null || genericFailureStep != null || genericFailureException != null;
+        boolean externalProcessFailed = genericFailureExternalProcessExitCode != null || genericFailureExternalProcessErrorMessages != null;
 
-        return compilationFailed || unitTestsFailed || genericFailureHappened;
+        return compilationFailed || unitTestsFailed || genericFailureHappened || externalProcessFailed;
     }
 }
