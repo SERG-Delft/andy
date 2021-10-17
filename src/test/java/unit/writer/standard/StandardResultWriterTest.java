@@ -158,6 +158,44 @@ public class StandardResultWriterTest {
     }
 
     @Test
+    void reportGenericFailureExternalProcessExitCode() {
+        Result result = new ResultTestDataBuilder()
+                .withGenericFailureExternalProcessExitCode(1)
+                .build();
+
+        writer.write(ctx, result);
+
+        String output = generatedResult();
+
+        assertThat(output)
+                .has(versionInformation(versionInformation))
+                .has(finalGradeNotOnScreen(0))
+                .has(noFinalGrade())
+                .has(genericFailure("exit code 1"))
+                .doesNotContain("Error message:");
+    }
+
+    @Test
+    void reportGenericFailureExternalProcessExitCodeAndErrors() {
+        Result result = new ResultTestDataBuilder()
+                .withGenericFailureExternalProcessExitCode(1)
+                .withGenericFailureExternalProcessErrorMessages("test error")
+                .build();
+
+        writer.write(ctx, result);
+
+        String output = generatedResult();
+
+        assertThat(output)
+                .has(versionInformation(versionInformation))
+                .has(finalGradeNotOnScreen(0))
+                .has(noFinalGrade())
+                .has(genericFailure("exit code 1"))
+                .has(genericFailure("test error"))
+                .contains("Error message:");
+    }
+
+    @Test
     void testLineCoverage() {
         Result result = new ResultTestDataBuilder()
                 .withCoverageResult(CoverageResult.build(

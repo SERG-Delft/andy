@@ -44,6 +44,16 @@ public class ResultTestDataBuilder {
         return this;
     }
 
+    public ResultTestDataBuilder withGenericFailureExternalProcessExitCode(Integer exitCode) {
+        genericFailureExternalProcessExitCode = exitCode;
+        return this;
+    }
+
+    public ResultTestDataBuilder withGenericFailureExternalProcessErrorMessages(String errorMessages) {
+        genericFailureExternalProcessErrorMessages = errorMessages;
+        return this;
+    }
+
     public ResultTestDataBuilder withCoverageResult(CoverageResult coverageResult) {
         coverageResults = coverageResult;
         return this;

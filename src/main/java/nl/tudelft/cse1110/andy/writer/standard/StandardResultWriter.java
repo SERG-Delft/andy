@@ -89,6 +89,16 @@ public class StandardResultWriter implements ResultWriter {
                 toDisplay.append("---\n");
             }
 
+            if (result.getGenericFailureExternalProcessExitCode() != null) {
+                toDisplay.append(String.format("External process crashed with exit code %d.\n",
+                        result.getGenericFailureExternalProcessExitCode()));
+                if (result.getGenericFailureExternalProcessErrorMessages() != null &&
+                    !result.getGenericFailureExternalProcessErrorMessages().isEmpty()) {
+                    toDisplay.append(String.format("    Error message: %s\n",
+                            result.getGenericFailureExternalProcessErrorMessages()));
+                }
+            }
+
             if (result.getGenericFailure() != null) {
                 toDisplay.append(result.getGenericFailure());
             }
