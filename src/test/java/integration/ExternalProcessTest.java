@@ -87,7 +87,7 @@ public class ExternalProcessTest extends IntegrationTestBase {
         Result result = run("EmptyLibrary", "EmptySolution",
                 "ExternalProcessGracefulExitConfiguration");
 
-        assertThat(result.getGenericFailure()).isNull();
+        assertThat(result.hasGenericFailure()).isFalse();
 
         String tmp = getTempDirectory();
         assertThat(new File(tmp + GRACEFUL_EXIT_GENERATED_FILE_PATH)).exists();
@@ -100,7 +100,7 @@ public class ExternalProcessTest extends IntegrationTestBase {
             Result result = run("EmptyLibrary", "EmptySolution",
                     "ExternalProcessInitSignalConfiguration");
 
-            assertThat(result.getGenericFailure()).isNull();
+            assertThat(result.hasGenericFailure()).isFalse();
 
             String tmp = getTempDirectory();
             assertThat(new File(tmp + INIT_SIGNAL_GENERATED_FILE_PATH)).exists();
@@ -116,7 +116,7 @@ public class ExternalProcessTest extends IntegrationTestBase {
             Result result = run("EmptyLibrary", "EmptySolution",
                     "ExternalProcessErrorConfiguration");
 
-            assertThat(result.getGenericFailure()).isNull();
+            assertThat(result.hasGenericFailure()).isFalse();
 
         });
     }
@@ -126,7 +126,8 @@ public class ExternalProcessTest extends IntegrationTestBase {
         Result result = run("EmptyLibrary", "EmptySolution",
                 "ExternalProcessCrashesConfiguration");
 
-        assertThat(result.getGenericFailure()).contains("exit code 1: some error");
+        assertThat(result.getGenericFailureExternalProcessExitCode()).isEqualTo(1);
+        assertThat(result.getGenericFailureExternalProcessErrorMessages()).isEqualTo("some error");
     }
 
     @Test
@@ -136,7 +137,7 @@ public class ExternalProcessTest extends IntegrationTestBase {
                     "ExternalProcessLocalConnectionConfiguration");
 
             assertThat(result.hasFailed()).isFalse();
-            assertThat(result.getGenericFailure()).isNull();
+            assertThat(result.hasGenericFailure()).isFalse();
         });
     }
 }
