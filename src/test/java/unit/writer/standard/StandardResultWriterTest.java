@@ -2,6 +2,7 @@ package unit.writer.standard;
 
 import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.execution.Context;
+import nl.tudelft.cse1110.andy.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.execution.mode.Mode;
 import nl.tudelft.cse1110.andy.execution.mode.ModeActionSelector;
@@ -102,7 +103,7 @@ public class StandardResultWriterTest {
     }
 
     @Test
-    void reportGenericFailure() {
+    void reportGenericFailureMessage() {
         Result result = new ResultTestDataBuilder()
                 .withGenericFailure("test failure")
                 .build();
@@ -116,6 +117,44 @@ public class StandardResultWriterTest {
                 .has(finalGradeNotOnScreen(0))
                 .has(noFinalGrade())
                 .has(genericFailure("test failure"));
+    }
+
+    @Test
+    void reportGenericFailureStep() {
+        ExecutionStep mockStep = mock(ExecutionStep.class);
+
+        Result result = new ResultTestDataBuilder()
+                .withGenericFailureStep(mockStep)
+                .build();
+
+        writer.write(ctx, result);
+
+        String output = generatedResult();
+
+        assertThat(output)
+                .has(versionInformation(versionInformation))
+                .has(finalGradeNotOnScreen(0))
+                .has(noFinalGrade())
+                .has(genericFailure(mockStep.getClass().getSimpleName()));
+    }
+
+    @Test
+    void reportGenericFailureException() {
+        Exception ex = new Exception("test exception");
+
+        Result result = new ResultTestDataBuilder()
+                .withGenericFailureException(ex)
+                .build();
+
+        writer.write(ctx, result);
+
+        String output = generatedResult();
+
+        assertThat(output)
+                .has(versionInformation(versionInformation))
+                .has(finalGradeNotOnScreen(0))
+                .has(noFinalGrade())
+                .has(genericFailure(ex.getMessage()));
     }
 
     @Test

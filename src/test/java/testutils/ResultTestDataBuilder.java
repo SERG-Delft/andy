@@ -32,6 +32,16 @@ public class ResultTestDataBuilder {
         return this;
     }
 
+    public ResultTestDataBuilder withGenericFailureStep(ExecutionStep step) {
+        genericFailureStep = step;
+        return this;
+    }
+
+    public ResultTestDataBuilder withGenericFailureException(Throwable e) {
+        genericFailureException = e;
+        return this;
+    }
+
     public ResultTestDataBuilder withCoverageResult(CoverageResult coverageResult) {
         coverageResults = coverageResult;
         return this;
