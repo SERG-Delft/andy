@@ -53,10 +53,14 @@ public class AndySecurityManager extends SecurityManager {
 
         // If the currently requested permission should not be allowed,
         // throw an exception to block the execution
-        var ex = new SecurityException("Operation not permitted: " +
-                                       perm.getClass().getName() + " " +
-                                       perm.getName() + " " +
-                                       perm.getActions());
+        var ex = new SecurityException(
+                String.format("Operation not permitted: %s name=%s actions=%s mockito=%b jdk=%b",
+                        perm.getClass().getName(),
+                        perm.getName(),
+                        perm.getActions(),
+                        mockitoInternal,
+                        jdkInternalLoader
+                ));
 
         // Print the stack trace to make debugging easier
         ex.printStackTrace();
