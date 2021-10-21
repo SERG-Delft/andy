@@ -131,6 +131,7 @@ public class AndySecurityManager extends SecurityManager {
                 || perm.getName().equals("loggerFinder")
                 || perm.getName().equals("createClassLoader")
                 || perm.getName().equals("createSecurityManager")
+                || perm.getName().equals("accessSystemModules")
                 || checkNetworkRuntimePermissions(perm)) {
                 return true;
             }
@@ -156,7 +157,8 @@ public class AndySecurityManager extends SecurityManager {
         return perm.getName().equals("accessSystemModules") ||
                perm.getName().equals("accessClassInPackage.sun.misc") ||
                perm.getName().startsWith("accessClassInPackage.") ||
-               perm.getName().equals("reflectionFactoryAccess");
+               perm.getName().equals("reflectionFactoryAccess") ||
+               perm.getName().equals("localeServiceProvider");
     }
 
     private boolean checkPropertyPermission(Permission perm) {
