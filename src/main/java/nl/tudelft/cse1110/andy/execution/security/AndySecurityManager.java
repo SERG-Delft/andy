@@ -53,7 +53,7 @@ public class AndySecurityManager extends SecurityManager {
 
         // If the currently requested permission should not be allowed,
         // throw an exception to block the execution
-        var ex = new SecurityException(
+        throw new SecurityException(
                 String.format("Operation not permitted: %s name=%s actions=%s mockito=%b jdk=%b",
                         perm.getClass().getName(),
                         perm.getName(),
@@ -61,11 +61,6 @@ public class AndySecurityManager extends SecurityManager {
                         mockitoInternal,
                         jdkInternalLoader
                 ));
-
-        // Print the stack trace to make debugging easier
-        ex.printStackTrace();
-
-        throw ex;
     }
 
     private boolean checkPermissionsUntrusted(Permission perm, boolean mockitoInternal, boolean jdkInternalLoader) {
