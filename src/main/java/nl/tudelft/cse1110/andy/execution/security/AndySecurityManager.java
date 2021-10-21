@@ -158,7 +158,7 @@ public class AndySecurityManager extends SecurityManager {
                perm.getName().equals("accessClassInPackage.sun.misc") ||
                perm.getName().startsWith("accessClassInPackage.") ||
                perm.getName().equals("reflectionFactoryAccess") ||
-               perm.getName().equals("localeServiceProvider");
+               perm.getName().equals("localeServiceProvider"); // Required when running via Docker
     }
 
     private boolean checkPropertyPermission(Permission perm) {
