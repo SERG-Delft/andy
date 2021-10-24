@@ -78,24 +78,24 @@ public class StandardResultWriter implements ResultWriter {
         if (result.hasGenericFailure()) {
             toDisplay.append("Oh, we are facing a failure that we cannot recover from.\n");
 
-            if (result.getGenericFailureStepName() != null) {
-                toDisplay.append(String.format("The failure occurred in %s.\n", result.getGenericFailureStepName()));
+            if (result.getGenericFailure().getStepName() != null) {
+                toDisplay.append(String.format("The failure occurred in %s.\n", result.getGenericFailure().getStepName()));
             }
 
-            if (result.getGenericFailureExceptionMessage() != null) {
+            if (result.getGenericFailure().getExceptionMessage() != null) {
                 toDisplay.append("Please, send the message below to the teaching team:\n");
                 toDisplay.append("---\n");
-                toDisplay.append(result.getGenericFailureExceptionMessage());
+                toDisplay.append(result.getGenericFailure().getExceptionMessage());
                 toDisplay.append("---\n");
             }
 
-            if (result.getGenericFailureExternalProcessExitCode() != null) {
+            if (result.getGenericFailure().getExternalProcessExitCode() != null) {
                 toDisplay.append(String.format("External process crashed with exit code %d.\n",
-                        result.getGenericFailureExternalProcessExitCode()));
-                if (result.getGenericFailureExternalProcessErrorMessages() != null &&
-                    !result.getGenericFailureExternalProcessErrorMessages().isEmpty()) {
+                        result.getGenericFailure().getExternalProcessExitCode()));
+                if (result.getGenericFailure().getExternalProcessErrorMessages() != null &&
+                    !result.getGenericFailure().getExternalProcessErrorMessages().isEmpty()) {
                     toDisplay.append(String.format("    Error message: %s\n",
-                            result.getGenericFailureExternalProcessErrorMessages()));
+                            result.getGenericFailure().getExternalProcessErrorMessages()));
                 }
             }
 

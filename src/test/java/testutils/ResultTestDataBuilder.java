@@ -93,6 +93,19 @@ public class ResultTestDataBuilder {
     }
 
     public Result build() {
-        return new Result(compilation, testResults, mutationResults, codeCheckResults, coverageResults, metaTestResults, finalGrade, genericFailureMessage, genericFailureStepName, genericFailureExceptionMessage, genericFailureExternalProcessExitCode, genericFailureExternalProcessErrorMessages, timeInSeconds, weights);
+        GenericFailure genericFailure = null;
+
+        if (hasGenericFailure()) {
+            genericFailure = GenericFailure.build(genericFailureMessage, genericFailureStepName, genericFailureExceptionMessage, genericFailureExternalProcessExitCode, genericFailureExternalProcessErrorMessages);
+        }
+
+        return new Result(compilation, testResults, mutationResults, codeCheckResults, coverageResults, metaTestResults, finalGrade, genericFailure, timeInSeconds, weights);
+    }
+
+    private boolean hasGenericFailure() {
+        boolean genericFailureHappened = genericFailureMessage != null || genericFailureStepName != null || genericFailureExceptionMessage != null;
+        boolean externalProcessFailed = genericFailureExternalProcessExitCode != null || genericFailureExternalProcessErrorMessages != null;
+
+        return genericFailureHappened || externalProcessFailed;
     }
 }

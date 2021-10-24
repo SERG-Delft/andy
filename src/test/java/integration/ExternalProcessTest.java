@@ -126,8 +126,8 @@ public class ExternalProcessTest extends IntegrationTestBase {
         Result result = run("EmptyLibrary", "EmptySolution",
                 "ExternalProcessCrashesConfiguration");
 
-        assertThat(result.getGenericFailureExternalProcessExitCode()).isEqualTo(1);
-        assertThat(result.getGenericFailureExternalProcessErrorMessages()).isEqualTo("some error");
+        assertThat(result.getGenericFailure().getExternalProcessExitCode()).isEqualTo(1);
+        assertThat(result.getGenericFailure().getExternalProcessErrorMessages()).isEqualTo("some error");
     }
 
     @Test

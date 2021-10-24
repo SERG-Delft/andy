@@ -263,6 +263,12 @@ public class ResultBuilder {
 
             int finalGrade = calculateFinalGrade(grades, weights);
 
+            GenericFailure genericFailure = null;
+
+            if (hasGenericFailure()) {
+                genericFailure = GenericFailure.build(genericFailureMessage, genericFailureStepName, genericFailureExceptionMessage, genericFailureExternalProcessExitCode, genericFailureExternalProcessErrorMessages);
+            }
+
             return new Result(compilation,
                     testResults,
                     mutationResults,
@@ -270,11 +276,7 @@ public class ResultBuilder {
                     coverageResults,
                     metaTestResults,
                     finalGrade,
-                    genericFailureMessage,
-                    genericFailureStepName,
-                    genericFailureExceptionMessage,
-                    genericFailureExternalProcessExitCode,
-                    genericFailureExternalProcessErrorMessages,
+                    genericFailure,
                     timeInSeconds,
                     weights);
         }
@@ -309,9 +311,15 @@ public class ResultBuilder {
     public boolean hasFailed() {
         boolean compilationFailed = compilation!=null && !compilation.successful();
         boolean unitTestsFailed = testResults != null && testResults.didNotGoWell();
+        boolean hasGenericFailure = hasGenericFailure();
+
+        return compilationFailed || unitTestsFailed || hasGenericFailure;
+    }
+
+    private boolean hasGenericFailure() {
         boolean genericFailureHappened = genericFailureMessage != null || genericFailureStepName != null || genericFailureExceptionMessage != null;
         boolean externalProcessFailed = genericFailureExternalProcessExitCode != null || genericFailureExternalProcessErrorMessages != null;
 
-        return compilationFailed || unitTestsFailed || genericFailureHappened || externalProcessFailed;
+        return genericFailureHappened || externalProcessFailed;
     }
 }

@@ -35,9 +35,9 @@ public class GenericFailureTest extends IntegrationTestBase {
 
         assertThat(result.hasGenericFailure()).isTrue();
         assertThat(result.getGenericFailure()).isNull();
-        assertThat(result.getGenericFailureStepName())
+        assertThat(result.getGenericFailure().getStepName())
                 .isEqualTo(badStep.getClass().getSimpleName());
-        assertThat(result.getGenericFailureExceptionMessage())
+        assertThat(result.getGenericFailure().getExceptionMessage())
                 .startsWith("java.lang.RuntimeException: Some super error here\n" +
                             "\tat nl.tudelft.cse1110.andy.execution.ExecutionFlow.run(ExecutionFlow.java");
     }

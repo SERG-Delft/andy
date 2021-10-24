@@ -11,15 +11,11 @@ public class Result {
     private final CoverageResult coverage;
     private final MetaTestsResult metaTests;
     private final int finalGrade;
-    private final String genericFailure;
-    private final String genericFailureStepName;
-    private final String genericFailureExceptionMessage;
-    private final Integer genericFailureExternalProcessExitCode;
-    private final String genericFailureExternalProcessErrorMessages;
+    private final GenericFailure genericFailure;
     private final double timeInSeconds;
     private final GradeWeight weights;
 
-    public Result(CompilationResult compilation, UnitTestsResult tests, MutationTestingResult mutationTesting, CodeChecksResult codeChecks, CoverageResult coverage, MetaTestsResult metaTests, int finalGrade, String genericFailure, String genericFailureStepName, String genericFailureExceptionMessage, Integer genericFailureExternalProcessExitCode, String genericFailureExternalProcessErrorMessages, double timeInSeconds, GradeWeight weights) {
+    public Result(CompilationResult compilation, UnitTestsResult tests, MutationTestingResult mutationTesting, CodeChecksResult codeChecks, CoverageResult coverage, MetaTestsResult metaTests, int finalGrade, GenericFailure genericFailure, double timeInSeconds, GradeWeight weights) {
         this.compilation = compilation;
         this.tests = tests;
         this.mutationTesting = mutationTesting;
@@ -28,10 +24,6 @@ public class Result {
         this.metaTests = metaTests;
         this.finalGrade = finalGrade;
         this.genericFailure = genericFailure;
-        this.genericFailureStepName = genericFailureStepName;
-        this.genericFailureExceptionMessage = genericFailureExceptionMessage;
-        this.genericFailureExternalProcessExitCode = genericFailureExternalProcessExitCode;
-        this.genericFailureExternalProcessErrorMessages = genericFailureExternalProcessErrorMessages;
         this.timeInSeconds = timeInSeconds;
         this.weights = weights;
 
@@ -40,7 +32,7 @@ public class Result {
     }
 
     public Result(CompilationResult compilation, double timeInSeconds) {
-        this(compilation, UnitTestsResult.empty(), MutationTestingResult.empty(), CodeChecksResult.empty(), CoverageResult.empty(), MetaTestsResult.empty(), 0, null, null, null, null, null, timeInSeconds, null);
+        this(compilation, UnitTestsResult.empty(), MutationTestingResult.empty(), CodeChecksResult.empty(), CoverageResult.empty(), MetaTestsResult.empty(), 0, null, timeInSeconds, null);
     }
 
     public CompilationResult getCompilation() {
@@ -79,24 +71,8 @@ public class Result {
         return weights;
     }
 
-    public String getGenericFailure() {
+    public GenericFailure getGenericFailure() {
         return genericFailure;
-    }
-
-    public String getGenericFailureStepName() {
-        return genericFailureStepName;
-    }
-
-    public String getGenericFailureExceptionMessage() {
-        return genericFailureExceptionMessage;
-    }
-
-    public Integer getGenericFailureExternalProcessExitCode() {
-        return genericFailureExternalProcessExitCode;
-    }
-
-    public String getGenericFailureExternalProcessErrorMessages() {
-        return genericFailureExternalProcessErrorMessages;
     }
 
     public boolean hasFailed() {
@@ -104,8 +80,7 @@ public class Result {
     }
 
     public boolean hasGenericFailure() {
-        return genericFailure != null || genericFailureStepName != null || genericFailureExceptionMessage != null ||
-               genericFailureExternalProcessExitCode != null || genericFailureExternalProcessErrorMessages != null;
+        return genericFailure != null;
     }
 
     @Override
