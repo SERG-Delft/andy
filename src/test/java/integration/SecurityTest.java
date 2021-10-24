@@ -12,12 +12,12 @@ public class SecurityTest extends IntegrationTestBase {
 
     @ParameterizedTest
     @CsvSource({
-            "WriteResultsXml,results.xml write",
-            "SystemExit,exitVM.",
-            "SetProperty,test write",
-            "RuntimeExec,execute",
-            "ReadSource,ExploitTest.java read",
-            "ReadClass,ExploitTest$1.class read"
+            "WriteResultsXml,name=results.xml actions=write",
+            "SystemExit,name=exitVM.",
+            "SetProperty,test actions=write",
+            "RuntimeExec,actions=execute",
+            "ReadSource,ExploitTest.java actions=read",
+            "ReadClass,ExploitTest$1.class actions=read"
     })
     void securityTest(String exploitFile, String expectedMessage) {
         // Provide working directory path to user code for testing purposes

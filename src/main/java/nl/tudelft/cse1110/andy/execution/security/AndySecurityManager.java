@@ -53,15 +53,14 @@ public class AndySecurityManager extends SecurityManager {
 
         // If the currently requested permission should not be allowed,
         // throw an exception to block the execution
-        var ex = new SecurityException("Operation not permitted: " +
-                                       perm.getClass().getName() + " " +
-                                       perm.getName() + " " +
-                                       perm.getActions());
-
-        // Print the stack trace to make debugging easier
-        ex.printStackTrace();
-
-        throw ex;
+        throw new SecurityException(
+                String.format("Operation not permitted: %s name=%s actions=%s mockito=%b jdk=%b",
+                        perm.getClass().getName(),
+                        perm.getName(),
+                        perm.getActions(),
+                        mockitoInternal,
+                        jdkInternalLoader
+                ));
     }
 
     private boolean checkPermissionsUntrusted(Permission perm, boolean mockitoInternal, boolean jdkInternalLoader) {
@@ -131,6 +130,7 @@ public class AndySecurityManager extends SecurityManager {
                 || perm.getName().equals("loggerFinder")
                 || perm.getName().equals("createClassLoader")
                 || perm.getName().equals("createSecurityManager")
+                || perm.getName().equals("accessSystemModules")
                 || checkNetworkRuntimePermissions(perm)) {
                 return true;
             }
@@ -156,7 +156,8 @@ public class AndySecurityManager extends SecurityManager {
         return perm.getName().equals("accessSystemModules") ||
                perm.getName().equals("accessClassInPackage.sun.misc") ||
                perm.getName().startsWith("accessClassInPackage.") ||
-               perm.getName().equals("reflectionFactoryAccess");
+               perm.getName().equals("reflectionFactoryAccess") ||
+               perm.getName().equals("localeServiceProvider"); // Required when running via Docker
     }
 
     private boolean checkPropertyPermission(Permission perm) {
