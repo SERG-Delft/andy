@@ -34,7 +34,8 @@ public class GenericFailureTest extends IntegrationTestBase {
         Result result = run(Action.TESTS, "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass");
 
         assertThat(result.hasGenericFailure()).isTrue();
-        assertThat(result.getGenericFailure()).isNull();
+        assertThat(result.getGenericFailure().getGenericFailure())
+                .isNull();
         assertThat(result.getGenericFailure().getStepName())
                 .isEqualTo(badStep.getClass().getSimpleName());
         assertThat(result.getGenericFailure().getExceptionMessage())
