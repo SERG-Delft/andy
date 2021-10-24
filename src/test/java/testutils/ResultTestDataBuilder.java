@@ -10,7 +10,7 @@ import java.util.List;
 public class ResultTestDataBuilder {
 
     private String genericFailureMessage = null;
-    private ExecutionStep genericFailureStep = null;
+    private String genericFailureStepName = null;
     private Throwable genericFailureException = null;
     private Integer genericFailureExternalProcessExitCode = null;
     private String genericFailureExternalProcessErrorMessages = null;
@@ -34,8 +34,8 @@ public class ResultTestDataBuilder {
         return this;
     }
 
-    public ResultTestDataBuilder withGenericFailureStep(ExecutionStep step) {
-        genericFailureStep = step;
+    public ResultTestDataBuilder withGenericFailureStep(String step) {
+        genericFailureStepName = step;
         return this;
     }
 
@@ -94,6 +94,6 @@ public class ResultTestDataBuilder {
     }
 
     public Result build() {
-        return new Result(compilation, testResults, mutationResults, codeCheckResults, coverageResults, metaTestResults, finalGrade, genericFailureMessage, genericFailureStep, genericFailureException, genericFailureExternalProcessExitCode, genericFailureExternalProcessErrorMessages, timeInSeconds, weights);
+        return new Result(compilation, testResults, mutationResults, codeCheckResults, coverageResults, metaTestResults, finalGrade, genericFailureMessage, genericFailureStepName, genericFailureException, genericFailureExternalProcessExitCode, genericFailureExternalProcessErrorMessages, timeInSeconds, weights);
     }
 }

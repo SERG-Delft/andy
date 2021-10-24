@@ -2,7 +2,6 @@ package unit.writer.standard;
 
 import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.execution.Context;
-import nl.tudelft.cse1110.andy.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.execution.mode.Mode;
 import nl.tudelft.cse1110.andy.execution.mode.ModeActionSelector;
@@ -121,10 +120,10 @@ public class StandardResultWriterTest {
 
     @Test
     void reportGenericFailureStep() {
-        ExecutionStep mockStep = mock(ExecutionStep.class);
+        String testStep = "TestStep";
 
         Result result = new ResultTestDataBuilder()
-                .withGenericFailureStep(mockStep)
+                .withGenericFailureStep(testStep)
                 .build();
 
         writer.write(ctx, result);
@@ -135,7 +134,7 @@ public class StandardResultWriterTest {
                 .has(versionInformation(versionInformation))
                 .has(finalGradeNotOnScreen(0))
                 .has(noFinalGrade())
-                .has(genericFailure(mockStep.getClass().getSimpleName()));
+                .has(genericFailure(testStep));
     }
 
     @Test

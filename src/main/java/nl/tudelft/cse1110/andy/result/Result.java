@@ -1,6 +1,5 @@
 package nl.tudelft.cse1110.andy.result;
 
-import nl.tudelft.cse1110.andy.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.grade.GradeWeight;
 
 public class Result {
@@ -13,14 +12,14 @@ public class Result {
     private final MetaTestsResult metaTests;
     private final int finalGrade;
     private final String genericFailure;
-    private final ExecutionStep genericFailureStep;
+    private final String genericFailureStepName;
     private final Throwable genericFailureException;
     private final Integer genericFailureExternalProcessExitCode;
     private final String genericFailureExternalProcessErrorMessages;
     private final double timeInSeconds;
     private final GradeWeight weights;
 
-    public Result(CompilationResult compilation, UnitTestsResult tests, MutationTestingResult mutationTesting, CodeChecksResult codeChecks, CoverageResult coverage, MetaTestsResult metaTests, int finalGrade, String genericFailure, ExecutionStep genericFailureStep, Throwable genericFailureException, Integer genericFailureExternalProcessExitCode, String genericFailureExternalProcessErrorMessages, double timeInSeconds, GradeWeight weights) {
+    public Result(CompilationResult compilation, UnitTestsResult tests, MutationTestingResult mutationTesting, CodeChecksResult codeChecks, CoverageResult coverage, MetaTestsResult metaTests, int finalGrade, String genericFailure, String genericFailureStepName, Throwable genericFailureException, Integer genericFailureExternalProcessExitCode, String genericFailureExternalProcessErrorMessages, double timeInSeconds, GradeWeight weights) {
         this.compilation = compilation;
         this.tests = tests;
         this.mutationTesting = mutationTesting;
@@ -29,7 +28,7 @@ public class Result {
         this.metaTests = metaTests;
         this.finalGrade = finalGrade;
         this.genericFailure = genericFailure;
-        this.genericFailureStep = genericFailureStep;
+        this.genericFailureStepName = genericFailureStepName;
         this.genericFailureException = genericFailureException;
         this.genericFailureExternalProcessExitCode = genericFailureExternalProcessExitCode;
         this.genericFailureExternalProcessErrorMessages = genericFailureExternalProcessErrorMessages;
@@ -84,8 +83,8 @@ public class Result {
         return genericFailure;
     }
 
-    public ExecutionStep getGenericFailureStep() {
-        return genericFailureStep;
+    public String getGenericFailureStepName() {
+        return genericFailureStepName;
     }
 
     public Throwable getGenericFailureException() {
@@ -105,7 +104,7 @@ public class Result {
     }
 
     public boolean hasGenericFailure() {
-        return genericFailure != null || genericFailureStep != null || genericFailureException != null ||
+        return genericFailure != null || genericFailureStepName != null || genericFailureException != null ||
                genericFailureExternalProcessExitCode != null || genericFailureExternalProcessErrorMessages != null;
     }
 

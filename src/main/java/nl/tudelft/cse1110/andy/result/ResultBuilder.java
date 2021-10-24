@@ -32,7 +32,7 @@ public class ResultBuilder {
 
     // it will be set in case of a generic failure. If one happens, the output is purely the generic failure
     private String genericFailureMessage;
-    private ExecutionStep genericFailureStep;
+    private String genericFailureStepName;
     private Throwable genericFailureException;
     private Integer genericFailureExternalProcessExitCode;
     private String genericFailureExternalProcessErrorMessages;
@@ -237,9 +237,13 @@ public class ResultBuilder {
         this.genericFailureMessage = msg;
     }
 
-    public void genericFailure(ExecutionStep step, Throwable e) {
-        this.genericFailureStep = step;
+    public void genericFailure(String step, Throwable e) {
+        this.genericFailureStepName = step;
         this.genericFailureException = e;
+    }
+
+    public void genericFailure(ExecutionStep step, Throwable e) {
+        this.genericFailure(step.getClass().getSimpleName(), e);
     }
 
     /*
@@ -266,7 +270,7 @@ public class ResultBuilder {
                     metaTestResults,
                     finalGrade,
                     genericFailureMessage,
-                    genericFailureStep,
+                    genericFailureStepName,
                     genericFailureException,
                     genericFailureExternalProcessExitCode,
                     genericFailureExternalProcessErrorMessages,
@@ -304,7 +308,7 @@ public class ResultBuilder {
     public boolean hasFailed() {
         boolean compilationFailed = compilation!=null && !compilation.successful();
         boolean unitTestsFailed = testResults != null && testResults.didNotGoWell();
-        boolean genericFailureHappened = genericFailureMessage != null || genericFailureStep != null || genericFailureException != null;
+        boolean genericFailureHappened = genericFailureMessage != null || genericFailureStepName != null || genericFailureException != null;
         boolean externalProcessFailed = genericFailureExternalProcessExitCode != null || genericFailureExternalProcessErrorMessages != null;
 
         return compilationFailed || unitTestsFailed || genericFailureHappened || externalProcessFailed;

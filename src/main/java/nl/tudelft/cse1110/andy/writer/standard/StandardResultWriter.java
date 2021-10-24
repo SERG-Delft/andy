@@ -78,8 +78,8 @@ public class StandardResultWriter implements ResultWriter {
         if (result.hasGenericFailure()) {
             toDisplay.append("Oh, we are facing a failure that we cannot recover from.\n");
 
-            if (result.getGenericFailureStep() != null) {
-                toDisplay.append(String.format("The failure occurred in %s.\n", result.getGenericFailureStep().getClass().getSimpleName()));
+            if (result.getGenericFailureStepName() != null) {
+                toDisplay.append(String.format("The failure occurred in %s.\n", result.getGenericFailureStepName()));
             }
 
             if (result.getGenericFailureException() != null) {
