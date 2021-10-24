@@ -20,6 +20,7 @@ import javax.tools.JavaFileObject;
 import java.util.*;
 
 import static javax.tools.Diagnostic.Kind.ERROR;
+import static nl.tudelft.cse1110.andy.utils.ExceptionUtils.exceptionMessage;
 import static nl.tudelft.cse1110.andy.utils.JUnitUtils.*;
 
 public class ResultBuilder {
@@ -33,7 +34,7 @@ public class ResultBuilder {
     // it will be set in case of a generic failure. If one happens, the output is purely the generic failure
     private String genericFailureMessage;
     private String genericFailureStepName;
-    private Throwable genericFailureException;
+    private String genericFailureExceptionMessage;
     private Integer genericFailureExternalProcessExitCode;
     private String genericFailureExternalProcessErrorMessages;
 
@@ -237,13 +238,13 @@ public class ResultBuilder {
         this.genericFailureMessage = msg;
     }
 
-    public void genericFailure(String step, Throwable e) {
+    public void genericFailure(String step, String genericFailureExceptionMessage) {
         this.genericFailureStepName = step;
-        this.genericFailureException = e;
+        this.genericFailureExceptionMessage = genericFailureExceptionMessage;
     }
 
     public void genericFailure(ExecutionStep step, Throwable e) {
-        this.genericFailure(step.getClass().getSimpleName(), e);
+        this.genericFailure(step.getClass().getSimpleName(), exceptionMessage(e));
     }
 
     /*
@@ -271,7 +272,7 @@ public class ResultBuilder {
                     finalGrade,
                     genericFailureMessage,
                     genericFailureStepName,
-                    genericFailureException,
+                    genericFailureExceptionMessage,
                     genericFailureExternalProcessExitCode,
                     genericFailureExternalProcessErrorMessages,
                     timeInSeconds,
@@ -308,7 +309,7 @@ public class ResultBuilder {
     public boolean hasFailed() {
         boolean compilationFailed = compilation!=null && !compilation.successful();
         boolean unitTestsFailed = testResults != null && testResults.didNotGoWell();
-        boolean genericFailureHappened = genericFailureMessage != null || genericFailureStepName != null || genericFailureException != null;
+        boolean genericFailureHappened = genericFailureMessage != null || genericFailureStepName != null || genericFailureExceptionMessage != null;
         boolean externalProcessFailed = genericFailureExternalProcessExitCode != null || genericFailureExternalProcessErrorMessages != null;
 
         return compilationFailed || unitTestsFailed || genericFailureHappened || externalProcessFailed;

@@ -37,9 +37,9 @@ public class GenericFailureTest extends IntegrationTestBase {
         assertThat(result.getGenericFailure()).isNull();
         assertThat(result.getGenericFailureStepName())
                 .isEqualTo(badStep.getClass().getSimpleName());
-        assertThat(result.getGenericFailureException())
-                .isInstanceOf(RuntimeException.class)
-                .hasMessage("Some super error here");
+        assertThat(result.getGenericFailureExceptionMessage())
+                .startsWith("java.lang.RuntimeException: Some super error here\n" +
+                            "\tat nl.tudelft.cse1110.andy.execution.ExecutionFlow.run(ExecutionFlow.java");
     }
 
 }

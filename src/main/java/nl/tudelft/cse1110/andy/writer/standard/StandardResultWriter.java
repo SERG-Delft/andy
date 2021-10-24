@@ -82,10 +82,10 @@ public class StandardResultWriter implements ResultWriter {
                 toDisplay.append(String.format("The failure occurred in %s.\n", result.getGenericFailureStepName()));
             }
 
-            if (result.getGenericFailureException() != null) {
+            if (result.getGenericFailureExceptionMessage() != null) {
                 toDisplay.append("Please, send the message below to the teaching team:\n");
                 toDisplay.append("---\n");
-                toDisplay.append(exceptionMessage(result.getGenericFailureException()));
+                toDisplay.append(result.getGenericFailureExceptionMessage());
                 toDisplay.append("---\n");
             }
 

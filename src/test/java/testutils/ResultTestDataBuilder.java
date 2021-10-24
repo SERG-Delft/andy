@@ -1,6 +1,5 @@
 package testutils;
 
-import nl.tudelft.cse1110.andy.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.grade.GradeWeight;
 import nl.tudelft.cse1110.andy.result.*;
 
@@ -11,7 +10,7 @@ public class ResultTestDataBuilder {
 
     private String genericFailureMessage = null;
     private String genericFailureStepName = null;
-    private Throwable genericFailureException = null;
+    private String genericFailureExceptionMessage = null;
     private Integer genericFailureExternalProcessExitCode = null;
     private String genericFailureExternalProcessErrorMessages = null;
     private CompilationResult compilation = CompilationResult.empty();
@@ -39,8 +38,8 @@ public class ResultTestDataBuilder {
         return this;
     }
 
-    public ResultTestDataBuilder withGenericFailureException(Throwable e) {
-        genericFailureException = e;
+    public ResultTestDataBuilder withGenericFailureExceptionMessage(String e) {
+        genericFailureExceptionMessage = e;
         return this;
     }
 
@@ -94,6 +93,6 @@ public class ResultTestDataBuilder {
     }
 
     public Result build() {
-        return new Result(compilation, testResults, mutationResults, codeCheckResults, coverageResults, metaTestResults, finalGrade, genericFailureMessage, genericFailureStepName, genericFailureException, genericFailureExternalProcessExitCode, genericFailureExternalProcessErrorMessages, timeInSeconds, weights);
+        return new Result(compilation, testResults, mutationResults, codeCheckResults, coverageResults, metaTestResults, finalGrade, genericFailureMessage, genericFailureStepName, genericFailureExceptionMessage, genericFailureExternalProcessExitCode, genericFailureExternalProcessErrorMessages, timeInSeconds, weights);
     }
 }

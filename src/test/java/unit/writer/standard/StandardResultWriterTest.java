@@ -139,10 +139,10 @@ public class StandardResultWriterTest {
 
     @Test
     void reportGenericFailureException() {
-        Exception ex = new Exception("test exception");
+        String ex = "test exception";
 
         Result result = new ResultTestDataBuilder()
-                .withGenericFailureException(ex)
+                .withGenericFailureExceptionMessage(ex)
                 .build();
 
         writer.write(ctx, result);
@@ -153,7 +153,7 @@ public class StandardResultWriterTest {
                 .has(versionInformation(versionInformation))
                 .has(finalGradeNotOnScreen(0))
                 .has(noFinalGrade())
-                .has(genericFailure(ex.getMessage()));
+                .has(genericFailure(ex));
     }
 
     @Test

@@ -13,13 +13,13 @@ public class Result {
     private final int finalGrade;
     private final String genericFailure;
     private final String genericFailureStepName;
-    private final Throwable genericFailureException;
+    private final String genericFailureExceptionMessage;
     private final Integer genericFailureExternalProcessExitCode;
     private final String genericFailureExternalProcessErrorMessages;
     private final double timeInSeconds;
     private final GradeWeight weights;
 
-    public Result(CompilationResult compilation, UnitTestsResult tests, MutationTestingResult mutationTesting, CodeChecksResult codeChecks, CoverageResult coverage, MetaTestsResult metaTests, int finalGrade, String genericFailure, String genericFailureStepName, Throwable genericFailureException, Integer genericFailureExternalProcessExitCode, String genericFailureExternalProcessErrorMessages, double timeInSeconds, GradeWeight weights) {
+    public Result(CompilationResult compilation, UnitTestsResult tests, MutationTestingResult mutationTesting, CodeChecksResult codeChecks, CoverageResult coverage, MetaTestsResult metaTests, int finalGrade, String genericFailure, String genericFailureStepName, String genericFailureExceptionMessage, Integer genericFailureExternalProcessExitCode, String genericFailureExternalProcessErrorMessages, double timeInSeconds, GradeWeight weights) {
         this.compilation = compilation;
         this.tests = tests;
         this.mutationTesting = mutationTesting;
@@ -29,7 +29,7 @@ public class Result {
         this.finalGrade = finalGrade;
         this.genericFailure = genericFailure;
         this.genericFailureStepName = genericFailureStepName;
-        this.genericFailureException = genericFailureException;
+        this.genericFailureExceptionMessage = genericFailureExceptionMessage;
         this.genericFailureExternalProcessExitCode = genericFailureExternalProcessExitCode;
         this.genericFailureExternalProcessErrorMessages = genericFailureExternalProcessErrorMessages;
         this.timeInSeconds = timeInSeconds;
@@ -87,8 +87,8 @@ public class Result {
         return genericFailureStepName;
     }
 
-    public Throwable getGenericFailureException() {
-        return genericFailureException;
+    public String getGenericFailureExceptionMessage() {
+        return genericFailureExceptionMessage;
     }
 
     public Integer getGenericFailureExternalProcessExitCode() {
@@ -104,7 +104,7 @@ public class Result {
     }
 
     public boolean hasGenericFailure() {
-        return genericFailure != null || genericFailureStepName != null || genericFailureException != null ||
+        return genericFailure != null || genericFailureStepName != null || genericFailureExceptionMessage != null ||
                genericFailureExternalProcessExitCode != null || genericFailureExternalProcessErrorMessages != null;
     }
 
