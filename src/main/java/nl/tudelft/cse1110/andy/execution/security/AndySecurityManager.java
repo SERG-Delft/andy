@@ -178,11 +178,7 @@ public class AndySecurityManager extends SecurityManager {
             if (perm.getActions().equals("read") &&
                 !perm.getName().endsWith(".java") &&
                 (
-                        (
-                                checkFilePermissionAllowedExtensions(perm) ||
-                                checkFilePermissionAllowedPaths(perm)
-                        )
-                        && (mockitoInternal || jdkInternalLoader) ||
+                        checkPrivilegedFilePermission(perm, mockitoInternal, jdkInternalLoader) ||
                         (perm.getName().contains("/repository/") || perm.getName().contains("/target/"))
                 )
                 && !perm.getName().contains("..")) {
@@ -190,6 +186,14 @@ public class AndySecurityManager extends SecurityManager {
             }
         }
         return false;
+    }
+
+    private boolean checkPrivilegedFilePermission(Permission perm, boolean mockitoInternal, boolean jdkInternalLoader) {
+        return (
+                       checkFilePermissionAllowedExtensions(perm) ||
+                       checkFilePermissionAllowedPaths(perm)
+               )
+               && (mockitoInternal || jdkInternalLoader);
     }
 
     private boolean checkFilePermissionAllowedExtensions(Permission perm) {
