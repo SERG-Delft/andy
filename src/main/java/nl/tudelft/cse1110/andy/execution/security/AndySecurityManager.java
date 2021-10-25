@@ -183,7 +183,7 @@ public class AndySecurityManager extends SecurityManager {
                                 checkFilePermissionAllowedPaths(perm)
                         )
                         && (mockitoInternal || jdkInternalLoader) ||
-                        (perm.getName().contains("/repository/"))
+                        (perm.getName().contains("/repository/") || perm.getName().contains("/target/"))
                 )
                 && !perm.getName().contains("..")) {
                 return true;
