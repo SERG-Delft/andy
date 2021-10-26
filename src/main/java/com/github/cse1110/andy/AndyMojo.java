@@ -12,6 +12,7 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 
 import java.io.File;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -36,7 +37,9 @@ public class AndyMojo extends AbstractMojo {
 
     @Override
     public void execute() {
-        this.printHeader();
+        PrintStream out = System.out;
+
+        this.printHeader(out);
 
         File basedir = project.getBasedir();
 
@@ -69,7 +72,7 @@ public class AndyMojo extends AbstractMojo {
             List<String> compileClasspathElements = project.getCompileClasspathElements();
 
             /* Start printing dots */
-            Timer workingIndicator = this.startWorkingIndicationTimer();
+            Timer workingIndicator = this.startWorkingIndicationTimer(out);
 
             /* Run Andy! */
             new Andy(
@@ -85,11 +88,11 @@ public class AndyMojo extends AbstractMojo {
 
             /* Stop printing dots */
             workingIndicator.cancel();
-            System.out.println("\n\n");
+            out.println("\n\n");
 
             /* Print output */
-            System.out.println(output);
-            System.out.println("\n\nCheck branch and mutation coverage in the /andy folder!\n\n");
+            out.println(output);
+            out.println("\n\nCheck branch and mutation coverage in the /andy folder!\n\n");
 
         } catch (Exception ex) {
             ex.printStackTrace(System.err);
@@ -119,8 +122,8 @@ public class AndyMojo extends AbstractMojo {
         return javaFiles;
     }
 
-    private void printHeader() {
-        System.out.println(
+    private void printHeader(PrintStream out) {
+        out.println(
             """
 
      _              _       
@@ -133,13 +136,13 @@ public class AndyMojo extends AbstractMojo {
         """);
     }
 
-    private Timer startWorkingIndicationTimer() {
+    private Timer startWorkingIndicationTimer(PrintStream out) {
         Timer timer = new Timer(true);
 
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                System.out.print('.');
+                out.print('.');
             }
         }, 0, 1000);
 
