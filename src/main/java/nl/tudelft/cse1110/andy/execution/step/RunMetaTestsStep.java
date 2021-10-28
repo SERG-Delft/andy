@@ -120,7 +120,10 @@ public class RunMetaTestsStep implements ExecutionStep {
 
         ResultBuilder metaResult = new ResultBuilder(metaCtx, new GradeCalculator());
 
-        ExecutionFlow flow = ExecutionFlow.build(metaCtx, metaResult, new EmptyWriter());
+        ExecutionFlow flow = ctx.isSecurityEnabled()
+                           ? ExecutionFlow.build(metaCtx, metaResult, new EmptyWriter())
+                           : ExecutionFlow.buildWithoutSecurityManager(metaCtx, metaResult, new EmptyWriter());
+
         flow.run();
 
         return metaResult;

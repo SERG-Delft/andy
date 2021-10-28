@@ -20,6 +20,7 @@ public class Context {
     private ModeActionSelector modeActionSelector;
     private ExternalProcess externalProcess;
     private List<String> librariesToBeIncluded;
+    private boolean securityEnabled = true;
 
     public Context(Action action) {
         this.cleanClassloader = Thread.currentThread().getContextClassLoader();
@@ -95,5 +96,13 @@ public class Context {
 
     public boolean hasLibrariesToBeIncluded() {
         return librariesToBeIncluded!=null && !librariesToBeIncluded.isEmpty();
+    }
+
+    public boolean isSecurityEnabled() {
+        return securityEnabled;
+    }
+
+    public void disableSecurity() {
+        this.securityEnabled = false;
     }
 }

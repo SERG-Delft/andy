@@ -19,6 +19,11 @@ public class ExecutionFlow {
         this.steps = new LinkedList<>();
         steps.addAll(0, basicSteps());
 
+        if (ctx.isSecurityEnabled()) {
+            this.steps.add(0, new SetSecurityManagerStep());
+            this.steps.add(2, new SourceCodeSecurityCheckStep());
+        }
+
         this.writer = writer;
         this.ctx = ctx;
         this.result = result;
@@ -54,11 +59,14 @@ public class ExecutionFlow {
         return new ExecutionFlow(ctx, result, writer);
     }
 
+    public static ExecutionFlow buildWithoutSecurityManager(Context ctx, ResultBuilder result, ResultWriter writer) {
+        ctx.disableSecurity();
+        return ExecutionFlow.build(ctx, result, writer);
+    }
+
     private List<ExecutionStep> basicSteps() {
         return Arrays.asList(
-                new SetSecurityManagerStep(),
                 new OrganizeSourceCodeStep(),
-                new SourceCodeSecurityCheckStep(),
                 new CompilationStep(),
                 new ReplaceClassloaderStep(),
                 new GetRunConfigurationStep());
