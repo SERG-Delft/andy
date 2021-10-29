@@ -32,6 +32,7 @@ public class ResultBuilder {
     private Map<TestIdentifier, ReportEntry> additionalReports = new HashMap<>();
 
     // it will be set in case of a generic failure. If one happens, the output is purely the generic failure
+    private GenericFailure genericFailureObject;
     private String genericFailureMessage;
     private String genericFailureStepName;
     private String genericFailureExceptionMessage;
@@ -261,9 +262,9 @@ public class ResultBuilder {
 
             this.checkExternalProcessExit();
 
-            int finalGrade = calculateFinalGrade(grades, weights);
+            this.buildGenericFailure();
 
-            GenericFailure genericFailure = this.buildGenericFailure();
+            int finalGrade = calculateFinalGrade(grades, weights);
 
             return new Result(compilation,
                     testResults,
@@ -272,17 +273,14 @@ public class ResultBuilder {
                     coverageResults,
                     metaTestResults,
                     finalGrade,
-                    genericFailure,
+                    genericFailureObject,
                     timeInSeconds,
                     weights);
         }
     }
 
-    private GenericFailure buildGenericFailure() {
-        if (!hasGenericFailure()) {
-            return null;
-        }
-        return GenericFailure.build(genericFailureMessage, genericFailureStepName, genericFailureExceptionMessage,
+    private void buildGenericFailure() {
+        this.genericFailureObject = GenericFailure.build(genericFailureMessage, genericFailureStepName, genericFailureExceptionMessage,
                 genericFailureExternalProcessExitCode, genericFailureExternalProcessErrorMessages);
     }
 
@@ -315,15 +313,8 @@ public class ResultBuilder {
     public boolean hasFailed() {
         boolean compilationFailed = compilation!=null && !compilation.successful();
         boolean unitTestsFailed = testResults != null && testResults.didNotGoWell();
-        boolean hasGenericFailure = hasGenericFailure();
+        boolean hasGenericFailure = genericFailureObject != null;
 
         return compilationFailed || unitTestsFailed || hasGenericFailure;
-    }
-
-    private boolean hasGenericFailure() {
-        boolean genericFailureHappened = genericFailureMessage != null || genericFailureStepName != null || genericFailureExceptionMessage != null;
-        boolean externalProcessFailed = genericFailureExternalProcessExitCode != null || genericFailureExternalProcessErrorMessages != null;
-
-        return genericFailureHappened || externalProcessFailed;
     }
 }
