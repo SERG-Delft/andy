@@ -16,6 +16,13 @@ public class GenericFailure {
     }
 
     public static GenericFailure build(String genericFailure, String stepName, String exceptionMessage, Integer externalProcessExitCode, String externalProcessErrorMessages) {
+        boolean genericFailureHappened = genericFailure != null || stepName != null || exceptionMessage != null;
+        boolean externalProcessFailed = externalProcessExitCode != null || externalProcessErrorMessages != null;
+
+        if (!genericFailureHappened && !externalProcessFailed) {
+            return null;
+        }
+
         return new GenericFailure(genericFailure, stepName, exceptionMessage, externalProcessExitCode, externalProcessErrorMessages);
     }
 
