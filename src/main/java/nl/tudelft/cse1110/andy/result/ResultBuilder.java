@@ -263,11 +263,7 @@ public class ResultBuilder {
 
             int finalGrade = calculateFinalGrade(grades, weights);
 
-            GenericFailure genericFailure = null;
-
-            if (hasGenericFailure()) {
-                genericFailure = GenericFailure.build(genericFailureMessage, genericFailureStepName, genericFailureExceptionMessage, genericFailureExternalProcessExitCode, genericFailureExternalProcessErrorMessages);
-            }
+            GenericFailure genericFailure = this.buildGenericFailure();
 
             return new Result(compilation,
                     testResults,
@@ -280,6 +276,14 @@ public class ResultBuilder {
                     timeInSeconds,
                     weights);
         }
+    }
+
+    private GenericFailure buildGenericFailure() {
+        if (!hasGenericFailure()) {
+            return null;
+        }
+        return GenericFailure.build(genericFailureMessage, genericFailureStepName, genericFailureExceptionMessage,
+                genericFailureExternalProcessExitCode, genericFailureExternalProcessErrorMessages);
     }
 
     private void checkExternalProcessExit() {
