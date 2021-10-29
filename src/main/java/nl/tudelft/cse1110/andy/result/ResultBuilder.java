@@ -260,8 +260,6 @@ public class ResultBuilder {
             GradeValues grades = GradeValues.fromResults(coverageResults, codeCheckResults, mutationResults, metaTestResults);
             GradeWeight weights = GradeWeight.fromConfig(ctx.getRunConfiguration().weights());
 
-            this.checkExternalProcessExit();
-
             this.buildGenericFailure();
 
             int finalGrade = calculateFinalGrade(grades, weights);
@@ -280,6 +278,8 @@ public class ResultBuilder {
     }
 
     private void buildGenericFailure() {
+        this.checkExternalProcessExit();
+
         this.genericFailureObject = GenericFailure.build(genericFailureMessage, genericFailureStepName, genericFailureExceptionMessage,
                 genericFailureExternalProcessExitCode, genericFailureExternalProcessErrorMessages);
     }
