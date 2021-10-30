@@ -102,8 +102,13 @@ public class StandardResultWriter implements ResultWriter {
         // print the final grade
         l(String.format("Final grade: %d/100", finalGrade));
 
-        // print some nice ascii art if it's full grade!
+        // print success message and some nice ascii art if it's full grade!
         if (result.isFullyCorrect()) {
+            if (result.getSuccessMessage() != null) {
+                l("");
+                l(result.getSuccessMessage());
+            }
+
             String randomAsciiArt = asciiArtGenerator.getRandomAsciiArt();
             l("");
             l(randomAsciiArt);
