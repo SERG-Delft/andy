@@ -18,6 +18,7 @@ public class ResultTestDataBuilder {
     private int finalGrade = 0;
     private double timeInSeconds = 10;
     private GradeWeight weights = new GradeWeight(0.25f, 0.25f, 0.25f, 0.25f);
+    private String successMessage = null;
 
     public ResultTestDataBuilder withCompilationFail(CompilationErrorInfo... errors) {
         compilation = CompilationResult.compilationFail(Arrays.asList(errors));
@@ -68,7 +69,12 @@ public class ResultTestDataBuilder {
         return this;
     }
 
+    public ResultTestDataBuilder withSuccessMessage(String successMessage) {
+        this.successMessage = successMessage;
+        return this;
+    }
+
     public Result build() {
-        return new Result(compilation, testResults, mutationResults, codeCheckResults, coverageResults, metaTestResults, finalGrade, genericFailureMessage, timeInSeconds, weights);
+        return new Result(compilation, testResults, mutationResults, codeCheckResults, coverageResults, metaTestResults, finalGrade, genericFailureMessage, timeInSeconds, weights, successMessage);
     }
 }
