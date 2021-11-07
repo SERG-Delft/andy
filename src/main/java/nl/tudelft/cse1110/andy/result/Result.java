@@ -2,6 +2,8 @@ package nl.tudelft.cse1110.andy.result;
 
 import nl.tudelft.cse1110.andy.grade.GradeWeight;
 
+import java.util.Optional;
+
 public class Result {
 
     private final CompilationResult compilation;
@@ -73,8 +75,8 @@ public class Result {
         return weights;
     }
 
-    public String getSuccessMessage() {
-        return successMessage;
+    public Optional<String> getSuccessMessage() {
+        return Optional.ofNullable(successMessage);
     }
 
     public String getGenericFailure() {

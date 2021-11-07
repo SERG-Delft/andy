@@ -111,10 +111,7 @@ public class StandardResultWriter implements ResultWriter {
             return;
         }
 
-        if (result.getSuccessMessage() != null) {
-            l("");
-            l(result.getSuccessMessage());
-        }
+        result.getSuccessMessage().ifPresent(msg -> l("\n" + msg));
 
         String randomAsciiArt = asciiArtGenerator.getRandomAsciiArt();
         l("");
