@@ -99,8 +99,8 @@ public class StandardResultWriter implements ResultWriter {
                 }
             }
 
-            if (result.getGenericFailure() != null) {
-                toDisplay.append(result.getGenericFailure());
+            if (result.getGenericFailure().getGenericFailureMessage() != null) {
+                toDisplay.append(result.getGenericFailure().getGenericFailureMessage());
             }
 
             return true;
