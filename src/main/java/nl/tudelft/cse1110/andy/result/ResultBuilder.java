@@ -32,7 +32,7 @@ public class ResultBuilder {
     private Map<TestIdentifier, ReportEntry> additionalReports = new HashMap<>();
 
     // it will be set in case of a generic failure. If one happens, the output is purely the generic failure
-    private GenericFailure genericFailureObject;
+    private GenericFailure genericFailureObject = GenericFailure.noFailure();
     private String genericFailureMessage;
     private String genericFailureStepName;
     private String genericFailureExceptionMessage;
@@ -237,11 +237,13 @@ public class ResultBuilder {
      */
     public void genericFailure(String msg) {
         this.genericFailureMessage = msg;
+        this.buildGenericFailure();
     }
 
     public void genericFailure(String step, String genericFailureExceptionMessage) {
         this.genericFailureStepName = step;
         this.genericFailureExceptionMessage = genericFailureExceptionMessage;
+        this.buildGenericFailure();
     }
 
     public void genericFailure(ExecutionStep step, Throwable e) {
@@ -260,7 +262,7 @@ public class ResultBuilder {
             GradeValues grades = GradeValues.fromResults(coverageResults, codeCheckResults, mutationResults, metaTestResults);
             GradeWeight weights = GradeWeight.fromConfig(ctx.getRunConfiguration().weights());
 
-            this.buildGenericFailure();
+            this.checkExternalProcessExit();
 
             int finalGrade = calculateFinalGrade(grades, weights);
 
@@ -278,8 +280,6 @@ public class ResultBuilder {
     }
 
     private void buildGenericFailure() {
-        this.checkExternalProcessExit();
-
         this.genericFailureObject = GenericFailure.build(genericFailureMessage, genericFailureStepName, genericFailureExceptionMessage,
                 genericFailureExternalProcessExitCode, genericFailureExternalProcessErrorMessages);
     }
@@ -289,6 +289,7 @@ public class ResultBuilder {
         if (!process.hasExitedNormally()) {
             this.genericFailureExternalProcessExitCode = process.getExitCode();
             this.genericFailureExternalProcessErrorMessages = process.getErrorMessages();
+            this.buildGenericFailure();
         }
     }
 

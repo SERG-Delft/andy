@@ -19,6 +19,10 @@ public class GenericFailure {
         return new GenericFailure(genericFailure, stepName, exceptionMessage, externalProcessExitCode, externalProcessErrorMessages);
     }
 
+    public static GenericFailure noFailure() {
+        return new GenericFailure(null, null, null, null, null);
+    }
+
     public boolean hasFailure() {
         boolean genericFailureHappened = genericFailureMessage != null || stepName != null || exceptionMessage != null;
         boolean externalProcessFailed = externalProcessExitCode != null || externalProcessErrorMessages != null;
