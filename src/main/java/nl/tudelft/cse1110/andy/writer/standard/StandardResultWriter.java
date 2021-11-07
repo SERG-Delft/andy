@@ -5,7 +5,6 @@ import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.execution.mode.Mode;
 import nl.tudelft.cse1110.andy.execution.mode.ModeActionSelector;
 import nl.tudelft.cse1110.andy.result.*;
-import nl.tudelft.cse1110.andy.utils.ExceptionUtils;
 import nl.tudelft.cse1110.andy.utils.ImportUtils;
 import nl.tudelft.cse1110.andy.utils.PropertyUtils;
 import nl.tudelft.cse1110.andy.writer.ResultWriter;
@@ -17,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static nl.tudelft.cse1110.andy.utils.ExceptionUtils.exceptionMessage;
 import static nl.tudelft.cse1110.andy.utils.FilesUtils.concatenateDirectories;
 import static nl.tudelft.cse1110.andy.utils.FilesUtils.writeToFile;
 
@@ -48,7 +48,7 @@ public class StandardResultWriter implements ResultWriter {
 
         errorMsg.append("\n\n*** ERROR ***\n");
         errorMsg.append("Something unexpected just happened. Please forward this message to the teacher.\n\n");
-        errorMsg.append(ExceptionUtils.exceptionMessage(t));
+        errorMsg.append(exceptionMessage(t));
 
         File stdoutTxt = new File(concatenateDirectories(ctx.getDirectoryConfiguration().getOutputDir(), "stdout.txt"));
         writeToFile(stdoutTxt, errorMsg.toString());
@@ -57,9 +57,9 @@ public class StandardResultWriter implements ResultWriter {
     private void writeStdOutFile(Context ctx, Result result) {
         printVersionInformation();
 
-        if(result.hasGenericFailure()) {
-            toDisplay.append(result.getGenericFailure());
-        } else {
+        boolean hasFailure = printFailure(result);
+
+        if(!hasFailure) {
             printCompilationResult(result.getCompilation());
             printTestResults(result.getTests());
             printCoverageResults(result.getCoverage());
@@ -72,6 +72,41 @@ public class StandardResultWriter implements ResultWriter {
 
         File stdoutTxt = new File(concatenateDirectories(ctx.getDirectoryConfiguration().getOutputDir(), "stdout.txt"));
         writeToFile(stdoutTxt, toDisplay.toString());
+    }
+
+    private boolean printFailure(Result result) {
+        if (result.hasGenericFailure()) {
+            toDisplay.append("Oh, we are facing a failure that we cannot recover from.\n");
+
+            result.getGenericFailure().getStepName()
+                    .ifPresent(s -> toDisplay.append(String.format("The failure occurred in %s.\n", s)));
+
+            Optional<String> exceptionMessage = result.getGenericFailure().getExceptionMessage();
+            if (exceptionMessage.isPresent()) {
+                toDisplay.append("Please, send the message below to the teaching team:\n");
+                toDisplay.append("---\n");
+                toDisplay.append(exceptionMessage.get());
+                toDisplay.append("---\n");
+            }
+
+            Optional<Integer> externalProcessExitCode = result.getGenericFailure().getExternalProcessExitCode();
+            if (externalProcessExitCode.isPresent()) {
+                toDisplay.append(String.format("External process crashed with exit code %d.\n",
+                        externalProcessExitCode.get()));
+                Optional<String> externalProcessErrorMessages = result.getGenericFailure().getExternalProcessErrorMessages();
+                if (externalProcessErrorMessages.isPresent() &&
+                    !externalProcessErrorMessages.get().isEmpty()) {
+                    toDisplay.append(String.format("    Error message:\n%s\n",
+                            externalProcessErrorMessages.get()));
+                }
+            }
+
+            result.getGenericFailure().getGenericFailureMessage().ifPresent(s -> toDisplay.append(s));
+
+            return true;
+        }
+
+        return false;
     }
 
 
