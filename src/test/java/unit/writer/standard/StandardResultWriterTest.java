@@ -102,7 +102,7 @@ public class StandardResultWriterTest {
     }
 
     @Test
-    void reportGenericFailure() {
+    void reportGenericFailureMessage() {
         Result result = new ResultTestDataBuilder()
                 .withGenericFailure("test failure")
                 .build();
@@ -116,6 +116,82 @@ public class StandardResultWriterTest {
                 .has(finalGradeNotOnScreen(0))
                 .has(noFinalGrade())
                 .has(genericFailure("test failure"));
+    }
+
+    @Test
+    void reportGenericFailureStep() {
+        String testStep = "TestStep";
+
+        Result result = new ResultTestDataBuilder()
+                .withGenericFailureStep(testStep)
+                .build();
+
+        writer.write(ctx, result);
+
+        String output = generatedResult();
+
+        assertThat(output)
+                .has(versionInformation(versionInformation))
+                .has(finalGradeNotOnScreen(0))
+                .has(noFinalGrade())
+                .has(genericFailure(testStep));
+    }
+
+    @Test
+    void reportGenericFailureException() {
+        String ex = "test exception";
+
+        Result result = new ResultTestDataBuilder()
+                .withGenericFailureExceptionMessage(ex)
+                .build();
+
+        writer.write(ctx, result);
+
+        String output = generatedResult();
+
+        assertThat(output)
+                .has(versionInformation(versionInformation))
+                .has(finalGradeNotOnScreen(0))
+                .has(noFinalGrade())
+                .has(genericFailure(ex));
+    }
+
+    @Test
+    void reportGenericFailureExternalProcessExitCode() {
+        Result result = new ResultTestDataBuilder()
+                .withGenericFailureExternalProcessExitCode(1)
+                .build();
+
+        writer.write(ctx, result);
+
+        String output = generatedResult();
+
+        assertThat(output)
+                .has(versionInformation(versionInformation))
+                .has(finalGradeNotOnScreen(0))
+                .has(noFinalGrade())
+                .has(genericFailure("exit code 1"))
+                .doesNotContain("Error message:");
+    }
+
+    @Test
+    void reportGenericFailureExternalProcessExitCodeAndErrors() {
+        Result result = new ResultTestDataBuilder()
+                .withGenericFailureExternalProcessExitCode(1)
+                .withGenericFailureExternalProcessErrorMessages("test error")
+                .build();
+
+        writer.write(ctx, result);
+
+        String output = generatedResult();
+
+        assertThat(output)
+                .has(versionInformation(versionInformation))
+                .has(finalGradeNotOnScreen(0))
+                .has(noFinalGrade())
+                .has(genericFailure("exit code 1"))
+                .has(genericFailure("test error"))
+                .contains("Error message:");
     }
 
     @Test

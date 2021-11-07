@@ -32,7 +32,12 @@ public class ResultBuilder {
     private Map<TestIdentifier, ReportEntry> additionalReports = new HashMap<>();
 
     // it will be set in case of a generic failure. If one happens, the output is purely the generic failure
+    private GenericFailure genericFailureObject = GenericFailure.noFailure();
     private String genericFailureMessage;
+    private String genericFailureStepName;
+    private String genericFailureExceptionMessage;
+    private Integer genericFailureExternalProcessExitCode;
+    private String genericFailureExternalProcessErrorMessages;
 
     // just so we know the time it took
     private long startTime = System.nanoTime();
@@ -232,19 +237,17 @@ public class ResultBuilder {
      */
     public void genericFailure(String msg) {
         this.genericFailureMessage = msg;
+        this.buildGenericFailure();
+    }
+
+    public void genericFailure(String step, String genericFailureExceptionMessage) {
+        this.genericFailureStepName = step;
+        this.genericFailureExceptionMessage = genericFailureExceptionMessage;
+        this.buildGenericFailure();
     }
 
     public void genericFailure(ExecutionStep step, Throwable e) {
-
-        StringBuilder failureMsg = new StringBuilder();
-
-        failureMsg.append(String.format("Oh, we are facing a failure in %s that we cannot recover from.\n", step.getClass().getSimpleName()));
-        failureMsg.append("Please, send the message below to the teaching team:\n");
-        failureMsg.append("---\n");
-        failureMsg.append(exceptionMessage(e));
-        failureMsg.append("---\n");
-
-        genericFailure(failureMsg.toString());
+        this.genericFailure(step.getClass().getSimpleName(), exceptionMessage(e));
     }
 
     /*
@@ -259,15 +262,34 @@ public class ResultBuilder {
             GradeValues grades = GradeValues.fromResults(coverageResults, codeCheckResults, mutationResults, metaTestResults);
             GradeWeight weights = GradeWeight.fromConfig(ctx.getRunConfiguration().weights());
 
+            this.checkExternalProcessExit();
+
             int finalGrade = calculateFinalGrade(grades, weights);
 
-            ExternalProcess process = ctx.getExternalProcess();
-            if (!process.hasExitedNormally()) {
-                genericFailureMessage = String.format("External process crashed with exit code %d: %s",
-                        process.getExitCode(), process.getErrorMessages());
-            }
+            return new Result(compilation,
+                    testResults,
+                    mutationResults,
+                    codeCheckResults,
+                    coverageResults,
+                    metaTestResults,
+                    finalGrade,
+                    genericFailureObject,
+                    timeInSeconds,
+                    weights);
+        }
+    }
 
-            return new Result(compilation, testResults, mutationResults, codeCheckResults, coverageResults, metaTestResults, finalGrade, genericFailureMessage, timeInSeconds, weights);
+    private void buildGenericFailure() {
+        this.genericFailureObject = GenericFailure.build(genericFailureMessage, genericFailureStepName, genericFailureExceptionMessage,
+                genericFailureExternalProcessExitCode, genericFailureExternalProcessErrorMessages);
+    }
+
+    private void checkExternalProcessExit() {
+        ExternalProcess process = ctx.getExternalProcess();
+        if (!process.hasExitedNormally()) {
+            this.genericFailureExternalProcessExitCode = process.getExitCode();
+            this.genericFailureExternalProcessErrorMessages = process.getErrorMessages();
+            this.buildGenericFailure();
         }
     }
 
@@ -292,8 +314,8 @@ public class ResultBuilder {
     public boolean hasFailed() {
         boolean compilationFailed = compilation!=null && !compilation.successful();
         boolean unitTestsFailed = testResults != null && testResults.didNotGoWell();
-        boolean genericFailureHappened = genericFailureMessage != null;
+        boolean hasGenericFailure = genericFailureObject.hasFailure();
 
-        return compilationFailed || unitTestsFailed || genericFailureHappened;
+        return compilationFailed || unitTestsFailed || hasGenericFailure;
     }
 }

@@ -11,11 +11,11 @@ public class Result {
     private final CoverageResult coverage;
     private final MetaTestsResult metaTests;
     private final int finalGrade;
-    private final String genericFailure;
+    private final GenericFailure genericFailure;
     private final double timeInSeconds;
     private final GradeWeight weights;
 
-    public Result(CompilationResult compilation, UnitTestsResult tests, MutationTestingResult mutationTesting, CodeChecksResult codeChecks, CoverageResult coverage, MetaTestsResult metaTests, int finalGrade, String genericFailure, double timeInSeconds, GradeWeight weights) {
+    public Result(CompilationResult compilation, UnitTestsResult tests, MutationTestingResult mutationTesting, CodeChecksResult codeChecks, CoverageResult coverage, MetaTestsResult metaTests, int finalGrade, GenericFailure genericFailure, double timeInSeconds, GradeWeight weights) {
         this.compilation = compilation;
         this.tests = tests;
         this.mutationTesting = mutationTesting;
@@ -71,7 +71,7 @@ public class Result {
         return weights;
     }
 
-    public String getGenericFailure() {
+    public GenericFailure getGenericFailure() {
         return genericFailure;
     }
 
@@ -80,7 +80,7 @@ public class Result {
     }
 
     public boolean hasGenericFailure() {
-        return genericFailure!=null;
+        return genericFailure.hasFailure();
     }
 
     @Override
