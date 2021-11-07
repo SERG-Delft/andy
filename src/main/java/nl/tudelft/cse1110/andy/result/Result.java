@@ -80,7 +80,7 @@ public class Result {
     }
 
     public boolean hasGenericFailure() {
-        return genericFailure != null;
+        return genericFailure.hasFailure();
     }
 
     @Override

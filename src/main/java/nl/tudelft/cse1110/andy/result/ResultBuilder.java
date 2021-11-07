@@ -313,7 +313,7 @@ public class ResultBuilder {
     public boolean hasFailed() {
         boolean compilationFailed = compilation!=null && !compilation.successful();
         boolean unitTestsFailed = testResults != null && testResults.didNotGoWell();
-        boolean hasGenericFailure = genericFailureObject != null;
+        boolean hasGenericFailure = genericFailureObject.hasFailure();
 
         return compilationFailed || unitTestsFailed || hasGenericFailure;
     }
