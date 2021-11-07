@@ -14,6 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static unit.writer.standard.StandardResultTestAssertions.startsWithString;
 
 public class GenericFailureTest extends IntegrationTestBase {
 
@@ -35,12 +36,16 @@ public class GenericFailureTest extends IntegrationTestBase {
 
         assertThat(result.hasGenericFailure()).isTrue();
         assertThat(result.getGenericFailure().getGenericFailureMessage())
-                .isNull();
+                .isEmpty();
         assertThat(result.getGenericFailure().getStepName())
-                .isEqualTo(badStep.getClass().getSimpleName());
+                .isPresent()
+                .hasValue(badStep.getClass().getSimpleName());
         assertThat(result.getGenericFailure().getExceptionMessage())
-                .startsWith("java.lang.RuntimeException: Some super error here\n" +
-                            "\tat nl.tudelft.cse1110.andy.execution.ExecutionFlow.run(ExecutionFlow.java");
+                .isPresent()
+                .hasValueSatisfying(
+                        startsWithString("java.lang.RuntimeException: Some super error here\n" +
+                                         "\tat nl.tudelft.cse1110.andy.execution.ExecutionFlow.run(ExecutionFlow.java")
+                );
     }
 
 }

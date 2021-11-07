@@ -1,5 +1,7 @@
 package nl.tudelft.cse1110.andy.result;
 
+import java.util.Optional;
+
 public class GenericFailure {
     private final String genericFailureMessage;
     private final String stepName;
@@ -29,24 +31,24 @@ public class GenericFailure {
         return genericFailureHappened || externalProcessFailed;
     }
 
-    public String getGenericFailureMessage() {
-        return genericFailureMessage;
+    public Optional<String> getGenericFailureMessage() {
+        return Optional.ofNullable(genericFailureMessage);
     }
 
-    public String getStepName() {
-        return stepName;
+    public Optional<String> getStepName() {
+        return Optional.ofNullable(stepName);
     }
 
-    public String getExceptionMessage() {
-        return exceptionMessage;
+    public Optional<String> getExceptionMessage() {
+        return Optional.ofNullable(exceptionMessage);
     }
 
-    public Integer getExternalProcessExitCode() {
-        return externalProcessExitCode;
+    public Optional<Integer> getExternalProcessExitCode() {
+        return Optional.ofNullable(externalProcessExitCode);
     }
 
-    public String getExternalProcessErrorMessages() {
-        return externalProcessErrorMessages;
+    public Optional<String> getExternalProcessErrorMessages() {
+        return Optional.ofNullable(externalProcessErrorMessages);
     }
 
     @Override
