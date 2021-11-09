@@ -58,7 +58,6 @@ public class SourceCodeSecurityCheckStep implements ExecutionStep {
         var keywords = Map.of(
                 "Configuration", "Accessing the task configuration in your code is not allowed",
                 "forName", reflectionMsg,
-                "getClass", reflectionMsg,
                 "getDeclaredConstructor", reflectionMsg,
                 "getDeclaredMethods", reflectionMsg,
                 "getField", reflectionMsg,
