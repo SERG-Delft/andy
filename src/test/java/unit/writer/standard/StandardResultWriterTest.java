@@ -253,6 +253,7 @@ public class StandardResultWriterTest {
                         new MetaTestResult("e", 3, false),
                         new MetaTestResult("f", 1, true)
                 ))
+                .withSuccessMessage("test success message")
                 .build();
 
         writer.write(ctx, result);
@@ -273,7 +274,8 @@ public class StandardResultWriterTest {
                 .has(mutationScore(5, 6))
                 .has(noMetaTests())
                 .has(noCodeChecks())
-                .has(not(zeroScoreExplanation()));
+                .has(not(zeroScoreExplanation()))
+                .doesNotContain("test success message");
 
         verify(asciiArtGenerator, times(0)).getRandomAsciiArt();
     }
@@ -296,6 +298,7 @@ public class StandardResultWriterTest {
                         new CoverageLineByLine(List.of(), List.of(), List.of())))
                 .withMutationTestingResults(5, 6)
                 .withWeights(1, 0, 0, 0)
+                .withSuccessMessage("test success message")
                 .build();
 
         writer.write(ctx, result);
@@ -315,7 +318,8 @@ public class StandardResultWriterTest {
                 .has(fullGradeDescription("Meta tests", 0, 0, 0))
                 .has(mutationScore(5, 6))
                 .has(noMetaTests())
-                .has(noCodeChecks());
+                .has(noCodeChecks())
+                .doesNotContain("test success message");
 
         verify(asciiArtGenerator, times(0)).getRandomAsciiArt();
     }
@@ -348,6 +352,7 @@ public class StandardResultWriterTest {
                         new MetaTestResult("e", 3, false),
                         new MetaTestResult("f", 1, true)
                 ))
+                .withSuccessMessage("test success message")
                 .build();
 
         writer.write(ctx, result);
@@ -368,7 +373,8 @@ public class StandardResultWriterTest {
                 .has(not(fullGradeDescription("Meta tests", 2, 3, 0.25)))
                 .has(mutationScore(5, 6))
                 .has(zeroScoreExplanation())
-                .contains("only checking if your tests pass");
+                .contains("only checking if your tests pass")
+                .doesNotContain("test success message");
 
         verify(asciiArtGenerator, times(0)).getRandomAsciiArt();
     }
@@ -387,6 +393,7 @@ public class StandardResultWriterTest {
         Result result = new ResultTestDataBuilder()
                 .withGrade(0)
                 .withCompilationFail(new CompilationErrorInfo("a", 1, "a"))
+                .withSuccessMessage("test success message")
                 .build();
 
         writer.write(ctx, result);
@@ -403,7 +410,8 @@ public class StandardResultWriterTest {
                 .has(noCodeChecks())
                 .has(noMetaTests())
                 .has(noPitestCoverage())
-                .has(not(zeroScoreExplanation()));
+                .has(not(zeroScoreExplanation()))
+                .doesNotContain("test success message");
 
         verify(asciiArtGenerator, times(0)).getRandomAsciiArt();
     }
@@ -432,6 +440,34 @@ public class StandardResultWriterTest {
                 .has(finalGradeOnScreen(100))
                 .has(not(zeroScoreExplanation()))
                 .contains("random ascii art");
+    }
+
+    @Test
+    void testPrintFinalGradeWithScore100AndSuccessMessage() {
+        ModeActionSelector modeActionSelector = mock(ModeActionSelector.class);
+        when(modeActionSelector.shouldCalculateAndShowGrades()).thenReturn(true);
+        when(modeActionSelector.shouldGenerateAnalytics()).thenReturn(false);
+        when(modeActionSelector.shouldShowFullHints()).thenReturn(false);
+        when(modeActionSelector.shouldShowPartialHints()).thenReturn(false);
+        when(modeActionSelector.getMode()).thenReturn(Mode.PRACTICE);
+
+        when(ctx.getModeActionSelector()).thenReturn(modeActionSelector);
+
+        Result result = new ResultTestDataBuilder()
+                .withGrade(100)
+                .withSuccessMessage("test success message")
+                .build();
+
+        writer.write(ctx, result);
+
+        String output = generatedResult();
+
+        assertThat(output)
+                .has(versionInformation(versionInformation))
+                .has(finalGradeOnScreen(100))
+                .has(not(zeroScoreExplanation()))
+                .contains("random ascii art")
+                .contains("test success message");
     }
 
     @ParameterizedTest

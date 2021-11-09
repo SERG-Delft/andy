@@ -57,4 +57,8 @@ public abstract class RunConfiguration {
         return new EmptyExternalProcess();
     }
 
+    public String successMessage() {
+        return null;
+    }
+
 }

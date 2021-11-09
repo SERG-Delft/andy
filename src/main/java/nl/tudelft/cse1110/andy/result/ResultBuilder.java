@@ -261,6 +261,7 @@ public class ResultBuilder {
         } else {
             GradeValues grades = GradeValues.fromResults(coverageResults, codeCheckResults, mutationResults, metaTestResults);
             GradeWeight weights = GradeWeight.fromConfig(ctx.getRunConfiguration().weights());
+            String successMessage = ctx.getRunConfiguration().successMessage();
 
             this.checkExternalProcessExit();
 
@@ -275,7 +276,8 @@ public class ResultBuilder {
                     finalGrade,
                     genericFailureObject,
                     timeInSeconds,
-                    weights);
+                    weights,
+                    successMessage);
         }
     }
 

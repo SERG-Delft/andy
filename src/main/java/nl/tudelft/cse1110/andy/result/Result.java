@@ -2,6 +2,8 @@ package nl.tudelft.cse1110.andy.result;
 
 import nl.tudelft.cse1110.andy.grade.GradeWeight;
 
+import java.util.Optional;
+
 public class Result {
 
     private final CompilationResult compilation;
@@ -14,8 +16,9 @@ public class Result {
     private final GenericFailure genericFailure;
     private final double timeInSeconds;
     private final GradeWeight weights;
+    private final String successMessage;
 
-    public Result(CompilationResult compilation, UnitTestsResult tests, MutationTestingResult mutationTesting, CodeChecksResult codeChecks, CoverageResult coverage, MetaTestsResult metaTests, int finalGrade, GenericFailure genericFailure, double timeInSeconds, GradeWeight weights) {
+    public Result(CompilationResult compilation, UnitTestsResult tests, MutationTestingResult mutationTesting, CodeChecksResult codeChecks, CoverageResult coverage, MetaTestsResult metaTests, int finalGrade, GenericFailure genericFailure, double timeInSeconds, GradeWeight weights, String successMessage) {
         this.compilation = compilation;
         this.tests = tests;
         this.mutationTesting = mutationTesting;
@@ -26,13 +29,14 @@ public class Result {
         this.genericFailure = genericFailure;
         this.timeInSeconds = timeInSeconds;
         this.weights = weights;
+        this.successMessage = successMessage;
 
         if(finalGrade < 0 || finalGrade>100)
             throw new RuntimeException("Invalid final grade");
     }
 
     public Result(CompilationResult compilation, double timeInSeconds) {
-        this(compilation, UnitTestsResult.empty(), MutationTestingResult.empty(), CodeChecksResult.empty(), CoverageResult.empty(), MetaTestsResult.empty(), 0, null, timeInSeconds, null);
+        this(compilation, UnitTestsResult.empty(), MutationTestingResult.empty(), CodeChecksResult.empty(), CoverageResult.empty(), MetaTestsResult.empty(), 0, null, timeInSeconds, null, null);
     }
 
     public CompilationResult getCompilation() {
@@ -71,6 +75,10 @@ public class Result {
         return weights;
     }
 
+    public Optional<String> getSuccessMessage() {
+        return Optional.ofNullable(successMessage);
+    }
+
     public GenericFailure getGenericFailure() {
         return genericFailure;
     }
@@ -96,6 +104,7 @@ public class Result {
                 ", genericFailure='" + genericFailure + '\'' +
                 ", timeInSeconds=" + timeInSeconds +
                 ", weights=" + weights +
+                ", successMessage=" + successMessage +
                 '}';
     }
 
