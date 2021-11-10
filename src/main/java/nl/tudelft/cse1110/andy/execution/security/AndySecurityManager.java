@@ -175,21 +175,28 @@ public class AndySecurityManager extends SecurityManager {
         // This is needed in order to execute the tests.
         // Block writing or executing files.
         if (perm instanceof FilePermission) {
+            boolean isAccessToMavenLibrary = perm.getName().contains("/repository/");
+            boolean isAccessToFileInTargetFolder = perm.getName().contains("/target/");
+            boolean mayBePathTraversalAttempt = perm.getName().contains("..");
             if (perm.getActions().equals("read") &&
                 !perm.getName().endsWith(".java") &&
                 (
-                        (
-                                checkFilePermissionAllowedExtensions(perm) ||
-                                checkFilePermissionAllowedPaths(perm)
-                        )
-                        && (mockitoInternal || jdkInternalLoader) ||
-                        (perm.getName().contains("/repository/"))
+                        checkPrivilegedFilePermission(perm, mockitoInternal, jdkInternalLoader) ||
+                        (isAccessToMavenLibrary || isAccessToFileInTargetFolder)
                 )
-                && !perm.getName().contains("..")) {
+                && !mayBePathTraversalAttempt) {
                 return true;
             }
         }
         return false;
+    }
+
+    private boolean checkPrivilegedFilePermission(Permission perm, boolean mockitoInternal, boolean jdkInternalLoader) {
+        return (
+                       checkFilePermissionAllowedExtensions(perm) ||
+                       checkFilePermissionAllowedPaths(perm)
+               )
+               && (mockitoInternal || jdkInternalLoader);
     }
 
     private boolean checkFilePermissionAllowedExtensions(Permission perm) {
