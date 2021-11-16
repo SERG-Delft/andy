@@ -246,7 +246,7 @@
                         <include>%regex[.*Test(\d?).*]</include>
                     </includes>
                     <excludes>
-                        <exclude>**/WebLabSeleniumTest.java</exclude>
+                        <exclude>selenium/*</exclude>
                     </excludes>
                 </configuration>
             </plugin>
