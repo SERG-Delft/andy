@@ -71,6 +71,9 @@ public abstract class WebLabSeleniumTestBase {
     private void login() {
         WebLabLoginPage loginPage = new WebLabLoginPage(this.driver, WEBLAB_URL + WEBLAB_LOGIN_PATH);
         loginPage.navigate();
-        loginPage.login(this.weblabUsername, this.weblabPassword);
+        String redirectUrl = loginPage.login(this.weblabUsername, this.weblabPassword);
+        if (!redirectUrl.equals(WEBLAB_URL + "/")) {
+            fail("Could not log into WebLab. Are the provided credentials valid?");
+        }
     }
 }
