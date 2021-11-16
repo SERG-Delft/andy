@@ -40,7 +40,7 @@ public abstract class WebLabSeleniumTestBase {
         String[] weblabCredentials = credentialsString != null ? credentialsString.split(":") : null;
 
         if (weblabCredentials == null || weblabCredentials.length != 2) {
-            fail("WebLab credentials are not set configured. Provide a local WebLab username and " +
+            fail("WebLab credentials are not configured. Provide a local WebLab username and " +
                  "password in the \"" + WEBLAB_CREDENTIALS_ENV_VAR + "\" environment variable in the format " +
                  "\"username:password\" or \"email:password\". The provided user has to be enrolled in the " +
                  "course containing the test assignments.");
