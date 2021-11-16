@@ -35,11 +35,13 @@ public class AndyMojo extends AbstractMojo {
     @Parameter(property = "coverage")
     private boolean coverage;
 
+    private PrintStream out;
+
     @Override
     public void execute() {
-        PrintStream out = System.out;
+        out = System.out;
 
-        this.printHeader(out);
+        this.printHeader();
 
         File basedir = project.getBasedir();
 
@@ -72,7 +74,7 @@ public class AndyMojo extends AbstractMojo {
             List<String> compileClasspathElements = project.getCompileClasspathElements();
 
             /* Start printing dots */
-            Timer workingIndicator = this.startWorkingIndicationTimer(out);
+            Timer workingIndicator = this.startWorkingIndicationTimer();
 
             /* Run Andy! */
             new Andy(
@@ -122,7 +124,7 @@ public class AndyMojo extends AbstractMojo {
         return javaFiles;
     }
 
-    private void printHeader(PrintStream out) {
+    private void printHeader() {
         out.println(
             """
 
@@ -136,7 +138,7 @@ public class AndyMojo extends AbstractMojo {
         """);
     }
 
-    private Timer startWorkingIndicationTimer(PrintStream out) {
+    private Timer startWorkingIndicationTimer() {
         Timer timer = new Timer(true);
 
         timer.scheduleAtFixedRate(new TimerTask() {
