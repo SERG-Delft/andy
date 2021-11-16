@@ -13,6 +13,7 @@ public class CompilationTest extends IntegrationTestBase {
     void compilationOk() {
         Result result = run(Action.TESTS, "ListUtilsLibrary", "ListUtilsCompilationSuccess");
         assertThat(result.getCompilation().successful()).isTrue();
+        assertThat(result.getGenericFailure().hasFailure()).isFalse();
     }
 
     @Test
@@ -22,6 +23,7 @@ public class CompilationTest extends IntegrationTestBase {
         assertThat(result.getCompilation().successful()).isFalse();
         assertThat(result.getFinalGrade()).isEqualTo(0);
         assertThat(result.getTests().wasExecuted()).isFalse();
+        assertThat(result.getGenericFailure().hasFailure()).isFalse();
 
         assertThat(result)
                 .has(compilationErrorInLine(29))
@@ -36,6 +38,7 @@ public class CompilationTest extends IntegrationTestBase {
         assertThat(result.getCompilation().successful()).isFalse();
         assertThat(result.getFinalGrade()).isEqualTo(0);
         assertThat(result.getTests().wasExecuted()).isFalse();
+        assertThat(result.getGenericFailure().hasFailure()).isFalse();
 
         assertThat(result)
                 .has(compilationErrorInLine(21))

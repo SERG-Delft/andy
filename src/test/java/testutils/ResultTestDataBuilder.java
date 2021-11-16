@@ -9,6 +9,10 @@ import java.util.List;
 public class ResultTestDataBuilder {
 
     private String genericFailureMessage = null;
+    private String genericFailureStepName = null;
+    private String genericFailureExceptionMessage = null;
+    private Integer genericFailureExternalProcessExitCode = null;
+    private String genericFailureExternalProcessErrorMessages = null;
     private CompilationResult compilation = CompilationResult.empty();
     private UnitTestsResult testResults = UnitTestsResult.empty();
     private MutationTestingResult mutationResults = MutationTestingResult.empty();
@@ -18,6 +22,7 @@ public class ResultTestDataBuilder {
     private int finalGrade = 0;
     private double timeInSeconds = 10;
     private GradeWeight weights = new GradeWeight(0.25f, 0.25f, 0.25f, 0.25f);
+    private String successMessage = null;
 
     public ResultTestDataBuilder withCompilationFail(CompilationErrorInfo... errors) {
         compilation = CompilationResult.compilationFail(Arrays.asList(errors));
@@ -26,6 +31,26 @@ public class ResultTestDataBuilder {
 
     public ResultTestDataBuilder withGenericFailure(String message) {
         genericFailureMessage = message;
+        return this;
+    }
+
+    public ResultTestDataBuilder withGenericFailureStep(String step) {
+        genericFailureStepName = step;
+        return this;
+    }
+
+    public ResultTestDataBuilder withGenericFailureExceptionMessage(String e) {
+        genericFailureExceptionMessage = e;
+        return this;
+    }
+
+    public ResultTestDataBuilder withGenericFailureExternalProcessExitCode(Integer exitCode) {
+        genericFailureExternalProcessExitCode = exitCode;
+        return this;
+    }
+
+    public ResultTestDataBuilder withGenericFailureExternalProcessErrorMessages(String errorMessages) {
+        genericFailureExternalProcessErrorMessages = errorMessages;
         return this;
     }
 
@@ -68,7 +93,14 @@ public class ResultTestDataBuilder {
         return this;
     }
 
+    public ResultTestDataBuilder withSuccessMessage(String successMessage) {
+        this.successMessage = successMessage;
+        return this;
+    }
+
     public Result build() {
-        return new Result(compilation, testResults, mutationResults, codeCheckResults, coverageResults, metaTestResults, finalGrade, genericFailureMessage, timeInSeconds, weights);
+        GenericFailure genericFailure = GenericFailure.build(genericFailureMessage, genericFailureStepName, genericFailureExceptionMessage, genericFailureExternalProcessExitCode, genericFailureExternalProcessErrorMessages);
+
+        return new Result(compilation, testResults, mutationResults, codeCheckResults, coverageResults, metaTestResults, finalGrade, genericFailure, timeInSeconds, weights, successMessage);
     }
 }

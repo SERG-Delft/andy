@@ -26,11 +26,20 @@ public class StandardResultTestAssertions {
         };
     }
 
-    public static Condition<String> containsString(String regex) {
+    public static Condition<String> containsString(String str) {
         return new Condition<>() {
             @Override
             public boolean matches(String value) {
-                return value.contains(regex);
+                return value.contains(str);
+            }
+        };
+    }
+
+    public static Condition<String> startsWithString(String str) {
+        return new Condition<>() {
+            @Override
+            public boolean matches(String value) {
+                return value.startsWith(str);
             }
         };
     }
@@ -262,7 +271,7 @@ public class StandardResultTestAssertions {
         return new Condition<>() {
             @Override
             public boolean matches(String value) {
-                return value.contains(failure);
+                return value.contains("we are facing a failure") && value.contains(failure);
             }
         };
     }
