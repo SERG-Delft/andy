@@ -1,10 +1,12 @@
 package selenium;
 
 import nl.tudelft.cse1110.andy.utils.ResourceUtils;
+import org.apache.commons.lang.StringUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import selenium.pageobjects.WebLabLoginPage;
 
 import java.io.IOException;
@@ -23,6 +25,8 @@ public abstract class WebLabSeleniumTestBase {
     protected static final String USER_ID = "36461";
 
     protected static final String WEBLAB_SUBMISSION_PATH = "///assignment/%s/submission/%s/edit";
+
+    private static final String WEBLAB_SELENIUM_HEADLESS_ENV_VAR = "WEBLAB_SELENIUM_HEADLESS";
 
     protected WebDriver driver;
     private String weblabUsername;
@@ -46,7 +50,12 @@ public abstract class WebLabSeleniumTestBase {
         this.weblabUsername = weblabCredentials[0];
         this.weblabPassword = weblabCredentials[1];
 
-        this.driver = new FirefoxDriver();
+        FirefoxOptions options = new FirefoxOptions();
+        if (StringUtils.isNotEmpty(System.getenv(WEBLAB_SELENIUM_HEADLESS_ENV_VAR))) {
+            options.setHeadless(true);
+        }
+
+        this.driver = new FirefoxDriver(options);
 
         this.testSubmissionContent = Files.readString(Path.of(
                 ResourceUtils.resourceFolder("/selenium/solutions/") + "Upvote.java"));
