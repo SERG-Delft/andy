@@ -20,4 +20,7 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: Run WebLab Selenium tests
+        env:
+          WEBLAB_CREDENTIALS: ${{ secrets.WEBLAB_CREDENTIALS }}
+          WEBLAB_SELENIUM_HEADLESS: true
         run: mvn -B test --file pom.xml -Dtest="selenium/*"
