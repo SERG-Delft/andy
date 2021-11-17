@@ -31,7 +31,7 @@ public class PracticeAssignmentTests extends WebLabSeleniumTestBase {
                 .has(noCodeChecks())
                 .has(noMetaTests())
                 .has(noFinalGrade())
-                // .has(zeroScoreExplanation()) TODO
+                .has(zeroScoreExplanation())
                 .has(mode("PRACTICE"))
                 .doesNotContain("pitest")
                 .doesNotContain("jacoco")
@@ -60,7 +60,7 @@ public class PracticeAssignmentTests extends WebLabSeleniumTestBase {
                 .has(noCodeChecks())
                 .has(noMetaTests())
                 .has(noFinalGrade())
-                // .has(zeroScoreExplanation()) TODO
+                .has(zeroScoreExplanation())
                 .has(mode("PRACTICE"))
                 .contains("pitest")
                 .contains("jacoco")

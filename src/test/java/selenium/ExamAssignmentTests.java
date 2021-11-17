@@ -47,7 +47,7 @@ public class ExamAssignmentTests extends WebLabSeleniumTestBase {
                 .has(not(fullGradeDescription("Mutation coverage", 3, 4, 0.25)))
                 .has(not(fullGradeDescription("Code checks", 17, 18, 0.25)))
                 .has(not(fullGradeDescription("Meta tests", 2, 3, 0.25)))
-                // .has(zeroScoreExplanation()) TODO
+                .has(zeroScoreExplanation())
                 .doesNotContain("Final grade:")
                 .has(mode("EXAM"))
                 .doesNotContain("pitest")
@@ -88,7 +88,7 @@ public class ExamAssignmentTests extends WebLabSeleniumTestBase {
                 .has(not(fullGradeDescription("Mutation coverage", 3, 4, 0.25)))
                 .has(not(fullGradeDescription("Code checks", 17, 18, 0.25)))
                 .has(not(fullGradeDescription("Meta tests", 2, 3, 0.25)))
-                // .has(zeroScoreExplanation()) TODO
+                .has(zeroScoreExplanation())
                 .doesNotContain("Final grade:")
                 .has(mode("EXAM"))
                 .contains("pitest")
