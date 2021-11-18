@@ -16,6 +16,7 @@ import org.junit.platform.launcher.listeners.TestExecutionSummary;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.List;
 
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
@@ -47,6 +48,15 @@ public class RunJUnitTestsStep implements ExecutionStep {
             launcher.execute(request);
 
             TestExecutionSummary summary = listener.getSummary();
+
+            /* Print all the exceptions that were occurred.
+               In most cases, these will be useless.
+               However this gives very valuable information with bugs like the Selenium bug.
+             */
+            for (int i = 0; i < summary.getFailures().size(); i++) {
+                console.println("\nFailure Report [" + (i + 1) + "/" + summary.getFailures().size() + "]");
+                summary.getFailures().get(i).getException().printStackTrace(console);
+            }
 
             /* Restore the sysout back, and put it in the result in case there's something */
             System.setOut(console);
