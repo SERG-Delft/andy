@@ -56,9 +56,9 @@ public class ExecutionFlow {
 
     private List<ExecutionStep> basicSteps() {
         return Arrays.asList(
-                new SetSecurityManagerStep(),
+                //new SetSecurityManagerStep(),
                 new OrganizeSourceCodeStep(),
-                new SourceCodeSecurityCheckStep(),
+                //new SourceCodeSecurityCheckStep(),
                 new CompilationStep(),
                 new ReplaceClassloaderStep(),
                 new GetRunConfigurationStep());
