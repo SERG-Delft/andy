@@ -21,6 +21,8 @@ import org.apache.commons.io.FileUtils;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -45,12 +47,17 @@ public class RunPitestStep implements ExecutionStep {
             final ReportOptions data = pr.getOptions();
 
             // let's silence the sysout and java logging
-            PrintStream console = silencePitest();
+            //PrintStream console = silencePitest();
 
             // run!
+            RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();
+            for (String inputArgument : runtimeMXBean.getInputArguments()) {
+                System.out.println("Input " + inputArgument);
+            }
+            System.out.println(data);
             final CombinedStatistics stats = runReport(ctx, data, plugins);
 
-            System.setOut(console);
+            //System.setOut(console);
 
             extractAndRemoveReportFolder(outputPitestDir);
             result.logPitest(stats);
@@ -82,6 +89,10 @@ public class RunPitestStep implements ExecutionStep {
         args.add(dirCfg.getWorkingDir());
 
         args.add("--verbose");
+        args.add("true");
+
+        // Explicitly disable the classpath provided by Maven to be added.
+        args.add("--includeLaunchClasspath");
         args.add("false");
 
         args.add("--classPath");
