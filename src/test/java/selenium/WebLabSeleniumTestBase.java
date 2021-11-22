@@ -57,8 +57,7 @@ public abstract class WebLabSeleniumTestBase {
 
         this.driver = new FirefoxDriver(options);
 
-        this.testSubmissionContent = Files.readString(Path.of(
-                ResourceUtils.resourceFolder("/selenium/solutions/") + "Upvote.java"));
+        this.testSubmissionContent = readSubmissionFile("/selenium/solutions/", "Upvote.java");
 
         this.login();
     }
@@ -66,6 +65,11 @@ public abstract class WebLabSeleniumTestBase {
     @AfterEach
     public void cleanup() {
         driver.quit();
+    }
+
+    protected String readSubmissionFile(String path, String filename) throws IOException {
+        return Files.readString(Path.of(
+                ResourceUtils.resourceFolder(path) + filename));
     }
 
     private void login() {
