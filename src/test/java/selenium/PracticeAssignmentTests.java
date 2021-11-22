@@ -1,7 +1,10 @@
 package selenium;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import selenium.pageobjects.WebLabSubmissionPage;
+
+import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.not;
@@ -10,6 +13,13 @@ import static unit.writer.standard.StandardResultTestAssertions.*;
 public class PracticeAssignmentTests extends WebLabSeleniumTestBase {
 
     private static final String ASSIGNMENT_PRACTICE = "89104";
+
+    private String testSubmissionContent;
+
+    @BeforeEach
+    public void loadSubmission() throws IOException {
+        this.testSubmissionContent = readSubmissionFile("/selenium/solutions/", "Upvote.java");
+    }
 
     @Test
     public void testPracticeSubmissionOnlyTests() {

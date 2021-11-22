@@ -32,8 +32,6 @@ public abstract class WebLabSeleniumTestBase {
     private String weblabUsername;
     private String weblabPassword;
 
-    protected String testSubmissionContent;
-
     @BeforeEach
     public void setup() throws IOException {
         String credentialsString = System.getenv(WEBLAB_CREDENTIALS_ENV_VAR);
@@ -56,8 +54,6 @@ public abstract class WebLabSeleniumTestBase {
         }
 
         this.driver = new FirefoxDriver(options);
-
-        this.testSubmissionContent = readSubmissionFile("/selenium/solutions/", "Upvote.java");
 
         this.login();
     }
