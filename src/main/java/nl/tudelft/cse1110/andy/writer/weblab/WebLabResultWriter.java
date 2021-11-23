@@ -98,7 +98,7 @@ public class WebLabResultWriter extends StandardResultWriter {
             return;
 
         Submission submission = new Submission(
-                new SubmissionMetaData("course", "studentid", "studentname", "exercise", ctx.getAction()),
+                new SubmissionMetaData("course", "studentid", "exercise", ctx.getAction()),
                 result
         );
 
