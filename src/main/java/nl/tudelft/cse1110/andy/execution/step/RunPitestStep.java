@@ -91,10 +91,6 @@ public class RunPitestStep implements ExecutionStep {
         args.add("--verbose");
         args.add("true");
 
-        // Explicitly disable the classpath provided by Maven to be added.
-        args.add("--includeLaunchClasspath");
-        args.add("false");
-
         args.add("--classPath");
         List<String> librariesToInclude = compiledClassesPlusLibraries(ctx, dirCfg);
         args.add(commaSeparated(librariesToInclude));
