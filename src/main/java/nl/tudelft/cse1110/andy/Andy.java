@@ -55,7 +55,7 @@ public class Andy {
 
         ctx.setDirectoryConfiguration(dirCfg);
         ctx.setLibrariesToBeIncluded(librariesToBeIncluded);
-        ctx.setMetaData(metaData);
+        ctx.setSubmissionMetaData(metaData);
 
         return ctx;
     }

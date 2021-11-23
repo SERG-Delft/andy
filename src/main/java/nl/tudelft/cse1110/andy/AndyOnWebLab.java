@@ -1,8 +1,6 @@
 package nl.tudelft.cse1110.andy;
 
 import nl.tudelft.cse1110.andy.execution.mode.Action;
-import nl.tudelft.cse1110.andy.utils.PropertyUtils;
-import nl.tudelft.cse1110.andy.writer.standard.RandomAsciiArtGenerator;
 import nl.tudelft.cse1110.andy.writer.weblab.SubmissionMetaData;
 import nl.tudelft.cse1110.andy.writer.weblab.WebLabResultWriter;
 
@@ -26,7 +24,7 @@ public class AndyOnWebLab {
         if (outputDir == null) { System.out.println("No OUTPUT_DIR environment variable.");  System.exit(-1); }
 
         WebLabResultWriter writer = new WebLabResultWriter();
-        SubmissionMetaData metaData = getMetaData();
+        SubmissionMetaData metaData = getSubmissionMetaData();
         new Andy(getAction(action), workDir, outputDir, writer, metaData).run();
     }
 
@@ -41,7 +39,7 @@ public class AndyOnWebLab {
         }
     }
 
-    private static SubmissionMetaData getMetaData() {
+    private static SubmissionMetaData getSubmissionMetaData() {
         String course = System.getenv("WL_COURSE");
         String studentId = System.getenv("WL_STUDENT");
         String exercise = System.getenv("WL_ASSIGNMENT_TITLE");

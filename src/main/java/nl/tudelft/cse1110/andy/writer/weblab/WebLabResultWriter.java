@@ -99,7 +99,7 @@ public class WebLabResultWriter extends StandardResultWriter {
 
         Submission submission = new Submission(
                 ctx.getAction(),
-                ctx.getMetaData(),
+                ctx.getSubmissionMetaData(),
                 result
         );
 

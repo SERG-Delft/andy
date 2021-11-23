@@ -21,7 +21,7 @@ public class Context {
     private ModeActionSelector modeActionSelector;
     private ExternalProcess externalProcess;
     private List<String> librariesToBeIncluded;
-    private SubmissionMetaData metaData;
+    private SubmissionMetaData submissionMetaData;
 
     public Context(Action action) {
         this.cleanClassloader = Thread.currentThread().getContextClassLoader();
@@ -99,11 +99,11 @@ public class Context {
         return librariesToBeIncluded!=null && !librariesToBeIncluded.isEmpty();
     }
 
-    public SubmissionMetaData getMetaData() {
-        return metaData;
+    public SubmissionMetaData getSubmissionMetaData() {
+        return submissionMetaData;
     }
 
-    public void setMetaData(SubmissionMetaData metaData) {
-        this.metaData = metaData;
+    public void setSubmissionMetaData(SubmissionMetaData submissionMetaData) {
+        this.submissionMetaData = submissionMetaData;
     }
 }
