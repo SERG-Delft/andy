@@ -6,6 +6,7 @@ import nl.tudelft.cse1110.andy.execution.externalprocess.EmptyExternalProcess;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.execution.mode.ModeActionSelector;
 import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
+import nl.tudelft.cse1110.andy.writer.weblab.SubmissionMetaData;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class Context {
     private ModeActionSelector modeActionSelector;
     private ExternalProcess externalProcess;
     private List<String> librariesToBeIncluded;
+    private SubmissionMetaData metaData;
 
     public Context(Action action) {
         this.cleanClassloader = Thread.currentThread().getContextClassLoader();
@@ -95,5 +97,13 @@ public class Context {
 
     public boolean hasLibrariesToBeIncluded() {
         return librariesToBeIncluded!=null && !librariesToBeIncluded.isEmpty();
+    }
+
+    public SubmissionMetaData getMetaData() {
+        return metaData;
+    }
+
+    public void setMetaData(SubmissionMetaData metaData) {
+        this.metaData = metaData;
     }
 }

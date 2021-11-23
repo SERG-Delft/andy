@@ -3,6 +3,7 @@ package nl.tudelft.cse1110.andy;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.utils.PropertyUtils;
 import nl.tudelft.cse1110.andy.writer.standard.RandomAsciiArtGenerator;
+import nl.tudelft.cse1110.andy.writer.weblab.SubmissionMetaData;
 import nl.tudelft.cse1110.andy.writer.weblab.WebLabResultWriter;
 
 import java.util.Arrays;
@@ -25,7 +26,8 @@ public class AndyOnWebLab {
         if (outputDir == null) { System.out.println("No OUTPUT_DIR environment variable.");  System.exit(-1); }
 
         WebLabResultWriter writer = new WebLabResultWriter();
-        new Andy(getAction(action), workDir, outputDir, writer).run();
+        SubmissionMetaData metaData = getMetaData();
+        new Andy(getAction(action), workDir, outputDir, writer, metaData).run();
     }
 
     private static Action getAction(String action) {
@@ -37,6 +39,28 @@ public class AndyOnWebLab {
             System.exit(-1);
             return null;
         }
+    }
+
+    private static SubmissionMetaData getMetaData() {
+        String course = System.getenv("WL_COURSE");
+        String studentId = System.getenv("WL_STUDENT");
+        String exercise = System.getenv("WL_ASSIGNMENT_TITLE");
+
+        if (course == null) {
+            System.out.println("No WL_COURSE environment variable.");
+            System.exit(-1);
+        }
+        if (studentId == null) {
+            System.out.println("No WL_STUDENT environment variable.");
+            System.exit(-1);
+        }
+        if (exercise == null) {
+            System.out.println("No WL_ASSIGNMENT_TITLE environment variable.");
+            System.exit(-1);
+        }
+
+        SubmissionMetaData metaData = new SubmissionMetaData(course, studentId, exercise);
+        return metaData;
     }
 
 }
