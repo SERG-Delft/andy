@@ -1,11 +1,13 @@
 package selenium;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import selenium.pageobjects.WebLabSubmissionPage;
 
+import java.io.IOException;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -16,6 +18,13 @@ import static unit.writer.standard.StandardResultTestAssertions.*;
 public class ExamAssignmentTests extends WebLabSeleniumTestBase {
 
     private static final String ASSIGNMENT_EXAM = "89106";
+
+    private String testSubmissionContent;
+
+    @BeforeEach
+    public void loadSubmission() throws IOException {
+        this.testSubmissionContent = readSubmissionFile("/selenium/solutions/", "Upvote.java");
+    }
 
     @Test
     public void testExamSubmissionOnlyTests() {
