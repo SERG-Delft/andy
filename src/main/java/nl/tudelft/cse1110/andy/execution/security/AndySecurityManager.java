@@ -25,10 +25,14 @@ public class AndySecurityManager extends SecurityManager {
          */
         boolean untrusted = false;
         boolean mockitoInternal = false;
+        boolean seleniumInternal = false;
         boolean jdkInternalLoader = false;
         for (StackTraceElement elem : Thread.currentThread().getStackTrace()) {
             if (elem.getClassName().startsWith("org.mockito.internal")) {
                 mockitoInternal = true;
+            }
+            if (elem.getClassName().startsWith("org.openqa.selenium")) {
+                seleniumInternal = true;
             }
             if (elem.getClassName().startsWith("jdk.internal.") && !untrusted) {
                 jdkInternalLoader = true;
@@ -49,7 +53,7 @@ public class AndySecurityManager extends SecurityManager {
         }
 
         // Determine if the currently requested permission should be granted
-        if (checkPermissionsUntrusted(perm, mockitoInternal, jdkInternalLoader)) return;
+        if (checkPermissionsUntrusted(perm, mockitoInternal, seleniumInternal, jdkInternalLoader)) return;
 
         // If the currently requested permission should not be allowed,
         // throw an exception to block the execution
@@ -63,12 +67,13 @@ public class AndySecurityManager extends SecurityManager {
                 ));
     }
 
-    private boolean checkPermissionsUntrusted(Permission perm, boolean mockitoInternal, boolean jdkInternalLoader) {
+    private boolean checkPermissionsUntrusted(Permission perm, boolean mockitoInternal, boolean seleniumInternal,
+                                              boolean jdkInternalLoader) {
         if (checkFilePermission(perm, mockitoInternal, jdkInternalLoader)) return true;
 
         if (checkPropertyPermission(perm)) return true;
 
-        if (checkRuntimePermission(perm, mockitoInternal)) return true;
+        if (checkRuntimePermission(perm, mockitoInternal, seleniumInternal)) return true;
 
         if (checkLoggingPermission(perm)) return true;
 
@@ -122,7 +127,7 @@ public class AndySecurityManager extends SecurityManager {
         return false;
     }
 
-    private boolean checkRuntimePermission(Permission perm, boolean mockitoInternal) {
+    private boolean checkRuntimePermission(Permission perm, boolean mockitoInternal, boolean seleniumInternal) {
         // Allow various runtime permissions as they are needed in order to execute the tests
         if (perm instanceof RuntimePermission) {
             if (mockitoInternal && checkMockitoInternalRuntimePermission(perm)
@@ -131,7 +136,8 @@ public class AndySecurityManager extends SecurityManager {
                 || perm.getName().equals("createClassLoader")
                 || perm.getName().equals("createSecurityManager")
                 || perm.getName().equals("accessSystemModules")
-                || checkNetworkRuntimePermissions(perm)) {
+                || checkNetworkRuntimePermissions(perm)
+                || seleniumInternal && perm.getName().equals("modifyThread")) {
                 return true;
             }
         }
