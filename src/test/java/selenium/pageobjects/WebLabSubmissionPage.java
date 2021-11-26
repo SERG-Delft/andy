@@ -12,16 +12,12 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.regex.Pattern;
 
-public class WebLabSubmissionPage {
-    private final WebDriver driver;
-    private final String url;
+public class WebLabSubmissionPage extends BasePageObject{
 
     private static final String SOLUTION_DIV_XPATH = "/html/body/div[3]/div[5]/div/div/div[3]/div[1]/div";
 
     public WebLabSubmissionPage(WebDriver driver, String url) {
-        this.driver = driver;
-        this.url = url;
-        PageFactory.initElements(driver, this);
+        super(driver, url);
     }
 
     @FindBy(xpath = SOLUTION_DIV_XPATH)
@@ -44,10 +40,6 @@ public class WebLabSubmissionPage {
 
     @FindBy(xpath = "/html/body/div[3]/div[5]/div/div/div[3]/div[2]/div/div[1]/div/div/div/pre")
     private WebElement output;
-
-    public void navigate() {
-        this.driver.navigate().to(url);
-    }
 
     public void runOnlyTests() {
         this.runOnlyTestsBtn.click();
