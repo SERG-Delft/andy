@@ -17,19 +17,21 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class SeleniumOnePassingOneFailingTest {
+    private final String TEST_URL = "https://nonexistentpage.github.io/";
+
     @Test
     void demoOfAPassingTest() {
         // select which driver to use
         WebDriver browser = new HtmlUnitDriver(BrowserVersion.FIREFOX, true);
 
         // visit a page
-        browser.get("http://localhost:8087");
+        browser.get(TEST_URL);
 
         // find an HTML element in the page
-        WebElement welcomeHeader = browser.findElement(By.tagName("p"));
+        WebElement welcomeHeader = browser.findElement(By.tagName("h1"));
 
         // assert it contains what we want
-        assertThat(welcomeHeader.getText()).isEqualTo("Hello");
+        assertThat(welcomeHeader.getText()).isEqualTo("404");
 
         // close the browser and the selenium session
         browser.close();
@@ -41,13 +43,13 @@ class SeleniumOnePassingOneFailingTest {
         WebDriver browser = new HtmlUnitDriver(BrowserVersion.FIREFOX, true);
 
         // visit a page
-        browser.get("http://localhost:8087");
+        browser.get(TEST_URL);
 
         // find an HTML element in the page
         WebElement welcomeHeader = browser.findElement(By.tagName("p"));
 
         // assert it contains what we want
-        assertThat(welcomeHeader.getText()).isEqualTo("Welcome");
+        assertThat(welcomeHeader.getText()).isEqualTo("404");
 
         // close the browser and the selenium session
         browser.close();

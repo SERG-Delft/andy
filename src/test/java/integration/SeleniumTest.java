@@ -19,28 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 @EnabledOnOs({OS.LINUX, OS.MAC})
 public class SeleniumTest extends IntegrationTestBase {
 
-    private static final String SELENIUM_SIMPLE_WEBPAGE_SCRIPT = "/andy_selenium_simple_webpage.sh";
-
-    @BeforeAll
-    static void copyShellScripts() throws IOException {
-        String tmp = getTempDirectory();
-
-        Files.writeString(Path.of(tmp + SELENIUM_SIMPLE_WEBPAGE_SCRIPT), """
-                echo "initSignal"
-                while true; do echo "HTTP/1.1 200 OK\\nContent-Length: 69\\n\\n<!DOCTYPE html><html><body><h2>Welcome</h1><p>Hello</p></body></html>" | nc -l 8087; done
-                """);
-    }
-
-    @AfterAll
-    static void shellCleanup() throws IOException {
-        String tmp = getTempDirectory();
-        Files.deleteIfExists(Path.of(tmp + SELENIUM_SIMPLE_WEBPAGE_SCRIPT));
-    }
-
-    private static String getTempDirectory() {
-        return System.getProperty("java.io.tmpdir");
-    }
-
     @Test
     void seleniumTest() {
         assertTimeoutPreemptively(ofSeconds(30), () -> {

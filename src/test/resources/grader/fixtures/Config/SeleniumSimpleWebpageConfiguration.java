@@ -24,12 +24,4 @@ public class Configuration extends RunConfiguration {
             put("codechecks", 0.0f);
         }};
     }
-
-    @Override
-    public ExternalProcess externalProcess() {
-        String tmp = System.getProperty("java.io.tmpdir");
-        return new CommandExternalProcess(
-                "sh " + tmp + "/andy_selenium_simple_webpage.sh",
-                "initSignal");
-    }
 }
