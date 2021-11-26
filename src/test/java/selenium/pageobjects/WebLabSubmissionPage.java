@@ -6,13 +6,12 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.regex.Pattern;
 
-public class WebLabSubmissionPage extends BasePageObject{
+public class WebLabSubmissionPage extends BasePageObject {
 
     private static final String SOLUTION_DIV_XPATH = "/html/body/div[3]/div[5]/div/div/div[3]/div[1]/div";
 
@@ -58,9 +57,7 @@ public class WebLabSubmissionPage extends BasePageObject{
     }
 
     public void enterSolution(String solution) {
-        // Wait until solution div is visible to prevent flakiness
-        WebDriverWait wait = new WebDriverWait(driver, 10);
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(SOLUTION_DIV_XPATH)));
+        this.awaitElementVisibility(solutionDiv);
 
         this.solutionDiv.click();
         Actions actions = new Actions(driver);
