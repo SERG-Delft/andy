@@ -131,17 +131,25 @@ public class AndySecurityManager extends SecurityManager {
         // Allow various runtime permissions as they are needed in order to execute the tests
         if (perm instanceof RuntimePermission) {
             if (mockitoInternal && checkMockitoInternalRuntimePermission(perm)
-                || checkReflectionRuntimePermissions(perm)
-                || perm.getName().equals("loggerFinder")
-                || perm.getName().equals("createClassLoader")
-                || perm.getName().equals("createSecurityManager")
-                || perm.getName().equals("accessSystemModules")
-                || checkNetworkRuntimePermissions(perm)
-                || seleniumInternal && perm.getName().equals("modifyThread")) {
+                || seleniumInternal && checkSeleniumRuntimePermissions(perm)
+                || checkNormalRuntimePermissions(perm)) {
                 return true;
             }
         }
         return false;
+    }
+
+    private boolean checkSeleniumRuntimePermissions(Permission perm) {
+        return perm.getName().equals("modifyThread");
+    }
+
+    private boolean checkNormalRuntimePermissions(Permission perm) {
+        return perm.getName().equals("loggerFinder")
+               || perm.getName().equals("createClassLoader")
+               || perm.getName().equals("createSecurityManager")
+               || perm.getName().equals("accessSystemModules")
+               || checkReflectionRuntimePermissions(perm)
+               || checkNetworkRuntimePermissions(perm);
     }
 
     private boolean checkReflectionRuntimePermissions(Permission perm) {
