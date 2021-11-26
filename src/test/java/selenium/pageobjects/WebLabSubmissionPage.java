@@ -5,7 +5,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class WebLabSubmissionPage extends BasePageObject {
 
@@ -72,13 +71,11 @@ public class WebLabSubmissionPage extends BasePageObject {
 
     public String getOutput() {
         // Wait until WebLab finishes processing submission
-        WebDriverWait wait = new WebDriverWait(driver, 90);
-        wait.until(d -> output.getText().contains("Status: Done"));
+        waitUntil(90, () -> output.getText().contains("Status: Done"));
         return this.output.getText();
     }
 
     private void awaitExecutionStart() {
-        WebDriverWait wait = new WebDriverWait(driver, 30);
-        wait.until(d -> !output.getText().contains("Status: Done"));
+        waitUntil(30, () -> !output.getText().contains("Status: Done"));
     }
 }
