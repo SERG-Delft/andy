@@ -3,7 +3,6 @@ package selenium.pageobjects;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 public class WebLabLoginPage extends BasePageObject {
 
@@ -22,6 +21,8 @@ public class WebLabLoginPage extends BasePageObject {
 
 
     public String login(String username, String password) {
+        this.awaitElementVisibility(this.username, this.password, this.signInButton);
+
         this.username.clear();
         this.password.clear();
         this.username.sendKeys(username);
