@@ -1,15 +1,11 @@
 package selenium.pageobjects;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.util.regex.Pattern;
 
 public class WebLabSubmissionPage extends BasePageObject {
 
@@ -42,18 +38,22 @@ public class WebLabSubmissionPage extends BasePageObject {
 
     public void runOnlyTests() {
         this.runOnlyTestsBtn.click();
+        this.awaitExecutionStart();
     }
 
     public void runWithCoverage() {
         this.runWithCoverageBtn.click();
+        this.awaitExecutionStart();
     }
 
     public void assessWithoutHints() {
         this.assessWithoutHintsBtn.click();
+        this.awaitExecutionStart();
     }
 
     public void assessWithHints() {
         this.assessWithHintsBtn.click();
+        this.awaitExecutionStart();
     }
 
     public void enterSolution(String solution) {
@@ -73,8 +73,12 @@ public class WebLabSubmissionPage extends BasePageObject {
     public String getOutput() {
         // Wait until WebLab finishes processing submission
         WebDriverWait wait = new WebDriverWait(driver, 90);
-        wait.until(ExpectedConditions.textMatches(By.id(output.getAttribute("id")),
-                Pattern.compile("Status: Done")));
+        wait.until(d -> output.getText().contains("Status: Done"));
         return this.output.getText();
+    }
+
+    private void awaitExecutionStart() {
+        WebDriverWait wait = new WebDriverWait(driver, 30);
+        wait.until(d -> !output.getText().contains("Status: Done"));
     }
 }
