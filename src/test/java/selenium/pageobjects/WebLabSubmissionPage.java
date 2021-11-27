@@ -1,27 +1,17 @@
 package selenium.pageobjects;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.regex.Pattern;
-
-public class WebLabSubmissionPage {
-    private final WebDriver driver;
-    private final String url;
+public class WebLabSubmissionPage extends BasePageObject {
 
     private static final String SOLUTION_DIV_XPATH = "/html/body/div[3]/div[5]/div/div/div[3]/div[1]/div";
 
     public WebLabSubmissionPage(WebDriver driver, String url) {
-        this.driver = driver;
-        this.url = url;
-        PageFactory.initElements(driver, this);
+        super(driver, url);
     }
 
     @FindBy(xpath = SOLUTION_DIV_XPATH)
@@ -45,30 +35,28 @@ public class WebLabSubmissionPage {
     @FindBy(xpath = "/html/body/div[3]/div[5]/div/div/div[3]/div[2]/div/div[1]/div/div/div/pre")
     private WebElement output;
 
-    public void navigate() {
-        this.driver.navigate().to(url);
-    }
-
     public void runOnlyTests() {
         this.runOnlyTestsBtn.click();
+        this.awaitExecutionStart();
     }
 
     public void runWithCoverage() {
         this.runWithCoverageBtn.click();
+        this.awaitExecutionStart();
     }
 
     public void assessWithoutHints() {
         this.assessWithoutHintsBtn.click();
+        this.awaitExecutionStart();
     }
 
     public void assessWithHints() {
         this.assessWithHintsBtn.click();
+        this.awaitExecutionStart();
     }
 
     public void enterSolution(String solution) {
-        // Wait until solution div is visible to prevent flakiness
-        WebDriverWait wait = new WebDriverWait(driver, 10);
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(SOLUTION_DIV_XPATH)));
+        this.awaitElementVisibility(solutionDiv);
 
         this.solutionDiv.click();
         Actions actions = new Actions(driver);
@@ -83,9 +71,11 @@ public class WebLabSubmissionPage {
 
     public String getOutput() {
         // Wait until WebLab finishes processing submission
-        WebDriverWait wait = new WebDriverWait(driver, 90);
-        wait.until(ExpectedConditions.textMatches(By.id(output.getAttribute("id")),
-                Pattern.compile("Status: Done")));
+        waitUntil(90, () -> output.getText().contains("Status: Done"));
         return this.output.getText();
+    }
+
+    private void awaitExecutionStart() {
+        waitUntil(30, () -> !output.getText().contains("Status: Done"));
     }
 }
