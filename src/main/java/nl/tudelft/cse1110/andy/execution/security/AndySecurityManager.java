@@ -128,7 +128,7 @@ public class AndySecurityManager extends SecurityManager {
     }
 
     private boolean checkRuntimePermission(Permission perm, boolean mockitoInternal, boolean seleniumInternal) {
-        // Allow various runtime permissions as they are needed in order to execute the tests
+        // Allow various runtime permissions depending on the context as they are needed in order to execute the tests
         if (perm instanceof RuntimePermission) {
             if (mockitoInternal && checkMockitoInternalRuntimePermission(perm)
                 || seleniumInternal && checkSeleniumRuntimePermissions(perm)
@@ -140,6 +140,7 @@ public class AndySecurityManager extends SecurityManager {
     }
 
     private boolean checkSeleniumRuntimePermissions(Permission perm) {
+        // Grant permissions necessary for Selenium to run correctly
         return perm.getName().equals("modifyThread");
     }
 
