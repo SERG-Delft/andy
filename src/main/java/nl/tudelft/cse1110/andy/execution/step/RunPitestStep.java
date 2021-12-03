@@ -33,6 +33,12 @@ public class RunPitestStep implements ExecutionStep {
 
     @Override
     public void execute(Context ctx, ResultBuilder result) {
+
+        // Skip step if disabled
+        if (ctx.getRunConfiguration().skipPitest()) {
+            return;
+        }
+
         final PluginServices plugins = PluginServices.makeForContextLoader();
         final OptionsParser parser = new OptionsParser(new PluginFilter(plugins));
 
