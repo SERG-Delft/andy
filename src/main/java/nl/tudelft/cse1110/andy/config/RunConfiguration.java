@@ -61,4 +61,8 @@ public abstract class RunConfiguration {
         return null;
     }
 
+    public boolean skipPitest() {
+        return false;
+    }
+
 }
