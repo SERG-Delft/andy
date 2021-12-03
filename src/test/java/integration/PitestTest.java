@@ -70,4 +70,18 @@ public class PitestTest extends IntegrationTestBase {
         assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(10);
     }
 
+
+    /*
+     * Configuration is set to skip Pitest.
+     */
+    @Test
+    void pitestSkipped() {
+        // Pitest is skipped
+        Result result = run("ZagZigLibrary", "ZagZigAllMutantsKilled", "ZagZigPitestSkipped");
+
+        assertThat(result.getMutationTesting().wasExecuted()).isFalse();
+        assertThat(result.getMutationTesting().getKilledMutants()).isZero();
+        assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isZero();
+    }
+
 }

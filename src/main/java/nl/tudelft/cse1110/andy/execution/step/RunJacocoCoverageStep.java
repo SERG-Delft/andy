@@ -38,6 +38,12 @@ public class RunJacocoCoverageStep implements ExecutionStep {
 
     @Override
     public void execute(Context ctx, ResultBuilder result) {
+
+        // Skip step if disabled
+        if (ctx.getRunConfiguration().skipJacoco()) {
+            return;
+        }
+
         DirectoryConfiguration dirCfg = ctx.getDirectoryConfiguration();
         RunConfiguration runCfg = ctx.getRunConfiguration();
 
