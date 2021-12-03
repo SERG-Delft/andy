@@ -61,6 +61,10 @@ public abstract class RunConfiguration {
         return null;
     }
 
+    public boolean skipJacoco() {
+        return false;
+    }
+
     public boolean skipPitest() {
         return false;
     }
