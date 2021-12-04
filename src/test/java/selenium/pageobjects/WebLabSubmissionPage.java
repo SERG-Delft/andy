@@ -8,13 +8,11 @@ import org.openqa.selenium.support.FindBy;
 
 public class WebLabSubmissionPage extends BasePageObject {
 
-    private static final String SOLUTION_DIV_XPATH = "/html/body/div[3]/div[5]/div/div/div[3]/div[1]/div";
-
     public WebLabSubmissionPage(WebDriver driver, String url) {
         super(driver, url);
     }
 
-    @FindBy(xpath = SOLUTION_DIV_XPATH)
+    @FindBy(xpath = "/html/body/div[3]/div[5]/div/div/div[3]/div[1]/div")
     private WebElement solutionDiv;
 
     @FindBy(xpath = "/html/body/div[3]/div[5]/div/div/div[3]/div[2]/div/div[1]/div/span/span")
