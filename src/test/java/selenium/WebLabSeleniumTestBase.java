@@ -24,7 +24,13 @@ public abstract class WebLabSeleniumTestBase {
 
     protected static final String USER_ID = "36461";
 
-    protected static final String WEBLAB_SUBMISSION_PATH = "///assignment/%s/submission/%s/edit";
+    protected static final String WEBLAB_ASSIGNMENT_BASE_PATH = "///assignment/%s/";
+
+    protected static final String WEBLAB_SUBMISSION_PATH = WEBLAB_ASSIGNMENT_BASE_PATH + "submission/%s/edit";
+
+    protected static final String WEBLAB_ASSIGNMENT_INFO_PATH = WEBLAB_ASSIGNMENT_BASE_PATH + "info";
+
+    protected static final String WEBLAB_ANSWER_PATH = WEBLAB_ASSIGNMENT_BASE_PATH + "answer";
 
     private static final String WEBLAB_SELENIUM_HEADLESS_ENV_VAR = "WEBLAB_SELENIUM_HEADLESS";
 
