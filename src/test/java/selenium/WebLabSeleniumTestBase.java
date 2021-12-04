@@ -2,8 +2,7 @@ package selenium;
 
 import nl.tudelft.cse1110.andy.utils.ResourceUtils;
 import org.apache.commons.lang.StringUtils;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -15,6 +14,7 @@ import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.fail;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class WebLabSeleniumTestBase {
     // Remember to set the credentials as an environment variable ("username:password")
     // Only works with local WebLab accounts, NOT netid
@@ -32,7 +32,7 @@ public abstract class WebLabSeleniumTestBase {
     private String weblabUsername;
     private String weblabPassword;
 
-    @BeforeEach
+    @BeforeAll
     public void setup() throws IOException {
         String credentialsString = System.getenv(WEBLAB_CREDENTIALS_ENV_VAR);
         String[] weblabCredentials = credentialsString != null ? credentialsString.split(":") : null;
@@ -58,7 +58,7 @@ public abstract class WebLabSeleniumTestBase {
         this.login();
     }
 
-    @AfterEach
+    @AfterAll
     public void cleanup() {
         driver.quit();
     }
