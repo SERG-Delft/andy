@@ -1,16 +1,9 @@
 package selenium.pageobjects;
 
-import org.openqa.selenium.Keys;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-
-import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.IOException;
 
 public class WebLabAnswerPage extends BasePageObject {
 
@@ -33,24 +26,10 @@ public class WebLabAnswerPage extends BasePageObject {
             this.awaitElementVisibility(this.solutionDiv);
         }
 
-        this.solutionDiv.click();
-        Actions actions = new Actions(driver);
-        actions.keyDown(Keys.CONTROL);
-        actions.sendKeys("a");
-        actions.sendKeys("c");
-        actions.keyUp(Keys.CONTROL);
-        actions.perform();
+        String script = "return document.getElementById('solution').value;";
 
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-
-        String solution;
-        try {
-            solution = (String) clipboard.getData(DataFlavor.stringFlavor);
-        } catch (IOException | UnsupportedFlavorException e) {
-            // should never happen
-            e.printStackTrace();
-            solution = null;
-        }
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        String solution = (String) js.executeScript(script);
 
         return solution;
     }
