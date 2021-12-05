@@ -1,7 +1,6 @@
 package selenium.pageobjects;
 
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -28,12 +27,10 @@ public class WebLabAnswerPage extends BasePageObject {
     public String getSolution() {
         this.awaitPageLoaded();
 
-        boolean unlockAnswerButtonExists = false;
-        try {
+        // unlock answer if it is not yet unlocked
+        if (this.isDisplayed(unlockAnswerButton)) {
             this.unlockAnswerButton.click();
             this.awaitElementVisibility(this.solutionDiv);
-        } catch (NoSuchElementException ex) {
-            // ignore, button is not shown, answer is already unlocked
         }
 
         this.solutionDiv.click();
@@ -59,22 +56,6 @@ public class WebLabAnswerPage extends BasePageObject {
     }
 
     private void awaitPageLoaded() {
-        waitUntil(30, () -> {
-            boolean found = false;
-
-            try {
-                if (solutionDiv.isDisplayed()) found = true;
-            } catch (NoSuchElementException e) {
-                // ignore, solution div does not exist
-            }
-
-            try {
-                if (unlockAnswerButton.isDisplayed()) found = true;
-            } catch (NoSuchElementException e) {
-                // ignore, unlock button does not exist
-            }
-
-            return found;
-        });
+        waitUntil(30, () -> this.isDisplayed(solutionDiv) || this.isDisplayed(unlockAnswerButton));
     }
 }
