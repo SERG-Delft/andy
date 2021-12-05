@@ -1,15 +1,58 @@
 package selenium;
 
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import selenium.pageobjects.WebLabAnswerPage;
 import selenium.pageobjects.WebLabAssignmentListPage;
+import selenium.pageobjects.WebLabSubmissionPage;
 
+import java.awt.*;
+import java.awt.datatransfer.StringSelection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static unit.writer.standard.StandardResultTestAssertions.compilationSuccess;
+import static unit.writer.standard.StandardResultTestAssertions.finalGrade;
+
 public class AllExerciseTests extends WebLabSeleniumTestBase {
 
     protected static final String BASE_ASSIGNMENT_ID = "91800";
+
+    @BeforeAll
+    public void clearClipboard() {
+        // Clear clipboard in case there is something sensitive there
+        // so that its content does not get uploaded to WebLab if a test fails
+        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(""), null);
+    }
+
+    @ParameterizedTest
+    @MethodSource("scrapeAssignmentIds")
+    public void testAllAssignments(String assignmentId) {
+        WebLabAnswerPage webLabAnswerPage = new WebLabAnswerPage(driver,
+                WEBLAB_URL + String.format(WEBLAB_ANSWER_PATH, assignmentId));
+
+        webLabAnswerPage.navigate();
+
+        String solution = webLabAnswerPage.getSolution();
+
+        WebLabSubmissionPage webLabSubmissionPage = new WebLabSubmissionPage(driver,
+                WEBLAB_URL + String.format(WEBLAB_SUBMISSION_PATH, assignmentId, USER_ID));
+
+        webLabSubmissionPage.navigate();
+        webLabSubmissionPage.enterSolution(solution);
+        webLabSubmissionPage.assessWithHints();
+
+        String output = webLabSubmissionPage.getOutput();
+
+        assertThat(output)
+                .has(compilationSuccess())
+                .has(finalGrade(100))
+                .contains("Test score: 100/100");
+    }
 
     public Stream<Arguments> scrapeAssignmentIds() {
         return scrapeAssignmentIds(WEBLAB_URL + String.format(WEBLAB_ASSIGNMENT_VIEW_PATH, BASE_ASSIGNMENT_ID));
