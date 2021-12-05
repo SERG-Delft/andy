@@ -65,6 +65,14 @@ public class WebLabSubmissionPage extends BasePageObject {
         actions.sendKeys(solution);
         actions.perform();
         this.saveButton.click();
+
+        // Wait a few seconds for the submission to be processed
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            // ignore
+        }
+        waitUntil(15, () -> saveButton.getText().equals("Saved"));
     }
 
     public String getOutput() {
