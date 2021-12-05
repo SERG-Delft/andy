@@ -26,6 +26,8 @@ public class WebLabAssignmentListPage extends BasePageObject {
     }
 
     private List<String> getSubAssignmentUrls(String type) {
+        this.awaitListLoaded();
+
         return subAssignments.stream()
                 .filter(tr -> tr
                         .findElements(By.tagName("td"))
@@ -41,5 +43,9 @@ public class WebLabAssignmentListPage extends BasePageObject {
                         .getAttribute("href")
                 )
                 .collect(Collectors.toList());
+    }
+
+    private void awaitListLoaded() {
+        waitUntil(30, () -> !subAssignments.isEmpty());
     }
 }
