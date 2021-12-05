@@ -1,6 +1,5 @@
 package selenium;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -8,8 +7,6 @@ import selenium.pageobjects.WebLabAnswerPage;
 import selenium.pageobjects.WebLabAssignmentListPage;
 import selenium.pageobjects.WebLabSubmissionPage;
 
-import java.awt.*;
-import java.awt.datatransfer.StringSelection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -21,13 +18,6 @@ import static unit.writer.standard.StandardResultTestAssertions.finalGrade;
 public class AllExerciseTests extends WebLabSeleniumTestBase {
 
     protected static final String BASE_ASSIGNMENT_ID = "91800";
-
-    @BeforeAll
-    public void clearClipboard() {
-        // Clear clipboard in case there is something sensitive there
-        // so that its content does not get uploaded to WebLab if a test fails
-        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(""), null);
-    }
 
     @ParameterizedTest
     @MethodSource("scrapeAssignmentIds")
