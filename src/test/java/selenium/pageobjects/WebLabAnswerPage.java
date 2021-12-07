@@ -1,6 +1,5 @@
 package selenium.pageobjects;
 
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -14,6 +13,9 @@ public class WebLabAnswerPage extends BasePageObject {
     @FindBy(xpath = "/html/body/div[2]/div[5]/div/div/div[3]/div[1]/div/div/div[1]")
     private WebElement solutionDiv;
 
+    @FindBy(id = "solution")
+    private WebElement solutionTextAreaHidden;
+
     @FindBy(xpath = "/html/body/div[2]/div[5]/div/div/div[3]/div[1]/div/div/a[1]")
     private WebElement unlockAnswerButton;
 
@@ -26,10 +28,7 @@ public class WebLabAnswerPage extends BasePageObject {
             this.awaitElementVisibility(this.solutionDiv);
         }
 
-        String script = "return document.getElementById('solution').value;";
-
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        String solution = (String) js.executeScript(script);
+        String solution = solutionTextAreaHidden.getAttribute("textContent");
 
         return solution;
     }
