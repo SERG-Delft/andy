@@ -141,6 +141,8 @@ public class AndySecurityManager extends SecurityManager {
 
     private boolean checkSeleniumRuntimePermissions(Permission perm) {
         // Grant permissions necessary for Selenium to run correctly
+        // The "modifyThread" RuntimePermission grants Selenium access to methods for controlling threads,
+        // which are necessary for its operation.
         return perm.getName().equals("modifyThread");
     }
 
