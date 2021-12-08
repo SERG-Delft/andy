@@ -12,6 +12,7 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 
 import java.io.File;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -34,8 +35,12 @@ public class AndyMojo extends AbstractMojo {
     @Parameter(property = "coverage")
     private boolean coverage;
 
+    private PrintStream out;
+
     @Override
     public void execute() {
+        out = System.out;
+
         this.printHeader();
 
         File basedir = project.getBasedir();
@@ -85,11 +90,11 @@ public class AndyMojo extends AbstractMojo {
 
             /* Stop printing dots */
             workingIndicator.cancel();
-            System.out.println("\n\n");
+            out.println("\n\n");
 
             /* Print output */
-            System.out.println(output);
-            System.out.println("\n\nCheck branch and mutation coverage in the /andy folder!\n\n");
+            out.println(output);
+            out.println("\n\nCheck branch and mutation coverage in the /andy folder!\n\n");
 
         } catch (Exception ex) {
             ex.printStackTrace(System.err);
@@ -120,7 +125,7 @@ public class AndyMojo extends AbstractMojo {
     }
 
     private void printHeader() {
-        System.out.println(
+        out.println(
             """
 
      _              _       
@@ -139,7 +144,7 @@ public class AndyMojo extends AbstractMojo {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                System.out.print('.');
+                out.print('.');
             }
         }, 0, 1000);
 
