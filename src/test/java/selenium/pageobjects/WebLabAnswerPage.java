@@ -28,6 +28,7 @@ public class WebLabAnswerPage extends BasePageObject {
             this.awaitElementVisibility(this.solutionDiv);
         }
 
+        // No way to get content directly: element is not visible.
         String solution = solutionTextAreaHidden.getAttribute("textContent");
 
         return solution;

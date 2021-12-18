@@ -59,6 +59,7 @@ public class WebLabSubmissionPage extends BasePageObject {
     public void enterSolution(String solution) {
         this.awaitElementVisibility(solutionDiv);
 
+        // No way to set content without javascript: element is not visible.
         String script = String.format("document.getElementById('%s').value = '%s';",
                 solutionTextAreaHidden.getAttribute("id"),
                 StringEscapeUtils.escapeJavaScript(solution));
