@@ -27,6 +27,9 @@ public class WebLabAssignmentListPage extends BasePageObject {
     private List<String> getSubAssignmentUrls(String type) {
         this.awaitListLoaded();
 
+        // Convert subassignment rows to WebLabAssignmentListElement objects,
+        // filter by type,
+        // and finally extract the url.
         return subAssignments.stream()
                 .map(WebLabAssignmentListElement::new)
                 .filter(element -> element.getAssignmentType().equals(type))

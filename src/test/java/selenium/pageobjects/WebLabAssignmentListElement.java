@@ -6,6 +6,7 @@ import org.openqa.selenium.WebElement;
 public class WebLabAssignmentListElement {
     private final WebElement parent;
 
+    // Use relative xpaths to find elements
     private final By typeHolder = By.xpath("./td[1]/span");
 
     private final By assignmentLink = By.xpath("./td[2]/a");
