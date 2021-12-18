@@ -1,6 +1,5 @@
 package selenium.pageobjects;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -29,19 +28,9 @@ public class WebLabAssignmentListPage extends BasePageObject {
         this.awaitListLoaded();
 
         return subAssignments.stream()
-                .filter(tr -> tr
-                        .findElements(By.tagName("td"))
-                        .get(0)
-                        .findElement(By.tagName("span"))
-                        .getAttribute("data-original-title")
-                        .equals(type)
-                )
-                .map(tr -> tr
-                        .findElements(By.tagName("td"))
-                        .get(1)
-                        .findElement(By.tagName("a"))
-                        .getAttribute("href")
-                )
+                .map(WebLabAssignmentListElement::new)
+                .filter(element -> element.getAssignmentType().equals(type))
+                .map(WebLabAssignmentListElement::getUrl)
                 .collect(Collectors.toList());
     }
 
