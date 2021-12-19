@@ -2,8 +2,7 @@ package selenium;
 
 import nl.tudelft.cse1110.andy.utils.ResourceUtils;
 import org.apache.commons.lang.StringUtils;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -15,6 +14,7 @@ import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.fail;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class WebLabSeleniumTestBase {
     // Remember to set the credentials as an environment variable ("username:password")
     // Only works with local WebLab accounts, NOT netid
@@ -24,7 +24,13 @@ public abstract class WebLabSeleniumTestBase {
 
     protected static final String USER_ID = "36461";
 
-    protected static final String WEBLAB_SUBMISSION_PATH = "///assignment/%s/submission/%s/edit";
+    protected static final String WEBLAB_ASSIGNMENT_BASE_PATH = "///assignment/%s/";
+
+    protected static final String WEBLAB_SUBMISSION_PATH = WEBLAB_ASSIGNMENT_BASE_PATH + "submission/%s/edit";
+
+    protected static final String WEBLAB_ASSIGNMENT_VIEW_PATH = WEBLAB_ASSIGNMENT_BASE_PATH + "view";
+
+    protected static final String WEBLAB_ANSWER_PATH = WEBLAB_ASSIGNMENT_BASE_PATH + "answer";
 
     private static final String WEBLAB_SELENIUM_HEADLESS_ENV_VAR = "WEBLAB_SELENIUM_HEADLESS";
 
@@ -32,7 +38,7 @@ public abstract class WebLabSeleniumTestBase {
     private String weblabUsername;
     private String weblabPassword;
 
-    @BeforeEach
+    @BeforeAll
     public void setup() throws IOException {
         String credentialsString = System.getenv(WEBLAB_CREDENTIALS_ENV_VAR);
         String[] weblabCredentials = credentialsString != null ? credentialsString.split(":") : null;
@@ -58,7 +64,7 @@ public abstract class WebLabSeleniumTestBase {
         this.login();
     }
 
-    @AfterEach
+    @AfterAll
     public void cleanup() {
         driver.quit();
     }

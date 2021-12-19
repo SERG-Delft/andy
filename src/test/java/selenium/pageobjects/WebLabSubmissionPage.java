@@ -1,21 +1,22 @@
 package selenium.pageobjects;
 
-import org.openqa.selenium.Keys;
+import org.apache.commons.lang.StringEscapeUtils;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 
 public class WebLabSubmissionPage extends BasePageObject {
-
-    private static final String SOLUTION_DIV_XPATH = "/html/body/div[3]/div[5]/div/div/div[3]/div[1]/div";
 
     public WebLabSubmissionPage(WebDriver driver, String url) {
         super(driver, url);
     }
 
-    @FindBy(xpath = SOLUTION_DIV_XPATH)
+    @FindBy(xpath = "/html/body/div[3]/div[5]/div/div/div[3]/div[1]/div")
     private WebElement solutionDiv;
+
+    @FindBy(xpath = "/html/body/div[3]/div[5]/div/div/div[3]/div[1]/div/span/form/div/div[1]/textarea")
+    private WebElement solutionTextAreaHidden;
 
     @FindBy(xpath = "/html/body/div[3]/div[5]/div/div/div[3]/div[2]/div/div[1]/div/span/span")
     private WebElement saveButton;
@@ -58,15 +59,23 @@ public class WebLabSubmissionPage extends BasePageObject {
     public void enterSolution(String solution) {
         this.awaitElementVisibility(solutionDiv);
 
-        this.solutionDiv.click();
-        Actions actions = new Actions(driver);
-        actions.keyDown(Keys.CONTROL);
-        actions.sendKeys("a");
-        actions.keyUp(Keys.CONTROL);
-        actions.sendKeys(Keys.BACK_SPACE);
-        actions.sendKeys(solution);
-        actions.perform();
+        // No way to set content without javascript: element is not visible.
+        String script = String.format("document.getElementById('%s').value = '%s';",
+                solutionTextAreaHidden.getAttribute("id"),
+                StringEscapeUtils.escapeJavaScript(solution));
+
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript(script);
+
         this.saveButton.click();
+
+        // Wait a few seconds for the submission to be processed
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            // ignore
+        }
+        waitUntil(15, () -> saveButton.getText().equals("Saved"));
     }
 
     public String getOutput() {
