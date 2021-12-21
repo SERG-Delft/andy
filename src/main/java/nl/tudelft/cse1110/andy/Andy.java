@@ -33,8 +33,16 @@ public class Andy {
         this.metaData = metaData;
     }
 
+    public Andy(Action action, String workDir, String outputDir, List<String> librariesToBeIncluded, ResultWriter writer) {
+        this(action, workDir, outputDir, librariesToBeIncluded, writer, SubmissionMetaData.empty());
+    }
+
     public Andy(Action action, String workDir, String outputDir, ResultWriter writer, SubmissionMetaData metaData) {
         this(action, workDir, outputDir, null, writer, metaData);
+    }
+
+    public Andy(Action action, String workDir, String outputDir, ResultWriter writer) {
+        this(action, workDir, outputDir, null, writer);
     }
 
     public void run() {
