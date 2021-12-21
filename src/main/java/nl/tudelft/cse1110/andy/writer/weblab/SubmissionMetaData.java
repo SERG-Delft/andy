@@ -10,4 +10,8 @@ public class SubmissionMetaData {
         this.studentId = studentId;
         this.exercise = exercise;
     }
+
+    public static SubmissionMetaData empty() {
+        return new SubmissionMetaData(null, null, null);
+    }
 }
