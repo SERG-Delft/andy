@@ -10,8 +10,9 @@ import java.util.stream.Collectors;
 public class AndyOnWebLab {
 
     public static void main(String[] args) {
-        if(args.length!=3) {
-            System.out.println("Andy needs three parameters: <ACTION/TASK_MODE> <WORK DIRECTORY> <OUTPUT DIRECTORY>");
+        if(args.length != 6) {
+            System.out.println("Andy needs six parameters: <ACTION/TASK_MODE> <WORK DIRECTORY> <OUTPUT DIRECTORY> " +
+                               "<WL_COURSE> <WL_STUDENT> <WL_ASSIGNMENT_TITLE>");
             System.exit(-1);
         }
 
