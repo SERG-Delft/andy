@@ -10,8 +10,9 @@ import java.util.stream.Collectors;
 public class AndyOnWebLab {
 
     public static void main(String[] args) {
-        if(args.length!=3) {
-            System.out.println("Andy needs three parameters: <ACTION/TASK_MODE> <WORK DIRECTORY> <OUTPUT DIRECTORY>");
+        if(args.length != 6) {
+            System.out.println("Andy needs six parameters: <ACTION/TASK_MODE> <WORK DIRECTORY> <OUTPUT DIRECTORY> " +
+                               "<WL_COURSE> <WL_STUDENT> <WL_ASSIGNMENT_TITLE>");
             System.exit(-1);
         }
 
@@ -24,7 +25,7 @@ public class AndyOnWebLab {
         if (outputDir == null) { System.out.println("No OUTPUT_DIR environment variable.");  System.exit(-1); }
 
         WebLabResultWriter writer = new WebLabResultWriter();
-        SubmissionMetaData metaData = getSubmissionMetaData();
+        SubmissionMetaData metaData = getSubmissionMetaData(args, 3);
         new Andy(getAction(action), workDir, outputDir, writer, metaData).run();
     }
 
@@ -39,10 +40,10 @@ public class AndyOnWebLab {
         }
     }
 
-    private static SubmissionMetaData getSubmissionMetaData() {
-        String course = System.getenv("WL_COURSE");
-        String studentId = System.getenv("WL_STUDENT");
-        String exercise = System.getenv("WL_ASSIGNMENT_TITLE");
+    private static SubmissionMetaData getSubmissionMetaData(String[] args, int start) {
+        String course = args[start];
+        String studentId = args[start + 1];
+        String exercise = args[start + 2];
 
         if (course == null) {
             System.out.println("No WL_COURSE environment variable.");
