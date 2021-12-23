@@ -88,4 +88,19 @@ public class JacocoTest extends IntegrationTestBase {
         );
     }
 
+    @Test
+    void jacocoDisabled() {
+        Result result = run(Action.COVERAGE, "NumberUtilsAddLibrary", "NumberUtilsAddSmoke", "NumberUtilsJacocoSkipped");
+
+        assertThat(result.getCoverage().wasExecuted()).isFalse();
+
+        assertThat(result.getCoverage().getCoveredLines()).isZero();
+        assertThat(result.getCoverage().getCoveredInstructions()).isZero();
+        assertThat(result.getCoverage().getCoveredBranches()).isZero();
+
+        assertThat(result.getCoverage().getNotCoveredLines().isEmpty()).isTrue();
+        assertThat(result.getCoverage().getPartiallyCoveredLines().isEmpty()).isTrue();
+        assertThat(result.getCoverage().getFullyCoveredLines().isEmpty()).isTrue();
+    }
+
 }
