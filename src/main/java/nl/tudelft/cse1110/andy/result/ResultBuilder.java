@@ -229,7 +229,7 @@ public class ResultBuilder {
      * Meta tests
      */
     public void logMetaTests(int score, int totalTests, List<MetaTestResult> metaTestResults) {
-        this.metaTestResults = MetaTestsResult.build(score, totalTests, metaTestResults);
+        this.metaTestResults.addResults(score, totalTests, metaTestResults);
     }
 
     /*
