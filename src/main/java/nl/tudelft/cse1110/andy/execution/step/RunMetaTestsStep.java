@@ -3,6 +3,7 @@ package nl.tudelft.cse1110.andy.execution.step;
 import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.config.MetaTest;
 import nl.tudelft.cse1110.andy.config.RunConfiguration;
+import nl.tudelft.cse1110.andy.config.metatest.implementations.LibraryMetaTest;
 import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
@@ -50,7 +51,12 @@ public class RunMetaTestsStep implements ExecutionStep {
              *
              * We reuse our execution framework to run the code with the meta test.
              */
-            for (MetaTest metaTest : metaTests) {
+            for (MetaTest abstractMetaTest : metaTests) {
+                if (!(abstractMetaTest instanceof LibraryMetaTest)) {
+                    continue;
+                }
+
+                LibraryMetaTest metaTest = (LibraryMetaTest) abstractMetaTest;
                 /* Set the classloader to the cleanest classloader we have */
                 Thread.currentThread().setContextClassLoader(ctx.getCleanClassloader());
 
@@ -90,7 +96,7 @@ public class RunMetaTestsStep implements ExecutionStep {
         }
     }
 
-    private String generateMetaFileContent(MetaTest metaTest, String originalLibraryContent) {
+    private String generateMetaFileContent(LibraryMetaTest metaTest, String originalLibraryContent) {
         String metaFileContent = metaTest.evaluate(originalLibraryContent);
 
         if (metaFileContent.equals(originalLibraryContent)) {
