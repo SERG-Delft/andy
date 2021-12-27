@@ -10,19 +10,19 @@ public class MetaTestsResult {
     private int totalTests;
     private final ArrayList<MetaTestResult> metaTestResults;
 
-        if(this.metaTestResults.size() > this.totalTests)
-            throw new RuntimeException("Number of meta tests do not match.");
-
-        if(this.score > this.totalTests)
-            throw new RuntimeException("Meta tests score greater than maximum.");
+    private MetaTestsResult() {
+        this.wasExecuted = false;
+        this.score = 0;
+        this.totalTests = 0;
+        this.metaTestResults = new ArrayList<>();
     }
 
     public static MetaTestsResult build(int score, int totalTests, List<MetaTestResult> metaTestResults) {
-        return new MetaTestsResult(true, score, totalTests, metaTestResults);
+        return MetaTestsResult.empty().addResults(score, totalTests, metaTestResults);
     }
 
     public static MetaTestsResult empty() {
-        return new MetaTestsResult(false, 0, 0, Collections.emptyList());
+        return new MetaTestsResult();
     }
 
     public MetaTestsResult addResults(int score, int totalTests, List<MetaTestResult> metaTestResults) {
