@@ -1,7 +1,7 @@
 package unit.config;
 
 import nl.tudelft.cse1110.andy.config.MetaTest;
-import nl.tudelft.cse1110.andy.config.metatest.implementations.LibraryMetaTest;
+import nl.tudelft.cse1110.andy.execution.metatest.implementations.LibraryMetaTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

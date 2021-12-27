@@ -1,4 +1,4 @@
-package nl.tudelft.cse1110.andy.config.metatest.evaluators;
+package nl.tudelft.cse1110.andy.execution.metatest.evaluators;
 
 public class StringReplacementEvaluator implements MetaEvaluator {
 

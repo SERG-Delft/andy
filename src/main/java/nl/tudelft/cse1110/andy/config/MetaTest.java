@@ -1,10 +1,10 @@
 package nl.tudelft.cse1110.andy.config;
 
-import nl.tudelft.cse1110.andy.config.metatest.evaluators.InsertAtEvaluator;
-import nl.tudelft.cse1110.andy.config.metatest.evaluators.LineReplacementEvaluator;
-import nl.tudelft.cse1110.andy.config.metatest.evaluators.MetaEvaluator;
-import nl.tudelft.cse1110.andy.config.metatest.evaluators.StringReplacementEvaluator;
-import nl.tudelft.cse1110.andy.config.metatest.implementations.LibraryMetaTest;
+import nl.tudelft.cse1110.andy.execution.metatest.evaluators.InsertAtEvaluator;
+import nl.tudelft.cse1110.andy.execution.metatest.evaluators.LineReplacementEvaluator;
+import nl.tudelft.cse1110.andy.execution.metatest.evaluators.MetaEvaluator;
+import nl.tudelft.cse1110.andy.execution.metatest.evaluators.StringReplacementEvaluator;
+import nl.tudelft.cse1110.andy.execution.metatest.implementations.LibraryMetaTest;
 
 public abstract class MetaTest {
 
