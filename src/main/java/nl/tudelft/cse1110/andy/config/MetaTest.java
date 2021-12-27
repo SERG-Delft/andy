@@ -1,6 +1,7 @@
 package nl.tudelft.cse1110.andy.config;
 
 import nl.tudelft.cse1110.andy.config.metatest.evaluators.MetaEvaluator;
+import nl.tudelft.cse1110.andy.config.metatest.evaluators.StringReplacementEvaluator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,30 +60,6 @@ public class MetaTest {
 
     public String getNameAndWeight() {
         return String.format("%s (weight: %d)", name, weight);
-    }
-
-    private static class StringReplacementEvaluator implements MetaEvaluator {
-
-        private String old;
-        private String replacement;
-
-        public StringReplacementEvaluator(String old, String replacement) {
-            this.old = old;
-            this.replacement = replacement;
-        }
-
-        @Override
-        public String evaluate(String oldLibraryCode) {
-            String shiftedOld = this.old.replaceAll("(?m)^\\s+", "");
-            String shiftedOldLibraryCode = oldLibraryCode.replaceAll("(?m)^\\s+", "");
-            String replaced = shiftedOldLibraryCode.replace(shiftedOld, this.replacement);
-
-            if (replaced.equals(oldLibraryCode)) {
-                throw new RuntimeException("Meta test failed to find this text replacement:\n" + this.old);
-            }
-
-            return replaced;
-        }
     }
 
     private static class LineReplacementEvaluator implements MetaEvaluator {
