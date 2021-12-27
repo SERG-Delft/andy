@@ -1,5 +1,7 @@
 package nl.tudelft.cse1110.andy.config;
 
+import nl.tudelft.cse1110.andy.config.metatest.evaluators.MetaEvaluator;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,10 +59,6 @@ public class MetaTest {
 
     public String getNameAndWeight() {
         return String.format("%s (weight: %d)", name, weight);
-    }
-
-    private interface MetaEvaluator {
-        String evaluate(String oldLibraryCode);
     }
 
     private static class StringReplacementEvaluator implements MetaEvaluator {
