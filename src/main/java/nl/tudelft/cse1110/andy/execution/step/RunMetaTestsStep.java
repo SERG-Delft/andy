@@ -30,6 +30,7 @@ public class RunMetaTestsStep implements ExecutionStep {
         RunConfiguration runCfg = ctx.getRunConfiguration();
 
         int score = 0;
+        int totalWeight = 0;
 
         ClassLoader currentClassLoader = Thread.currentThread().getContextClassLoader();
 
@@ -82,11 +83,12 @@ public class RunMetaTestsStep implements ExecutionStep {
                     metaTestResults.add(new MetaTestResult(metaTest.getName(), metaTest.getWeight(), false));
                 }
 
+                totalWeight += metaTest.getWeight();
+
                 /* Clean up the directory */
                 deleteDirectory(metaWorkingDir);
             }
 
-            int totalWeight = metaTests.stream().mapToInt(m -> m.getWeight()).sum();
             result.logMetaTests(score, totalWeight, metaTestResults);
         } catch (Exception ex) {
             result.genericFailure(this, ex);
