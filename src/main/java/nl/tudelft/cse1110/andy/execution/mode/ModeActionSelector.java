@@ -25,7 +25,7 @@ public class ModeActionSelector {
 
     public Action getAction() {
         if (this.action == META_TEST) {
-            throw new IllegalStateException("The META_TEST action should only be used in unit tests");
+            throw new IllegalStateException("The META_TEST action should only be used when running meta tests");
         }
 
         return action;
