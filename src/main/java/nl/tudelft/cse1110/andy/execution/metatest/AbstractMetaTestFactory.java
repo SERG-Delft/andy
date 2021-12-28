@@ -1,9 +1,11 @@
 package nl.tudelft.cse1110.andy.execution.metatest;
 
+import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
 import nl.tudelft.cse1110.andy.execution.metatest.evaluators.InsertAtEvaluator;
 import nl.tudelft.cse1110.andy.execution.metatest.evaluators.LineReplacementEvaluator;
 import nl.tudelft.cse1110.andy.execution.metatest.evaluators.MetaEvaluator;
 import nl.tudelft.cse1110.andy.execution.metatest.evaluators.StringReplacementEvaluator;
+import nl.tudelft.cse1110.andy.execution.metatest.implementations.ExternalProcessMetaTest;
 import nl.tudelft.cse1110.andy.execution.metatest.implementations.LibraryMetaTest;
 
 public class AbstractMetaTestFactory {
@@ -33,5 +35,13 @@ public class AbstractMetaTestFactory {
 
     public AbstractMetaTest insertAt(String name, int lineToInsertStartingIn1, String contentToAdd) {
         return insertAt(1, name, lineToInsertStartingIn1, contentToAdd);
+    }
+
+    public AbstractMetaTest withExternalProcess(int weight, String name, ExternalProcess externalProcess) {
+        return new ExternalProcessMetaTest(1, name, externalProcess);
+    }
+
+    public AbstractMetaTest withExternalProcess(String name, ExternalProcess externalProcess) {
+        return withExternalProcess(1, name, externalProcess);
     }
 }
