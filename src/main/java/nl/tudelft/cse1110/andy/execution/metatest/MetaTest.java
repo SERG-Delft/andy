@@ -1,4 +1,4 @@
-package nl.tudelft.cse1110.andy.config;
+package nl.tudelft.cse1110.andy.execution.metatest;
 
 import nl.tudelft.cse1110.andy.execution.metatest.evaluators.InsertAtEvaluator;
 import nl.tudelft.cse1110.andy.execution.metatest.evaluators.LineReplacementEvaluator;

@@ -1,6 +1,6 @@
 package nl.tudelft.cse1110.andy.execution.metatest.implementations;
 
-import nl.tudelft.cse1110.andy.config.MetaTest;
+import nl.tudelft.cse1110.andy.execution.metatest.MetaTest;
 import nl.tudelft.cse1110.andy.execution.metatest.evaluators.MetaEvaluator;
 
 public class LibraryMetaTest extends MetaTest {
