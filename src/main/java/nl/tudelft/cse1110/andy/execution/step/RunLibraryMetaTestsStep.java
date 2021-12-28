@@ -78,10 +78,9 @@ public class RunLibraryMetaTestsStep implements ExecutionStep {
 
                 if (passesTheMetaTest) {
                     score+= metaTest.getWeight();
-                    metaTestResults.add(new MetaTestResult(metaTest.getName(), metaTest.getWeight(), true));
-                } else {
-                    metaTestResults.add(new MetaTestResult(metaTest.getName(), metaTest.getWeight(), false));
                 }
+
+                metaTestResults.add(new MetaTestResult(metaTest.getName(), metaTest.getWeight(), passesTheMetaTest));
 
                 totalWeight += metaTest.getWeight();
 
