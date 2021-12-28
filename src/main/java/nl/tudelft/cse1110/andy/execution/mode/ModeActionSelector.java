@@ -92,6 +92,9 @@ public class ModeActionSelector {
         return fullMode();
     }
 
+    /*
+     * This mode is used when running the pipeline as part of the execution of a meta test
+     */
     private List<ExecutionStep> getMetaTestMode() {
         return List.of(new RunJUnitTestsStep());
     }
