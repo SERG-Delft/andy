@@ -116,7 +116,7 @@ public class ModeActionSelector {
                 new RunJacocoCoverageStep(),
                 new RunPitestStep(),
                 new RunCodeChecksStep(),
-                new RunMetaTestsStep(),
+                new RunLibraryMetaTestsStep(),
                 new KillExternalProcessStep()
         );
     }

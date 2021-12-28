@@ -22,7 +22,7 @@ import java.util.List;
 
 import static nl.tudelft.cse1110.andy.utils.FilesUtils.*;
 
-public class RunMetaTestsStep implements ExecutionStep {
+public class RunLibraryMetaTestsStep implements ExecutionStep {
 
     @Override
     public void execute(Context ctx, ResultBuilder result) {
@@ -136,6 +136,6 @@ public class RunMetaTestsStep implements ExecutionStep {
 
     @Override
     public boolean equals(Object other) {
-        return other instanceof RunMetaTestsStep;
+        return other instanceof RunLibraryMetaTestsStep;
     }
 }
