@@ -93,7 +93,7 @@ public class ModeActionSelector {
     }
 
     private List<ExecutionStep> getMetaTestMode() {
-        return justTests();
+        return List.of(new RunJUnitTestsStep());
     }
 
     public static List<ExecutionStep> justTests() {
