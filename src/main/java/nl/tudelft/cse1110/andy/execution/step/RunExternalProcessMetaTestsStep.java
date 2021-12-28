@@ -43,6 +43,16 @@ public class RunExternalProcessMetaTestsStep implements ExecutionStep {
                 RunJUnitTestsStep jUnitStep = new RunJUnitTestsStep();
                 jUnitStep.execute(ctx, metaResultBuilder);
 
+                /* Kill the meta external process */
+                metaTest.killExternalProcess();
+
+                /*
+                 * Status and possible error messages of the meta external process are ignored.
+                 * The external process may crash as part of normal operation as it is supposed to be a
+                 * buggy implementation due to the nature of meta tests.
+                 */
+
+                /* Retrieve meta test result */
                 Result metaResult = metaResultBuilder.build();
 
                 /* Check the result. If there's a failing test, the test suite is good! */
