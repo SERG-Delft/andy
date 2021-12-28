@@ -6,7 +6,7 @@ import nl.tudelft.cse1110.andy.execution.metatest.evaluators.MetaEvaluator;
 import nl.tudelft.cse1110.andy.execution.metatest.evaluators.StringReplacementEvaluator;
 import nl.tudelft.cse1110.andy.execution.metatest.implementations.LibraryMetaTest;
 
-public abstract class MetaTest {
+public abstract class MetaTest implements nl.tudelft.cse1110.andy.config.MetaTest {
 
     private final int weight;
     private final String name;
@@ -16,10 +16,12 @@ public abstract class MetaTest {
         this.name = name;
     }
 
+    @Override
     public String getName() {
         return this.name;
     }
 
+    @Override
     public int getWeight() {
         return weight;
     }
@@ -51,6 +53,7 @@ public abstract class MetaTest {
         return insertAt(1, name, lineToInsertStartingIn1, contentToAdd);
     }
 
+    @Override
     public String getNameAndWeight() {
         return String.format("%s (weight: %d)", name, weight);
     }
