@@ -120,7 +120,8 @@ public class ModeActionSelector {
                 new RunPitestStep(),
                 new RunCodeChecksStep(),
                 new RunLibraryMetaTestsStep(),
-                new KillExternalProcessStep()
+                new KillExternalProcessStep(),
+                new RunExternalProcessMetaTestsStep()
         );
     }
 
