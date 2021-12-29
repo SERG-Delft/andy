@@ -1,14 +1,12 @@
 package integration;
 
-import nl.tudelft.cse1110.andy.result.MetaTestsResult;
 import nl.tudelft.cse1110.andy.result.Result;
-import org.assertj.core.api.Condition;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
-public class LibraryMetaTestsTest extends IntegrationTestBase {
+public class LibraryMetaTestsTest extends BaseMetaTestsTest {
 
     @Test
     void allMetaTestsPassing() {
@@ -76,26 +74,6 @@ public class LibraryMetaTestsTest extends IntegrationTestBase {
                 .has(passedMetaTest("AlwaysReturnsNotFound"))
                 .has(passedMetaTest("AlwaysReturnsStartIndex"))
                 .has(passedMetaTest("DoesNotUseStartIndex"));
-    }
-
-    public static Condition<? super MetaTestsResult> passedMetaTest(String metaTestName) {
-        return new Condition<>() {
-            @Override
-            public boolean matches(MetaTestsResult value) {
-                return value.getMetaTestResults().stream()
-                        .anyMatch(m -> m.getName().equals(metaTestName) && m.succeeded());
-            }
-        };
-    }
-
-    public static Condition<? super MetaTestsResult> failedMetaTest(String metaTestName) {
-        return new Condition<>() {
-            @Override
-            public boolean matches(MetaTestsResult value) {
-                return value.getMetaTestResults().stream()
-                        .anyMatch(m -> m.getName().equals(metaTestName) && !m.succeeded());
-            }
-        };
     }
 
 }
