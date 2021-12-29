@@ -1,4 +1,4 @@
-package unit.config;
+package unit.execution.metatest;
 
 import nl.tudelft.cse1110.andy.config.MetaTest;
 import nl.tudelft.cse1110.andy.execution.metatest.implementations.LibraryMetaTest;
