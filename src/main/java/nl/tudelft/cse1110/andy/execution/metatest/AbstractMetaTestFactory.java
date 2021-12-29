@@ -38,7 +38,7 @@ public class AbstractMetaTestFactory {
     }
 
     public AbstractMetaTest withExternalProcess(int weight, String name, ExternalProcess externalProcess) {
-        return new ExternalProcessMetaTest(1, name, externalProcess);
+        return new ExternalProcessMetaTest(weight, name, externalProcess);
     }
 
     public AbstractMetaTest withExternalProcess(String name, ExternalProcess externalProcess) {
