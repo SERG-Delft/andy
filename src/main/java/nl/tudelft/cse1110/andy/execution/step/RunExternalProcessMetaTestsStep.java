@@ -1,5 +1,6 @@
 package nl.tudelft.cse1110.andy.execution.step;
 
+import nl.tudelft.cse1110.andy.config.DefaultRunConfiguration;
 import nl.tudelft.cse1110.andy.config.MetaTest;
 import nl.tudelft.cse1110.andy.config.RunConfiguration;
 import nl.tudelft.cse1110.andy.execution.Context;
@@ -38,7 +39,9 @@ public class RunExternalProcessMetaTestsStep implements ExecutionStep {
                 metaTest.startExternalProcess();
 
                 /* Run the test suite using our existing JUnit runner */
-                ResultBuilder metaResultBuilder = new ResultBuilder(new Context(Action.META_TEST), new GradeCalculator());
+                Context jUnitContext = new Context(Action.META_TEST);
+                jUnitContext.setRunConfiguration(new DefaultRunConfiguration(ctx.getRunConfiguration().classesUnderTest()));
+                ResultBuilder metaResultBuilder = new ResultBuilder(jUnitContext, new GradeCalculator());
 
                 RunJUnitTestsStep jUnitStep = new RunJUnitTestsStep();
                 jUnitStep.execute(ctx, metaResultBuilder);
