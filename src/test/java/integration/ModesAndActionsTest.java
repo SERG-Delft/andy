@@ -7,7 +7,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import static integration.CodeChecksTest.codeCheck;
-import static integration.MetaTestsTest.failedMetaTest;
+import static integration.LibraryMetaTestsTest.failedMetaTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ModesAndActionsTest extends IntegrationTestBase {

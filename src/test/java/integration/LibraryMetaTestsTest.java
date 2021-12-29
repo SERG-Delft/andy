@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
-public class MetaTestsTest extends IntegrationTestBase {
+public class LibraryMetaTestsTest extends IntegrationTestBase {
 
     @Test
     void allMetaTestsPassing() {
