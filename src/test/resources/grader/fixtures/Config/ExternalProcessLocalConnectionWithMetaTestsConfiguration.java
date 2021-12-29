@@ -38,19 +38,19 @@ public class Configuration extends RunConfiguration {
     public List<MetaTest> metaTests() {
         String tmp = System.getProperty("java.io.tmpdir");
         return List.of(
-                MetaTest.withExternalProcess(2, "example of a failing meta test",
+                MetaTest.withExternalProcess(2, "example of a passing meta test",
                         new CommandExternalProcess(
-                                "sh " + tmp + "/andy_test_external_process_local_connection_meta_test_fail_1.sh",
+                                "sh " + tmp + "/andy_test_external_process_local_connection_meta_test_pass_1.sh",
                                 "initSignal")
                 ),
-                MetaTest.withExternalProcess(2, "example of a passing meta test",
+                MetaTest.withExternalProcess(2, "example of a failing meta test",
                         new CommandExternalProcess(
                                 "sh " + tmp + "/andy_test_external_process_local_connection.sh",
                                 "initSignal")
                 ),
-                MetaTest.withExternalProcess("example of another failing meta test",
+                MetaTest.withExternalProcess("example of another passing meta test",
                         new CommandExternalProcess(
-                                "sh " + tmp + "/andy_test_external_process_local_connection_meta_test_fail_2.sh",
+                                "sh " + tmp + "/andy_test_external_process_local_connection_meta_test_pass_2.sh",
                                 "initSignal")
                 )
         );

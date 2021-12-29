@@ -18,10 +18,10 @@ import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 public class ExternalProcessMetaTestsTest extends BaseMetaTestsTest {
 
     private static final String EXTERNAL_PROCESS_LOCAL_CONNECTION = "/andy_test_external_process_local_connection.sh";
-    private static final String EXTERNAL_PROCESS_LOCAL_CONNECTION_META_TEST_FAIL_1 =
-            "/andy_test_external_process_local_connection_meta_test_fail_1.sh";
-    private static final String EXTERNAL_PROCESS_LOCAL_CONNECTION_META_TEST_FAIL_2 =
-            "/andy_test_external_process_local_connection_meta_test_fail_2.sh";
+    private static final String EXTERNAL_PROCESS_LOCAL_CONNECTION_META_TEST_PASS_1 =
+            "/andy_test_external_process_local_connection_meta_test_pass_1.sh";
+    private static final String EXTERNAL_PROCESS_LOCAL_CONNECTION_META_TEST_PASS_2 =
+            "/andy_test_external_process_local_connection_meta_test_pass_2.sh";
 
     @BeforeAll
     static void copyShellScripts() throws IOException {
@@ -32,12 +32,12 @@ public class ExternalProcessMetaTestsTest extends BaseMetaTestsTest {
                 while true; do echo "HTTP/1.1 200 OK\\nContent-Length: 5\\n\\nhello" | nc -l 8086; done
                 """);
 
-        Files.writeString(Path.of(tmp + EXTERNAL_PROCESS_LOCAL_CONNECTION_META_TEST_FAIL_1), """
+        Files.writeString(Path.of(tmp + EXTERNAL_PROCESS_LOCAL_CONNECTION_META_TEST_PASS_1), """
                 echo "initSignal"
                 while true; do echo "HTTP/1.1 200 OK\\nContent-Length: 3\\n\\nbye" | nc -l 8086; done
                 """);
 
-        Files.writeString(Path.of(tmp + EXTERNAL_PROCESS_LOCAL_CONNECTION_META_TEST_FAIL_2), """
+        Files.writeString(Path.of(tmp + EXTERNAL_PROCESS_LOCAL_CONNECTION_META_TEST_PASS_2), """
                 echo "initSignal"
                 while true; do echo "HTTP/1.1 200 OK\\nContent-Length: 15\\n\\nauf wiedersehen" | nc -l 8086; done
                 """);
@@ -51,8 +51,8 @@ public class ExternalProcessMetaTestsTest extends BaseMetaTestsTest {
     static void shellCleanup() throws IOException {
         String tmp = getTempDirectory();
         Files.deleteIfExists(Path.of(tmp + EXTERNAL_PROCESS_LOCAL_CONNECTION));
-        Files.deleteIfExists(Path.of(tmp + EXTERNAL_PROCESS_LOCAL_CONNECTION_META_TEST_FAIL_1));
-        Files.deleteIfExists(Path.of(tmp + EXTERNAL_PROCESS_LOCAL_CONNECTION_META_TEST_FAIL_2));
+        Files.deleteIfExists(Path.of(tmp + EXTERNAL_PROCESS_LOCAL_CONNECTION_META_TEST_PASS_1));
+        Files.deleteIfExists(Path.of(tmp + EXTERNAL_PROCESS_LOCAL_CONNECTION_META_TEST_PASS_2));
     }
 
     @Test
@@ -64,13 +64,13 @@ public class ExternalProcessMetaTestsTest extends BaseMetaTestsTest {
             assertThat(result.hasFailed()).isFalse();
             assertThat(result.hasGenericFailure()).isFalse();
 
-            assertThat(result.getMetaTests().getPassedMetaTests()).isEqualTo(2);
+            assertThat(result.getMetaTests().getPassedMetaTests()).isEqualTo(3);
             assertThat(result.getMetaTests().getTotalTests()).isEqualTo(5);
 
             assertThat(result.getMetaTests())
-                    .has(failedMetaTest("example of a failing meta test"))
-                    .has(failedMetaTest("example of another failing meta test"))
-                    .has(passedMetaTest("example of a passing meta test"));
+                    .has(passedMetaTest("example of a passing meta test"))
+                    .has(passedMetaTest("example of another passing meta test"))
+                    .has(failedMetaTest("example of a failing meta test"));
         });
     }
 }
