@@ -55,7 +55,9 @@ public class SourceCodeSecurityCheckStep implements ExecutionStep {
 
     private boolean checkForKeywords(String code, ResultBuilder result) {
         String reflectionMsg = "Using reflection in your code is not allowed";
-        var keywords = Map.of(
+        String seleniumUnsupportedDriverMsg = "Please use HtmlUnitDriver as WebLab does not have a browser installed";
+        // An immutable map only supports 10 hardcoded KVs, we need more, hence HashMap wrapper.
+        var keywords = new java.util.HashMap<>(Map.of(
                 "Configuration", "Accessing the task configuration in your code is not allowed",
                 "forName", reflectionMsg,
                 "getDeclaredConstructor", reflectionMsg,
@@ -64,7 +66,14 @@ public class SourceCodeSecurityCheckStep implements ExecutionStep {
                 "getModifiers", reflectionMsg,
                 "reflect", reflectionMsg,
                 "setAccessible", reflectionMsg
-        );
+        ));
+        keywords.put("ChromeDriver", seleniumUnsupportedDriverMsg);
+        keywords.put("ChromiumDriver", seleniumUnsupportedDriverMsg);
+        keywords.put("EdgeDriver", seleniumUnsupportedDriverMsg);
+        keywords.put("FirefoxDriver", seleniumUnsupportedDriverMsg);
+        keywords.put("InternetExplorerDriver", seleniumUnsupportedDriverMsg);
+        keywords.put("OperaDriver", seleniumUnsupportedDriverMsg);
+        keywords.put("SafariDriver", seleniumUnsupportedDriverMsg);
         for (String keyword : keywords.keySet()) {
             if (code.contains(keyword)) {
                 result.compilationSecurityFail(keywords.get(keyword));
