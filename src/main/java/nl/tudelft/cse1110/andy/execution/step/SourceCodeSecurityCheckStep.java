@@ -55,15 +55,15 @@ public class SourceCodeSecurityCheckStep implements ExecutionStep {
 
     private boolean checkForKeywords(String code, ResultBuilder result) {
         String reflectionMsg = "Using reflection in your code is not allowed";
-        var keywords = Map.of(
-                "Configuration", "Accessing the task configuration in your code is not allowed",
-                "forName", reflectionMsg,
-                "getDeclaredConstructor", reflectionMsg,
-                "getDeclaredMethods", reflectionMsg,
-                "getField", reflectionMsg,
-                "getModifiers", reflectionMsg,
-                "reflect", reflectionMsg,
-                "setAccessible", reflectionMsg
+        var keywords = Map.ofEntries(
+                Map.entry("Configuration", "Accessing the task configuration in your code is not allowed"),
+                Map.entry("forName", reflectionMsg),
+                Map.entry("getDeclaredConstructor", reflectionMsg),
+                Map.entry("getDeclaredMethods", reflectionMsg),
+                Map.entry("getField", reflectionMsg),
+                Map.entry("getModifiers", reflectionMsg),
+                Map.entry("reflect", reflectionMsg),
+                Map.entry("setAccessible", reflectionMsg)
         );
         for (String keyword : keywords.keySet()) {
             if (code.contains(keyword)) {
