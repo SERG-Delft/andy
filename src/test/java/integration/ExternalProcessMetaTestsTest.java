@@ -28,19 +28,19 @@ public class ExternalProcessMetaTestsTest extends BaseMetaTestsTest {
         String tmp = getTempDirectory();
 
         Files.writeString(Path.of(tmp + EXTERNAL_PROCESS_LOCAL_CONNECTION), """
-                echo "hello" > %s/andy_test_external_process_output.txt
                 echo "initSignal"
-                """.formatted(tmp));
+                while true; do echo "HTTP/1.1 200 OK\\nContent-Length: 5\\n\\nhello" | nc -l 8086; done
+                """);
 
         Files.writeString(Path.of(tmp + EXTERNAL_PROCESS_LOCAL_CONNECTION_META_TEST_PASS_1), """
-                echo "bye" > %s/andy_test_external_process_output.txt
                 echo "initSignal"
-                """.formatted(tmp));
+                while true; do echo "HTTP/1.1 200 OK\\nContent-Length: 3\\n\\nbye" | nc -l 8086; done
+                """);
 
         Files.writeString(Path.of(tmp + EXTERNAL_PROCESS_LOCAL_CONNECTION_META_TEST_PASS_2), """
-                echo "auf wiedersehen" > %s/andy_test_external_process_output.txt
                 echo "initSignal"
-                """.formatted(tmp));
+                while true; do echo "HTTP/1.1 200 OK\\nContent-Length: 15\\n\\nauf wiedersehen" | nc -l 8086; done
+                """);
     }
 
     private static String getTempDirectory() {
