@@ -11,6 +11,7 @@ public class CommandExternalProcess implements ExternalProcess {
     private final String command;
     private final String initSignal;
     private final CountDownLatch initSignalLatch;
+    private final CountDownLatch exitLatch;
     private String errorMessages;
 
     private Process process;
@@ -19,6 +20,7 @@ public class CommandExternalProcess implements ExternalProcess {
         this.command = command;
         this.initSignal = initSignal;
         this.initSignalLatch = new CountDownLatch(1);
+        this.exitLatch = new CountDownLatch(1);
     }
 
     @Override
@@ -26,7 +28,10 @@ public class CommandExternalProcess implements ExternalProcess {
         Thread thread = new Thread(new OutputHandler());
         process = Runtime.getRuntime().exec(command);
 
-        process.onExit().thenAccept(p -> initSignalLatch.countDown());
+        process.onExit().thenAccept(p -> {
+            initSignalLatch.countDown();
+            exitLatch.countDown();
+        });
 
         thread.start();
     }
@@ -54,6 +59,13 @@ public class CommandExternalProcess implements ExternalProcess {
         }
 
         process.destroy();
+
+        // Block thread until process has exited
+        try {
+            this.exitLatch.await();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     @Override
