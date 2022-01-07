@@ -320,4 +320,8 @@ public class ResultBuilder {
 
         return compilationFailed || unitTestsFailed || hasGenericFailure;
     }
+
+    public UnitTestsResult getTestResults() {
+        return testResults;
+    }
 }
