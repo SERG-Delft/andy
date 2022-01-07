@@ -41,7 +41,7 @@ public class RunExternalProcessMetaTestsStep implements ExecutionStep {
                 /* Run the test suite using our existing JUnit runner */
                 Context jUnitContext = new Context(Action.META_TEST);
                 jUnitContext.setRunConfiguration(new DefaultRunConfiguration(ctx.getRunConfiguration().classesUnderTest()));
-                ResultBuilder metaResultBuilder = new ResultBuilder(jUnitContext, new GradeCalculator());
+                ResultBuilder metaResultBuilder = new ResultBuilder(null, null);
 
                 RunJUnitTestsStep jUnitStep = new RunJUnitTestsStep();
                 jUnitStep.execute(ctx, metaResultBuilder);
@@ -55,12 +55,9 @@ public class RunExternalProcessMetaTestsStep implements ExecutionStep {
                  * buggy implementation due to the nature of meta tests.
                  */
 
-                /* Retrieve meta test result */
-                Result metaResult = metaResultBuilder.build();
-
                 /* Check the result. If there's a failing test, the test suite is good! */
-                int testsRan = metaResult.getTests().getTestsRan();
-                int testsSucceeded = metaResult.getTests().getTestsSucceeded();
+                int testsRan = metaResultBuilder.getTestResults().getTestsRan();
+                int testsSucceeded = metaResultBuilder.getTestResults().getTestsSucceeded();
                 boolean passesTheMetaTest = testsSucceeded < testsRan;
 
                 if (passesTheMetaTest) {
