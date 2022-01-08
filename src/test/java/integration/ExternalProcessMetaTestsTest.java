@@ -45,7 +45,7 @@ public class ExternalProcessMetaTestsTest extends BaseMetaTestsTest {
     }
 
     @AfterAll
-    static void cleanup() throws IOException {
+    static void cleanupFiles() throws IOException {
         final String tmp = getTempDirectory();
         deleteDirectoryAndHtmlFile(tmp, EXTERNAL_PROCESS_LOCAL_CONNECTION);
         deleteDirectoryAndHtmlFile(tmp, EXTERNAL_PROCESS_LOCAL_CONNECTION_META_TEST_PASS_1);
