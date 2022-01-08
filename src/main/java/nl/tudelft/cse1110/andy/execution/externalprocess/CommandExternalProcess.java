@@ -19,13 +19,12 @@ public class CommandExternalProcess implements ExternalProcess {
     public CommandExternalProcess(String command, String initSignal) {
         this.command = command;
         this.initSignal = initSignal;
-        this.initSignalLatch = new CountDownLatch(1);
+        this.initSignalLatch = new CountDownLatch(initSignal != null ? 1 : 0);
         this.exitLatch = new CountDownLatch(1);
     }
 
     @Override
     public void launch() throws IOException {
-        Thread thread = new Thread(new OutputHandler());
         process = Runtime.getRuntime().exec(command);
 
         process.onExit().thenAccept(p -> {
@@ -33,7 +32,10 @@ public class CommandExternalProcess implements ExternalProcess {
             exitLatch.countDown();
         });
 
-        thread.start();
+        if (initSignal != null) {
+            Thread thread = new Thread(new OutputHandler());
+            thread.start();
+        }
     }
 
     @Override
