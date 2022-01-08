@@ -27,7 +27,7 @@ public class ExternalProcessMetaTestsTest extends BaseMetaTestsTest {
     private static final String INDEX_FILE_NAME = "/index.html";
 
     @BeforeAll
-    static void copyShellScripts() throws IOException {
+    static void copyFiles() throws IOException {
         final String tmp = getTempDirectory();
 
         createDirectoryAndHtmlFile(tmp, EXTERNAL_PROCESS_LOCAL_CONNECTION, "hello");
@@ -45,7 +45,7 @@ public class ExternalProcessMetaTestsTest extends BaseMetaTestsTest {
     }
 
     @AfterAll
-    static void shellCleanup() throws IOException {
+    static void cleanup() throws IOException {
         final String tmp = getTempDirectory();
         deleteDirectoryAndHtmlFile(tmp, EXTERNAL_PROCESS_LOCAL_CONNECTION);
         deleteDirectoryAndHtmlFile(tmp, EXTERNAL_PROCESS_LOCAL_CONNECTION_META_TEST_PASS_1);
