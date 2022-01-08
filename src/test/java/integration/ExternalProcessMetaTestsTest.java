@@ -17,30 +17,27 @@ import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 
 public class ExternalProcessMetaTestsTest extends BaseMetaTestsTest {
 
-    private static final String EXTERNAL_PROCESS_LOCAL_CONNECTION = "/andy_test_external_process_local_connection.sh";
+    private static final String EXTERNAL_PROCESS_LOCAL_CONNECTION =
+            "/andy_test_external_process_local_connection";
     private static final String EXTERNAL_PROCESS_LOCAL_CONNECTION_META_TEST_PASS_1 =
-            "/andy_test_external_process_local_connection_meta_test_pass_1.sh";
+            "/andy_test_external_process_local_connection_meta_test_pass_1";
     private static final String EXTERNAL_PROCESS_LOCAL_CONNECTION_META_TEST_PASS_2 =
-            "/andy_test_external_process_local_connection_meta_test_pass_2.sh";
+            "/andy_test_external_process_local_connection_meta_test_pass_2";
+
+    private static final String INDEX_FILE_NAME = "/index.html";
 
     @BeforeAll
     static void copyShellScripts() throws IOException {
-        String tmp = getTempDirectory();
+        final String tmp = getTempDirectory();
 
-        Files.writeString(Path.of(tmp + EXTERNAL_PROCESS_LOCAL_CONNECTION), """
-                echo "initSignal"
-                while true; do echo "HTTP/1.1 200 OK\\nContent-Length: 5\\n\\nhello" | nc -l 8086; done
-                """);
+        createDirectoryAndHtmlFile(tmp, EXTERNAL_PROCESS_LOCAL_CONNECTION, "hello");
+        createDirectoryAndHtmlFile(tmp, EXTERNAL_PROCESS_LOCAL_CONNECTION_META_TEST_PASS_1, "bye");
+        createDirectoryAndHtmlFile(tmp, EXTERNAL_PROCESS_LOCAL_CONNECTION_META_TEST_PASS_2, "auf wiedersehen");
+    }
 
-        Files.writeString(Path.of(tmp + EXTERNAL_PROCESS_LOCAL_CONNECTION_META_TEST_PASS_1), """
-                echo "initSignal"
-                while true; do echo "HTTP/1.1 200 OK\\nContent-Length: 3\\n\\nbye" | nc -l 8086; done
-                """);
-
-        Files.writeString(Path.of(tmp + EXTERNAL_PROCESS_LOCAL_CONNECTION_META_TEST_PASS_2), """
-                echo "initSignal"
-                while true; do echo "HTTP/1.1 200 OK\\nContent-Length: 15\\n\\nauf wiedersehen" | nc -l 8086; done
-                """);
+    private static void createDirectoryAndHtmlFile(String tmp, String directory, String content) throws IOException {
+        Files.createDirectories(Path.of(tmp + directory));
+        Files.writeString(Path.of(tmp + directory + INDEX_FILE_NAME), content);
     }
 
     private static String getTempDirectory() {
@@ -49,10 +46,15 @@ public class ExternalProcessMetaTestsTest extends BaseMetaTestsTest {
 
     @AfterAll
     static void shellCleanup() throws IOException {
-        String tmp = getTempDirectory();
-        Files.deleteIfExists(Path.of(tmp + EXTERNAL_PROCESS_LOCAL_CONNECTION));
-        Files.deleteIfExists(Path.of(tmp + EXTERNAL_PROCESS_LOCAL_CONNECTION_META_TEST_PASS_1));
-        Files.deleteIfExists(Path.of(tmp + EXTERNAL_PROCESS_LOCAL_CONNECTION_META_TEST_PASS_2));
+        final String tmp = getTempDirectory();
+        deleteDirectoryAndHtmlFile(tmp, EXTERNAL_PROCESS_LOCAL_CONNECTION);
+        deleteDirectoryAndHtmlFile(tmp, EXTERNAL_PROCESS_LOCAL_CONNECTION_META_TEST_PASS_1);
+        deleteDirectoryAndHtmlFile(tmp, EXTERNAL_PROCESS_LOCAL_CONNECTION_META_TEST_PASS_2);
+    }
+
+    private static void deleteDirectoryAndHtmlFile(String tmp, String directory) throws IOException {
+        Files.deleteIfExists(Path.of(tmp + directory + INDEX_FILE_NAME));
+        Files.deleteIfExists(Path.of(tmp + directory));
     }
 
     @Test
