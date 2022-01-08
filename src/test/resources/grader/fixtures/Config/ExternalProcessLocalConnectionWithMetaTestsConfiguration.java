@@ -30,8 +30,8 @@ public class Configuration extends RunConfiguration {
     public ExternalProcess externalProcess() {
         String tmp = System.getProperty("java.io.tmpdir");
         return new CommandExternalProcess(
-                "sh " + tmp + "/andy_test_external_process_local_connection.sh",
-                "initSignal");
+                "python3 -m http.server 8086 -d " + tmp + "/andy_test_external_process_local_connection",
+                null);
     }
 
     @Override
@@ -40,18 +40,18 @@ public class Configuration extends RunConfiguration {
         return List.of(
                 MetaTest.withExternalProcess(2, "example of a passing meta test",
                         new CommandExternalProcess(
-                                "sh " + tmp + "/andy_test_external_process_local_connection_meta_test_pass_1.sh",
-                                "initSignal")
+                                "python3 -m http.server 8086 -d " + tmp + "/andy_test_external_process_local_connection_meta_test_pass_1",
+                                null)
                 ),
                 MetaTest.withExternalProcess(2, "example of a failing meta test",
                         new CommandExternalProcess(
-                                "sh " + tmp + "/andy_test_external_process_local_connection.sh",
-                                "initSignal")
+                                "python3 -m http.server 8086 -d " + tmp + "/andy_test_external_process_local_connection",
+                                null)
                 ),
                 MetaTest.withExternalProcess("example of another passing meta test",
                         new CommandExternalProcess(
-                                "sh " + tmp + "/andy_test_external_process_local_connection_meta_test_pass_2.sh",
-                                "initSignal")
+                                "python3 -m http.server 8086 -d " + tmp + "/andy_test_external_process_local_connection_meta_test_pass_2",
+                                null)
                 )
         );
     }
