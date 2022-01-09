@@ -27,10 +27,10 @@ public class MetaTestsResult {
 
     public MetaTestsResult addResults(int score, int totalTests, List<MetaTestResult> metaTestResults) {
         if (metaTestResults.size() > totalTests)
-            throw new RuntimeException("Number of meta tests does not match.");
+            throw new RuntimeException("Precondition failed: Number of meta tests does not match.");
 
         if (score > totalTests)
-            throw new RuntimeException("Meta test score greater than maximum.");
+            throw new RuntimeException("Precondition failed: Meta test score greater than maximum.");
 
         this.score += score;
         this.totalTests += totalTests;
