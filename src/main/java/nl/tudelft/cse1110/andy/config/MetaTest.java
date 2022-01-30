@@ -1,5 +1,6 @@
 package nl.tudelft.cse1110.andy.config;
 
+import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
 import nl.tudelft.cse1110.andy.execution.metatest.AbstractMetaTestFactory;
 
@@ -9,6 +10,8 @@ public interface MetaTest {
     int getWeight();
 
     String getNameAndWeight();
+
+    boolean execute(Context ctx, DirectoryConfiguration dirCfg, RunConfiguration runCfg) throws Exception;
 
     static MetaTest withStringReplacement(int weight, String name, String old, String replacement) {
         return new AbstractMetaTestFactory().withStringReplacement(weight, name, old, replacement);
