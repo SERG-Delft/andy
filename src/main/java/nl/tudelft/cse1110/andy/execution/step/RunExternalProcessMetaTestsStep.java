@@ -33,30 +33,7 @@ public class RunExternalProcessMetaTestsStep implements ExecutionStep {
 
                 ExternalProcessMetaTest metaTest = (ExternalProcessMetaTest) abstractMetaTest;
 
-                /* Start the meta external process */
-                metaTest.startExternalProcess();
-
-                /* Run the test suite using our existing JUnit runner */
-                Context jUnitContext = new Context(Action.META_TEST);
-                jUnitContext.setRunConfiguration(new DefaultRunConfiguration(ctx.getRunConfiguration().classesUnderTest()));
-                ResultBuilder metaResultBuilder = new ResultBuilder(null, null);
-
-                RunJUnitTestsStep jUnitStep = new RunJUnitTestsStep();
-                jUnitStep.execute(ctx, metaResultBuilder);
-
-                /* Kill the meta external process */
-                metaTest.killExternalProcess();
-
-                /*
-                 * Status and possible error messages of the meta external process are ignored.
-                 * The external process may crash as part of normal operation as it is supposed to be a
-                 * buggy implementation due to the nature of meta tests.
-                 */
-
-                /* Check the result. If there's a failing test, the test suite is good! */
-                int testsRan = metaResultBuilder.getTestResults().getTestsRan();
-                int testsSucceeded = metaResultBuilder.getTestResults().getTestsSucceeded();
-                boolean passesTheMetaTest = testsSucceeded < testsRan;
+                boolean passesTheMetaTest = metaTest.execute(ctx, null, runCfg);
 
                 if (passesTheMetaTest) {
                     score += metaTest.getWeight();
