@@ -1,7 +1,7 @@
 package unit.execution.metatest;
 
 import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
-import nl.tudelft.cse1110.andy.execution.metatest.implementations.ExternalProcessMetaTest;
+import nl.tudelft.cse1110.andy.execution.metatest.externalprocess.ExternalProcessMetaTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,12 +1,12 @@
 package nl.tudelft.cse1110.andy.execution.metatest;
 
 import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
-import nl.tudelft.cse1110.andy.execution.metatest.evaluators.InsertAtEvaluator;
-import nl.tudelft.cse1110.andy.execution.metatest.evaluators.LineReplacementEvaluator;
-import nl.tudelft.cse1110.andy.execution.metatest.evaluators.MetaEvaluator;
-import nl.tudelft.cse1110.andy.execution.metatest.evaluators.StringReplacementEvaluator;
-import nl.tudelft.cse1110.andy.execution.metatest.implementations.ExternalProcessMetaTest;
-import nl.tudelft.cse1110.andy.execution.metatest.implementations.LibraryMetaTest;
+import nl.tudelft.cse1110.andy.execution.metatest.library.evaluators.InsertAtEvaluator;
+import nl.tudelft.cse1110.andy.execution.metatest.library.evaluators.LineReplacementEvaluator;
+import nl.tudelft.cse1110.andy.execution.metatest.library.evaluators.MetaEvaluator;
+import nl.tudelft.cse1110.andy.execution.metatest.library.evaluators.StringReplacementEvaluator;
+import nl.tudelft.cse1110.andy.execution.metatest.externalprocess.ExternalProcessMetaTest;
+import nl.tudelft.cse1110.andy.execution.metatest.library.LibraryMetaTest;
 
 public class AbstractMetaTestFactory {
 

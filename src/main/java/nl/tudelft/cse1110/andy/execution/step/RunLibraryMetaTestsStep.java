@@ -3,7 +3,7 @@ package nl.tudelft.cse1110.andy.execution.step;
 import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.config.MetaTest;
 import nl.tudelft.cse1110.andy.config.RunConfiguration;
-import nl.tudelft.cse1110.andy.execution.metatest.implementations.LibraryMetaTest;
+import nl.tudelft.cse1110.andy.execution.metatest.library.LibraryMetaTest;
 import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;

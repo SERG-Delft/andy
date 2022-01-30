@@ -1,4 +1,4 @@
-package nl.tudelft.cse1110.andy.execution.metatest.implementations;
+package nl.tudelft.cse1110.andy.execution.metatest.externalprocess;
 
 import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
 import nl.tudelft.cse1110.andy.execution.metatest.AbstractMetaTest;

@@ -5,11 +5,9 @@ import nl.tudelft.cse1110.andy.config.MetaTest;
 import nl.tudelft.cse1110.andy.config.RunConfiguration;
 import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
-import nl.tudelft.cse1110.andy.execution.metatest.implementations.ExternalProcessMetaTest;
+import nl.tudelft.cse1110.andy.execution.metatest.externalprocess.ExternalProcessMetaTest;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
-import nl.tudelft.cse1110.andy.grade.GradeCalculator;
 import nl.tudelft.cse1110.andy.result.MetaTestResult;
-import nl.tudelft.cse1110.andy.result.Result;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
 
 import java.util.ArrayList;
