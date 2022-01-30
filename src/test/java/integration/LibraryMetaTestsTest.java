@@ -1,5 +1,6 @@
 package integration;
 
+import nl.tudelft.cse1110.andy.execution.step.RunMetaTestsStep;
 import nl.tudelft.cse1110.andy.result.Result;
 import org.junit.jupiter.api.Test;
 
@@ -74,6 +75,17 @@ public class LibraryMetaTestsTest extends BaseMetaTestsTest {
                 .has(passedMetaTest("AlwaysReturnsNotFound"))
                 .has(passedMetaTest("AlwaysReturnsStartIndex"))
                 .has(passedMetaTest("DoesNotUseStartIndex"));
+    }
+
+    @Test
+    void metaTestInternalFailure() {
+        Result result = run("NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddConfigurationWithMetaTestInternalFailure");
+
+        assertThat(result.hasGenericFailure()).isTrue();
+        assertThat(result.getGenericFailure().getStepName())
+                .isPresent()
+                .get()
+                .isEqualTo(RunMetaTestsStep.class.getSimpleName());
     }
 
 }
