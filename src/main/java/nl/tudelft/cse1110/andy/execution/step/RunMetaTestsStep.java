@@ -5,14 +5,13 @@ import nl.tudelft.cse1110.andy.config.MetaTest;
 import nl.tudelft.cse1110.andy.config.RunConfiguration;
 import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
-import nl.tudelft.cse1110.andy.execution.metatest.library.LibraryMetaTest;
 import nl.tudelft.cse1110.andy.result.MetaTestResult;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RunLibraryMetaTestsStep implements ExecutionStep {
+public class RunMetaTestsStep implements ExecutionStep {
 
     @Override
     public void execute(Context ctx, ResultBuilder result) {
@@ -29,17 +28,12 @@ public class RunLibraryMetaTestsStep implements ExecutionStep {
             List<MetaTest> metaTests = runCfg.metaTests();
             List<MetaTestResult> metaTestResults = new ArrayList<>();
 
-            for (MetaTest abstractMetaTest : metaTests) {
-                if (!(abstractMetaTest instanceof LibraryMetaTest)) {
-                    continue;
-                }
-
-                LibraryMetaTest metaTest = (LibraryMetaTest) abstractMetaTest;
+            for (MetaTest metaTest : metaTests) {
 
                 boolean passesTheMetaTest = metaTest.execute(ctx, dirCfg, runCfg);
 
                 if (passesTheMetaTest) {
-                    score+= metaTest.getWeight();
+                    score += metaTest.getWeight();
                 }
 
                 metaTestResults.add(new MetaTestResult(metaTest.getName(), metaTest.getWeight(), passesTheMetaTest));
@@ -58,6 +52,6 @@ public class RunLibraryMetaTestsStep implements ExecutionStep {
 
     @Override
     public boolean equals(Object other) {
-        return other instanceof RunLibraryMetaTestsStep;
+        return other instanceof RunMetaTestsStep;
     }
 }
