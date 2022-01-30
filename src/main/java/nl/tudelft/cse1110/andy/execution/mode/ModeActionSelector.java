@@ -25,7 +25,7 @@ public class ModeActionSelector {
 
     public Action getAction() {
         if (this.action == META_TEST) {
-            throw new IllegalStateException("The META_TEST action should only be used in unit tests");
+            throw new IllegalStateException("The META_TEST action should only be used when running meta tests");
         }
 
         return action;
@@ -92,8 +92,11 @@ public class ModeActionSelector {
         return fullMode();
     }
 
+    /*
+     * This mode is used when running the pipeline as part of the execution of a meta test
+     */
     private List<ExecutionStep> getMetaTestMode() {
-        return justTests();
+        return List.of(new RunJUnitTestsStep());
     }
 
     public static List<ExecutionStep> justTests() {
@@ -116,6 +119,7 @@ public class ModeActionSelector {
                 new RunJacocoCoverageStep(),
                 new RunPitestStep(),
                 new RunCodeChecksStep(),
+                new KillExternalProcessStep(),
                 new RunMetaTestsStep()
         );
     }

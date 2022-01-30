@@ -59,7 +59,6 @@ public class ExternalProcessTest extends IntegrationTestBase {
                 """);
 
         Files.writeString(Path.of(tmp + EXTERNAL_PROCESS_LOCAL_CONNECTION), """
-                echo "initSignal"
                 while true; do echo "HTTP/1.1 200 OK\\nContent-Length: 5\\n\\nhello" | nc -l 8086; done
                 """);
     }
@@ -135,7 +134,7 @@ public class ExternalProcessTest extends IntegrationTestBase {
     }
 
     @Test
-    void localConnectionTest() {
+    void localConnectionWithoutInitSignalTest() {
         assertTimeoutPreemptively(ofSeconds(10), () -> {
             Result result = run(Action.TESTS, "EmptyLibrary", "ExternalProcessLocalConnectionSolution",
                     "ExternalProcessLocalConnectionConfiguration");

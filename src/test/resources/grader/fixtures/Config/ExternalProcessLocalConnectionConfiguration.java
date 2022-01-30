@@ -30,6 +30,6 @@ public class Configuration extends RunConfiguration {
         String tmp = System.getProperty("java.io.tmpdir");
         return new CommandExternalProcess(
                 "sh " + tmp + "/andy_test_external_process_local_connection.sh",
-                "initSignal");
+                null);
     }
 }

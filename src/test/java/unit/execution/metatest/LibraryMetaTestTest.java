@@ -1,6 +1,7 @@
-package unit.config;
+package unit.execution.metatest;
 
 import nl.tudelft.cse1110.andy.config.MetaTest;
+import nl.tudelft.cse1110.andy.execution.metatest.library.LibraryMetaTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -11,12 +12,12 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class MetaTestTest {
+public class LibraryMetaTestTest {
 
     @ParameterizedTest
     @MethodSource("insertInLineGenerator")
     void insertInLine(String oldCode, int lineToInsert, String contentToAdd, String expectedResult) {
-        MetaTest metaTest = MetaTest.insertAt("some meta test", lineToInsert, contentToAdd);
+        LibraryMetaTest metaTest = (LibraryMetaTest) MetaTest.insertAt("some meta test", lineToInsert, contentToAdd);
 
         String result = metaTest.evaluate(oldCode);
 
@@ -68,7 +69,7 @@ public class MetaTestTest {
     @ParameterizedTest
     @MethodSource("withLineReplacementGenerator")
     void withLineReplacement(String oldCode, int start, int end, String replacement, String expectedResult) {
-        MetaTest metaTest = MetaTest.withLineReplacement("some meta test", start,end, replacement);
+        LibraryMetaTest metaTest = (LibraryMetaTest) MetaTest.withLineReplacement("some meta test", start,end, replacement);
 
         String result = metaTest.evaluate(oldCode);
 
@@ -114,7 +115,7 @@ public class MetaTestTest {
     @ParameterizedTest
     @MethodSource("withStringReplacementGenerator")
     void withStringReplacement(String oldCode, String old, String replacement, String expectedResult) {
-        MetaTest metaTest = MetaTest.withStringReplacement("some meta test", old, replacement);
+        LibraryMetaTest metaTest = (LibraryMetaTest) MetaTest.withStringReplacement("some meta test", old, replacement);
 
         String result = metaTest.evaluate(oldCode);
 
@@ -149,7 +150,7 @@ public class MetaTestTest {
 
     @Test
     void withStringReplacementNotFound() {
-        MetaTest metaTest = MetaTest.withStringReplacement("some meta test",
+        LibraryMetaTest metaTest = (LibraryMetaTest) MetaTest.withStringReplacement("some meta test",
                 "line 5\nline 6",
                 "extra line 1\nextra line 2");
 

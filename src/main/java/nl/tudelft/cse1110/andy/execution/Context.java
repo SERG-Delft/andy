@@ -84,6 +84,9 @@ public class Context {
     }
 
     public void killExternalProcess() {
+        // Retrieve error messages before killing process
+        externalProcess.extractErrorMessages();
+
         externalProcess.kill();
     }
 
