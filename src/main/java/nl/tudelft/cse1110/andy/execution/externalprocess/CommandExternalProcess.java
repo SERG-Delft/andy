@@ -88,7 +88,7 @@ public class CommandExternalProcess implements ExternalProcess {
     }
 
     @Override
-    public String getErrorMessages() {
+    public void extractErrorMessages() {
         if (errorMessages == null) {
             // stderr messages can only be retrieved from the process once
 
@@ -100,13 +100,16 @@ public class CommandExternalProcess implements ExternalProcess {
                     sb.append(next);
                 }
                 errorMessages = sb.toString();
-
-                return sb.toString();
             } catch (IOException ex) {
                 ex.printStackTrace();
-                return ex.getMessage();
+                errorMessages = ex.getMessage();
             }
         }
+    }
+
+    @Override
+    public String getErrorMessages() {
+        this.extractErrorMessages();
 
         return errorMessages;
     }
