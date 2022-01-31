@@ -16,7 +16,7 @@ public class StringReplacementEvaluator implements MetaEvaluator {
         String shiftedOldLibraryCode = oldLibraryCode.replaceAll("(?m)^\\s+", "");
         String replaced = shiftedOldLibraryCode.replace(shiftedOld, this.replacement);
 
-        if (replaced.equals(oldLibraryCode)) {
+        if (replaced.equals(shiftedOldLibraryCode)) {
             throw new RuntimeException("Meta test failed to find this text replacement:\n" + this.old);
         }
 
