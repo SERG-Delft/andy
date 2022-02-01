@@ -22,6 +22,7 @@ public class Context {
     private ExternalProcess externalProcess;
     private List<String> librariesToBeIncluded;
     private SubmissionMetaData submissionMetaData;
+    private boolean securityEnabled = true;
 
     public Context(Action action) {
         this.cleanClassloader = Thread.currentThread().getContextClassLoader();
@@ -108,5 +109,13 @@ public class Context {
 
     public void setSubmissionMetaData(SubmissionMetaData submissionMetaData) {
         this.submissionMetaData = submissionMetaData;
+    }
+
+    public boolean isSecurityEnabled() {
+        return securityEnabled;
+    }
+
+    public void disableSecurity() {
+        this.securityEnabled = false;
     }
 }
