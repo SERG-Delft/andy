@@ -11,6 +11,7 @@ public class CommandExternalProcess implements ExternalProcess {
     private final String command;
     private final String initSignal;
     private final CountDownLatch initSignalLatch;
+    private final CountDownLatch exitLatch;
     private String errorMessages;
 
     private Process process;
@@ -18,17 +19,23 @@ public class CommandExternalProcess implements ExternalProcess {
     public CommandExternalProcess(String command, String initSignal) {
         this.command = command;
         this.initSignal = initSignal;
-        this.initSignalLatch = new CountDownLatch(1);
+        this.initSignalLatch = new CountDownLatch(initSignal != null ? 1 : 0);
+        this.exitLatch = new CountDownLatch(1);
     }
 
     @Override
     public void launch() throws IOException {
-        Thread thread = new Thread(new OutputHandler());
         process = Runtime.getRuntime().exec(command);
 
-        process.onExit().thenAccept(p -> initSignalLatch.countDown());
+        process.onExit().thenAccept(p -> {
+            initSignalLatch.countDown();
+            exitLatch.countDown();
+        });
 
-        thread.start();
+        if (initSignal != null) {
+            Thread thread = new Thread(new OutputHandler());
+            thread.start();
+        }
     }
 
     @Override
@@ -54,6 +61,13 @@ public class CommandExternalProcess implements ExternalProcess {
         }
 
         process.destroy();
+
+        // Block thread until process has exited
+        try {
+            this.exitLatch.await();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     @Override
@@ -74,7 +88,7 @@ public class CommandExternalProcess implements ExternalProcess {
     }
 
     @Override
-    public String getErrorMessages() {
+    public void extractErrorMessages() {
         if (errorMessages == null) {
             // stderr messages can only be retrieved from the process once
 
@@ -86,13 +100,16 @@ public class CommandExternalProcess implements ExternalProcess {
                     sb.append(next);
                 }
                 errorMessages = sb.toString();
-
-                return sb.toString();
             } catch (IOException ex) {
                 ex.printStackTrace();
-                return ex.getMessage();
+                errorMessages = ex.getMessage();
             }
         }
+    }
+
+    @Override
+    public String getErrorMessages() {
+        this.extractErrorMessages();
 
         return errorMessages;
     }

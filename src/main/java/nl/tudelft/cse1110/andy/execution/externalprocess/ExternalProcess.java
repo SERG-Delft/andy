@@ -9,6 +9,8 @@ public interface ExternalProcess {
 
     void kill();
 
+    void extractErrorMessages();
+
     String getErrorMessages();
 
     boolean hasExitedNormally();

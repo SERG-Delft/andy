@@ -55,15 +55,37 @@ public class SourceCodeSecurityCheckStep implements ExecutionStep {
 
     private boolean checkForKeywords(String code, ResultBuilder result) {
         String reflectionMsg = "Using reflection in your code is not allowed";
-        var keywords = Map.of(
-                "Configuration", "Accessing the task configuration in your code is not allowed",
-                "forName", reflectionMsg,
-                "getDeclaredConstructor", reflectionMsg,
-                "getDeclaredMethods", reflectionMsg,
-                "getField", reflectionMsg,
-                "getModifiers", reflectionMsg,
-                "reflect", reflectionMsg,
-                "setAccessible", reflectionMsg
+        String seleniumUnsupportedDriverMsg = "Please use HtmlUnitDriver as Andy does not have a browser installed";
+        var keywords = Map.ofEntries(
+                // Block attempts to access the RunConfiguration
+                Map.entry("Configuration", "Accessing the task configuration in your code is not allowed"),
+
+                // Block reflection
+                Map.entry("forName", reflectionMsg),
+                Map.entry("getAnnotation", reflectionMsg), // also blocks getAnnotations
+                Map.entry("getClassLoader", reflectionMsg),
+                Map.entry("getConstructor", reflectionMsg), // also blocks getConstructors
+                Map.entry("getDeclaredAnnotation", reflectionMsg), // also blocks getDeclaredAnnotations/-ByType
+                Map.entry("getDeclaredConstructor", reflectionMsg), // also blocks getDeclaredConstructors
+                Map.entry("getDeclaredField", reflectionMsg), // also blocks getDeclaredFields
+                Map.entry("getDeclaredMethod", reflectionMsg), // also blocks getDeclaredMethods
+                Map.entry("getDeclaredMethods", reflectionMsg),
+                Map.entry("getEnclosingConstructor", reflectionMsg),
+                Map.entry("getEnclosingMethod", reflectionMsg),
+                Map.entry("getField", reflectionMsg), // also blocks getFields
+                Map.entry("getMethod", reflectionMsg), // also blocks getMethods
+                Map.entry("getModifiers", reflectionMsg),
+                Map.entry("reflect", reflectionMsg),
+                Map.entry("setAccessible", reflectionMsg),
+
+                // Block unsupported Selenium drivers
+                Map.entry("ChromeDriver", seleniumUnsupportedDriverMsg),
+                Map.entry("ChromiumDriver", seleniumUnsupportedDriverMsg),
+                Map.entry("EdgeDriver", seleniumUnsupportedDriverMsg),
+                Map.entry("FirefoxDriver", seleniumUnsupportedDriverMsg),
+                Map.entry("InternetExplorerDriver", seleniumUnsupportedDriverMsg),
+                Map.entry("OperaDriver", seleniumUnsupportedDriverMsg),
+                Map.entry("SafariDriver", seleniumUnsupportedDriverMsg)
         );
         for (String keyword : keywords.keySet()) {
             if (code.contains(keyword)) {

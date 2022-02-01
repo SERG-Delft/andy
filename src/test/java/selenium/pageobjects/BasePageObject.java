@@ -1,5 +1,6 @@
 package selenium.pageobjects;
 
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
@@ -39,5 +40,18 @@ public class BasePageObject {
                 }
             }
         });
+    }
+
+    protected boolean isDisplayed(WebElement element) {
+        try {
+            if (element.isDisplayed()) {
+                return true;
+            }
+        } catch (NoSuchElementException e) {
+            // ignore, element div does not exist in DOM
+            return false;
+        }
+
+        return false;
     }
 }
