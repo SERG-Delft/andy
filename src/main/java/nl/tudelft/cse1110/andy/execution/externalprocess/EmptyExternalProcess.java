@@ -17,6 +17,11 @@ public class EmptyExternalProcess implements ExternalProcess {
     }
 
     @Override
+    public void extractErrorMessages() {
+
+    }
+
+    @Override
     public String getErrorMessages() {
         return null;
     }
