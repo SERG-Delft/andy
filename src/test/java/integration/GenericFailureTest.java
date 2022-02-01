@@ -14,12 +14,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static unit.writer.standard.StandardResultTestAssertions.startsWithString;
 
 public class GenericFailureTest extends IntegrationTestBase {
 
+    private ExecutionStep badStep;
+
     @Override
     protected void addSteps(ExecutionFlow flow) {
-        ExecutionStep badStep = mock(ExecutionStep.class);
+        badStep = mock(ExecutionStep.class);
 
         doThrow(new RuntimeException("Some super error here"))
                 .when(badStep).execute(any(Context.class), any(ResultBuilder.class));
@@ -32,9 +35,17 @@ public class GenericFailureTest extends IntegrationTestBase {
         Result result = run(Action.TESTS, "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass");
 
         assertThat(result.hasGenericFailure()).isTrue();
-        assertThat(result.getGenericFailure())
-                .isNotEmpty()
-                .contains("Some super error here");
+        assertThat(result.getGenericFailure().getGenericFailureMessage())
+                .isEmpty();
+        assertThat(result.getGenericFailure().getStepName())
+                .isPresent()
+                .hasValue(badStep.getClass().getSimpleName());
+        assertThat(result.getGenericFailure().getExceptionMessage())
+                .isPresent()
+                .hasValueSatisfying(
+                        startsWithString("java.lang.RuntimeException: Some super error here" + System.lineSeparator() +
+                                         "\tat nl.tudelft.cse1110.andy.execution.ExecutionFlow.run(ExecutionFlow.java")
+                );
     }
 
 }

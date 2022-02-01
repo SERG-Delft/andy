@@ -59,7 +59,6 @@ public class ExternalProcessTest extends IntegrationTestBase {
                 """);
 
         Files.writeString(Path.of(tmp + EXTERNAL_PROCESS_LOCAL_CONNECTION), """
-                echo "initSignal"
                 while true; do echo "HTTP/1.1 200 OK\\nContent-Length: 5\\n\\nhello" | nc -l 8086; done
                 """);
     }
@@ -87,7 +86,7 @@ public class ExternalProcessTest extends IntegrationTestBase {
         Result result = run("EmptyLibrary", "EmptySolution",
                 "ExternalProcessGracefulExitConfiguration");
 
-        assertThat(result.getGenericFailure()).isNull();
+        assertThat(result.hasGenericFailure()).isFalse();
 
         String tmp = getTempDirectory();
         assertThat(new File(tmp + GRACEFUL_EXIT_GENERATED_FILE_PATH)).exists();
@@ -100,7 +99,7 @@ public class ExternalProcessTest extends IntegrationTestBase {
             Result result = run("EmptyLibrary", "EmptySolution",
                     "ExternalProcessInitSignalConfiguration");
 
-            assertThat(result.getGenericFailure()).isNull();
+            assertThat(result.hasGenericFailure()).isFalse();
 
             String tmp = getTempDirectory();
             assertThat(new File(tmp + INIT_SIGNAL_GENERATED_FILE_PATH)).exists();
@@ -116,7 +115,7 @@ public class ExternalProcessTest extends IntegrationTestBase {
             Result result = run("EmptyLibrary", "EmptySolution",
                     "ExternalProcessErrorConfiguration");
 
-            assertThat(result.getGenericFailure()).isNull();
+            assertThat(result.hasGenericFailure()).isFalse();
 
         });
     }
@@ -126,17 +125,22 @@ public class ExternalProcessTest extends IntegrationTestBase {
         Result result = run("EmptyLibrary", "EmptySolution",
                 "ExternalProcessCrashesConfiguration");
 
-        assertThat(result.getGenericFailure()).contains("exit code 1: some error");
+        assertThat(result.getGenericFailure().getExternalProcessExitCode())
+                .isPresent()
+                .hasValue(1);
+        assertThat(result.getGenericFailure().getExternalProcessErrorMessages())
+                .isPresent()
+                .hasValue("some error");
     }
 
     @Test
-    void localConnectionTest() {
+    void localConnectionWithoutInitSignalTest() {
         assertTimeoutPreemptively(ofSeconds(10), () -> {
             Result result = run(Action.TESTS, "EmptyLibrary", "ExternalProcessLocalConnectionSolution",
                     "ExternalProcessLocalConnectionConfiguration");
 
             assertThat(result.hasFailed()).isFalse();
-            assertThat(result.getGenericFailure()).isNull();
+            assertThat(result.hasGenericFailure()).isFalse();
         });
     }
 }

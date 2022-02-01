@@ -6,6 +6,7 @@ import nl.tudelft.cse1110.andy.execution.externalprocess.EmptyExternalProcess;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.execution.mode.ModeActionSelector;
 import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
+import nl.tudelft.cse1110.andy.writer.weblab.SubmissionMetaData;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class Context {
     private ModeActionSelector modeActionSelector;
     private ExternalProcess externalProcess;
     private List<String> librariesToBeIncluded;
+    private SubmissionMetaData submissionMetaData;
     private boolean securityEnabled = true;
 
     public Context(Action action) {
@@ -83,6 +85,9 @@ public class Context {
     }
 
     public void killExternalProcess() {
+        // Retrieve error messages before killing process
+        externalProcess.extractErrorMessages();
+
         externalProcess.kill();
     }
 
@@ -96,6 +101,14 @@ public class Context {
 
     public boolean hasLibrariesToBeIncluded() {
         return librariesToBeIncluded!=null && !librariesToBeIncluded.isEmpty();
+    }
+
+    public SubmissionMetaData getSubmissionMetaData() {
+        return submissionMetaData;
+    }
+
+    public void setSubmissionMetaData(SubmissionMetaData submissionMetaData) {
+        this.submissionMetaData = submissionMetaData;
     }
 
     public boolean isSecurityEnabled() {

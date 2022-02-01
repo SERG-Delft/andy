@@ -3,22 +3,35 @@ package integration;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.result.Result;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.ArrayList;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SecurityTest extends IntegrationTestBase {
 
+    @DisabledOnOs(OS.WINDOWS) // Disable on Windows as Runtime#getExec is not well-received by Windows Defender.
     @ParameterizedTest
-    @CsvSource({
-            "WriteResultsXml,name=results.xml actions=write",
-            "SystemExit,name=exitVM.",
-            "SetProperty,test actions=write",
-            "RuntimeExec,actions=execute",
-            "ReadSource,ExploitTest.java actions=read",
-            "ReadClass,ExploitTest$1.class actions=read"
-    })
+    @MethodSource("securityTestGeneratorAdvanced")
+    void securityTestNonWindows(String exploitFile, String expectedMessage) {
+        securityTest(exploitFile, expectedMessage);
+    }
+
+    @EnabledOnOs(OS.WINDOWS) // Enable on Windows only, tests everything except Runtime#getExec.
+    @ParameterizedTest
+    @MethodSource("securityTestGeneratorBasic")
+    void securityTestWindows(String exploitFile, String expectedMessage) {
+        securityTest(exploitFile, expectedMessage);
+    }
+
     void securityTest(String exploitFile, String expectedMessage) {
         // Provide working directory path to user code for testing purposes
         System.setProperty("andy.securitytest.workdir", workDir.getAbsolutePath());
@@ -54,5 +67,17 @@ public class SecurityTest extends IntegrationTestBase {
                 .allMatch(err -> err.getMessage().contains(expectedMessage));
     }
 
+    static Stream<Arguments> securityTestGeneratorAdvanced() {
+        return Stream.concat(securityTestGeneratorBasic(), Stream.of(Arguments.arguments("RuntimeExec", "actions=execute")));
+    }
 
+    static Stream<Arguments> securityTestGeneratorBasic() {
+        return Stream.of(
+            Arguments.arguments("WriteResultsXml", "name=results.xml actions=write"),
+            Arguments.arguments("SystemExit", "name=exitVM."),
+            Arguments.arguments("SetProperty", "test actions=write"),
+            Arguments.arguments("ReadSource", "ExploitTest.java actions=read"),
+            Arguments.arguments("ReadClass", "ExploitTest$1.class actions=read")
+        );
+    }
 }

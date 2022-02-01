@@ -20,8 +20,11 @@ public class RandomAsciiArtGenerator {
         // Randomly pick one of the .txt files
         Random random = new Random();
         String randomAsciiFile = congratsFiles.get(random.nextInt(congratsFiles.size()));
-
-        return readCongratsFile(randomAsciiFile);
+        try {
+            return readCongratsFile(randomAsciiFile);
+        } catch (RuntimeException exception) {
+            return "";
+        }
     }
 
 
@@ -38,11 +41,11 @@ public class RandomAsciiArtGenerator {
             return allFiles;
 
         } catch(Exception e) {
-            throw new RuntimeException(e);
+            return List.of();
         }
     }
 
-    private String readCongratsFile(String randomAsciiFile) {
+    private String readCongratsFile(String randomAsciiFile) throws RuntimeException {
         try {
             InputStream resourceAsStream = ResourceUtils.class.getResourceAsStream("/congrats/" + randomAsciiFile);
             return IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8);

@@ -7,6 +7,7 @@ import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.grade.GradeCalculator;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.writer.ResultWriter;
+import nl.tudelft.cse1110.andy.writer.weblab.SubmissionMetaData;
 
 import java.util.List;
 
@@ -17,8 +18,9 @@ public class Andy {
     private final String outputDir;
     private final List<String> librariesToBeIncluded;
     private final ResultWriter writer;
+    private final SubmissionMetaData metaData;
 
-    public Andy(Action action, String workDir, String outputDir, List<String> librariesToBeIncluded, ResultWriter writer) {
+    public Andy(Action action, String workDir, String outputDir, List<String> librariesToBeIncluded, ResultWriter writer, SubmissionMetaData metaData) {
         this.writer = writer;
         assert action!=null;
         assert workDir!=null;
@@ -28,6 +30,15 @@ public class Andy {
         this.workDir = workDir;
         this.outputDir = outputDir;
         this.librariesToBeIncluded = librariesToBeIncluded;
+        this.metaData = metaData;
+    }
+
+    public Andy(Action action, String workDir, String outputDir, List<String> librariesToBeIncluded, ResultWriter writer) {
+        this(action, workDir, outputDir, librariesToBeIncluded, writer, SubmissionMetaData.empty());
+    }
+
+    public Andy(Action action, String workDir, String outputDir, ResultWriter writer, SubmissionMetaData metaData) {
+        this(action, workDir, outputDir, null, writer, metaData);
     }
 
     public Andy(Action action, String workDir, String outputDir, ResultWriter writer) {
@@ -61,6 +72,7 @@ public class Andy {
 
         ctx.setDirectoryConfiguration(dirCfg);
         ctx.setLibrariesToBeIncluded(librariesToBeIncluded);
+        ctx.setSubmissionMetaData(metaData);
 
         return ctx;
     }

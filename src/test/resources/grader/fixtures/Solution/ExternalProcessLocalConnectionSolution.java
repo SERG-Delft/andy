@@ -14,6 +14,14 @@ class ExternalProcessLocalConnectionTests {
 
     @Test
     void responseTest() throws IOException, InterruptedException {
+
+        // Give the external process time to initialise.
+
+        // This would not be necessary outside of Andy integration tests since Selenium is much sloer than HttpClient,
+        // and Spring applications provide output when they start while the Python web server used in this test does not
+        // properly indicate that it has started.
+        Thread.sleep(1000);
+
         var client = HttpClient.newHttpClient();
         var request = HttpRequest.newBuilder(URI.create("http://localhost:8086/")).build();
 
