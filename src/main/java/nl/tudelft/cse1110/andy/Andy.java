@@ -54,7 +54,7 @@ public class Andy {
         flow.run();
     }
 
-    public void runWithoutSecurityManager() {
+    public void runWithoutSecurity() {
         Context ctx = buildContext();
 
         ResultBuilder result = new ResultBuilder(ctx, new GradeCalculator());
