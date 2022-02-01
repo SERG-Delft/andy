@@ -16,8 +16,8 @@ home_dir = '/home/runner/work/andy/andy/assignments'
 Repo.clone_from('https://github.com/cse1110/assignments', home_dir)
 
 # Set the environment variables.
-os.environ['WORKING_DIR'] = os.path.join(os.getcwd(), 'code');
-os.environ['OUTPUT_DIR']  = os.path.join(os.getcwd(), 'output');
+os.environ['WORKING_DIR'] = os.path.join(os.getcwd(), 'code')
+os.environ['OUTPUT_DIR']  = os.path.join(os.getcwd(), 'output')
 os.makedirs(os.environ['WORKING_DIR'], exist_ok = True)
 os.makedirs(os.environ['OUTPUT_DIR'],  exist_ok = True)
 
