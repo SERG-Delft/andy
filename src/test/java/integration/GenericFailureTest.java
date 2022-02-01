@@ -43,7 +43,7 @@ public class GenericFailureTest extends IntegrationTestBase {
         assertThat(result.getGenericFailure().getExceptionMessage())
                 .isPresent()
                 .hasValueSatisfying(
-                        startsWithString("java.lang.RuntimeException: Some super error here\n" +
+                        startsWithString("java.lang.RuntimeException: Some super error here" + System.lineSeparator() +
                                          "\tat nl.tudelft.cse1110.andy.execution.ExecutionFlow.run(ExecutionFlow.java")
                 );
     }

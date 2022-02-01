@@ -55,6 +55,7 @@ public class SourceCodeSecurityCheckStep implements ExecutionStep {
 
     private boolean checkForKeywords(String code, ResultBuilder result) {
         String reflectionMsg = "Using reflection in your code is not allowed";
+        String seleniumUnsupportedDriverMsg = "Please use HtmlUnitDriver as Andy does not have a browser installed";
         var keywords = Map.ofEntries(
                 // Block attempts to access the RunConfiguration
                 Map.entry("Configuration", "Accessing the task configuration in your code is not allowed"),
@@ -75,7 +76,16 @@ public class SourceCodeSecurityCheckStep implements ExecutionStep {
                 Map.entry("getMethod", reflectionMsg), // also blocks getMethods
                 Map.entry("getModifiers", reflectionMsg),
                 Map.entry("reflect", reflectionMsg),
-                Map.entry("setAccessible", reflectionMsg)
+                Map.entry("setAccessible", reflectionMsg),
+
+                // Block unsupported Selenium drivers
+                Map.entry("ChromeDriver", seleniumUnsupportedDriverMsg),
+                Map.entry("ChromiumDriver", seleniumUnsupportedDriverMsg),
+                Map.entry("EdgeDriver", seleniumUnsupportedDriverMsg),
+                Map.entry("FirefoxDriver", seleniumUnsupportedDriverMsg),
+                Map.entry("InternetExplorerDriver", seleniumUnsupportedDriverMsg),
+                Map.entry("OperaDriver", seleniumUnsupportedDriverMsg),
+                Map.entry("SafariDriver", seleniumUnsupportedDriverMsg)
         );
         for (String keyword : keywords.keySet()) {
             if (code.contains(keyword)) {

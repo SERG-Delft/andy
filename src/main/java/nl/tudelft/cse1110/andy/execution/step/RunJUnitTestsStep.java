@@ -16,6 +16,7 @@ import org.junit.platform.launcher.listeners.TestExecutionSummary;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.List;
 
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
