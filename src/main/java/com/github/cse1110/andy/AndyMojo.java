@@ -83,7 +83,7 @@ public class AndyMojo extends AbstractMojo {
                 outputDir.getAbsolutePath(),
                 compileClasspathElements,
                 new StandardResultWriter()
-            ).run();
+            ).runWithoutSecurity();
 
             /* Read output file */
             String output = readFile(new File(concatenateDirectories(outputDir.getAbsolutePath(), "stdout.txt")));
