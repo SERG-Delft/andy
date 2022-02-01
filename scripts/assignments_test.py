@@ -13,7 +13,7 @@ target_dir = '/home/runner/work/andy/andy/target'
 home_dir = '/home/runner/work/andy/andy/assignments'
 
 # Clone the assignments repository in a temporary directory.
-Repo.clone_from('https://github.com/cse1110/assignments', home_dir)
+Repo.clone_from('https://github.com/cse1110/assignments', home_dir, depth=1)
 
 # Set the environment variables.
 os.environ['WORKING_DIR'] = os.path.join(os.getcwd(), 'code')
