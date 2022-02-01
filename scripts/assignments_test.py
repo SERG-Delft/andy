@@ -21,9 +21,6 @@ os.environ['OUTPUT_DIR']  = os.path.join(os.getcwd(), 'output')
 os.makedirs(os.environ['WORKING_DIR'], exist_ok = True)
 os.makedirs(os.environ['OUTPUT_DIR'],  exist_ok = True)
 
-# Set the WebLab environment variables to not trigger an error.
-os.environ['WL_COURSE'] = os.environ['WL_STUDENT'] = os.environ['WL_ASSIGNMENT_TITLE'] = ''
-
 pipeline_failed = False
 for category_dir in get_directories(home_dir):
     for assignment_dir in get_directories(category_dir):
@@ -38,7 +35,7 @@ for category_dir in get_directories(home_dir):
         copyfile(f'{assignment_dir}/config/Configuration.java', os.path.join(os.environ['WORKING_DIR'], 'Configuration.java'))
 
         # Run Andy and collect the results.
-        os.system(f'java -ea -cp "{target_dir}/classes:{target_dir}/dependencies/*" nl.tudelft.cse1110.andy.AndyOnWebLab FULL_WITHOUT_HINTS {os.environ["WORKING_DIR"]} {os.environ["OUTPUT_DIR"]}')
+        os.system(f'java -ea -cp "{target_dir}/classes:{target_dir}/dependencies/*" nl.tudelft.cse1110.andy.AndyOnWebLab "FULL_WITHOUT_HINTS" "{os.environ["WORKING_DIR"]}" "{os.environ["OUTPUT_DIR"]}" "123456" "CSE1110 Q4 2022" "An assignment!"')
 
         with open(f'{os.environ["OUTPUT_DIR"]}/stdout.txt') as file:
             # Get the score from the `stdout.txt` file.
