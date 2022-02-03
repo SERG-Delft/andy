@@ -7,10 +7,18 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class PitestTest extends IntegrationTestBase {
 
-
     /* Test where all mutants are killed.
+     */
+    @Test
+    void allMutantsKilled() {
+        Result result = run("BalancingArrays", "BalancingArraysOfficialSolution", "BalancingArraysPitestStrongerConfiguration");
+
+        assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(18);
+        assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(18);
+    }
+
+    /* Test where all non-equivalent mutants are killed.
      * 32 killed mutants means 100%, because 1 of the 33 identified mutants cannot be killed.
-     * TODO: replace this test by one that kills all the mutants!!
      */
     @Test
     void allMutantsButOneKilled() {
