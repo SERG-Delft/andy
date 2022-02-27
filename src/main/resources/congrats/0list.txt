@@ -1,7 +1,6 @@
 andy.txt
 boxes_dog.txt
 boxes_mouse.txt
-boxes_nuke.txt
 boxes_parchment.txt
 boxes_santa.txt
 boxes_spring.txt
