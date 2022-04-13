@@ -87,7 +87,7 @@ Andy is a simple Java application. All it needs is:
 
 For TU Delft students, Andy can be used directly in WebLab, our cloud IDE.
 
-_We are working on a command-line tool that will make Andy easier to be executed_.
+_We are working on a command-line tool that will make Andy easier to run._
 
 ## Team
 
