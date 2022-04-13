@@ -77,4 +77,8 @@ fabric.properties
 target/
 *.class
 
+# Emacs
+*~
+#*
+
 # End of https://www.gitignore.io/api/intellij
