@@ -16,6 +16,9 @@ public class WebLabAssignmentListPage extends BasePageObject {
     @FindBy(className = "majorrow")
     private List<WebElement> subAssignments;
 
+    @FindBy(className = "masterrow")
+    private List<WebElement> assignmentHeaders; // used to check whether the table has fully loaded
+
     public List<String> getSubdirectoryUrls() {
         return getSubAssignmentUrls("Collection of Assignments");
     }
@@ -38,6 +41,6 @@ public class WebLabAssignmentListPage extends BasePageObject {
     }
 
     private void awaitListLoaded() {
-        waitUntil(30, () -> !subAssignments.isEmpty());
+        waitUntil(30, () -> !assignmentHeaders.isEmpty());
     }
 }
