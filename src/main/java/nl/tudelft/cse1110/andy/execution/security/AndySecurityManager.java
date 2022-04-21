@@ -26,20 +26,14 @@ public class AndySecurityManager extends SecurityManager {
         boolean untrusted = false;
         boolean mockitoInternal = false;
         boolean seleniumInternal = false;
+        boolean databaseConnection = false;
         boolean jdkInternalLoader = false;
         for (StackTraceElement elem : Thread.currentThread().getStackTrace()) {
-            if (elem.getClassName().startsWith("org.mockito.internal")) {
-                mockitoInternal = true;
-            }
-            if (elem.getClassName().startsWith("org.openqa.selenium")) {
-                seleniumInternal = true;
-            }
-            if (elem.getClassName().startsWith("jdk.internal.") && !untrusted) {
-                jdkInternalLoader = true;
-            }
-            if (elem.getClassName().startsWith("delft.")) {
-                untrusted = true;
-            }
+            if (elem.getClassName().startsWith("org.mockito.internal")) mockitoInternal = true;
+            if (elem.getClassName().startsWith("org.openqa.selenium")) seleniumInternal = true;
+            if (elem.getClassName().startsWith("java.sql.DriverManager")) databaseConnection = true;
+            if (elem.getClassName().startsWith("jdk.internal.") && !untrusted) jdkInternalLoader = true;
+            if (elem.getClassName().startsWith("delft.")) untrusted = true;
         }
 
         /*
@@ -53,7 +47,7 @@ public class AndySecurityManager extends SecurityManager {
         }
 
         // Determine if the currently requested permission should be granted
-        if (checkPermissionsUntrusted(perm, mockitoInternal, seleniumInternal, jdkInternalLoader)) return;
+        if (checkPermissionsUntrusted(perm, mockitoInternal, seleniumInternal, jdkInternalLoader, databaseConnection)) return;
 
         // If the currently requested permission should not be allowed,
         // throw an exception to block the execution
@@ -68,12 +62,12 @@ public class AndySecurityManager extends SecurityManager {
     }
 
     private boolean checkPermissionsUntrusted(Permission perm, boolean mockitoInternal, boolean seleniumInternal,
-                                              boolean jdkInternalLoader) {
+                                              boolean jdkInternalLoader, boolean databaseConnection) {
         if (checkFilePermission(perm, mockitoInternal, jdkInternalLoader)) return true;
 
         if (checkPropertyPermission(perm)) return true;
 
-        if (checkRuntimePermission(perm, mockitoInternal, seleniumInternal)) return true;
+        if (checkRuntimePermission(perm, mockitoInternal, seleniumInternal, databaseConnection)) return true;
 
         if (checkLoggingPermission(perm)) return true;
 
@@ -127,11 +121,12 @@ public class AndySecurityManager extends SecurityManager {
         return false;
     }
 
-    private boolean checkRuntimePermission(Permission perm, boolean mockitoInternal, boolean seleniumInternal) {
+    private boolean checkRuntimePermission(Permission perm, boolean mockitoInternal, boolean seleniumInternal, boolean databaseConnection) {
         // Allow various runtime permissions depending on the context as they are needed in order to execute the tests
         if (perm instanceof RuntimePermission) {
             if (mockitoInternal && checkMockitoInternalRuntimePermission(perm)
                 || seleniumInternal && checkSeleniumRuntimePermissions(perm)
+                || databaseConnection && checkDatabaseConnectionRuntimePermissions(perm)
                 || checkNormalRuntimePermissions(perm)) {
                 return true;
             }
@@ -144,6 +139,13 @@ public class AndySecurityManager extends SecurityManager {
         // The "modifyThread" RuntimePermission grants Selenium access to methods for controlling threads,
         // which are necessary for its operation.
         return perm.getName().equals("modifyThread");
+    }
+
+    private boolean checkDatabaseConnectionRuntimePermissions(Permission perm) {
+        // Grant permissions necessary for Selenium to run correctly
+        // These RuntimePermissions are necessary to load the driver correctly.
+        return perm.getName().equals("accessClassInPackage.jdk.internal.reflect")
+               || perm.getName().equals("shutdownHooks");
     }
 
     private boolean checkNormalRuntimePermissions(Permission perm) {
