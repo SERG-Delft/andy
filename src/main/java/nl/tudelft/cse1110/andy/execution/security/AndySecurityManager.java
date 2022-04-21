@@ -29,21 +29,11 @@ public class AndySecurityManager extends SecurityManager {
         boolean databaseConnection = false;
         boolean jdkInternalLoader = false;
         for (StackTraceElement elem : Thread.currentThread().getStackTrace()) {
-            if (elem.getClassName().startsWith("org.mockito.internal")) {
-                mockitoInternal = true;
-            }
-            if (elem.getClassName().startsWith("org.openqa.selenium")) {
-                seleniumInternal = true;
-            }
-            if (elem.getClassName().startsWith("java.sql.DriverManager")) {
-                databaseConnection = true;
-            }
-            if (elem.getClassName().startsWith("jdk.internal.") && !untrusted) {
-                jdkInternalLoader = true;
-            }
-            if (elem.getClassName().startsWith("delft.")) {
-                untrusted = true;
-            }
+            if (elem.getClassName().startsWith("org.mockito.internal")) mockitoInternal = true;
+            if (elem.getClassName().startsWith("org.openqa.selenium")) seleniumInternal = true;
+            if (elem.getClassName().startsWith("java.sql.DriverManager")) databaseConnection = true;
+            if (elem.getClassName().startsWith("jdk.internal.") && !untrusted) jdkInternalLoader = true;
+            if (elem.getClassName().startsWith("delft.")) untrusted = true;
         }
 
         /*
