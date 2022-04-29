@@ -102,4 +102,31 @@ public class GradeCalculatorTest {
 
         assertThat(finalGrade).isEqualTo(99);
     }
+
+    @ParameterizedTest
+    @MethodSource("zeroWeights")
+    void withZeroWeights(int coveredBranches, int totalBranches,
+                         int detectedMutations, int totalMutations,
+                         int metaTestsPassed, int totalMetaTests,
+                         int checksPassed, int totalChecks, int expectedGrade) {
+
+        GradeWeight weights = new GradeWeight(0.4f, 0.0f, 0.5f, 0.1f);
+
+        GradeValues grades = new GradeValues();
+        grades.setBranchGrade(coveredBranches, totalBranches);
+        grades.setMutationGrade(detectedMutations, totalMutations);
+        grades.setMetaGrade(metaTestsPassed, totalMetaTests);
+        grades.setCheckGrade(checksPassed, totalChecks);
+
+        int finalGrade = new GradeCalculator().calculateFinalGrade(grades, weights);
+
+        assertThat(finalGrade).isEqualTo(expectedGrade);
+    }
+
+    private static Stream<Arguments> zeroWeights() {
+        return Stream.of(
+                of(25, 25, 2, 55, 100, 100, 5, 5, 100), // 0.4*1 + 0*(2/55) + 0.5*1 +  0.1*1 = 1.0 --> 100
+                of(25, 25, 2, 55, 100, 100, 4, 5, 98) // 0.4*1 + 0*(2/55) + 0.5*1 +  0.1*(4/5) = 0.98 --> 98
+        );
+    }
 }
