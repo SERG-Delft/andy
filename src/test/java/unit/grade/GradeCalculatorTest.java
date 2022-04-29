@@ -3,6 +3,7 @@ package unit.grade;
 import nl.tudelft.cse1110.andy.grade.GradeCalculator;
 import nl.tudelft.cse1110.andy.grade.GradeValues;
 import nl.tudelft.cse1110.andy.grade.GradeWeight;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -80,5 +81,25 @@ public class GradeCalculatorTest {
                 of(25, 25, 55, 55, 35, 100, 5, 5, 87), // 0.4*1 + 0.3*1 + 0.2*(35/100) +  0.1*1 = 0.87 --> 87
                 of(25, 25, 55, 55, 100, 100, 2, 5, 94) // 0.4*1 + 0.3*1 + 0.2*1 +  0.1*(2/5) = 0.94 --> 94
         );
+    }
+
+    /*
+     * Test where the grade is between 99.5 and 100, should be rounded down to 99 and not
+     * rounded up to 100, as 100 should only be achievable if everything
+     * with a positive weight is fully completed.
+     */
+    @Test
+    void withGradeBetween99And100() {
+        GradeWeight weights = new GradeWeight(0.1f, 0.3f, 0.6f, 0.0f);
+
+        GradeValues grades = new GradeValues();
+        grades.setBranchGrade(20, 21);
+        grades.setMutationGrade(27, 27);
+        grades.setMetaGrade(17, 17);
+        grades.setCheckGrade(0, 0);
+
+        int finalGrade = new GradeCalculator().calculateFinalGrade(grades, weights);
+
+        assertThat(finalGrade).isEqualTo(99);
     }
 }
