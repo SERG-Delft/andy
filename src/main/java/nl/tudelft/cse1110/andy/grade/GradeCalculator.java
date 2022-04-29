@@ -24,6 +24,11 @@ public class GradeCalculator {
         if(finalGrade < 0 || finalGrade > 100)
             throw new RuntimeException("Invalid grade calculation");
 
+        // Grades between 99.5 and 100 should be rounded down to 99 instead of up
+        if (finalGrade == 100 && finalDecimalGrade < 1) {
+            finalGrade = 99;
+        }
+
         return finalGrade;
     }
 
