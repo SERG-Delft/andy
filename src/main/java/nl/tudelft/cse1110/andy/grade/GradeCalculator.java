@@ -24,8 +24,14 @@ public class GradeCalculator {
         if(finalGrade < 0 || finalGrade > 100)
             throw new RuntimeException("Invalid grade calculation");
 
+        final boolean someComponentsWithPositiveWeightAreIncomplete =
+                weights.getBranchCoverageWeight() > 0.0f && gradeValues.getCoveredBranches() < gradeValues.getTotalBranches() ||
+                weights.getMutationCoverageWeight() > 0.0f && gradeValues.getDetectedMutations() < gradeValues.getTotalMutations() ||
+                weights.getMetaTestsWeight() > 0.0f && gradeValues.getMetaTestsPassed() < gradeValues.getTotalMetaTests() ||
+                weights.getCodeChecksWeight() > 0.0f && gradeValues.getChecksPassed() < gradeValues.getTotalChecks();
+
         // Grades between 99.5 and 100 should be rounded down to 99 instead of up
-        if (finalGrade == 100 && finalDecimalGrade < 1) {
+        if (finalGrade == 100 && someComponentsWithPositiveWeightAreIncomplete) {
             finalGrade = 99;
         }
 
