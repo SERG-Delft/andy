@@ -24,6 +24,11 @@ public class GradeCalculator {
         if(finalGrade < 0 || finalGrade > 100)
             throw new RuntimeException("Invalid grade calculation");
 
+        // Grades between 99.5 and 100 should be rounded down to 99 instead of up
+        if (finalGrade == 100 && hasIncompleteComponents(gradeValues, weights)) {
+            finalGrade = 99;
+        }
+
         return finalGrade;
     }
 
@@ -77,6 +82,18 @@ public class GradeCalculator {
             return 1f;   // full points assigned
         }
         return (float)checksPassed / totalChecks;
+    }
+
+    /**
+     * @param gradeValues the grade values
+     * @param weights     the weights
+     * @return whether any of the components with positive weight are incomplete
+     */
+    private boolean hasIncompleteComponents(GradeValues gradeValues, GradeWeight weights) {
+        return weights.getBranchCoverageWeight() > 0.0f && gradeValues.getCoveredBranches() < gradeValues.getTotalBranches() ||
+               weights.getMutationCoverageWeight() > 0.0f && gradeValues.getDetectedMutations() < gradeValues.getTotalMutations() ||
+               weights.getMetaTestsWeight() > 0.0f && gradeValues.getMetaTestsPassed() < gradeValues.getTotalMetaTests() ||
+               weights.getCodeChecksWeight() > 0.0f && gradeValues.getChecksPassed() < gradeValues.getTotalChecks();
     }
 
 }
