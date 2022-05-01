@@ -138,7 +138,10 @@ public class AndySecurityManager extends SecurityManager {
         // Grant permissions necessary for Selenium to run correctly
         // The "modifyThread" RuntimePermission grants Selenium access to methods for controlling threads,
         // which are necessary for its operation.
-        return perm.getName().equals("modifyThread");
+        // The HOSTNAME and COMPUTERNAME environment variables are necessary for Selenium exceptions
+        return perm.getName().equals("modifyThread")
+               || perm.getName().equals("getenv.HOSTNAME")
+               || perm.getName().equals("getenv.COMPUTERNAME");
     }
 
     private boolean checkDatabaseConnectionRuntimePermissions(Permission perm) {
