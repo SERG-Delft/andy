@@ -129,14 +129,14 @@
         <dependency>
             <groupId>org.jacoco</groupId>
             <artifactId>org.jacoco.core</artifactId>
-            <version>0.8.7</version>
+            <version>0.8.8</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.jacoco/org.jacoco.report -->
         <dependency>
             <groupId>org.jacoco</groupId>
             <artifactId>org.jacoco.report</artifactId>
-            <version>0.8.7</version>
+            <version>0.8.8</version>
         </dependency>
 
         <dependency>
