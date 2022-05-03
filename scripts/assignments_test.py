@@ -23,7 +23,7 @@ os.makedirs(os.environ['OUTPUT_DIR'],  exist_ok = True)
 
 # Build classpath
 mvndeps_file = os.path.join(os.environ['WORKING_DIR'], 'mvndeps.txt')
-os.system(f'mvn dependency:build-classpath -Dmdep.outputFile={mvndeps_file}')
+os.system(f'mvn -f andy/pom.xml dependency:build-classpath -Dmdep.outputFile={mvndeps_file}')
 classpath_string = 'target/classes:'
 with open(mvndeps_file, 'r') as mvndeps_f:
     classpath_string += mvndeps_f.read()
