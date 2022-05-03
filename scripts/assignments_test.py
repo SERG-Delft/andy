@@ -8,7 +8,7 @@ def get_directories(basedir):
                                        and not dir.startswith('.')]
 
 # Compile Andy and store the `target` directory.
-os.system('mvn clean compile dependency:copy-dependencies')
+os.system('mvn -f andy/pom.xml clean compile dependency:copy-dependencies')
 target_dir = '/home/runner/work/andy/andy/target'
 home_dir = '/home/runner/work/andy/andy/assignments'
 
