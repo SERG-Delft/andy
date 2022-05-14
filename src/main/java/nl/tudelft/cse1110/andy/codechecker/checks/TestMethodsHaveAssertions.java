@@ -39,6 +39,13 @@ public class TestMethodsHaveAssertions extends WithinTestMethod {
         // assertj
         add("assertThat");
         add("assertThatThrownBy");
+        add("assertThatExceptionOfType");
+        add("assertThatCode");
+        add("assertThatIllegalArgumentException");
+        add("assertThatIllegalStateException");
+        add("assertThatIOException");
+        add("assertThatNullPointerException");
+        add("assertThatObject");
 
     }};
 
