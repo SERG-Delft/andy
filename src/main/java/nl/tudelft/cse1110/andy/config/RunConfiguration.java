@@ -69,4 +69,7 @@ public abstract class RunConfiguration {
         return false;
     }
 
+    public int numberOfJQWikTries() {
+        return 1000;
+    }
 }
