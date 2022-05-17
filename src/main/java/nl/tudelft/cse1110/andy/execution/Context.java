@@ -23,6 +23,7 @@ public class Context {
     private List<String> librariesToBeIncluded;
     private SubmissionMetaData submissionMetaData;
     private boolean securityEnabled = true;
+    private int numberOfJQWikTries = -1;
 
     public Context(Action action) {
         this.cleanClassloader = Thread.currentThread().getContextClassLoader();
@@ -117,5 +118,18 @@ public class Context {
 
     public void disableSecurity() {
         this.securityEnabled = false;
+    }
+
+    public int getNumberOfJQWikTries() {
+        if(numberOfJQWikTries != -1) {
+            // Number of tries has been set explicitly for this context
+            return numberOfJQWikTries;
+        }
+
+        return this.getRunConfiguration().numberOfJQWikTries();
+    }
+
+    public void setOverriddenNumberOfJQWikTries(int numberOfJQWikTries) {
+        this.numberOfJQWikTries = numberOfJQWikTries;
     }
 }
