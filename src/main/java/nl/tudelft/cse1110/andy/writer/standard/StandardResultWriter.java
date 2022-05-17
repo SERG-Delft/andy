@@ -191,7 +191,7 @@ public class StandardResultWriter implements ResultWriter {
         if(modeActionSelector(ctx)!=null)
             l(String.format("\nAndy is running in %s mode and took %.1f seconds to assess your solution.", modeActionSelector(ctx).getMode().toString(), timeInSeconds));
         else
-            l(String.format("\nAndy took %.1f seconds to assess your question.", timeInSeconds));
+            l(String.format("\nAndy took %.1f seconds to assess your solution.", timeInSeconds));
     }
 
     private void printMetaTestResults(Context ctx, MetaTestsResult metaTests) {
