@@ -156,10 +156,18 @@ public class JUnitTestsTest {
 
         @Test
         void testMessageOtherThanAssertionError() {
-            Result result = run(Action.TESTS, "NumberUtilsAddPositiveLibrary", "NumberUtilsAddPositiveJqwikException");
+            Result result = run(Action.TESTS, "SimplePBTLibrary", "SimplePBTSolution", "SimplePBTConfiguration");
+
+            System.out.println(result.getTests().getConsole());
+        }
+
+
+        @Test
+        void differentNumberOfTrials() {
+            Result result = run(Action.TESTS, "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfJQWikPassing");
 
             assertThat(result.getTests())
-                    .has(failingTest("testAddition"));
+                    .has(failingTest("testNoElementInWholeArray"));
         }
 
     }
