@@ -98,6 +98,7 @@ public class LibraryMetaTest extends AbstractMetaTest {
         Context metaCtx = new Context(Action.META_TEST);
         metaCtx.setDirectoryConfiguration(metaDirCfg);
         metaCtx.setLibrariesToBeIncluded(ctx.getLibrariesToBeIncluded());
+        metaCtx.setOverriddenNumberOfJQWikTries(ctx.getNumberOfJQWikTries());
 
         if(!ctx.isSecurityEnabled()){
             metaCtx.disableSecurity();
