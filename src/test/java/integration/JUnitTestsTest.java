@@ -156,18 +156,22 @@ public class JUnitTestsTest {
 
         @Test
         void testMessageOtherThanAssertionError() {
-            Result result = run(Action.TESTS, "SimplePBTLibrary", "SimplePBTSolution", "SimplePBTConfiguration");
+            Result result = run(Action.TESTS, "NumberUtilsAddPositiveLibrary", "NumberUtilsAddPositiveJqwikException");
 
-            System.out.println(result.getTests().getConsole());
+            assertThat(result.getTests())
+                    .has(failingTest("testAddition"));
         }
 
 
         @Test
         void differentNumberOfTrials() {
-            Result result = run(Action.TESTS, "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfJQWikPassing");
+            Result result = run(Action.TESTS, "SimplePBTLibrary", "SimplePBTSolution", "SimplePBTConfiguration");
 
-            assertThat(result.getTests())
-                    .has(failingTest("testNoElementInWholeArray"));
+            assertThat(result.hasFailed()).isFalse();
+            assertThat(result.getTests().hasTestsFailingOrFailures()).isFalse();
+            String output = result.getTests().getConsole();
+            int numberOfTrials = output.split("\n").length; // matches the number of lines in the output
+            assertThat(numberOfTrials).isEqualTo(5);
         }
 
     }

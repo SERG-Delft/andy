@@ -12,9 +12,9 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
-class SimplePBTLibrarySolution {
+class SimplePBTTest {
 
-    static int i = 0;
+    static int i = 1;
 
     @Property
     void testPositive(

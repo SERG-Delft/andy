@@ -26,6 +26,6 @@ public class Configuration extends RunConfiguration {
 
     @Override
     public int numberOfJQWikTries() {
-        return 2;
+        return 5;
     }
 }
