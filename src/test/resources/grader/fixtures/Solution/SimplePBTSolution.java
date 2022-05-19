@@ -14,12 +14,10 @@ import org.junit.jupiter.params.provider.*;
 
 class SimplePBTTest {
 
-    static int i = 1;
-
     @Property
     void testPositive(
             @ForAll @Positive int number) {
-        System.out.println(i++);
+        System.out.println("hi");
 
         int result = new SimplePBTLibrary().calculate(number);
         assertThat(result).isPositive();
