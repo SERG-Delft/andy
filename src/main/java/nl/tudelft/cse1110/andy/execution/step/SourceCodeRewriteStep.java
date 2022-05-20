@@ -28,7 +28,7 @@ public class SourceCodeRewriteStep implements ExecutionStep {
             String code = Files.readString(Path.of(solutionFile.get(0).getPath()));
 
             code = Pattern.compile("@\\s*Property\\s*(\\([^)]*\\))?").matcher(code)
-                    .replaceAll("@Property(tries=100)");
+                    .replaceAll("@Property(tries=10)");
 
             Files.writeString(Path.of(solutionFile.get(0).getPath()), code);
         } catch (IOException e) {
