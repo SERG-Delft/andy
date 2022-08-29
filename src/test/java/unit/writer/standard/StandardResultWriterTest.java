@@ -676,6 +676,29 @@ public class StandardResultWriterTest {
     }
 
     @Test
+    void testPrintTestResultsWithNoTestsFoundDueToTestFailure() {
+        Result result = new ResultTestDataBuilder()
+                .withTestResults(0, 0, 0,
+                        List.of(new TestFailureInfo("exampleTestCase", "example failure")),
+                        "")
+                .withCompilationFail()
+                .build();
+
+        writer.write(ctx, result);
+
+        String output = generatedResult();
+
+        assertThat(output)
+                .has(compilationSuccess())
+                .has(testResults())
+                .has(not(noJUnitTestsFound()))
+                .has(allTestsNeedToPassMessage())
+                .has(numberOfJUnitTestsPassing(0))
+                .has(totalNumberOfJUnitTests(0))
+                .contains("- exampleTestCase:\nexample failure");
+    }
+
+    @Test
     void uncaughtError() {
         Exception ex = new RuntimeException("Some exception");
 
