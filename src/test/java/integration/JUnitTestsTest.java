@@ -1,13 +1,24 @@
 package integration;
 
+import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
+import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.result.Result;
 import nl.tudelft.cse1110.andy.result.UnitTestsResult;
+import nl.tudelft.cse1110.andy.writer.standard.RandomAsciiArtGenerator;
+import nl.tudelft.cse1110.andy.writer.standard.StandardResultWriter;
+import nl.tudelft.cse1110.andy.writer.standard.VersionInformation;
 import org.assertj.core.api.Condition;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+
+import static nl.tudelft.cse1110.andy.utils.FilesUtils.*;
+import static org.assertj.core.api.Assertions.not;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.Mockito.*;
+import static unit.writer.standard.StandardResultTestAssertions.*;
 
 public class JUnitTestsTest {
 
@@ -118,6 +129,39 @@ public class JUnitTestsTest {
             assertThat(result.getTests().getTestsSucceeded()).isEqualTo(26);
             assertThat(result.getTests().getTestsRan()).isEqualTo(26);
         }
+
+        @Test
+        void incorrectGeneratorMethodReference() {
+            // This verifies that a proper error message is shown when no tests are found due to a mistake
+            // when referencing the generator method (e.g. by having a non-static generator method)
+
+            // Arrange
+            Context ctx = mock(Context.class);
+            DirectoryConfiguration dirs = new DirectoryConfiguration("any", reportDir.toString());
+            when(ctx.getDirectoryConfiguration()).thenReturn(dirs);
+            StandardResultWriter writer = new StandardResultWriter(
+                    new VersionInformation("testVersion", "testBuildTimestamp", "testCommitId"),
+                    mock(RandomAsciiArtGenerator.class));
+
+            // Act
+            Result result = run(Action.TESTS, "ArrayUtilsIsSortedLibrary", "ArrayUtilsIsSortedWithGeneratorMethodError", "ArrayUtilsIndexOfJQWikConfiguration");
+
+            writer.write(ctx, result);
+
+            // Assert
+            String output = readFile(new File(concatenateDirectories(reportDir.toString(), "stdout.txt")));
+
+            assertThat(output)
+                    .has(compilationSuccess())
+                    .has(testResults())
+                    .has(not(noJUnitTestsFound()))
+                    .has(allTestsNeedToPassMessage())
+                    .has(numberOfJUnitTestsPassing(0))
+                    .has(totalNumberOfJUnitTests(0))
+                    .contains("- isSorted(String, int[], boolean):\n" +
+                              "Make sure your corresponding method delft.ArrayUtilsTest.generator() is static!");
+        }
+
 
     }
 
