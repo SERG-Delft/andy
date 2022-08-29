@@ -95,17 +95,7 @@ public class StandardResultWriter implements ResultWriter {
                 toDisplay.append("---\n");
             }
 
-            Optional<Integer> externalProcessExitCode = result.getGenericFailure().getExternalProcessExitCode();
-            if (externalProcessExitCode.isPresent()) {
-                toDisplay.append(String.format("External process crashed with exit code %d.\n",
-                        externalProcessExitCode.get()));
-                Optional<String> externalProcessErrorMessages = result.getGenericFailure().getExternalProcessErrorMessages();
-                if (externalProcessErrorMessages.isPresent() &&
-                    !externalProcessErrorMessages.get().isEmpty()) {
-                    toDisplay.append(String.format("    Error message:\n%s\n",
-                            externalProcessErrorMessages.get()));
-                }
-            }
+            printExternalProcessFailure(result);
 
             result.getGenericFailure().getGenericFailureMessage().ifPresent(s -> toDisplay.append(s));
 
@@ -147,6 +137,20 @@ public class StandardResultWriter implements ResultWriter {
         }
 
         return Optional.empty();
+    }
+
+    private void printExternalProcessFailure(Result result) {
+        Optional<Integer> externalProcessExitCode = result.getGenericFailure().getExternalProcessExitCode();
+        if (externalProcessExitCode.isPresent()) {
+            toDisplay.append(String.format("External process crashed with exit code %d.\n",
+                    externalProcessExitCode.get()));
+            Optional<String> externalProcessErrorMessages = result.getGenericFailure().getExternalProcessErrorMessages();
+            if (externalProcessErrorMessages.isPresent() &&
+                !externalProcessErrorMessages.get().isEmpty()) {
+                toDisplay.append(String.format("    Error message:\n%s\n",
+                        externalProcessErrorMessages.get()));
+            }
+        }
     }
 
 
