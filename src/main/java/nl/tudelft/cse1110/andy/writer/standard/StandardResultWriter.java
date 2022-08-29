@@ -78,20 +78,7 @@ public class StandardResultWriter implements ResultWriter {
         if (result.hasGenericFailure()) {
             Optional<String> exceptionMessage = result.getGenericFailure().getExceptionMessage();
 
-            boolean issueWithTests = false;
-
-            if (exceptionMessage.isPresent()) {
-                Optional<String> hint = getGenericFailureHint(exceptionMessage.get());
-                if (hint.isPresent()) {
-                    issueWithTests = true;
-
-                    toDisplay.append("An error occurred while running your tests.\n\n---\n\n");
-
-                    toDisplay.append(hint.get()).append("\n\n---\n\n");
-
-                    toDisplay.append("Full details:\n\n");
-                }
-            }
+            boolean issueWithTests = checkForIssueWithTests(exceptionMessage);
 
             if (!issueWithTests) {
                 toDisplay.append("Oh, we are facing a failure that we cannot recover from.\n");
@@ -126,6 +113,24 @@ public class StandardResultWriter implements ResultWriter {
         }
 
         return false;
+    }
+
+    private boolean checkForIssueWithTests(Optional<String> exceptionMessage) {
+        boolean issueWithTests = false;
+
+        if (exceptionMessage.isPresent()) {
+            Optional<String> hint = getGenericFailureHint(exceptionMessage.get());
+            if (hint.isPresent()) {
+                issueWithTests = true;
+
+                toDisplay.append("An error occurred while running your tests.\n\n---\n\n");
+
+                toDisplay.append(hint.get()).append("\n\n---\n\n");
+
+                toDisplay.append("Full details:\n\n");
+            }
+        }
+        return issueWithTests;
     }
 
     /**
