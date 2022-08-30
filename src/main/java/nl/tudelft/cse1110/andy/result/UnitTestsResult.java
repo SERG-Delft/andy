@@ -72,6 +72,10 @@ public class UnitTestsResult {
         return testsRan == 0;
     }
 
+    public boolean noTestsFound() {
+        return getTestsFound() == 0 && !hasFailingMessage();
+    }
+
     @Override
     public String toString() {
         return "UnitTestsResult{" +
