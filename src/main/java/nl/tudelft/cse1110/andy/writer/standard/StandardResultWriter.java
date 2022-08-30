@@ -286,7 +286,7 @@ public class StandardResultWriter implements ResultWriter {
             return;
 
         l("\n--- JUnit execution");
-        if (tests.getTestsFound() == 0) {
+        if (tests.noTestsFound()) {
             noTestsFound(tests);
         } else {
             l(String.format("%d/%d passed", tests.getTestsSucceeded(), tests.getTestsFound()));
