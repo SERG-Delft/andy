@@ -7,9 +7,11 @@ import nl.tudelft.cse1110.andy.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.result.Result;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
+import nl.tudelft.cse1110.andy.writer.ResultWriter;
 import nl.tudelft.cse1110.andy.writer.standard.RandomAsciiArtGenerator;
 import nl.tudelft.cse1110.andy.writer.standard.StandardResultWriter;
 import nl.tudelft.cse1110.andy.writer.standard.VersionInformation;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -23,7 +25,35 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static unit.writer.standard.StandardResultTestAssertions.*;
 
-public class GenericFailureWithHintTest extends IntegrationTestBase {
+public class GenericFailureWithStandardResultWriterTest extends IntegrationTestBase {
+    protected Context ctx = mock(Context.class);
+    protected VersionInformation versionInformation = new VersionInformation("testVersion", "testBuildTimestamp", "testCommitId");
+    protected RandomAsciiArtGenerator asciiArtGenerator = mock(RandomAsciiArtGenerator.class);
+    protected ResultWriter writer;
+
+    protected ResultWriter buildWriter() {
+        return new StandardResultWriter(versionInformation, asciiArtGenerator);
+    }
+
+    @BeforeEach
+    void setupMocks() {
+        DirectoryConfiguration dirs = new DirectoryConfiguration("any", reportDir.toString());
+        when(ctx.getDirectoryConfiguration()).thenReturn(dirs);
+        when(asciiArtGenerator.getRandomAsciiArt()).thenReturn("random ascii art");
+    }
+
+    @BeforeEach
+    void createWriter() {
+        this.writer = buildWriter();
+    }
+
+    protected String generatedResult() {
+        return readFile(new File(concatenateDirectories(reportDir.toString(), "stdout.txt")));
+    }
+
+    protected void writeResult(Result result) {
+        writer.write(ctx, result);
+    }
 
     @Override
     protected void addSteps(ExecutionFlow flow) {
@@ -37,24 +67,13 @@ public class GenericFailureWithHintTest extends IntegrationTestBase {
 
     @Test
     void genericFailureWithHint() {
-        // Arrange
-        Context ctx = mock(Context.class);
-        DirectoryConfiguration dirs = new DirectoryConfiguration("any", reportDir.toString());
-        when(ctx.getDirectoryConfiguration()).thenReturn(dirs);
-        StandardResultWriter writer = new StandardResultWriter(
-                new VersionInformation("testVersion", "testBuildTimestamp", "testCommitId"),
-                mock(RandomAsciiArtGenerator.class));
-
-        // Act
         Result result = run(Action.TESTS, "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass");
 
-        writer.write(ctx, result);
+        writeResult(result);
 
-        // Assert
         assertThat(result.hasGenericFailure()).isTrue();
 
-        String output = readFile(new File(concatenateDirectories(reportDir.toString(), "stdout.txt")));
-
+        String output = generatedResult();
         assertThat(output)
                 .has(not(compilationSuccess()))
                 .has(not(testResults()))
