@@ -276,5 +276,14 @@ public class StandardResultTestAssertions {
         };
     }
 
+    public static Condition<String> flakyTestSuiteMessage() {
+        return new Condition<>() {
+            @Override
+            public boolean matches(String value) {
+                return value.contains("It appears that your test suite is flaky.");
+            }
+        };
+    }
+
 }
 

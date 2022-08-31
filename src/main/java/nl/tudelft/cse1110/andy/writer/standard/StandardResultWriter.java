@@ -76,30 +76,26 @@ public class StandardResultWriter implements ResultWriter {
 
     private boolean printFailure(Result result) {
         if (result.hasGenericFailure()) {
-            toDisplay.append("Oh, we are facing a failure that we cannot recover from.\n");
+            Optional<String> exceptionMessage = result.getGenericFailure().getExceptionMessage();
+
+            boolean issueWithTests = checkForIssueWithTests(exceptionMessage);
+
+            if (!issueWithTests) {
+                toDisplay.append("Oh, we are facing a failure that we cannot recover from.\n");
+            }
 
             result.getGenericFailure().getStepName()
                     .ifPresent(s -> toDisplay.append(String.format("The failure occurred in %s.\n", s)));
-
-            Optional<String> exceptionMessage = result.getGenericFailure().getExceptionMessage();
             if (exceptionMessage.isPresent()) {
-                toDisplay.append("Please, send the message below to the teaching team:\n");
+                if(!issueWithTests) {
+                    toDisplay.append("Please, send the message below to the teaching team:\n");
+                }
                 toDisplay.append("---\n");
                 toDisplay.append(exceptionMessage.get());
                 toDisplay.append("---\n");
             }
 
-            Optional<Integer> externalProcessExitCode = result.getGenericFailure().getExternalProcessExitCode();
-            if (externalProcessExitCode.isPresent()) {
-                toDisplay.append(String.format("External process crashed with exit code %d.\n",
-                        externalProcessExitCode.get()));
-                Optional<String> externalProcessErrorMessages = result.getGenericFailure().getExternalProcessErrorMessages();
-                if (externalProcessErrorMessages.isPresent() &&
-                    !externalProcessErrorMessages.get().isEmpty()) {
-                    toDisplay.append(String.format("    Error message:\n%s\n",
-                            externalProcessErrorMessages.get()));
-                }
-            }
+            printExternalProcessFailure(result);
 
             result.getGenericFailure().getGenericFailureMessage().ifPresent(s -> toDisplay.append(s));
 
@@ -107,6 +103,54 @@ public class StandardResultWriter implements ResultWriter {
         }
 
         return false;
+    }
+
+    private boolean checkForIssueWithTests(Optional<String> exceptionMessage) {
+        boolean issueWithTests = false;
+
+        if (exceptionMessage.isPresent()) {
+            Optional<String> hint = getGenericFailureHint(exceptionMessage.get());
+            if (hint.isPresent()) {
+                issueWithTests = true;
+
+                toDisplay.append("An error occurred while running your tests.\n\n---\n\n");
+
+                toDisplay.append(hint.get()).append("\n\n---\n\n");
+
+                toDisplay.append("Full details:\n\n");
+            }
+        }
+        return issueWithTests;
+    }
+
+    /**
+     * This method returns a hint about the cause of the exception message when the exception is the student's fault.
+     *
+     * @param exceptionMessage The generic failure exception message
+     * @return A hint if one is available, or null if the exception is not recognised.
+     */
+    private Optional<String> getGenericFailureHint(String exceptionMessage) {
+        if (exceptionMessage.contains("org.pitest.help.PitHelpError") &&
+            exceptionMessage.contains("tests did not pass without mutation")) {
+            return Optional.of("It appears that your test suite is flaky. " +
+                               "Make sure that your tests do not randomly fail for no reason.");
+        }
+
+        return Optional.empty();
+    }
+
+    private void printExternalProcessFailure(Result result) {
+        Optional<Integer> externalProcessExitCode = result.getGenericFailure().getExternalProcessExitCode();
+        if (externalProcessExitCode.isPresent()) {
+            toDisplay.append(String.format("External process crashed with exit code %d.\n",
+                    externalProcessExitCode.get()));
+            Optional<String> externalProcessErrorMessages = result.getGenericFailure().getExternalProcessErrorMessages();
+            if (externalProcessErrorMessages.isPresent() &&
+                !externalProcessErrorMessages.get().isEmpty()) {
+                toDisplay.append(String.format("    Error message:\n%s\n",
+                        externalProcessErrorMessages.get()));
+            }
+        }
     }
 
 

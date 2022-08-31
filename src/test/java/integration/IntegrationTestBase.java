@@ -4,6 +4,7 @@ import com.google.common.io.Files;
 import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionFlow;
+import nl.tudelft.cse1110.andy.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.grade.GradeCalculator;
 import nl.tudelft.cse1110.andy.result.Result;
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.AfterEach;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import static nl.tudelft.cse1110.andy.utils.ResourceUtils.resourceFolder;
 
@@ -34,7 +36,8 @@ public abstract class IntegrationTestBase {
     public Result run(Action action,
                       String libraryFile,
                       String solutionFile,
-                      String configurationFile) {
+                      String configurationFile,
+                      List<ExecutionStep> executionStepsOverride) {
         if (configurationFile != null) {
             copyConfigurationFile(configurationFile);
         }
@@ -56,7 +59,9 @@ public abstract class IntegrationTestBase {
 
         try {
             ResultWriter writer = getWriter();
-            ExecutionFlow flow = ExecutionFlow.build(ctx, resultBuilder, writer);
+            ExecutionFlow flow = executionStepsOverride == null ?
+                    ExecutionFlow.build(ctx, resultBuilder, writer) :
+                    new ExecutionFlow(ctx, resultBuilder, writer, executionStepsOverride);
 
             addSteps(flow);
 
@@ -70,12 +75,24 @@ public abstract class IntegrationTestBase {
         return resultBuilder.build();
     }
 
+    public Result run(Action action,
+                      String libraryFile,
+                      String solutionFile,
+                      String configurationFile) {
+        return run(action, libraryFile, solutionFile, configurationFile, null);
+    }
+
     protected ResultWriter getWriter() {
         return new EmptyWriter();
     }
 
     public Result run(Action action, String libraryFile, String solutionFile) {
-        return this.run(action, libraryFile, solutionFile, null);
+        return this.run(action, libraryFile, solutionFile, (String) null);
+    }
+
+    public Result run(Action action, String libraryFile, String solutionFile,
+                      List<ExecutionStep> executionStepsOverride) {
+        return this.run(action, libraryFile, solutionFile, null, executionStepsOverride);
     }
 
     public Result run(String libraryFile, String solutionFile, String configurationFile) {
