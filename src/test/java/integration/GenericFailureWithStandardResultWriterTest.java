@@ -2,9 +2,9 @@ package integration;
 
 import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.execution.Context;
-import nl.tudelft.cse1110.andy.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
+import nl.tudelft.cse1110.andy.execution.step.*;
 import nl.tudelft.cse1110.andy.result.Result;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.writer.ResultWriter;
@@ -15,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.util.List;
+import java.util.Arrays;
 
 import static nl.tudelft.cse1110.andy.utils.FilesUtils.concatenateDirectories;
 import static nl.tudelft.cse1110.andy.utils.FilesUtils.readFile;
@@ -55,19 +55,20 @@ public class GenericFailureWithStandardResultWriterTest extends IntegrationTestB
         writer.write(ctx, result);
     }
 
-    @Override
-    protected void addSteps(ExecutionFlow flow) {
+    @Test
+    void genericFailureWithHint() {
         ExecutionStep badStep = mock(ExecutionStep.class);
-
         doThrow(new org.pitest.help.PitHelpError(org.pitest.help.Help.FAILING_TESTS, 5))
                 .when(badStep).execute(any(Context.class), any(ResultBuilder.class));
 
-        flow.addSteps(List.of(badStep));
-    }
-
-    @Test
-    void genericFailureWithHint() {
-        Result result = run(Action.TESTS, "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass");
+        Result result = run(Action.TESTS, "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass",
+                Arrays.asList(
+                        new OrganizeSourceCodeStep(),
+                        new SourceCodeSecurityCheckStep(),
+                        new CompilationStep(),
+                        new ReplaceClassloaderStep(),
+                        new GetRunConfigurationStep(),
+                        badStep));
 
         writeResult(result);
 

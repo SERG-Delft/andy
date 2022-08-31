@@ -15,7 +15,7 @@ public class ExecutionFlow {
     private LinkedList<ExecutionStep> steps;
     private final ResultWriter writer;
 
-    private ExecutionFlow(Context ctx, ResultBuilder result, ResultWriter writer, List<ExecutionStep> steps) {
+    public ExecutionFlow(Context ctx, ResultBuilder result, ResultWriter writer, List<ExecutionStep> steps) {
         this.steps = new LinkedList<>();
 
         if (ctx.isSecurityEnabled()) {
