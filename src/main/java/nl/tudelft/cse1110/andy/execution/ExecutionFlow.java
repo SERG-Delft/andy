@@ -70,6 +70,7 @@ public class ExecutionFlow {
                 new SourceCodeSecurityCheckStep(),
                 new CompilationStep(),
                 new ReplaceClassloaderStep(),
-                new GetRunConfigurationStep());
+                new GetRunConfigurationStep(),
+                new InjectModeActionStepsStep());
     }
 }

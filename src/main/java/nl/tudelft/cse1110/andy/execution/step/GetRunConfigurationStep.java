@@ -26,36 +26,13 @@ public class GetRunConfigurationStep implements ExecutionStep {
             RunConfiguration runConfiguration = (RunConfiguration) runConfigurationClass.getDeclaredConstructor().newInstance();
 
             ctx.setRunConfiguration(runConfiguration);
-
-            this.addExecutionSteps(ctx, result);
         } catch (NoSuchElementException ex) {
             // There's no configuration set. We put a default one!
             RunConfiguration runConfiguration = new DefaultRunConfiguration(allClassesButTestingAndConfigOnes(ctx.getNewClassNames()));
             ctx.setRunConfiguration(runConfiguration);
-
-            this.addExecutionSteps(ctx, result);
         } catch (Exception ex) {
             result.genericFailure(this, ex);
         }
-    }
-
-    private void addExecutionSteps(Context ctx, ResultBuilder result) {
-        ExecutionFlow flow = ctx.getFlow();
-
-        ModeActionSelector modeActionSelector = createModeSelector(ctx, result);
-        flow.addSteps(modeActionSelector.getSteps());
-    }
-
-    private ModeActionSelector createModeSelector(Context ctx, ResultBuilder result) {
-        RunConfiguration runConfiguration = ctx.getRunConfiguration();
-
-        Mode mode = runConfiguration.mode();
-        Action action = ctx.getAction();
-
-        ModeActionSelector modeActionSelector = new ModeActionSelector(mode, action);
-        ctx.setModeSelector(modeActionSelector);
-
-        return modeActionSelector;
     }
 
     @Override
