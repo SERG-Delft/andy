@@ -84,4 +84,32 @@ public class GenericFailureWithStandardResultWriterTest extends IntegrationTestB
                 .contains("tests did not pass without mutation")
                 .contains("It appears that your test suite is flaky.");
     }
+
+    @Test
+    void genericFailureTest() {
+        ExecutionStep badStep = mock(ExecutionStep.class);
+        doThrow(new RuntimeException("This is a very bad and scary exception"))
+                .when(badStep).execute(any(Context.class), any(ResultBuilder.class));
+
+        Result result = run(Action.TESTS, "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass",
+                Arrays.asList(
+                        new OrganizeSourceCodeStep(),
+                        new SourceCodeSecurityCheckStep(),
+                        new CompilationStep(),
+                        new ReplaceClassloaderStep(),
+                        new GetRunConfigurationStep(),
+                        badStep,
+                        new InjectModeActionStepsStep()));
+
+        writeResult(result);
+
+        assertThat(result.hasGenericFailure()).isTrue();
+
+        String output = generatedResult();
+        assertThat(output)
+                .has(not(compilationSuccess()))
+                .has(not(testResults()))
+                .has(genericFailure("java.lang.RuntimeException: This is a very bad and scary exception"))
+                .doesNotContain("It appears that your test suite is flaky.");
+    }
 }
