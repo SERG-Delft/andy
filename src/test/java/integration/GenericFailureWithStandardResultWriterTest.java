@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.List;
 
 import static nl.tudelft.cse1110.andy.utils.FilesUtils.concatenateDirectories;
 import static nl.tudelft.cse1110.andy.utils.FilesUtils.readFile;
@@ -62,14 +63,7 @@ public class GenericFailureWithStandardResultWriterTest extends IntegrationTestB
                 .when(badStep).execute(any(Context.class), any(ResultBuilder.class));
 
         Result result = run(Action.TESTS, "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass",
-                Arrays.asList(
-                        new OrganizeSourceCodeStep(),
-                        new SourceCodeSecurityCheckStep(),
-                        new CompilationStep(),
-                        new ReplaceClassloaderStep(),
-                        new GetRunConfigurationStep(),
-                        badStep,
-                        new InjectModeActionStepsStep()));
+                createSteps(badStep));
 
         writeResult(result);
 
@@ -92,14 +86,7 @@ public class GenericFailureWithStandardResultWriterTest extends IntegrationTestB
                 .when(badStep).execute(any(Context.class), any(ResultBuilder.class));
 
         Result result = run(Action.TESTS, "NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass",
-                Arrays.asList(
-                        new OrganizeSourceCodeStep(),
-                        new SourceCodeSecurityCheckStep(),
-                        new CompilationStep(),
-                        new ReplaceClassloaderStep(),
-                        new GetRunConfigurationStep(),
-                        badStep,
-                        new InjectModeActionStepsStep()));
+                createSteps(badStep));
 
         writeResult(result);
 
@@ -111,5 +98,16 @@ public class GenericFailureWithStandardResultWriterTest extends IntegrationTestB
                 .has(not(testResults()))
                 .has(genericFailure("java.lang.RuntimeException: This is a very bad and scary exception"))
                 .has(not(flakyTestSuiteMessage()));
+    }
+
+    private List<ExecutionStep> createSteps(ExecutionStep badStep) {
+        return Arrays.asList(
+                new OrganizeSourceCodeStep(),
+                new SourceCodeSecurityCheckStep(),
+                new CompilationStep(),
+                new ReplaceClassloaderStep(),
+                new GetRunConfigurationStep(),
+                badStep,
+                new InjectModeActionStepsStep());
     }
 }
