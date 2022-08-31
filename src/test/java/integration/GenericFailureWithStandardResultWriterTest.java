@@ -68,7 +68,8 @@ public class GenericFailureWithStandardResultWriterTest extends IntegrationTestB
                         new CompilationStep(),
                         new ReplaceClassloaderStep(),
                         new GetRunConfigurationStep(),
-                        badStep));
+                        badStep,
+                        new InjectModeActionStepsStep()));
 
         writeResult(result);
 
