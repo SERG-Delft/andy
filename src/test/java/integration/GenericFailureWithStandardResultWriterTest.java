@@ -82,7 +82,7 @@ public class GenericFailureWithStandardResultWriterTest extends IntegrationTestB
                 .has(not(genericFailure("")))
                 .contains("org.pitest.help.PitHelpError")
                 .contains("tests did not pass without mutation")
-                .contains("It appears that your test suite is flaky.");
+                .has(flakyTestSuiteMessage());
     }
 
     @Test
@@ -110,6 +110,6 @@ public class GenericFailureWithStandardResultWriterTest extends IntegrationTestB
                 .has(not(compilationSuccess()))
                 .has(not(testResults()))
                 .has(genericFailure("java.lang.RuntimeException: This is a very bad and scary exception"))
-                .doesNotContain("It appears that your test suite is flaky.");
+                .has(not(flakyTestSuiteMessage()));
     }
 }
