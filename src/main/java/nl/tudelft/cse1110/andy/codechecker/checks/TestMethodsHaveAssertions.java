@@ -35,10 +35,25 @@ public class TestMethodsHaveAssertions extends WithinTestMethod {
         add("assertTrue");
         add("assertFalse");
         add("assertThrows");
+        add("assertNull");
+        add("assertArrayEquals");
+        add("assertDoesNotThrow");
+        add("assertIterableEquals");
+        add("assertLinesMatch");
+        add("assertNotNull");
+        add("assertNotSame");
+        add("assertSame");
 
         // assertj
         add("assertThat");
         add("assertThatThrownBy");
+        add("assertThatExceptionOfType");
+        add("assertThatCode");
+        add("assertThatIllegalArgumentException");
+        add("assertThatIllegalStateException");
+        add("assertThatIOException");
+        add("assertThatNullPointerException");
+        add("assertThatObject");
 
     }};
 
