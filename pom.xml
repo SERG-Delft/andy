@@ -108,7 +108,7 @@
         <dependency>
             <groupId>org.pitest</groupId>
             <artifactId>pitest</artifactId>
-            <version>1.9.0</version>
+            <version>1.9.5</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.pitest/pitest-junit5-plugin -->
@@ -122,7 +122,7 @@
         <dependency>
             <groupId>org.pitest</groupId>
             <artifactId>pitest-command-line</artifactId>
-            <version>1.9.0</version>
+            <version>1.9.5</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.jacoco/org.jacoco.core -->
@@ -281,7 +281,7 @@
             <plugin>
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
-                <version>1.9.0</version>
+                <version>1.9.5</version>
                 <!-- https://mvnrepository.com/artifact/org.pitest/pitest-junit5-plugin -->
                 <dependencies>
                     <dependency>
