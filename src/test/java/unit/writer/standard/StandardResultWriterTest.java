@@ -274,6 +274,7 @@ public class StandardResultWriterTest {
                 .has(mutationScore(5, 6))
                 .has(noMetaTests())
                 .has(noCodeChecks())
+                .has(noRequiredCodeChecks())
                 .has(not(zeroScoreExplanation()))
                 .doesNotContain("test success message");
 
@@ -502,6 +503,12 @@ public class StandardResultWriterTest {
                         new MetaTestResult("e", 3, false),
                         new MetaTestResult("f", 1, true)
                 ))
+                .withRequiredCodeCheckResults(List.of(
+                        new CodeCheckResult("a1", 1, true),
+                        new CodeCheckResult("b1", 1, true),
+                        new CodeCheckResult("c1", 1, true),
+                        new CodeCheckResult("d1", 1, true)
+                ))
                 .build();
 
         writer.write(ctx, result);
@@ -523,6 +530,7 @@ public class StandardResultWriterTest {
                 .has(scoreOfCodeChecks(3, 4))
                 .has(metaTestsPassing(2))
                 .has(metaTests(3))
+                .has(not(requiredCodeChecksFailed()))
                 .has(not(zeroScoreExplanation()));
 
         if (fullHints) {
@@ -532,7 +540,62 @@ public class StandardResultWriterTest {
                     .has(metaTestPassing("f"))
                     .has(codeCheck("a", true, 1))
                     .has(codeCheck("b", true, 2))
-                    .has(codeCheck("c", false, 1));
+                    .has(codeCheck("c", false, 1))
+                    .has(codeCheck("a1", true, 1))
+                    .has(codeCheck("b1", true, 1))
+                    .has(codeCheck("c1", true, 1))
+                    .has(codeCheck("d1", true, 1));
+        }
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "true,false",
+            "false,true",
+            "true,true"
+    })
+    void testPrintFinalGradeWithRequiredCodeChecksFailing(boolean fullHints, boolean partialHints) {
+        ModeActionSelector modeActionSelector = mock(ModeActionSelector.class);
+        when(modeActionSelector.shouldCalculateAndShowGrades()).thenReturn(true);
+        when(modeActionSelector.shouldGenerateAnalytics()).thenReturn(false);
+        when(modeActionSelector.shouldShowFullHints()).thenReturn(fullHints);
+        when(modeActionSelector.shouldShowPartialHints()).thenReturn(partialHints);
+        when(modeActionSelector.getMode()).thenReturn(Mode.PRACTICE);
+
+        when(ctx.getModeActionSelector()).thenReturn(modeActionSelector);
+
+        Result result = new ResultTestDataBuilder()
+                .withCoverageResult(CoverageResult.build(
+                        4, 7, 5, 8, 1, 2,
+                        new CoverageLineByLine(List.of(), List.of(), List.of())))
+                .withMutationTestingResults(5, 6)
+                .withRequiredCodeCheckResults(List.of(
+                        new CodeCheckResult("a1", 1, true),
+                        new CodeCheckResult("b1", 1, false),
+                        new CodeCheckResult("c1", 1, true),
+                        new CodeCheckResult("d1", 1, true)
+                ))
+                .build();
+
+        writer.write(ctx, result);
+
+        String output = generatedResult();
+
+        assertThat(output)
+                .has(versionInformation(versionInformation))
+                .has(compilationSuccess())
+                .has(fullGradeDescription("Code checks", 0, 0, 0.25))
+                .has(mutationScore(5, 6))
+                .has(requiredCodeChecksFailed())
+                .has(noCodeChecks())
+                .has(not(zeroScoreExplanation()));
+
+        if (fullHints) {
+            assertThat(output)
+                    .has(codeCheck("a1", true, 1))
+                    .has(codeCheck("b1", false, 1))
+                    .has(codeCheck("c1", true, 1))
+                    .has(codeCheck("d1", true, 1));
         }
     }
 

@@ -244,7 +244,15 @@ public class StandardResultTestAssertions {
 
 
     public static Condition<String> noCodeChecks() {
-        return not(containsRegex("--- Code checks"));
+        return not(containsString("--- Code checks"));
+    }
+
+    public static Condition<String> noRequiredCodeChecks() {
+        return not(containsString("--- Required code checks"));
+    }
+
+    public static Condition<String> requiredCodeChecksFailed() {
+        return containsString("Some required code checks failed. Stopping the assessment.");
     }
 
     public static Condition<String> noCodeChecksToBeAssessed() {
