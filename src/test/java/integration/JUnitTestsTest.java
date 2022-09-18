@@ -371,6 +371,18 @@ public class JUnitTestsTest {
             assertThat(result.getTests().hasTestsFailingOrFailures()).isFalse();
         }
 
+        // Multiple class names contain the substring "Test" -> test discovery fails
+        @Test
+        void multipleTestClassesDiscovered() {
+            Result result = run(Action.TESTS, "LibraryWithBadTestTemplate", "SolutionWithBadInheritance");
+
+            assertThat(result.hasFailed()).isTrue();
+            assertThat(result.hasGenericFailure()).isTrue();
+            assertThat(result.getGenericFailure().getExceptionMessage())
+                    .hasValueSatisfying(containsString(
+                            "java.lang.IllegalArgumentException: There are 2 classes containing the substring \"Test\""));
+        }
+
     }
 
     private static Condition<UnitTestsResult> failingTest(String nameOfTheTest) {
