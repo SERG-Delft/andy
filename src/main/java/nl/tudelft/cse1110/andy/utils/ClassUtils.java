@@ -64,7 +64,8 @@ public class ClassUtils {
      * @throws IllegalArgumentException if there is not exactly 1 test class
      */
     public static String getTestClass(List<String> listOfClasses) {
-        List<String> matchingClassNames = listOfClasses.stream().filter(c -> c.contains("Test"))
+        List<String> matchingClassNames = listOfClasses.stream()
+                .filter(c -> c.substring(c.lastIndexOf(".")).contains("Test"))
                 .collect(Collectors.toList());
 
         if (matchingClassNames.size() != 1) {
