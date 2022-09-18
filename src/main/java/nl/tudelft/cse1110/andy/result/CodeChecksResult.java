@@ -40,6 +40,10 @@ public class CodeChecksResult {
         return wasExecuted;
     }
 
+    public boolean allChecksPass() {
+        return getNumberOfPassedChecks() != getTotalNumberOfChecks();
+    }
+
     @Override
     public String toString() {
         return "CodeChecksResult{" +

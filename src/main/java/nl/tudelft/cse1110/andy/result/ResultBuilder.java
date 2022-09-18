@@ -328,8 +328,7 @@ public class ResultBuilder {
         boolean compilationFailed = compilation!=null && !compilation.successful();
         boolean unitTestsFailed = testResults != null && testResults.didNotGoWell();
         boolean hasGenericFailure = genericFailureObject.hasFailure();
-        boolean requiredCodeChecksFailed = requiredCodeCheckResults.getNumberOfPassedChecks() !=
-                                           requiredCodeCheckResults.getTotalNumberOfChecks();
+        boolean requiredCodeChecksFailed = requiredCodeCheckResults.allChecksPass();
 
         return compilationFailed || unitTestsFailed || hasGenericFailure || requiredCodeChecksFailed;
     }
