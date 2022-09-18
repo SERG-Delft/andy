@@ -64,6 +64,7 @@ public class StandardResultWriter implements ResultWriter {
             printTestResults(result.getTests());
             printCoverageResults(result.getCoverage());
             printMutationTestingResults(result.getMutationTesting());
+            printRequiredCodeCheckResults(ctx, result.getRequiredCodeChecks());
             printCodeCheckResults(ctx, result.getCodeChecks());
             printMetaTestResults(ctx, result.getMetaTests());
             printFinalGrade(ctx, result);
@@ -301,19 +302,44 @@ public class StandardResultWriter implements ResultWriter {
         }
         else {
             l("\n--- Code checks");
-            l(String.format("%d/%d passed", codeChecks.getNumberOfPassedChecks(), codeChecks.getTotalNumberOfChecks()));
+            printCodeCheckOutput(codeChecks, allHints);
+        }
 
-            if(allHints) {
-                for (CodeCheckResult result : codeChecks.getCheckResults()) {
-                    l(String.format("%s: %s (weight: %d)",
-                            result.getDescription(),
-                            result.passed() ? "PASS" : "FAIL",
-                            result.getWeight()));
-                }
+    }
 
+    private void printRequiredCodeCheckResults(Context ctx, CodeChecksResult codeChecks) {
+        if(!codeChecks.wasExecuted())
+            return;
+
+        boolean allHints = modeActionSelector(ctx).shouldShowFullHints();
+        boolean onlyResult = modeActionSelector(ctx).shouldShowPartialHints();
+
+        if(!allHints && !onlyResult)
+            return;
+
+        if(codeChecks.hasChecks()) {
+            l("\n--- Required code checks");
+            printCodeCheckOutput(codeChecks, allHints);
+
+            if(!codeChecks.allChecksPass()){
+                l("\nSome required code checks failed. Stopping the assessment.");
             }
         }
 
+    }
+
+    private void printCodeCheckOutput(CodeChecksResult codeChecks, boolean allHints) {
+        l(String.format("%d/%d passed", codeChecks.getNumberOfPassedChecks(), codeChecks.getTotalNumberOfChecks()));
+
+        if(allHints) {
+            for (CodeCheckResult result : codeChecks.getCheckResults()) {
+                l(String.format("%s: %s (weight: %d)",
+                        result.getDescription(),
+                        result.passed() ? "PASS" : "FAIL",
+                        result.getWeight()));
+            }
+
+        }
     }
 
     private void printMutationTestingResults(MutationTestingResult mutationTesting) {
