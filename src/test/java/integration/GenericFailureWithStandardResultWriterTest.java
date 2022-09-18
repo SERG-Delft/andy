@@ -57,7 +57,7 @@ public class GenericFailureWithStandardResultWriterTest extends IntegrationTestB
     }
 
     @Test
-    void genericFailureWithHint() {
+    void genericFailureWithHint() throws Exception {
         ExecutionStep badStep = mock(ExecutionStep.class);
         doThrow(new org.pitest.help.PitHelpError(org.pitest.help.Help.FAILING_TESTS, 5))
                 .when(badStep).execute(any(Context.class), any(ResultBuilder.class));
@@ -80,7 +80,7 @@ public class GenericFailureWithStandardResultWriterTest extends IntegrationTestB
     }
 
     @Test
-    void genericFailureTest() {
+    void genericFailureTest() throws Exception {
         ExecutionStep badStep = mock(ExecutionStep.class);
         doThrow(new RuntimeException("This is a very bad and scary exception"))
                 .when(badStep).execute(any(Context.class), any(ResultBuilder.class));
