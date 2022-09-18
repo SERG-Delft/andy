@@ -282,6 +282,7 @@ public class ResultBuilder {
                     testResults,
                     mutationResults,
                     codeCheckResults,
+                    requiredCodeCheckResults,
                     coverageResults,
                     metaTestResults,
                     finalGrade,
