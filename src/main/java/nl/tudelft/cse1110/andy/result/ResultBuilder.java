@@ -328,8 +328,10 @@ public class ResultBuilder {
         boolean compilationFailed = compilation!=null && !compilation.successful();
         boolean unitTestsFailed = testResults != null && testResults.didNotGoWell();
         boolean hasGenericFailure = genericFailureObject.hasFailure();
+        boolean requiredCodeChecksFailed = requiredCodeCheckResults.getNumberOfPassedChecks() !=
+                                           requiredCodeCheckResults.getTotalNumberOfChecks();
 
-        return compilationFailed || unitTestsFailed || hasGenericFailure;
+        return compilationFailed || unitTestsFailed || hasGenericFailure || requiredCodeChecksFailed;
     }
 
     public UnitTestsResult getTestResults() {
