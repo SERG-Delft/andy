@@ -39,14 +39,6 @@ public class Configuration extends RunConfiguration {
     }
 
     @Override
-    public CheckScript requiredCheckScript() {
-        return new CheckScript(List.of(
-                new SingleCheck("Trip Repository should be mocked required", new MockClass("TripRepository")),
-                new SingleCheck( "getTripById should be set up required", new MockitoWhen("getTripById", Comparison.GTE, 1))
-        ));
-    }
-
-    @Override
     public List<MetaTest> metaTests() {
         return List.of(
                 MetaTest.withStringReplacement("BoundaryCheck",
