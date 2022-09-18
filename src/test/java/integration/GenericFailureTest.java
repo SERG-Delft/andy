@@ -24,8 +24,14 @@ public class GenericFailureTest extends IntegrationTestBase {
     protected void addSteps(ExecutionFlow flow) {
         badStep = mock(ExecutionStep.class);
 
-        doThrow(new RuntimeException("Some super error here"))
-                .when(badStep).execute(any(Context.class), any(ResultBuilder.class));
+        try {
+            doThrow(new RuntimeException("Some super error here"))
+                    .when(badStep).execute(any(Context.class), any(ResultBuilder.class));
+        } catch (Exception e) {
+            // avoid adding exception to the signatures of to all methods that call "run()"
+            // this block will never be executed as the "execute" method is stubbed
+            throw new RuntimeException(e);
+        }
 
         flow.addSteps(Arrays.asList(badStep));
     }
