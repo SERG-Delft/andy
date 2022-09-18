@@ -1,0 +1,29 @@
+package nl.tudelft.cse1110.andy.execution.step;
+
+import nl.tudelft.cse1110.andy.codechecker.engine.CheckScript;
+import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
+import nl.tudelft.cse1110.andy.config.RunConfiguration;
+import nl.tudelft.cse1110.andy.execution.Context;
+import nl.tudelft.cse1110.andy.execution.ExecutionStep;
+import nl.tudelft.cse1110.andy.result.ResultBuilder;
+
+import java.io.FileNotFoundException;
+
+import static nl.tudelft.cse1110.andy.utils.FilesUtils.findSolution;
+
+public class RunRequiredCodeChecksStep implements ExecutionStep {
+    @Override
+    public void execute(Context ctx, ResultBuilder result) throws FileNotFoundException {
+        DirectoryConfiguration dirCfg = ctx.getDirectoryConfiguration();
+        RunConfiguration runCfg = ctx.getRunConfiguration();
+
+        CheckScript script = runCfg.requiredCheckScript();
+        script.runChecks(findSolution(dirCfg.getWorkingDir()));
+        result.logRequiredCodeChecks(script);
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return other instanceof RunRequiredCodeChecksStep;
+    }
+}
