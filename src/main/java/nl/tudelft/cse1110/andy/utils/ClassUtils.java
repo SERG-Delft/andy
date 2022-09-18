@@ -69,7 +69,7 @@ public class ClassUtils {
 
         if (matchingClassNames.size() != 1) {
             throw new IllegalArgumentException(
-                    String.format("There are %d classes containing the substring \"Test\": %s." +
+                    String.format("There are %d classes containing the substring \"Test\": %s. " +
                                   "There must be only one such class, otherwise test class discovery is not possible.",
                             matchingClassNames.size(),
                             matchingClassNames)
