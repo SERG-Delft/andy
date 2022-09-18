@@ -41,7 +41,7 @@ public class CodeChecksResult {
     }
 
     public boolean allChecksPass() {
-        return getNumberOfPassedChecks() != getTotalNumberOfChecks();
+        return getNumberOfPassedChecks() == getTotalNumberOfChecks();
     }
 
     @Override
