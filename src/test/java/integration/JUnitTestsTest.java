@@ -226,6 +226,20 @@ public class JUnitTestsTest {
 
 
     @Nested
+    class SQLTests extends IntegrationTestBase {
+
+        @Test
+        void sqlTest() {
+            Result result = run(Action.TESTS, "RestaurantsLibrary", "RestaurantsOfficialSolution", "RestaurantsConfiguration");
+
+            assertThat(result.getTests().getTestsSucceeded()).isEqualTo(3);
+            assertThat(result.getTests().getTestsRan()).isEqualTo(3);
+            assertThat(result.getTests().hasTestsFailingOrFailures()).isFalse();
+        }
+    }
+
+
+    @Nested
     class GeneralMistakes extends IntegrationTestBase {
 
         // @BeforeAll methods should be static -> no tests detected
