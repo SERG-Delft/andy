@@ -10,7 +10,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
-class SolutionTest extends RestaurantDaoIntegrationTest {
+class SolutionTest extends RestaurantDaoTemplate {
     @ParameterizedTest(name = "{0}")
     @MethodSource("getAverageGenerator")
     public void getAverageRestaurantTest(String description, List<Restaurant> restaurants,

@@ -342,7 +342,7 @@ class RestaurantDao {
     }
 }
 
-class RestaurantDaoIntegrationTest {
+class RestaurantDaoTemplate {
 
     protected static final String DB_CONNECTION = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1";
     protected static final String DB_USER = "";
