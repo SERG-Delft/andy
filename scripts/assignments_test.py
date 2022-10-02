@@ -47,7 +47,8 @@ for category_dir in get_directories(home_dir):
         with open(f'{os.environ["OUTPUT_DIR"]}/stdout.txt') as file:
             # Get the score from the `stdout.txt` file.
             file_content = file.read()
-            score = int(re.search('Final grade: [0-9]+', file_content).group().split()[2])
+            re_score = re.search('Final grade: [0-9]+', file_content)
+            score = int(re_score.group().split()[2]) if re_score else -1
 
             # Print the score for the assignment.
             print(f'{assignment_dir.split("/")[-2]}/{assignment_dir.split("/")[-1]}: {score}/100')
