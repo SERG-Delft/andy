@@ -303,7 +303,7 @@ public class ResultBuilder {
     }
 
     private int calculateFinalGrade(GradeValues grades, GradeWeight weights) {
-        if(!ctx.getRunConfiguration().skipJacoco() && grades.getCoveredBranches() == 0)
+        if(grades.getTotalBranches() > 0 && grades.getCoveredBranches() == 0)
             return 0;
 
         if(hasFailed())
