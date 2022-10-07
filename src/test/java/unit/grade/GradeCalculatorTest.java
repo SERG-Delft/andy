@@ -11,6 +11,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.params.provider.Arguments.of;
 
 public class GradeCalculatorTest {
@@ -128,6 +130,61 @@ public class GradeCalculatorTest {
                 of(25, 25, 2, 55, 100, 100, 5, 5, 100), // 0.4*1 + 0*(2/55) + 0.5*1 +  0.1*1 = 1.0 --> 100
                 of(25, 25, 2, 55, 100, 100, 4, 5, 98), // 0.4*1 + 0*(2/55) + 0.5*1 +  0.1*(4/5) = 0.98 --> 98
                 of(25, 25, 55, 55, 100, 100, 4, 5, 98) // 0.4*1 + 0*1 + 0.5*1 +  0.1*(4/5) = 0.98 --> 98
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("nonzeroWeightButZeroTotal")
+    void withNonzeroWeightButZeroTotal(int totalBranches, int totalMutations,
+                                       int totalMetaTests, int totalChecks) {
+
+        GradeWeight weights = new GradeWeight(0.25f, 0.25f, 0.25f, 0.25f);
+
+        GradeValues grades = new GradeValues();
+        grades.setBranchGrade(0, totalBranches);
+        grades.setMutationGrade(0, totalMutations);
+        grades.setMetaGrade(0, totalMetaTests);
+        grades.setCheckGrade(0, totalChecks);
+
+        assertThrows(RuntimeException.class, () -> new GradeCalculator().calculateFinalGrade(grades, weights));
+    }
+
+    private static Stream<Arguments> nonzeroWeightButZeroTotal() {
+        return Stream.of(
+                of(0, 1, 1, 1),
+                of(1, 0, 1, 1),
+                of(1, 1, 0, 1),
+                of(1, 1, 1, 0),
+                of(0, 0, 1, 1),
+                of(0, 0, 0, 0)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("zeroWeightAndZeroTotal")
+    void withZeroWeightAndZeroTotal(int totalBranches, int totalMutations,
+                                    int totalMetaTests, int totalChecks,
+                                    float branchCoverageWeight, float mutationCoverageWeight,
+                                    float metaTestsWeight, float codeChecksWeight) {
+
+        GradeWeight weights = new GradeWeight(branchCoverageWeight, mutationCoverageWeight, metaTestsWeight, codeChecksWeight);
+
+        GradeValues grades = new GradeValues();
+        grades.setBranchGrade(0, totalBranches);
+        grades.setMutationGrade(0, totalMutations);
+        grades.setMetaGrade(0, totalMetaTests);
+        grades.setCheckGrade(0, totalChecks);
+
+        assertDoesNotThrow(() -> new GradeCalculator().calculateFinalGrade(grades, weights));
+    }
+
+    private static Stream<Arguments> zeroWeightAndZeroTotal() {
+        return Stream.of(
+                of(0, 1, 1, 1, 0f, 0.5f, 0.25f, 0.25f),
+                of(1, 0, 1, 1, 0.25f, 0f, 0.5f, 0.25f),
+                of(1, 1, 0, 1, 0.25f, 0.25f, 0f, 0.5f),
+                of(1, 1, 1, 0, 0.25f, 0.25f, 0.5f, 0f),
+                of(0, 0, 0, 1, 0f, 0f, 0f, 1f)
         );
     }
 }
