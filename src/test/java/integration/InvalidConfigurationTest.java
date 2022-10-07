@@ -26,7 +26,7 @@ public class InvalidConfigurationTest extends IntegrationTestBase {
     @Test
     void nonzeroWeightButZeroTotal() {
         assertThrows(RuntimeException.class, () -> {
-            run("SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfiguration");
+            run("SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfigurationWithZeroTotal");
         });
         verify(writer).uncaughtError(any(), any(RuntimeException.class));
     }
