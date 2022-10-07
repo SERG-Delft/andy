@@ -20,8 +20,8 @@ public class Configuration extends RunConfiguration {
         return new HashMap<>() {{
             put("coverage", 0.25f);
             put("mutation", 0.25f);
-            put("meta", 0.25f);
-            put("codechecks", 0.25f);
+            put("meta", 0.5f);
+            put("codechecks", 0f);
         }};
     }
 
