@@ -19,6 +19,7 @@ os.system(f'mvn install -Dmaven.test.skip')
 
 expected_andy_version = 'v' + minidom.parse('pom.xml').getElementsByTagName('version')[0].firstChild.data
 
+pipeline_failed = False
 for category_dir in get_directories(home_dir):
     for assignment_dir in get_directories(category_dir):
         # Change to the assignment directory.
