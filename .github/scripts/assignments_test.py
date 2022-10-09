@@ -1,6 +1,7 @@
 import os, re, sys
 from git import Repo
 from shutil import copyfile
+from xml.dom import minidom
 
 def get_directories(basedir):
     return [os.path.join(basedir, dir) for dir in os.listdir(basedir) \
@@ -28,6 +29,8 @@ classpath_string = 'target/classes:'
 with open(mvndeps_file, 'r') as mvndeps_f:
     classpath_string += mvndeps_f.read()
 
+expected_andy_version = 'v' + minidom.parse('pom.xml').getElementsByTagName('version')[0].firstChild.data
+
 pipeline_failed = False
 for category_dir in get_directories(home_dir):
     for assignment_dir in get_directories(category_dir):
@@ -42,20 +45,27 @@ for category_dir in get_directories(home_dir):
         copyfile(f'{assignment_dir}/config/Configuration.java', os.path.join(os.environ['WORKING_DIR'], 'Configuration.java'))
 
         # Run Andy and collect the results.
-        os.system(f'java -ea -cp {classpath_string} nl.tudelft.cse1110.andy.AndyOnWebLab "FULL_WITHOUT_HINTS" "{os.environ["WORKING_DIR"]}" "{os.environ["OUTPUT_DIR"]}" "123456" "CSE1110 Q4 2022" "An assignment!"')
+        os.system(f'java -ea -cp {classpath_string} nl.tudelft.cse1110.andy.AndyOnWebLab "FULL_WITH_HINTS" "{os.environ["WORKING_DIR"]}" "{os.environ["OUTPUT_DIR"]}" "123456" "CSE1110 Q4 2022" "An assignment!"')
 
         with open(f'{os.environ["OUTPUT_DIR"]}/stdout.txt') as file:
             # Get the score from the `stdout.txt` file.
             file_content = file.read()
             re_score = re.search('Final grade: [0-9]+', file_content)
             score = int(re_score.group().split()[2]) if re_score else -1
+            re_andy_version = re.search('Andy v.+', file_content)
+            andy_version = re_andy_version.group() if re_andy_version else "Unknown Andy version"
 
             # Print the score for the assignment.
-            print(f'{assignment_dir.split("/")[-2]}/{assignment_dir.split("/")[-1]}: {score}/100')
+            print(f'{andy_version} | {assignment_dir.split("/")[-2]}/{assignment_dir.split("/")[-1]}: {score}/100')
 
             # Update the `pipeline_failed` variable.
             if score != 100:
                 print(file_content)
+                pipeline_failed = True
+            
+            actual_andy_version = andy_version.split()[1] if re_andy_version else andy_version
+            if actual_andy_version != expected_andy_version:
+                print(f'Error: Unexpected Andy version {actual_andy_version}, expected {expected_andy_version}')
                 pipeline_failed = True
 
 if pipeline_failed:
