@@ -42,10 +42,9 @@ for category_dir in get_directories(home_dir):
         if score != 100:
             print(output)
             pipeline_failed = True
-            
-        actual_andy_version = andy_version.split()[1] if re_andy_version else andy_version
-        if actual_andy_version != expected_andy_version:
-            print(f'Error: Unexpected Andy version {actual_andy_version}, expected {expected_andy_version}')
+
+        if andy_version.startswith(expected_andy_version):
+            print(f'Error: Unexpected Andy version {andy_version}, expected {expected_andy_version}')
             pipeline_failed = True
 
 if pipeline_failed:
