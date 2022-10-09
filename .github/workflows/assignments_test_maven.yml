@@ -1,7 +1,7 @@
-name: assignments_test
+name: assignments_test_maven
 on: push
 jobs:
-  run_assignments:
+  run_assignments_maven:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,4 +20,4 @@ jobs:
           pip3 install gitpython
       - name: Execute python script
         run: |
-          python ./.github/scripts/assignments_test.py
+          python ./.github/scripts/assignments_test_maven.py
