@@ -63,7 +63,7 @@ for category_dir in get_directories(home_dir):
                 print(file_content)
                 pipeline_failed = True
 
-            if andy_version.startswith(expected_andy_version):
+            if expected_andy_version not in andy_version:
                 print(f'Error: Unexpected Andy version {andy_version}, expected {expected_andy_version}')
                 pipeline_failed = True
 
