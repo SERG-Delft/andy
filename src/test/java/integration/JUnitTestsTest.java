@@ -199,6 +199,17 @@ public class JUnitTestsTest {
 
 
         @Test
+        void testParameterizedTestsWithJavaRecordClass() {
+            Result result = run(Action.TESTS, "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfJqwikWithParameterizedWithRecord");
+
+            assertThat(result.getTests())
+                    .has(failingTest("testNoElementInWholeArray"))
+                    .has(failingTest("testValueInArrayUniqueElements"))
+                    .has(failingParameterizedTest("test", 6));
+        }
+
+
+        @Test
         void testMessageOtherThanAssertionError() {
             Result result = run(Action.TESTS, "NumberUtilsAddPositiveLibrary", "NumberUtilsAddPositiveJqwikException");
 
@@ -220,6 +231,20 @@ public class JUnitTestsTest {
 
             assertThat(result.getTests().getTestsSucceeded()).isEqualTo(5);
             assertThat(result.getTests().getTestsRan()).isEqualTo(5);
+            assertThat(result.getTests().hasTestsFailingOrFailures()).isFalse();
+        }
+    }
+
+
+    @Nested
+    class SQLTests extends IntegrationTestBase {
+
+        @Test
+        void sqlTest() {
+            Result result = run(Action.TESTS, "RestaurantsLibrary", "RestaurantsOfficialSolution", "RestaurantsConfiguration");
+
+            assertThat(result.getTests().getTestsSucceeded()).isEqualTo(3);
+            assertThat(result.getTests().getTestsRan()).isEqualTo(3);
             assertThat(result.getTests().hasTestsFailingOrFailures()).isFalse();
         }
     }
@@ -355,6 +380,18 @@ public class JUnitTestsTest {
             assertThat(result.getTests().getTestsSucceeded()).isEqualTo(0);
             assertThat(result.getTests().getTestsRan()).isEqualTo(0);
             assertThat(result.getTests().hasTestsFailingOrFailures()).isFalse();
+        }
+
+        // Multiple class names contain the substring "Test" -> test discovery fails
+        @Test
+        void multipleTestClassesDiscoveredShouldThrowException() {
+            Result result = run(Action.TESTS, "LibraryWithBadTestTemplate", "SolutionWithBadInheritance");
+
+            assertThat(result.hasFailed()).isTrue();
+            assertThat(result.hasGenericFailure()).isTrue();
+            assertThat(result.getGenericFailure().getExceptionMessage())
+                    .hasValueSatisfying(containsString(
+                            "java.lang.IllegalArgumentException: There are 2 classes containing the substring \"Test\""));
         }
 
     }

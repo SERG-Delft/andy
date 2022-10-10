@@ -11,6 +11,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.params.provider.Arguments.of;
 
 public class GradeCalculatorTest {
@@ -20,9 +22,11 @@ public class GradeCalculatorTest {
     void withSameWeights(int coveredBranches, int totalBranches,
                int detectedMutations, int totalMutations,
                int metaTestsPassed, int totalMetaTests,
-               int checksPassed, int totalChecks, int expectedGrade) {
+               int checksPassed, int totalChecks, int expectedGrade,
+               float branchCoverageWeight, float mutationCoverageWeight,
+               float metaTestsWeight, float codeChecksWeight) {
 
-        GradeWeight weights = new GradeWeight(0.25f, 0.25f, 0.25f, 0.25f);
+        GradeWeight weights = new GradeWeight(branchCoverageWeight, mutationCoverageWeight, metaTestsWeight, codeChecksWeight);
 
         GradeValues grades = new GradeValues();
         grades.setBranchGrade(coveredBranches, totalBranches);
@@ -37,18 +41,18 @@ public class GradeCalculatorTest {
 
     private static Stream<Arguments> sameWeights() {
         return Stream.of(
-                of(25, 25, 55, 55, 100, 100, 5, 5, 100), // 0.25*1 + 0.25*1 + 0.25*1 +  0.25*1 = 1.0 --> 100
-                of(22, 25, 45, 55, 82, 100, 4, 5, 83), // 0.25*(22/25) + 0.25*(45/55) + 0.25*(82/100) +  0.25*(4/5) = 0.8295... --> 83
-                of(22, 25, 55, 55, 100, 100, 5, 5, 97), // 0.25*(22/25) + 0.25*1 + 0.25*1 +  0.25*1 = 0.97 --> 97
-                of(25, 25, 45, 55, 100, 100, 5, 5, 95), // 0.25*1 + 0.25*(45/55) + 0.25*1 +  0.25*1 = 0.9545... --> 95
-                of(25, 25, 55, 55, 35, 100, 5, 5, 84), // 0.25*1 + 0.25*1 + 0.25*(35/100) +  0.25*1 = 0.8375 --> 84
-                of(25, 25, 55, 55, 100, 100, 2, 5, 85), // 0.25*1 + 0.25*1 + 0.25*1 +  0.25*(2/5) = 0.85 --> 85
-                of(25, 25, 50, 55, 100, 100, 5, 5, 98), // 0.25*1 + 0.25*(50/55) + 0.25*1 +  0.25*1 = 0.9773... --> 98
-                of(0, 0, 55, 55, 100, 100, 5, 5, 100), // 0.25*1 + 0.25*1 + 0.25*1 +  0.25*1 = 0.1 --> 100
-                of(12, 12, 0, 0, 50, 100, 5, 5, 88), // 0.25*1 + 0.25*1 + 0.25*(50/100) +  0.25*1 = 0.875 --> 88
-                of(24, 30, 55, 55, 0, 0, 5, 5, 95), // 0.25*(24/30) + 0.25*1 + 0.25*1 +  0.25*1 = 0.95 --> 95
-                of(24, 30, 55, 55, 100, 100, 0, 0, 95), // 0.25*(24/30) + 0.25*1 + 0.25*1 +  0.25*1 = 0.95 --> 95
-                of(0, 25, 0, 55, 0, 100, 0, 5, 0) // no scores
+                of(25, 25, 55, 55, 100, 100, 5, 5, 100, 0.25f, 0.25f, 0.25f, 0.25f), // 0.25*1 + 0.25*1 + 0.25*1 +  0.25*1 = 1.0 --> 100
+                of(22, 25, 45, 55, 82, 100, 4, 5, 83, 0.25f, 0.25f, 0.25f, 0.25f), // 0.25*(22/25) + 0.25*(45/55) + 0.25*(82/100) +  0.25*(4/5) = 0.8295... --> 83
+                of(22, 25, 55, 55, 100, 100, 5, 5, 97, 0.25f, 0.25f, 0.25f, 0.25f), // 0.25*(22/25) + 0.25*1 + 0.25*1 +  0.25*1 = 0.97 --> 97
+                of(25, 25, 45, 55, 100, 100, 5, 5, 95, 0.25f, 0.25f, 0.25f, 0.25f), // 0.25*1 + 0.25*(45/55) + 0.25*1 +  0.25*1 = 0.9545... --> 95
+                of(25, 25, 55, 55, 35, 100, 5, 5, 84, 0.25f, 0.25f, 0.25f, 0.25f), // 0.25*1 + 0.25*1 + 0.25*(35/100) +  0.25*1 = 0.8375 --> 84
+                of(25, 25, 55, 55, 100, 100, 2, 5, 85, 0.25f, 0.25f, 0.25f, 0.25f), // 0.25*1 + 0.25*1 + 0.25*1 +  0.25*(2/5) = 0.85 --> 85
+                of(25, 25, 50, 55, 100, 100, 5, 5, 98, 0.25f, 0.25f, 0.25f, 0.25f), // 0.25*1 + 0.25*(50/55) + 0.25*1 +  0.25*1 = 0.9773... --> 98
+                of(0, 0, 55, 55, 100, 100, 5, 5, 100, 0f, 0.5f, 0.25f, 0.25f), // 0.25*1 + 0.25*1 + 0.25*1 +  0.25*1 = 0.1 --> 100
+                of(12, 12, 0, 0, 50, 100, 5, 5, 88, 0.5f, 0f, 0.25f, 0.25f), // 0.25*1 + 0.25*1 + 0.25*(50/100) +  0.25*1 = 0.875 --> 88
+                of(24, 30, 55, 55, 0, 0, 5, 5, 95, 0.25f, 0.25f, 0f, 0.5f), // 0.25*(24/30) + 0.25*1 + 0.25*1 +  0.25*1 = 0.95 --> 95
+                of(24, 30, 55, 55, 100, 100, 0, 0, 95, 0.25f, 0.25f, 0.5f, 0f), // 0.25*(24/30) + 0.25*1 + 0.25*1 +  0.25*1 = 0.95 --> 95
+                of(0, 25, 0, 55, 0, 100, 0, 5, 0, 0.25f, 0.25f, 0.25f, 0.25f) // no scores
         );
     }
 
@@ -128,6 +132,61 @@ public class GradeCalculatorTest {
                 of(25, 25, 2, 55, 100, 100, 5, 5, 100), // 0.4*1 + 0*(2/55) + 0.5*1 +  0.1*1 = 1.0 --> 100
                 of(25, 25, 2, 55, 100, 100, 4, 5, 98), // 0.4*1 + 0*(2/55) + 0.5*1 +  0.1*(4/5) = 0.98 --> 98
                 of(25, 25, 55, 55, 100, 100, 4, 5, 98) // 0.4*1 + 0*1 + 0.5*1 +  0.1*(4/5) = 0.98 --> 98
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("nonzeroWeightButZeroTotal")
+    void withNonzeroWeightButZeroTotal(int totalBranches, int totalMutations,
+                                       int totalMetaTests, int totalChecks) {
+
+        GradeWeight weights = new GradeWeight(0.25f, 0.25f, 0.25f, 0.25f);
+
+        GradeValues grades = new GradeValues();
+        grades.setBranchGrade(0, totalBranches);
+        grades.setMutationGrade(0, totalMutations);
+        grades.setMetaGrade(0, totalMetaTests);
+        grades.setCheckGrade(0, totalChecks);
+
+        assertThrows(RuntimeException.class, () -> new GradeCalculator().calculateFinalGrade(grades, weights));
+    }
+
+    private static Stream<Arguments> nonzeroWeightButZeroTotal() {
+        return Stream.of(
+                of(0, 1, 1, 1),
+                of(1, 0, 1, 1),
+                of(1, 1, 0, 1),
+                of(1, 1, 1, 0),
+                of(0, 0, 1, 1),
+                of(0, 0, 0, 0)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("zeroWeightAndZeroTotal")
+    void withZeroWeightAndZeroTotal(int totalBranches, int totalMutations,
+                                    int totalMetaTests, int totalChecks,
+                                    float branchCoverageWeight, float mutationCoverageWeight,
+                                    float metaTestsWeight, float codeChecksWeight) {
+
+        GradeWeight weights = new GradeWeight(branchCoverageWeight, mutationCoverageWeight, metaTestsWeight, codeChecksWeight);
+
+        GradeValues grades = new GradeValues();
+        grades.setBranchGrade(0, totalBranches);
+        grades.setMutationGrade(0, totalMutations);
+        grades.setMetaGrade(0, totalMetaTests);
+        grades.setCheckGrade(0, totalChecks);
+
+        assertDoesNotThrow(() -> new GradeCalculator().calculateFinalGrade(grades, weights));
+    }
+
+    private static Stream<Arguments> zeroWeightAndZeroTotal() {
+        return Stream.of(
+                of(0, 1, 1, 1, 0f, 0.5f, 0.25f, 0.25f),
+                of(1, 0, 1, 1, 0.25f, 0f, 0.5f, 0.25f),
+                of(1, 1, 0, 1, 0.25f, 0.25f, 0f, 0.5f),
+                of(1, 1, 1, 0, 0.25f, 0.25f, 0.5f, 0f),
+                of(0, 0, 0, 1, 0f, 0f, 0f, 1f)
         );
     }
 }

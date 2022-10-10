@@ -48,6 +48,10 @@ public class MetaTestsResult {
         return totalTests;
     }
 
+    public boolean hasNoMetaTests() {
+        return this.getTotalTests() == 0;
+    }
+
     public List<MetaTestResult> getMetaTestResults() {
         return Collections.unmodifiableList(metaTestResults);
     }

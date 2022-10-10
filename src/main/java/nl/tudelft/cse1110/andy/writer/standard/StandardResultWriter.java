@@ -228,8 +228,9 @@ public class StandardResultWriter implements ResultWriter {
     }
 
     private void printGradeCalculationDetails(String what, int score, int total, double weight) {
-        l(String.format("%s: %d/%d (overall weight=%.2f)%s", what, score, total, weight,
-                (total > 0 && weight==0 ? " (0 gives full points)":"") ));
+        if(weight == 0) return;
+
+        l(String.format("%s: %d/%d (overall weight=%.2f)", what, score, total, weight));
     }
 
     private void printModeAndTimeToRun(Context ctx, double timeInSeconds) {
@@ -240,7 +241,7 @@ public class StandardResultWriter implements ResultWriter {
     }
 
     private void printMetaTestResults(Context ctx, MetaTestsResult metaTests) {
-        if(!metaTests.wasExecuted())
+        if (!metaTests.wasExecuted() || metaTests.hasNoMetaTests())
             return;
 
         boolean allHints = modeActionSelector(ctx).shouldShowFullHints();
@@ -296,11 +297,7 @@ public class StandardResultWriter implements ResultWriter {
         if(!allHints && !onlyResult)
             return;
 
-        if(!codeChecks.hasChecks()) {
-            l("\n--- Code checks");
-            l("No code checks to be assessed");
-        }
-        else {
+        if(codeChecks.hasChecks()) {
             l("\n--- Code checks");
             printCodeCheckOutput(codeChecks, allHints);
         }

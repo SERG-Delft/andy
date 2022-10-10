@@ -65,9 +65,10 @@ public class ModeActionSelector {
     public boolean shouldCalculateAndShowGrades() {
         boolean gradingMode = mode.equals(GRADING);
         boolean notExam = !mode.equals(EXAM);
+        boolean notMetaTest = !action.equals(META_TEST);
         boolean fullRun = action != COVERAGE && action != TESTS;
 
-        return gradingMode || (notExam && fullRun);
+        return gradingMode || (notExam && fullRun && notMetaTest);
     }
 
     private List<ExecutionStep> getPracticeMode() {

@@ -61,14 +61,23 @@ public class ClassUtils {
      *
      * @param listOfClasses the list of classes to find the test class
      * @return the name of the test class
-     * @throws NoSuchElementException if there are no test classes
+     * @throws IllegalArgumentException if there is not exactly 1 test class
      */
     public static String getTestClass(List<String> listOfClasses) {
-        String className = listOfClasses.stream().filter(c -> c.contains("Test"))
-                    .findFirst()
-                    .get();
+        List<String> matchingClassNames = listOfClasses.stream()
+                .filter(c -> c.substring(c.lastIndexOf(".")).contains("Test"))
+                .collect(Collectors.toList());
 
-        return className;
+        if (matchingClassNames.size() != 1) {
+            throw new IllegalArgumentException(
+                    String.format("There are %d classes containing the substring \"Test\": %s. " +
+                                  "There must be only one such class, otherwise test class discovery is not possible.",
+                            matchingClassNames.size(),
+                            matchingClassNames)
+            );
+        }
+
+        return matchingClassNames.get(0);
     }
 
     /**Finds the configuration class.
