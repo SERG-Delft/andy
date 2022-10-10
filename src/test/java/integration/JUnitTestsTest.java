@@ -384,7 +384,7 @@ public class JUnitTestsTest {
 
         // Multiple class names contain the substring "Test" -> test discovery fails
         @Test
-        void multipleTestClassesDiscovered() {
+        void multipleTestClassesDiscoveredShouldThrowException() {
             Result result = run(Action.TESTS, "LibraryWithBadTestTemplate", "SolutionWithBadInheritance");
 
             assertThat(result.hasFailed()).isTrue();
