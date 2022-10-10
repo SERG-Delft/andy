@@ -1,9 +1,9 @@
 package nl.tudelft.cse1110.andy.execution.step;
 
 import nl.tudelft.cse1110.andy.codechecker.engine.CheckScript;
-import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.config.RunConfiguration;
+import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
 
@@ -20,10 +20,11 @@ public class RunCodeChecksStep implements ExecutionStep {
         CheckScript script = runCfg.checkScript();
         try {
             script.runChecks(findSolution(dirCfg.getWorkingDir()));
-            result.logCodeChecks(script);
-        } catch (Exception e) {
-            result.genericFailure(this, e);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
         }
+
+        result.logCodeChecks(script);
     }
 
     @Override
