@@ -315,6 +315,9 @@ public class ResultBuilder {
     }
 
     private int calculateFinalGrade(GradeValues grades, GradeWeight weights) {
+        if (grades.noBranchesCovered())
+            return 0;
+
         if(hasFailed())
             return 0;
 

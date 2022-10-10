@@ -27,6 +27,10 @@ public class GradeValues {
         return totalBranches;
     }
 
+    public boolean noBranchesCovered() {
+        return this.getTotalBranches() > 0 && this.getCoveredBranches() == 0;
+    }
+
     public int getDetectedMutations() {
         return detectedMutations;
     }
