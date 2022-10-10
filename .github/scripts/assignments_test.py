@@ -34,6 +34,8 @@ expected_andy_version = 'v' + minidom.parse('pom.xml').getElementsByTagName('ver
 pipeline_failed = False
 for category_dir in get_directories(home_dir):
     for assignment_dir in get_directories(category_dir):
+        os.chdir(assignment_dir)
+
         # Remove the contents of the output folder.
         os.system(f'rm -r {os.environ["OUTPUT_DIR"]}/*')
 
