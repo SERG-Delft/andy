@@ -25,7 +25,7 @@ os.makedirs(os.environ['OUTPUT_DIR'],  exist_ok = True)
 # Build classpath
 mvndeps_file = os.path.join(os.environ['WORKING_DIR'], 'mvndeps.txt')
 os.system(f'mvn dependency:build-classpath -Dmdep.outputFile={mvndeps_file}')
-classpath_string = 'target/classes:'
+classpath_string = f'{os.getcwd()}/target/classes:'
 with open(mvndeps_file, 'r') as mvndeps_f:
     classpath_string += mvndeps_f.read()
 
@@ -34,6 +34,8 @@ expected_andy_version = 'v' + minidom.parse('pom.xml').getElementsByTagName('ver
 pipeline_failed = False
 for category_dir in get_directories(home_dir):
     for assignment_dir in get_directories(category_dir):
+        os.chdir(assignment_dir)
+
         # Remove the contents of the output folder.
         os.system(f'rm -r {os.environ["OUTPUT_DIR"]}/*')
 
@@ -63,7 +65,7 @@ for category_dir in get_directories(home_dir):
                 print(file_content)
                 pipeline_failed = True
 
-            if andy_version.startswith(expected_andy_version):
+            if expected_andy_version not in andy_version:
                 print(f'Error: Unexpected Andy version {andy_version}, expected {expected_andy_version}')
                 pipeline_failed = True
 
