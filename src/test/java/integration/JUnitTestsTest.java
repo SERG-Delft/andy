@@ -237,6 +237,20 @@ public class JUnitTestsTest {
 
 
     @Nested
+    class SQLTests extends IntegrationTestBase {
+
+        @Test
+        void sqlTest() {
+            Result result = run(Action.TESTS, "RestaurantsLibrary", "RestaurantsOfficialSolution", "RestaurantsConfiguration");
+
+            assertThat(result.getTests().getTestsSucceeded()).isEqualTo(3);
+            assertThat(result.getTests().getTestsRan()).isEqualTo(3);
+            assertThat(result.getTests().hasTestsFailingOrFailures()).isFalse();
+        }
+    }
+
+
+    @Nested
     class GeneralMistakes extends IntegrationTestBase {
 
         // @BeforeAll methods should be static -> no tests detected
@@ -366,6 +380,18 @@ public class JUnitTestsTest {
             assertThat(result.getTests().getTestsSucceeded()).isEqualTo(0);
             assertThat(result.getTests().getTestsRan()).isEqualTo(0);
             assertThat(result.getTests().hasTestsFailingOrFailures()).isFalse();
+        }
+
+        // Multiple class names contain the substring "Test" -> test discovery fails
+        @Test
+        void multipleTestClassesDiscoveredShouldThrowException() {
+            Result result = run(Action.TESTS, "LibraryWithBadTestTemplate", "SolutionWithBadInheritance");
+
+            assertThat(result.hasFailed()).isTrue();
+            assertThat(result.hasGenericFailure()).isTrue();
+            assertThat(result.getGenericFailure().getExceptionMessage())
+                    .hasValueSatisfying(containsString(
+                            "java.lang.IllegalArgumentException: There are 2 classes containing the substring \"Test\""));
         }
 
     }
