@@ -13,7 +13,7 @@ import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.util.ElementScanner9;
+import javax.lang.model.util.ElementScanner14;
 import javax.tools.*;
 import java.io.File;
 import java.util.*;
@@ -78,7 +78,7 @@ public class CompilationStep implements ExecutionStep {
         }
     }
 
-    @SupportedSourceVersion(SourceVersion.RELEASE_11)
+    @SupportedSourceVersion(SourceVersion.RELEASE_14)
     @SupportedAnnotationTypes("*")
     public class ClassNameProcessor extends AbstractProcessor {
         private final ClassNameScanner scanner;
@@ -100,7 +100,7 @@ public class CompilationStep implements ExecutionStep {
         }
     }
 
-    public class ClassNameScanner extends ElementScanner9< Void, Void > {
+    public class ClassNameScanner extends ElementScanner14< Void, Void > {
         private List<String> fullClassNames = new ArrayList<>();
 
         public Void visitType(final TypeElement type, final Void p) {

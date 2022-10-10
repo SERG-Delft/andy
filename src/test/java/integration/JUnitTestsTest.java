@@ -199,6 +199,17 @@ public class JUnitTestsTest {
 
 
         @Test
+        void testParameterizedTestsWithJavaRecordClass() {
+            Result result = run(Action.TESTS, "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfJqwikWithParameterizedWithRecord");
+
+            assertThat(result.getTests())
+                    .has(failingTest("testNoElementInWholeArray"))
+                    .has(failingTest("testValueInArrayUniqueElements"))
+                    .has(failingParameterizedTest("test", 6));
+        }
+
+
+        @Test
         void testMessageOtherThanAssertionError() {
             Result result = run(Action.TESTS, "NumberUtilsAddPositiveLibrary", "NumberUtilsAddPositiveJqwikException");
 
