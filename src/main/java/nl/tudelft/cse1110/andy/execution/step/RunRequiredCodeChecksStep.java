@@ -13,12 +13,17 @@ import static nl.tudelft.cse1110.andy.utils.FilesUtils.findSolution;
 
 public class RunRequiredCodeChecksStep implements ExecutionStep {
     @Override
-    public void execute(Context ctx, ResultBuilder result) throws FileNotFoundException {
+    public void execute(Context ctx, ResultBuilder result) {
         DirectoryConfiguration dirCfg = ctx.getDirectoryConfiguration();
         RunConfiguration runCfg = ctx.getRunConfiguration();
 
         CheckScript script = runCfg.requiredCheckScript();
-        script.runChecks(findSolution(dirCfg.getWorkingDir()));
+        try {
+            script.runChecks(findSolution(dirCfg.getWorkingDir()));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
         result.logRequiredCodeChecks(script);
     }
 
