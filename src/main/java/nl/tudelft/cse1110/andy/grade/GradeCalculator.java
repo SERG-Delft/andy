@@ -8,6 +8,8 @@ public class GradeCalculator {
      */
     public int calculateFinalGrade(GradeValues gradeValues, GradeWeight weights) {
 
+        this.checkNonzeroWeightValidity(gradeValues, weights);
+
         float branchScore = branchCoverageScore(gradeValues.getCoveredBranches(), gradeValues.getTotalBranches())
                 * weights.getBranchCoverageWeight();
         float mutationScore = mutationCoverageScore(gradeValues.getDetectedMutations(), gradeValues.getTotalMutations())
@@ -94,6 +96,28 @@ public class GradeCalculator {
                weights.getMutationCoverageWeight() > 0.0f && gradeValues.getDetectedMutations() < gradeValues.getTotalMutations() ||
                weights.getMetaTestsWeight() > 0.0f && gradeValues.getMetaTestsPassed() < gradeValues.getTotalMetaTests() ||
                weights.getCodeChecksWeight() > 0.0f && gradeValues.getChecksPassed() < gradeValues.getTotalChecks();
+    }
+
+
+    /**
+     * @param gradeValues the grade values
+     * @param weights     the weights
+     * @throws RuntimeException if any of the components with positive weight have a maximum score of 0
+     */
+    private void checkNonzeroWeightValidity(GradeValues gradeValues, GradeWeight weights) throws RuntimeException {
+        if (weights.getCodeChecksWeight() > 0 && gradeValues.getTotalChecks() == 0)
+            throw new RuntimeException("There are 0 code checks but the code check weight is not 0");
+
+        if (weights.getBranchCoverageWeight() > 0 && gradeValues.getTotalBranches() == 0)
+            throw new RuntimeException("There are 0 branches to cover (or jacoco is disabled) but the " +
+                                       "branch coverage weight is not 0");
+
+        if (weights.getMetaTestsWeight() > 0 && gradeValues.getTotalMetaTests() == 0)
+            throw new RuntimeException("There are 0 meta tests but the meta test weight is not 0");
+
+        if (weights.getMutationCoverageWeight() > 0 && gradeValues.getTotalMutations() == 0)
+            throw new RuntimeException("There are 0 mutants (or pitest failed or is disabled) but the " +
+                                       "mutation coverage weight is not 0");
     }
 
 }

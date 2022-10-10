@@ -247,10 +247,6 @@ public class StandardResultTestAssertions {
         return not(containsRegex("--- Code checks"));
     }
 
-    public static Condition<String> noCodeChecksToBeAssessed() {
-        return containsString("--- Code checks\nNo code checks to be assessed");
-    }
-
     public static Condition<String> noFinalGrade() {
         return not(containsRegex("--- Assessment"));
     }

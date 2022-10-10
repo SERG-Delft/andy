@@ -18,10 +18,10 @@ public class Configuration extends RunConfiguration {
     @Override
     public Map<String, Float> weights() {
         return new HashMap<>() {{
-            put("coverage", 0.0f);
-            put("mutation", 0.5f);
+            put("coverage", 1.0f);
+            put("mutation", 0f);
             put("meta", 0.0f);
-            put("codechecks", 0.5f);
+            put("codechecks", 0f);
         }};
     }
 

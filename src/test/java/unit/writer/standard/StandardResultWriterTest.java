@@ -313,12 +313,11 @@ public class StandardResultWriterTest {
                 .has(instructionsCovered(5))
                 .has(branchesCovered(1))
                 .has(fullGradeDescription("Branch coverage", 1, 2, 1))
-                .has(fullGradeDescription("Mutation coverage", 5, 6, 0))
-                .has(fullGradeDescription("Code checks", 0, 0, 0))
-                .has(fullGradeDescription("Meta tests", 0, 0, 0))
+                .doesNotContain("Mutation coverage")
+                .doesNotContain("Code checks")
+                .doesNotContain("Meta tests")
                 .has(mutationScore(5, 6))
                 .has(noMetaTests())
-                .has(noCodeChecks())
                 .doesNotContain("test success message");
 
         verify(asciiArtGenerator, times(0)).getRandomAsciiArt();
@@ -326,6 +325,61 @@ public class StandardResultWriterTest {
 
     @Test
     void testPrintFinalGradeWithoutCalculatingGrades() {
+        ModeActionSelector modeActionSelector = mock(ModeActionSelector.class);
+        when(modeActionSelector.shouldCalculateAndShowGrades()).thenReturn(false);
+        when(modeActionSelector.shouldGenerateAnalytics()).thenReturn(false);
+        when(modeActionSelector.shouldShowFullHints()).thenReturn(false);
+        when(modeActionSelector.shouldShowPartialHints()).thenReturn(false);
+        when(modeActionSelector.getMode()).thenReturn(Mode.PRACTICE);
+        when(modeActionSelector.getAction()).thenReturn(Action.TESTS);
+
+        when(ctx.getModeActionSelector()).thenReturn(modeActionSelector);
+
+        Result result = new ResultTestDataBuilder()
+                .withGrade(34)
+                .withCoverageResult(CoverageResult.build(
+                        4, 7, 5, 8, 1, 2,
+                        new CoverageLineByLine(List.of(), List.of(), List.of())))
+                .withMutationTestingResults(5, 6)
+                .withCodeCheckResults(List.of(
+                        new CodeCheckResult("a", 1, true),
+                        new CodeCheckResult("b", 2, true),
+                        new CodeCheckResult("c", 1, false)
+                ))
+                .withMetaTestResults(List.of(
+                        new MetaTestResult("d", 1, true),
+                        new MetaTestResult("e", 3, false),
+                        new MetaTestResult("f", 1, true)
+                ))
+                .withSuccessMessage("test success message")
+                .build();
+
+        writer.write(ctx, result);
+
+        String output = generatedResult();
+
+        assertThat(output)
+                .has(versionInformation(versionInformation))
+                .has(finalGradeNotOnScreen(34))
+                .has(noFinalGrade())
+                .has(compilationSuccess())
+                .has(linesCovered(4))
+                .has(instructionsCovered(5))
+                .has(branchesCovered(1))
+                .has(not(fullGradeDescription("Branch coverage", 1, 2, 0.25)))
+                .has(not(fullGradeDescription("Mutation coverage", 5, 6, 0.25)))
+                .has(not(fullGradeDescription("Code checks", 3, 4, 0.25)))
+                .has(not(fullGradeDescription("Meta tests", 2, 3, 0.25)))
+                .has(mutationScore(5, 6))
+                .has(zeroScoreExplanation())
+                .contains("only checking if your tests pass")
+                .doesNotContain("test success message");
+
+        verify(asciiArtGenerator, times(0)).getRandomAsciiArt();
+    }
+
+    @Test
+    void zeroWeightMeansComponentIsNotShown() {
         ModeActionSelector modeActionSelector = mock(ModeActionSelector.class);
         when(modeActionSelector.shouldCalculateAndShowGrades()).thenReturn(false);
         when(modeActionSelector.shouldGenerateAnalytics()).thenReturn(false);
@@ -555,6 +609,7 @@ public class StandardResultWriterTest {
                 .withCodeCheckResults(List.of())
                 .withMetaTestResults(List.of())
                 .withMutationTestingResults(5, 6)
+                .withWeights(0.5f, 0.5f, 0, 0)
                 .build();
 
         writer.write(ctx, result);
@@ -568,13 +623,11 @@ public class StandardResultWriterTest {
                 .has(linesCovered(4))
                 .has(instructionsCovered(5))
                 .has(branchesCovered(1))
-                .has(fullGradeDescription("Branch coverage", 1, 2, 0.25))
-                .has(fullGradeDescription("Mutation coverage", 5, 6, 0.25))
-                .has(fullGradeDescription("Code checks", 0, 0, 0.25))
-                .has(fullGradeDescription("Meta tests", 0, 0, 0.25))
+                .has(fullGradeDescription("Branch coverage", 1, 2, 0.5))
+                .has(fullGradeDescription("Mutation coverage", 5, 6, 0.5))
                 .has(mutationScore(5, 6))
-                .has(noCodeChecksToBeAssessed())
-                .has(metaTests(0))
+                .doesNotContain("Code checks")
+                .doesNotContain("Meta tests")
                 .has(not(zeroScoreExplanation()));
     }
 
