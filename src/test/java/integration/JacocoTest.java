@@ -103,4 +103,20 @@ public class JacocoTest extends IntegrationTestBase {
         assertThat(result.getCoverage().getFullyCoveredLines().isEmpty()).isTrue();
     }
 
+    @Test
+    void zeroCoverageDuringGradingMeans0Grade() {
+        Result result = run(Action.FULL_WITH_HINTS, "ArrayUtilsIsSortedLibrary", "DummyTest", "ArrayUtilsInGradingModeWithDummyCodeCheck");
+
+        assertThat(result.getFinalGrade()).isEqualTo(0);
+
+        // verify that the test actually makes sense
+        assertThat(result.getCompilation().successful()).isTrue();
+        assertThat(result.getTests().wasExecuted()).isTrue();
+        assertThat(result.getGenericFailure().hasFailure()).isFalse();
+
+        // verify that the grade is only 0 because there is no coverage
+        assertThat(result.getCodeChecks().wasExecuted()).isTrue();
+        assertThat(result.getCodeChecks().getNumberOfPassedChecks()).isEqualTo(1);
+        assertThat(result.getWeights().getCodeChecksWeight()).isNotZero();
+    }
 }
