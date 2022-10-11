@@ -53,6 +53,8 @@ The tool contains different checks for JUnit, Mockito, and JQWik tests:
 
 Each of these checks receive different parameters. Check their specific Javadoc for more details.
 
+Required code checks can also be configured. If one or more required code checks fail, the final grade is overridden to 0.
+
 ### Meta Tests
 
 Meta tests are basically mutants of the code under test. Teachers write those to ensure that the
