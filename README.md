@@ -82,6 +82,10 @@ provides the full description of how the grade was calculated.
 
 The easiest way to run Andy is via the [Maven plugin](https://mvnrepository.com/artifact/io.github.cse1110/andy-maven-plugin). All you need is a Maven project with `src/main` and `src/test` folders as well as an Andy configuration file in a `config` folder in the root directory of the project. You can see many examples of exercises configured to use the Maven plugin in the [assignment repository](https://github.com/cse1110/assignments).
 
+To run Andy, simply type `mvn andy:run` in the terminal. The output will be printed to the terminal, and JaCoCo and Pitest reports will be saved to the output directory (`andy/`).
+
+By default, Andy does not show hints when running in practice mode. To view hints, use `mvn andy:run -Dfull=true`.
+
 For TU Delft students, Andy can be used directly in WebLab, our cloud IDE.
 
 ## Team
