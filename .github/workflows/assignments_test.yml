@@ -16,9 +16,14 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: 3.8
-      - name: Install dependencies
+      - name: Clone cse1110/assignments
+        uses: actions/checkout@v3
+        with:
+          repository: 'cse1110/assignments'
+          path: 'assignments'
+      - name: Compile Andy
         run: |
-          pip3 install gitpython
+          mvn clean compile dependency:copy-dependencies
       - name: Execute python script
         run: |
           python ./.github/scripts/assignments_test.py

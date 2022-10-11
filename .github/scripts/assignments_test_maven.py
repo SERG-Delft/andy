@@ -1,5 +1,4 @@
 import os, re, sys
-from git import Repo
 from shutil import copyfile
 from xml.dom import minidom
 
@@ -9,12 +8,6 @@ def get_directories(basedir):
                                        and not dir.startswith('.')]
 
 home_dir = '/home/runner/work/andy/andy/assignments'
-
-# Clone the assignments repository in a temporary directory.
-Repo.clone_from('https://github.com/cse1110/assignments', home_dir, depth=1)
-
-# Install local Andy version
-os.system(f'mvn install -Dmaven.test.skip')
 
 expected_andy_version = 'v' + minidom.parse('pom.xml').getElementsByTagName('version')[0].firstChild.data
 
