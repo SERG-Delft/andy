@@ -1,0 +1,32 @@
+name: assignments_test_docker
+on: push
+jobs:
+  run_assignments_docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+      - name: Clone cse1110/assignments
+        uses: actions/checkout@v3
+        with:
+          repository: 'cse1110/assignments'
+          path: 'assignments'
+      - name: Clone cse1110/weblab-docker-v2
+        uses: actions/checkout@v3
+        with:
+          repository: 'cse1110/weblab-docker-v2'
+          path: 'weblab-docker-v2'
+      - name: Configure Dockerfile
+        run: |
+          sed -i -E 's/git clone --depth 1 --branch [^ ]+/git clone -n/; s/(RUN mvn clean compile)/RUN git checkout ${{ github.sha }}\n\1/' Dockerfile
+      - name: Build Docker image
+        run: |
+          make
+      - name: Execute python script
+        env:
+          COMMIT_HASH: ${{ github.sha }}
+        run: |
+          python ./.github/scripts/assignments_test_docker.py
