@@ -51,7 +51,7 @@ for category_dir in get_directories(home_dir):
                   'xargs -i cp --parents {} ' + f'{test_dir}/')
 
         # Switch to Docker directory
-        os.chdir('./weblab-docker-v2')
+        os.chdir(docker_dir)
 
         # Run `andy` on the current assignment.
         output = os.popen('make github-ci.test').read()
