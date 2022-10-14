@@ -6,19 +6,17 @@ def get_directories(basedir):
                                        and not dir.startswith('.')]
 
 home_dir = '/home/runner/work/andy/andy/assignments'
-output_dir = '/home/runner/work/andy/andy/weblab-docker-v2/testresults'
-test_dir = '/home/runner/work/andy/andy/weblab-docker-v2/tests/github-ci'
+docker_dir = '/home/runner/work/andy/andy/weblab-docker-v2'
+test_dir = docker_dir + '/tests/github-ci'
+output_dir = docker_dir + '/testresults'
 
 commit_hash = os.environ['COMMIT_HASH']
 print(f'Running Andy on {commit_hash}')
 
 expected_andy_version = f'-{commit_hash[:7]} '
 
-# Switch to Docker directory
-os.chdir('./weblab-docker-v2')
-
 # Configure Makefile.inc
-os.system("sed -i 's/gtar/tar/' Makefile.inc")
+os.system(f"sed -i 's/gtar/tar/' {docker_dir}/Makefile.inc")
 
 # Create test structure
 os.makedirs(test_dir)
@@ -42,9 +40,18 @@ for category_dir in get_directories(home_dir):
             ])
 
         # Copy the assignment to the test folder.
-        os.system(f'cp {assignment_dir}/config/Configuration.java {test_dir}/test.txt')
-        os.system(f'cp {assignment_dir}/solution/*.java {test_dir}/solution.txt')
-        os.system(f'cp {assignment_dir}/src/main/java/delft/*.java {test_dir}/library.txt')
+        os.chdir(assignment_dir)
+        os.system(f'cp ./config/Configuration.java {test_dir}/test.txt')
+        os.system(f'cp ./solution/*.java {test_dir}/solution.txt')
+        os.system(f'cp ./src/main/java/delft/*.java {test_dir}/library.txt')
+        # Copy resources
+        os.system('find . -type f | ' +
+                  'grep -i -v "^\./src/" | grep -i -v "\./config/Configuration.java" | ' +
+                  'grep -i -v "^\./pom.xml$" | grep -i -v "^\./solution/" | grep -i -v "^\./README.md$" | ' +
+                  'xargs -i cp --parents {} ' + f'{test_dir}/')
+
+        # Switch to Docker directory
+        os.chdir('./weblab-docker-v2')
 
         # Run `andy` on the current assignment.
         output = os.popen('make github-ci.test').read()
