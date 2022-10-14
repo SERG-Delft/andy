@@ -17,6 +17,9 @@ expected_andy_version = f'-{commit_hash[:7]} '
 # Switch to Docker directory
 os.chdir('./weblab-docker-v2')
 
+# Configure Makefile.inc
+os.system("sed -i 's/gtar/tar/' Makefile.inc")
+
 # Create test structure
 os.makedirs(test_dir)
 
