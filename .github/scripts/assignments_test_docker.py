@@ -32,6 +32,15 @@ for category_dir in get_directories(home_dir):
         # Remove the contents of the test directory.
         os.system(f'rm -r {test_dir}/*')
 
+        # Write environment file
+        with open(f'{test_dir}/.env', 'w') as envfile:
+            envfile.writelines([
+                'TASK_MODE=FULL_WITH_HINTS\n',
+                'WL_STUDENT=1\n',
+                'WL_COURSE=1\n',
+                'WL_ASSIGNMENT_TITLE=abcde'
+            ])
+
         # Copy the assignment to the test folder.
         os.system(f'cp {assignment_dir}/config/Configuration.java {test_dir}/test.txt')
         os.system(f'cp {assignment_dir}/solution/*.java {test_dir}/solution.txt')
