@@ -1,5 +1,4 @@
 import os, re, sys
-from git import Repo
 from shutil import copyfile
 from xml.dom import minidom
 
@@ -8,13 +7,8 @@ def get_directories(basedir):
                                        if os.path.isdir(os.path.join(basedir, dir)) \
                                        and not dir.startswith('.')]
 
-# Compile Andy and store the `target` directory.
-os.system('mvn clean compile dependency:copy-dependencies')
 target_dir = '/home/runner/work/andy/andy/target'
 home_dir = '/home/runner/work/andy/andy/assignments'
-
-# Clone the assignments repository in a temporary directory.
-Repo.clone_from('https://github.com/cse1110/assignments', home_dir, depth=1)
 
 # Set the environment variables.
 os.environ['WORKING_DIR'] = os.path.join(os.getcwd(), 'code')
