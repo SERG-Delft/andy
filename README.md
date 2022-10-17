@@ -92,7 +92,7 @@ For TU Delft students, Andy can be used directly in WebLab, our cloud IDE.
 
 Andy was envisioned by Maurício Aniche and Frank Mulder.
 
-Summer 2021 team: Nadine Kuo, Jan Warchocki, Florena Buse, Teodor Oprescu, Martin Mladenov, Yoon Hwan Jeong, Thijs Nulle.
+Summer 2021 team: Nadine Kuo, Jan Warchocki, Florena Buse, Teodor Oprescu, Martin Mladenov, Yoon Hwan Jeong, Thijs Nulle, Paul Hübner.
 
 ## License
 
