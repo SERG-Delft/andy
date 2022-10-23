@@ -7,7 +7,7 @@ def get_directories(basedir):
                                        if os.path.isdir(os.path.join(basedir, dir)) \
                                        and not dir.startswith('.')]
 
-home_dir = '/home/runner/work/andy/andy/assignments'
+home_dir = os.path.join(os.getcwd(), 'assignments').replace("\\", "/")
 
 expected_andy_version = 'v' + minidom.parse('pom.xml').getElementsByTagName('version')[0].firstChild.data
 
