@@ -2,7 +2,14 @@ name: assignments_test_maven
 on: push
 jobs:
   run_assignments_maven:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.job.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        job:
+          - os: ubuntu-22.04
+          - os: macos-12
+          - os: windows-2022
 
     steps:
       - name: Checkout the repository
