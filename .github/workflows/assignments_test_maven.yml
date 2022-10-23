@@ -30,7 +30,7 @@ jobs:
           path: 'assignments'
       - name: Compile and install Andy
         run: |
-          mvn install -Dmaven.test.skip
+          mvn install "-Dmaven.test.skip"
       - name: Execute python script
         run: |
           python ./.github/scripts/assignments_test_maven.py
