@@ -119,4 +119,18 @@ public class JacocoTest extends IntegrationTestBase {
         assertThat(result.getCodeChecks().getNumberOfPassedChecks()).isEqualTo(1);
         assertThat(result.getWeights().getCodeChecksWeight()).isNotZero();
     }
+
+    @Test
+    void excludedMethodsAreNotCounted() {
+        Result result = run(Action.FULL_WITH_HINTS, "AutoAssignerLibrary", "AutoAssignerOfficialSolution", "AutoAssignerConfiguration");
+
+        assertThat(result.getCoverage().wasExecuted()).isTrue();
+
+        assertThat(result.getCoverage().getCoveredLines()).isEqualTo(30);
+        assertThat(result.getCoverage().getTotalNumberOfLines()).isEqualTo(30);
+        assertThat(result.getCoverage().getCoveredInstructions()).isEqualTo(121);
+        assertThat(result.getCoverage().getTotalNumberOfInstructions()).isEqualTo(121);
+        assertThat(result.getCoverage().getCoveredBranches()).isEqualTo(10);
+        assertThat(result.getCoverage().getTotalNumberOfBranches()).isEqualTo(10);
+    }
 }
