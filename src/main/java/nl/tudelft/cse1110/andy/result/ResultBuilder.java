@@ -46,6 +46,7 @@ public class ResultBuilder {
     private UnitTestsResult testResults = UnitTestsResult.empty();
     private MutationTestingResult mutationResults = MutationTestingResult.empty();
     private CodeChecksResult codeCheckResults = CodeChecksResult.empty();
+    private CodeChecksResult requiredCodeCheckResults = CodeChecksResult.empty();
     private CoverageResult coverageResults = CoverageResult.empty();
     private MetaTestsResult metaTestResults = MetaTestsResult.empty();
 
@@ -163,7 +164,17 @@ public class ResultBuilder {
      * Code checks
      */
     public void logCodeChecks(CheckScript script) {
+        this.codeCheckResults = buildCodeChecksResult(script);
+    }
 
+    /*
+     * Required code checks
+     */
+    public void logRequiredCodeChecks(CheckScript script) {
+        this.requiredCodeCheckResults = buildCodeChecksResult(script);
+    }
+
+    private static CodeChecksResult buildCodeChecksResult(CheckScript script) {
         List<CodeCheckResult> checkResults = new ArrayList<>();
 
         if (script.hasChecks()) {
@@ -173,7 +184,7 @@ public class ResultBuilder {
             }
         }
 
-        this.codeCheckResults = CodeChecksResult.build(checkResults);
+        return CodeChecksResult.build(checkResults);
     }
 
     /*
@@ -271,6 +282,7 @@ public class ResultBuilder {
                     testResults,
                     mutationResults,
                     codeCheckResults,
+                    requiredCodeCheckResults,
                     coverageResults,
                     metaTestResults,
                     finalGrade,
@@ -320,8 +332,9 @@ public class ResultBuilder {
         boolean compilationFailed = compilation!=null && !compilation.successful();
         boolean unitTestsFailed = testResults != null && testResults.didNotGoWell();
         boolean hasGenericFailure = genericFailureObject.hasFailure();
+        boolean requiredCodeChecksFailed = !requiredCodeCheckResults.allChecksPass();
 
-        return compilationFailed || unitTestsFailed || hasGenericFailure;
+        return compilationFailed || unitTestsFailed || hasGenericFailure || requiredCodeChecksFailed;
     }
 
     public UnitTestsResult getTestResults() {

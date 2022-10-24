@@ -11,24 +11,24 @@ import java.io.FileNotFoundException;
 
 import static nl.tudelft.cse1110.andy.utils.FilesUtils.findSolution;
 
-public class RunCodeChecksStep implements ExecutionStep {
+public class RunRequiredCodeChecksStep implements ExecutionStep {
     @Override
     public void execute(Context ctx, ResultBuilder result) {
         DirectoryConfiguration dirCfg = ctx.getDirectoryConfiguration();
         RunConfiguration runCfg = ctx.getRunConfiguration();
 
-        CheckScript script = runCfg.checkScript();
+        CheckScript script = runCfg.requiredCheckScript();
         try {
             script.runChecks(findSolution(dirCfg.getWorkingDir()));
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
 
-        result.logCodeChecks(script);
+        result.logRequiredCodeChecks(script);
     }
 
     @Override
     public boolean equals(Object other) {
-        return other instanceof RunCodeChecksStep;
+        return other instanceof RunRequiredCodeChecksStep;
     }
 }

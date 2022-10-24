@@ -37,6 +37,10 @@ public abstract class RunConfiguration {
         return new CheckScript(Collections.emptyList());
     }
 
+    public CheckScript requiredCheckScript() {
+        return new CheckScript(Collections.emptyList());
+    }
+
     public List<MetaTest> metaTests() {
         return Collections.emptyList();
     }
