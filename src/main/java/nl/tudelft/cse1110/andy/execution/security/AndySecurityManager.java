@@ -71,7 +71,7 @@ public class AndySecurityManager extends SecurityManager {
 
         if (checkLoggingPermission(perm)) return true;
 
-        if (checkReflectPermission(perm)) return true;
+        if (checkReflectPermission(perm, mockitoInternal)) return true;
 
         if (checkSecurityPermission(perm)) return true;
 
@@ -100,15 +100,20 @@ public class AndySecurityManager extends SecurityManager {
         return false;
     }
 
-    private boolean checkReflectPermission(Permission perm) {
+    private boolean checkReflectPermission(Permission perm, boolean mockitoInternal) {
         // Allow overriding access checks via reflection as it is needed in order to execute the tests
         // Using reflection in solution code is blocked via other means
         if (perm instanceof ReflectPermission) {
-            if (perm.getName().equals("suppressAccessChecks")) {
+            if (mockitoInternal && checkMockitoInternalReflectPermission(perm) ||
+                perm.getName().equals("suppressAccessChecks")) {
                 return true;
             }
         }
         return false;
+    }
+
+    private boolean checkMockitoInternalReflectPermission(Permission perm) {
+        return perm.getName().startsWith("newProxyInPackage.net.bytebuddy.");
     }
 
     private boolean checkLoggingPermission(Permission perm) {
@@ -179,7 +184,8 @@ public class AndySecurityManager extends SecurityManager {
                perm.getName().equals("accessClassInPackage.sun.misc") ||
                perm.getName().startsWith("accessClassInPackage.") ||
                perm.getName().equals("reflectionFactoryAccess") ||
-               perm.getName().equals("localeServiceProvider"); // Required when running via Docker
+               perm.getName().equals("localeServiceProvider") || // Required when running via Docker
+               perm.getName().equals("net.bytebuddy.createJavaDispatcher");
     }
 
     private boolean checkPropertyPermission(Permission perm) {

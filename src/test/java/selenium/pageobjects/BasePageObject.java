@@ -8,6 +8,7 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.function.Supplier;
 
 public class BasePageObject {
@@ -25,12 +26,12 @@ public class BasePageObject {
     }
 
     protected void awaitElementVisibility(WebElement... elements) {
-        WebDriverWait wait = new WebDriverWait(this.driver, 10);
+        WebDriverWait wait = new WebDriverWait(this.driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.visibilityOfAllElements(elements));
     }
 
     protected void waitUntil(int seconds, Supplier<Boolean> until) {
-        WebDriverWait wait = new WebDriverWait(this.driver, seconds);
+        WebDriverWait wait = new WebDriverWait(this.driver, Duration.ofSeconds(seconds));
         wait.until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver webDriver) {
                 try {
