@@ -19,7 +19,7 @@ The screenshot below shows the bottom part of the assessment, containing the fin
 ## Configuration
 
 Teachers can configure how the student's test should be assessed. To that aim, the teacher 
-writes a `RunConfiguration` class. See the many examples in our [test folder](https://github.com/cse1110/andy/tree/main/src/test/resources/grader/fixtures/Config).
+writes a `RunConfiguration` class. See the many examples in our [test folder](https://github.com/cse1110/andy/tree/main/src/test/resources/grader/fixtures/Config) or in our [assignment repository](https://github.com/cse1110/assignments).
 The teacher can configure:
 
 * The weights of the different assessments
@@ -82,20 +82,19 @@ provides the full description of how the grade was calculated.
 
 ## Running
 
-Andy is a simple Java application. All it needs is:
+The easiest way to run Andy is via the [Maven plugin](https://mvnrepository.com/artifact/io.github.cse1110/andy-maven-plugin). All you need is a Maven project with `src/main` and `src/test` folders as well as an Andy configuration file in a `config` folder in the root directory of the project. You can see many examples of exercises configured to use the Maven plugin in the [assignment repository](https://github.com/cse1110/assignments).
 
-* A directory containing three files: the code to be tested (usually in a `Library.java` file),the student's solution (in a `Solution.java`) and a configuration (`Configuration.java`)
-* An empty directory where the output will be produced. You may expect JaCoCo and Pitest reports to also be stored in these folders.
+To run Andy, simply type `mvn andy:run` in the terminal. The output will be printed to the terminal, and JaCoCo and Pitest reports will be saved to the output directory (`andy/`).
+
+By default, Andy does not show hints when running in practice mode. To view hints, use `mvn andy:run -Dfull=true`.
 
 For TU Delft students, Andy can be used directly in WebLab, our cloud IDE.
-
-_We are working on a command-line tool that will make Andy easier to run._
 
 ## Team
 
 Andy was envisioned by Maurício Aniche and Frank Mulder.
 
-Summer 2021 team: Nadine Kuo, Jan Warchocki, Florena Buse, Teodor Oprescu, Martin Mladenov, Yoon Hwan Jeong, Thijs Nulle.
+Summer 2021 team: Nadine Kuo, Jan Warchocki, Florena Buse, Teodor Oprescu, Martin Mladenov, Yoon Hwan Jeong, Thijs Nulle, Paul Hübner.
 
 ## License
 
