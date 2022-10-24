@@ -24,8 +24,8 @@ public class PitestTest extends IntegrationTestBase {
     void allMutantsButOneKilled() {
         Result result = run("NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution", "NumberUtilsAddPiTestStrongerConfiguration");
 
-        assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(32);
-        assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(33);
+        assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(31);
+        assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(32);
     }
 
 
@@ -35,8 +35,8 @@ public class PitestTest extends IntegrationTestBase {
     void mutantsSurvived() {
         Result result = run("NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddPiTestStrongerConfiguration");
 
-        assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(7);
-        assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(33);
+        assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(6);
+        assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(32);
 
     }
 
@@ -47,8 +47,8 @@ public class PitestTest extends IntegrationTestBase {
     void overriddenNumberOfTotalMutantsAllKilled() {
         Result result = run("ZagZigLibrary", "ZagZigAllMutantsKilled", "ZagZigDifferentTotalMutantsConfiguration");
 
-        assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(26);
-        assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(26);
+        assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(25);
+        assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(25);
 
     }
 
@@ -60,8 +60,8 @@ public class PitestTest extends IntegrationTestBase {
     void overriddenNumberOfTotalMutantsNotAllKilled() {
         Result result = run("ZagZigLibrary", "ZagZigNotAllMutantsKilled", "ZagZigDifferentTotalMutantsConfiguration");
 
-        assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(24);
-        assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(26);
+        assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(23);
+        assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(25);
 
     }
 

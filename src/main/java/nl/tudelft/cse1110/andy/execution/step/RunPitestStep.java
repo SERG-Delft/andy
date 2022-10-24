@@ -58,7 +58,6 @@ public class RunPitestStep implements ExecutionStep {
 
             System.setOut(console);
 
-            extractAndRemoveReportFolder(outputPitestDir);
             result.logPitest(stats);
         }
     }
@@ -125,31 +124,6 @@ public class RunPitestStep implements ExecutionStep {
             throw Unchecked.translateCheckedException(result.getError().get());
         }
         return result.getStatistics().get();
-
-    }
-
-    private void extractAndRemoveReportFolder(String outputPitestDir) {
-        /*
-         * Pitest creates a subdir with the timestamp, which we want to remove.
-         * The report folder "year-month-day-time" will be the only file in .../output/pitest,
-         * as every WebLab submission gets a "clean" image.
-         */
-        try {
-            File[] contentsOfPitestOutputDir = FilesUtils.getAllFiles(new File(outputPitestDir));
-
-            if (contentsOfPitestOutputDir.length != 0) {
-                File reportFolderToSkip = contentsOfPitestOutputDir[0];
-
-                FileUtils.copyDirectory(reportFolderToSkip, new File(outputPitestDir),true);
-                FilesUtils.deleteDirectory(reportFolderToSkip);
-            } else {
-                throw new RuntimeException("PiTest report was not written to .../output/pitest!");
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
 
     }
 
