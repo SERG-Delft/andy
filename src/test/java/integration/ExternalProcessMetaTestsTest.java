@@ -4,6 +4,7 @@ import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.result.Result;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -15,6 +16,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 
 
+// Disabled as this test is flaky and this feature is not used in the current version of Andy
+// See https://github.com/cse1110/andy/issues/144
+@Disabled
 public class ExternalProcessMetaTestsTest extends BaseMetaTestsTest {
 
     private static final String EXTERNAL_PROCESS_LOCAL_CONNECTION =
