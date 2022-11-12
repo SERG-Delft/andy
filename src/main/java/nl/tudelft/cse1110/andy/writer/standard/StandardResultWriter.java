@@ -5,20 +5,21 @@ import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.execution.mode.Mode;
 import nl.tudelft.cse1110.andy.execution.mode.ModeActionSelector;
 import nl.tudelft.cse1110.andy.result.*;
+import nl.tudelft.cse1110.andy.utils.FilesUtils;
 import nl.tudelft.cse1110.andy.utils.ImportUtils;
 import nl.tudelft.cse1110.andy.utils.PropertyUtils;
 import nl.tudelft.cse1110.andy.writer.ResultWriter;
 import nl.tudelft.cse1110.andy.writer.weblab.Highlight;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static nl.tudelft.cse1110.andy.utils.ExceptionUtils.exceptionMessage;
-import static nl.tudelft.cse1110.andy.utils.FilesUtils.concatenateDirectories;
-import static nl.tudelft.cse1110.andy.utils.FilesUtils.writeToFile;
+import static nl.tudelft.cse1110.andy.utils.FilesUtils.*;
 
 public class StandardResultWriter implements ResultWriter {
 
@@ -60,7 +61,7 @@ public class StandardResultWriter implements ResultWriter {
         boolean hasFailure = printFailure(result);
 
         if(!hasFailure) {
-            printCompilationResult(result.getCompilation());
+            printCompilationResult(ctx, result.getCompilation());
             printTestResults(result.getTests());
             printCoverageResults(result.getCoverage());
             printMutationTestingResults(result.getMutationTesting());
@@ -390,14 +391,15 @@ public class StandardResultWriter implements ResultWriter {
                         "- @BeforeEach methods should be non-static");
     }
 
-    private void printCompilationResult(CompilationResult compilation) {
-        if(compilation.successful()) {
+    private void printCompilationResult(Context ctx, CompilationResult compilation) {
+        if (compilation.successful()) {
             l("--- Compilation\nSuccess");
         } else {
             l("We could not compile the code. See the compilation errors below:");
             List<CompilationErrorInfo> compilationErrors = compilation.getErrors();
 
-            for(CompilationErrorInfo error : compilationErrors) {
+            for (int i = 0; i < compilationErrors.size(); i++) {
+                CompilationErrorInfo error = compilationErrors.get(i);
 
                 String message = error.getMessage();
                 long lineNumber = error.getLineNumber();
@@ -407,6 +409,17 @@ public class StandardResultWriter implements ResultWriter {
 
                 Optional<String> importLog = ImportUtils.checkMissingImport(message);
                 importLog.ifPresent(this::l);
+
+                if (i == 0) {
+                    try {
+                        String solutionPath = findSolution(ctx.getDirectoryConfiguration().getWorkingDir());
+                        String snippet = FilesUtils.generateCodeSnippet(solutionPath, (int) lineNumber);
+                        l(snippet);
+                        l("");
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
 
                 highlights.add(new Highlight(lineNumber, message, Highlight.HighlightLocation.SOLUTION, Highlight.HighlightPurpose.COMPILATION_ERROR));
             }
