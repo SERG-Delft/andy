@@ -25,7 +25,7 @@ public class WebLabResultWriterTest extends StandardResultWriterTest {
 
     @Override
     protected ResultWriter buildWriter() {
-        return new WebLabResultWriter(versionInformation, asciiArtGenerator);
+        return new WebLabResultWriter(versionInformation, asciiArtGenerator, codeSnippetGenerator);
     }
 
     private String highlightsJson() {

@@ -8,6 +8,7 @@ import nl.tudelft.cse1110.andy.execution.step.*;
 import nl.tudelft.cse1110.andy.result.Result;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.writer.ResultWriter;
+import nl.tudelft.cse1110.andy.writer.standard.CodeSnippetGenerator;
 import nl.tudelft.cse1110.andy.writer.standard.RandomAsciiArtGenerator;
 import nl.tudelft.cse1110.andy.writer.standard.StandardResultWriter;
 import nl.tudelft.cse1110.andy.writer.standard.VersionInformation;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,17 +32,19 @@ public class GenericFailureWithStandardResultWriterTest extends IntegrationTestB
     protected Context ctx = mock(Context.class);
     protected VersionInformation versionInformation = new VersionInformation("testVersion", "testBuildTimestamp", "testCommitId");
     protected RandomAsciiArtGenerator asciiArtGenerator = mock(RandomAsciiArtGenerator.class);
+    protected CodeSnippetGenerator codeSnippetGenerator = mock(CodeSnippetGenerator.class);
     protected ResultWriter writer;
 
     protected ResultWriter buildWriter() {
-        return new StandardResultWriter(versionInformation, asciiArtGenerator);
+        return new StandardResultWriter(versionInformation, asciiArtGenerator, codeSnippetGenerator);
     }
 
     @BeforeEach
-    void setupMocks() {
+    void setupMocks() throws FileNotFoundException {
         DirectoryConfiguration dirs = new DirectoryConfiguration("any", reportDir.toString());
         when(ctx.getDirectoryConfiguration()).thenReturn(dirs);
         when(asciiArtGenerator.getRandomAsciiArt()).thenReturn("random ascii art");
+        when(codeSnippetGenerator.generateCodeSnippetFromSolution(any(), any())).thenReturn("arbitrary code snippet");
     }
 
     @BeforeEach

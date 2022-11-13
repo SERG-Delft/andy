@@ -7,6 +7,7 @@ import nl.tudelft.cse1110.andy.execution.mode.Mode;
 import nl.tudelft.cse1110.andy.execution.mode.ModeActionSelector;
 import nl.tudelft.cse1110.andy.result.*;
 import nl.tudelft.cse1110.andy.writer.ResultWriter;
+import nl.tudelft.cse1110.andy.writer.standard.CodeSnippetGenerator;
 import nl.tudelft.cse1110.andy.writer.standard.RandomAsciiArtGenerator;
 import nl.tudelft.cse1110.andy.writer.standard.StandardResultWriter;
 import nl.tudelft.cse1110.andy.writer.standard.VersionInformation;
@@ -19,6 +20,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import testutils.ResultTestDataBuilder;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -33,20 +35,22 @@ public class StandardResultWriterTest {
     protected Context ctx = mock(Context.class);
     protected VersionInformation versionInformation = new VersionInformation("testVersion", "testBuildTimestamp", "testCommitId");
     protected RandomAsciiArtGenerator asciiArtGenerator = mock(RandomAsciiArtGenerator.class);
+    protected CodeSnippetGenerator codeSnippetGenerator = mock(CodeSnippetGenerator.class);
     protected ResultWriter writer;
 
     protected ResultWriter buildWriter() {
-        return new StandardResultWriter(versionInformation, asciiArtGenerator);
+        return new StandardResultWriter(versionInformation, asciiArtGenerator, codeSnippetGenerator);
     }
 
     @TempDir
     protected Path reportDir;
 
     @BeforeEach
-    void setupMocks() {
-        DirectoryConfiguration dirs = new DirectoryConfiguration("any", reportDir.toString());
+    void setupMocks() throws FileNotFoundException {
+        DirectoryConfiguration dirs = new DirectoryConfiguration(null, reportDir.toString());
         when(ctx.getDirectoryConfiguration()).thenReturn(dirs);
         when(asciiArtGenerator.getRandomAsciiArt()).thenReturn("random ascii art");
+        when(codeSnippetGenerator.generateCodeSnippetFromSolution(any(), anyInt())).thenReturn("arbitrary code snippet");
     }
 
     @BeforeEach

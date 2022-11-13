@@ -3,6 +3,7 @@ package nl.tudelft.cse1110.andy.writer.weblab;
 import com.google.gson.Gson;
 import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.result.*;
+import nl.tudelft.cse1110.andy.writer.standard.CodeSnippetGenerator;
 import nl.tudelft.cse1110.andy.writer.standard.RandomAsciiArtGenerator;
 import nl.tudelft.cse1110.andy.writer.standard.StandardResultWriter;
 import nl.tudelft.cse1110.andy.writer.standard.VersionInformation;
@@ -16,8 +17,9 @@ import static nl.tudelft.cse1110.andy.utils.FilesUtils.writeToFile;
 
 public class WebLabResultWriter extends StandardResultWriter {
 
-    public WebLabResultWriter(VersionInformation versionInformation, RandomAsciiArtGenerator asciiArtGenerator) {
-        super(versionInformation, asciiArtGenerator);
+    public WebLabResultWriter(VersionInformation versionInformation, RandomAsciiArtGenerator asciiArtGenerator,
+                              CodeSnippetGenerator codeSnippetGenerator) {
+        super(versionInformation, asciiArtGenerator, codeSnippetGenerator);
     }
 
     public WebLabResultWriter() {

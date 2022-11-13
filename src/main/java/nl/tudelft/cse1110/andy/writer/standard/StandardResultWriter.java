@@ -5,7 +5,6 @@ import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.execution.mode.Mode;
 import nl.tudelft.cse1110.andy.execution.mode.ModeActionSelector;
 import nl.tudelft.cse1110.andy.result.*;
-import nl.tudelft.cse1110.andy.utils.FilesUtils;
 import nl.tudelft.cse1110.andy.utils.ImportUtils;
 import nl.tudelft.cse1110.andy.utils.PropertyUtils;
 import nl.tudelft.cse1110.andy.writer.ResultWriter;
@@ -25,17 +24,20 @@ public class StandardResultWriter implements ResultWriter {
 
     private final VersionInformation versionInformation;
     private final RandomAsciiArtGenerator asciiArtGenerator;
+    private final CodeSnippetGenerator codeSnippetGenerator;
 
     private StringBuilder toDisplay = new StringBuilder();
     private List<Highlight> highlights = new ArrayList<>();
 
-    public StandardResultWriter(VersionInformation versionInformation, RandomAsciiArtGenerator asciiArtGenerator) {
+    public StandardResultWriter(VersionInformation versionInformation, RandomAsciiArtGenerator asciiArtGenerator,
+                                CodeSnippetGenerator codeSnippetGenerator) {
         this.versionInformation = versionInformation;
         this.asciiArtGenerator = asciiArtGenerator;
+        this.codeSnippetGenerator = codeSnippetGenerator;
     }
 
     public StandardResultWriter() {
-        this(PropertyUtils.getVersionInformation(), new RandomAsciiArtGenerator());
+        this(PropertyUtils.getVersionInformation(), new RandomAsciiArtGenerator(), new CodeSnippetGenerator());
     }
 
     @Override
@@ -412,8 +414,7 @@ public class StandardResultWriter implements ResultWriter {
 
                 if (i == 0) {
                     try {
-                        String solutionPath = findSolution(ctx.getDirectoryConfiguration().getWorkingDir());
-                        String snippet = FilesUtils.generateCodeSnippet(solutionPath, (int) lineNumber);
+                        String snippet = codeSnippetGenerator.generateCodeSnippetFromSolution(ctx, (int) lineNumber);
                         l(snippet);
                         l("");
                     } catch (FileNotFoundException e) {
