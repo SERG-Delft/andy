@@ -290,6 +290,8 @@ public class StandardResultWriterTest {
                 .doesNotContain("test success message");
 
         verify(asciiArtGenerator, times(0)).getRandomAsciiArt();
+
+        verifyNoInteractions(codeSnippetGenerator);
     }
 
     @Test
