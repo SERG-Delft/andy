@@ -412,7 +412,9 @@ public class StandardResultWriter implements ResultWriter {
                 Optional<String> importLog = ImportUtils.checkMissingImport(message);
                 importLog.ifPresent(this::l);
 
-                if (i == 0) {
+                // Print code snippet pointing to the first compilation error
+                // Do not print a code snippet if the error is in the configuration (the snippet could be misleading in this case)
+                if (i == 0 && !compilation.hasConfigurationError()) {
                     try {
                         String snippet = codeSnippetGenerator.generateCodeSnippetFromSolution(ctx, (int) lineNumber);
                         l(snippet);
