@@ -44,7 +44,7 @@ public class GenericFailureWithStandardResultWriterTest extends IntegrationTestB
         DirectoryConfiguration dirs = new DirectoryConfiguration("any", reportDir.toString());
         when(ctx.getDirectoryConfiguration()).thenReturn(dirs);
         when(asciiArtGenerator.getRandomAsciiArt()).thenReturn("random ascii art");
-        when(codeSnippetGenerator.generateCodeSnippetFromSolution(any(), any())).thenReturn("arbitrary code snippet");
+        when(codeSnippetGenerator.generateCodeSnippetFromSolution(any(), anyInt())).thenReturn("arbitrary code snippet");
     }
 
     @BeforeEach
