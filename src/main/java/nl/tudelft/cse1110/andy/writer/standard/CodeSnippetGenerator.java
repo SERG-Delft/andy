@@ -51,15 +51,20 @@ public class CodeSnippetGenerator {
         List<String> linesToShow = lines.subList(start, end + 1);
 
         // trim spaces at the beginning of the extracted lines
-        int spacesToTrim = linesToShow.stream().mapToInt(CodeSnippetGenerator::getNumberOfLeadingSpaces).min().orElse(0);
+        int spacesToTrim = linesToShow.stream()
+                .filter(s -> !s.isBlank())
+                .mapToInt(CodeSnippetGenerator::getNumberOfLeadingSpaces)
+                .min()
+                .orElse(0);
         String[] trimmedLines = linesToShow.stream()
-                .map(x -> x.substring(spacesToTrim))
+                .map(x -> x.isBlank() ? "" : x.substring(spacesToTrim))
                 .toArray(String[]::new);
 
         // add arrow or spaces
         // (prepend "--> " to the line, and "    " to all other lines)
         int relativeLineNumber = lineZeroIndexed - start;
         for (int i = 0; i < trimmedLines.length; i++) {
+            if (trimmedLines[i].isBlank()) continue;
             String s = i == relativeLineNumber ?
                     "-".repeat(arrowSize - 2) + "> " :
                     " ".repeat(arrowSize);
@@ -71,7 +76,7 @@ public class CodeSnippetGenerator {
 
     private static int getNumberOfLeadingSpaces(String line) {
         int count = 0;
-        while (count < line.length() && line.charAt(count) != ' ') {
+        while (count < line.length() && line.charAt(count) == ' ') {
             count++;
         }
         return count;

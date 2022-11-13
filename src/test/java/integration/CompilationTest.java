@@ -89,10 +89,10 @@ public class CompilationTest extends IntegrationTestBase {
                 .has(compilationErrorOnLine(25))
                 .has(compilationErrorOnLine(33))
                 .containsOnlyOnce("""
-                                @MethodSource("generator")
-                                void unique(String description, double[] array, double[] expectedArray) {
-                        -->         assertThat(MathArrays.unique(array)).isEqual(expectedArray);
-                                }
+                            @MethodSource("generator")
+                            void unique(String description, double[] array, double[] expectedArray) {
+                        -->     assertThat(MathArrays.unique(array)).isEqual(expectedArray);
+                            }
                         """)
                 .doesNotContain("tc2 = Arguments.of(");
     }
