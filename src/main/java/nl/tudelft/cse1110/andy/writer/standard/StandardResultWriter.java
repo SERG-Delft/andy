@@ -415,13 +415,7 @@ public class StandardResultWriter implements ResultWriter {
                 // Print code snippet pointing to the first compilation error
                 // Do not print a code snippet if the error is in the configuration (the snippet could be misleading in this case)
                 if (i == 0 && !compilation.hasConfigurationError()) {
-                    try {
-                        String snippet = codeSnippetGenerator.generateCodeSnippetFromSolution(ctx, (int) lineNumber);
-                        l(snippet);
-                        l("");
-                    } catch (FileNotFoundException e) {
-                        throw new RuntimeException(e);
-                    }
+                    printCodeSnippet(ctx, lineNumber);
                 }
 
                 highlights.add(new Highlight(lineNumber, message, Highlight.HighlightLocation.SOLUTION, Highlight.HighlightPurpose.COMPILATION_ERROR));
@@ -432,6 +426,16 @@ public class StandardResultWriter implements ResultWriter {
                         "Please contact the teaching staff so they can fix this as quickly" +
                         "as possible. Thank you for your help! :)");
             }
+        }
+    }
+
+    private void printCodeSnippet(Context ctx, long lineNumber) {
+        try {
+            String snippet = codeSnippetGenerator.generateCodeSnippetFromSolution(ctx, (int) lineNumber);
+            l(snippet);
+            l("");
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
