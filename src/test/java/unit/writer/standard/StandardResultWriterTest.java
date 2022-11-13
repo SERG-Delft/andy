@@ -64,7 +64,7 @@ public class StandardResultWriterTest {
 
 
     @Test
-    void reportCompilationError() {
+    void reportCompilationError() throws FileNotFoundException {
         Result result = new ResultTestDataBuilder().withCompilationFail(
                 new CompilationErrorInfo("Library.java", 10, "some compilation error"),
                 new CompilationErrorInfo("Library.java", 11, "some other compilation error")
@@ -83,7 +83,11 @@ public class StandardResultWriterTest {
                 .has(compilationErrorOnLine(10))
                 .has(compilationErrorOnLine(11))
                 .has(compilationErrorType("some compilation error"))
-                .has(compilationErrorType("some other compilation error"));
+                .has(compilationErrorType("some other compilation error"))
+                .containsOnlyOnce("arbitrary code snippet");
+
+        verify(codeSnippetGenerator, times(1)).generateCodeSnippetFromSolution(ctx, 10);
+        verifyNoMoreInteractions(codeSnippetGenerator);
     }
 
     @Test
@@ -102,7 +106,10 @@ public class StandardResultWriterTest {
                 .has(versionInformation(versionInformation))
                 .has(not(compilationSuccess()))
                 .has(compilationFailure())
-                .has(compilationFailureConfigurationError());
+                .has(compilationFailureConfigurationError())
+                .doesNotContain("arbitrary code snippet");
+
+        verifyNoInteractions(codeSnippetGenerator);
     }
 
     @Test
