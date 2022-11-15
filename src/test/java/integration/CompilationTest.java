@@ -94,6 +94,7 @@ public class CompilationTest extends IntegrationTestBase {
                         -->     assertThat(MathArrays.unique(array)).isEqual(expectedArray);
                             }
                         """)
+                .containsOnlyOnce("-->")
                 .doesNotContain("tc2 = Arguments.of(");
     }
 
