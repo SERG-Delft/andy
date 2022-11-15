@@ -11,16 +11,16 @@ public class CodeSnippetUtils {
      * Generate a snippet of code from the given code, starting 2 lines before the given line
      * and ending 2 lines after the given line (inclusive), with an arrow pointing towards the line.
      *
-     * @param lines The lines of the source code.
-     * @param line  The line number to point to (1-indexed).
+     * @param lines      The lines of the source code.
+     * @param lineNumber The line number to point to (1-indexed).
      * @return A snippet of code with an arrow pointing to the given line.
      */
-    public static String generateCodeSnippet(List<String> lines, int line) {
-        final int lineZeroIndexed = line - 1;
+    public static String generateCodeSnippet(List<String> lines, int lineNumber) {
+        final int lineNumberZeroIndexed = lineNumber - 1;
 
         // extract relevant lines
-        int start = Math.max(0, lineZeroIndexed - SURROUNDING_LINES);
-        int end = Math.min(lines.size(), lineZeroIndexed + SURROUNDING_LINES);
+        int start = Math.max(0, lineNumberZeroIndexed - SURROUNDING_LINES);
+        int end = Math.min(lines.size(), lineNumberZeroIndexed + SURROUNDING_LINES);
         List<String> linesToShow = lines.subList(start, end + 1);
 
         // trim spaces at the beginning of the extracted lines
@@ -35,7 +35,7 @@ public class CodeSnippetUtils {
 
         // add arrow or spaces
         // (prepend "--> " to the line, and "    " to all other lines)
-        int relativeLineNumber = lineZeroIndexed - start;
+        int relativeLineNumber = lineNumberZeroIndexed - start;
         for (int i = 0; i < trimmedLines.length; i++) {
             if (trimmedLines[i].isBlank()) continue;
             String s = i == relativeLineNumber ?
