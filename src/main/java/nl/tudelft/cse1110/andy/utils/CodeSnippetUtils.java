@@ -20,7 +20,7 @@ public class CodeSnippetUtils {
 
         // extract relevant lines
         int start = Math.max(0, lineNumberZeroIndexed - SURROUNDING_LINES);
-        int end = Math.min(lines.size(), lineNumberZeroIndexed + SURROUNDING_LINES);
+        int end = Math.min(lines.size() - 1, lineNumberZeroIndexed + SURROUNDING_LINES);
         List<String> linesToShow = lines.subList(start, end + 1);
 
         // trim spaces at the beginning of the extracted lines
