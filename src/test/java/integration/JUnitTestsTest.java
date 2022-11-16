@@ -5,6 +5,7 @@ import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.result.Result;
 import nl.tudelft.cse1110.andy.result.UnitTestsResult;
+import nl.tudelft.cse1110.andy.writer.standard.CodeSnippetGenerator;
 import nl.tudelft.cse1110.andy.writer.standard.RandomAsciiArtGenerator;
 import nl.tudelft.cse1110.andy.writer.standard.StandardResultWriter;
 import nl.tudelft.cse1110.andy.writer.standard.VersionInformation;
@@ -141,7 +142,8 @@ public class JUnitTestsTest {
             when(ctx.getDirectoryConfiguration()).thenReturn(dirs);
             StandardResultWriter writer = new StandardResultWriter(
                     new VersionInformation("testVersion", "testBuildTimestamp", "testCommitId"),
-                    mock(RandomAsciiArtGenerator.class));
+                    mock(RandomAsciiArtGenerator.class),
+                    mock(CodeSnippetGenerator.class));
 
             // Act
             Result result = run(Action.TESTS, "ArrayUtilsIsSortedLibrary", "ArrayUtilsIsSortedWithGeneratorMethodError", "ArrayUtilsIndexOfJQWikConfiguration");
