@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class CodeSnippetUtilsTest {
+public class CodeSnippetUtilsTest {
 
     @ParameterizedTest
     @MethodSource("generator")
@@ -18,7 +18,6 @@ class CodeSnippetUtilsTest {
         String actual = CodeSnippetUtils.generateCodeSnippet(lines, lineNumber);
         assertThat(actual).isEqualTo(expected);
     }
-
 
     public static Stream<Arguments> generator() {
         final var testLines = List.of(
@@ -90,6 +89,25 @@ class CodeSnippetUtilsTest {
                         "        d\n" +
                         "    }"
                 ),
+                Arguments.of( // indentation mixed with blank lines
+                        List.of(
+                                "       a",
+                                "",
+                                "      if(c) {",
+                                "  ",
+                                "          d",
+                                "      }",
+                                "   f",
+                                "g",
+                                "                h"
+                        ),
+                        3,
+                        "     a\n" +
+                        "\n" +
+                        "--> if(c) {\n" +
+                        "\n" +
+                        "        d"
+                ),
                 Arguments.of( // file boundary with indentation
                         List.of(
                                 "  b",
@@ -107,5 +125,4 @@ class CodeSnippetUtilsTest {
                 )
         );
     }
-
 }
