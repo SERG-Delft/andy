@@ -49,7 +49,7 @@ public class CodeSnippetUtils {
 
     private static int getNumberOfLeadingSpaces(String line) {
         int count = 0;
-        while (count < line.length() && line.charAt(count) == ' ') {
+        while (line.charAt(count) == ' ') {
             count++;
         }
         return count;
