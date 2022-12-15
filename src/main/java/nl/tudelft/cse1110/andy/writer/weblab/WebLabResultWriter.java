@@ -78,7 +78,7 @@ public class WebLabResultWriter extends StandardResultWriter {
         Element failedElement = doc.createElement("testcase");
         failedElement.setAttribute("name", "Failed");
         failedElement.setAttribute("weight", String.valueOf(failedCount));
-        failedElement.appendChild(doc.createElement("failed"));
+        failedElement.appendChild(doc.createElement("failure"));
 
         testSuiteElement.appendChild(passedElement);
         testSuiteElement.appendChild(failedElement);
