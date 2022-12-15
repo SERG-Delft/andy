@@ -2,13 +2,24 @@ package nl.tudelft.cse1110.andy.writer.weblab;
 
 import com.google.gson.Gson;
 import nl.tudelft.cse1110.andy.execution.Context;
-import nl.tudelft.cse1110.andy.result.*;
+import nl.tudelft.cse1110.andy.result.CompilationErrorInfo;
+import nl.tudelft.cse1110.andy.result.Result;
 import nl.tudelft.cse1110.andy.writer.standard.CodeSnippetGenerator;
 import nl.tudelft.cse1110.andy.writer.standard.RandomAsciiArtGenerator;
 import nl.tudelft.cse1110.andy.writer.standard.StandardResultWriter;
 import nl.tudelft.cse1110.andy.writer.standard.VersionInformation;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.File;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,18 +55,54 @@ public class WebLabResultWriter extends StandardResultWriter {
     }
 
     private String buildResultsXml(Result result) {
-        StringBuilder xml = new StringBuilder();
+        int passedCount = result.getFinalGrade();
+        int failedCount = 100 - passedCount;
 
-        xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<testsuites>\n\t<testsuite>\n");
-        int score = result.getFinalGrade();
-        String failed = "\t\t<testcase><failure></failure></testcase>\n";
-        String passed = "\t\t<testcase/>\n";
+        // Create the document structure
+        Document doc;
+        try {
+            doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+        } catch (ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+        Element testSuitesElement = doc.createElement("testsuites");
+        doc.appendChild(testSuitesElement);
+        Element testSuiteElement = doc.createElement("testsuite");
+        testSuitesElement.appendChild(testSuiteElement);
 
-        xml.append(failed.repeat(100 - score));
-        xml.append(passed.repeat(score));
+        // Create passed and failed elements
+        Element passedElement = doc.createElement("testcase");
+        passedElement.setAttribute("name", "Passed");
+        passedElement.setAttribute("weight", String.valueOf(passedCount));
 
-        xml.append("\t</testsuite>\n</testsuites>\n");
-        return xml.toString();
+        Element failedElement = doc.createElement("testcase");
+        failedElement.setAttribute("name", "Failed");
+        failedElement.setAttribute("weight", String.valueOf(failedCount));
+        failedElement.appendChild(doc.createElement("failed"));
+
+        testSuiteElement.appendChild(passedElement);
+        testSuiteElement.appendChild(failedElement);
+
+        return buildXmlStringFromDocument(doc);
+    }
+
+    private static String buildXmlStringFromDocument(Document doc) {
+        // Remove standalone="no" from the XML declaration
+        doc.setXmlStandalone(true);
+
+        // Create string
+        try {
+            StringWriter sw = new StringWriter();
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            transformer.transform(new DOMSource(doc), new StreamResult(sw));
+            return sw.toString();
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
 
