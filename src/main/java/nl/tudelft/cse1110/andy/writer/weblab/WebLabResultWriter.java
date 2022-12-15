@@ -65,12 +65,20 @@ public class WebLabResultWriter extends StandardResultWriter {
         } catch (ParserConfigurationException e) {
             throw new RuntimeException(e);
         }
+
         Element testSuitesElement = doc.createElement("testsuites");
         doc.appendChild(testSuitesElement);
+
+        appendTestSuiteElement(passedCount, failedCount, doc, testSuitesElement);
+        appendMetaScoreElements(result, doc, testSuitesElement);
+
+        return buildXmlStringFromDocument(doc);
+    }
+
+    private static void appendTestSuiteElement(int passedCount, int failedCount, Document doc, Element testSuitesElement) {
         Element testSuiteElement = doc.createElement("testsuite");
         testSuitesElement.appendChild(testSuiteElement);
 
-        // Create passed and failed elements
         Element passedElement = doc.createElement("testcase");
         passedElement.setAttribute("name", "Passed");
         passedElement.setAttribute("weight", String.valueOf(passedCount));
@@ -82,8 +90,36 @@ public class WebLabResultWriter extends StandardResultWriter {
 
         testSuiteElement.appendChild(passedElement);
         testSuiteElement.appendChild(failedElement);
+    }
 
-        return buildXmlStringFromDocument(doc);
+    private static void appendMetaScoreElements(Result result, Document doc, Element testSuitesElement) {
+        Element metaElement = doc.createElement("meta");
+
+        appendMetaScore(doc, metaElement, "Branch coverage", result.getCoverage().getCoveredBranches());
+        appendMetaScore(doc, metaElement, "Mutation coverage", result.getMutationTesting().getKilledMutants());
+        appendMetaScore(doc, metaElement, "Code checks", result.getCodeChecks().getNumberOfPassedChecks());
+        appendMetaScore(doc, metaElement, "Meta tests", result.getMetaTests().getPassedMetaTests());
+
+        result.getCodeChecks().getCheckResults().forEach(check -> {
+            appendMetaScore(doc, metaElement, check.getDescription(), check.passed() ? 1 : 0);
+        });
+
+        result.getRequiredCodeChecks().getCheckResults().forEach(check -> {
+            appendMetaScore(doc, metaElement, check.getDescription(), check.passed() ? 1 : 0);
+        });
+
+        result.getMetaTests().getMetaTestResults().forEach(metaTest -> {
+            appendMetaScore(doc, metaElement, metaTest.getName(), metaTest.succeeded() ? 1 : 0);
+        });
+
+        testSuitesElement.appendChild(metaElement);
+    }
+
+    private static void appendMetaScore(Document doc, Element metaElement, String id, int value) {
+        Element scoreElement = doc.createElement("score");
+        scoreElement.setAttribute("id", id);
+        scoreElement.setTextContent(String.valueOf(value));
+        metaElement.appendChild(scoreElement);
     }
 
     private static String buildXmlStringFromDocument(Document doc) {
