@@ -26,8 +26,7 @@ import java.util.List;
 
 import static nl.tudelft.cse1110.andy.utils.FilesUtils.concatenateDirectories;
 import static nl.tudelft.cse1110.andy.utils.FilesUtils.readFile;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.not;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static unit.writer.standard.StandardResultTestAssertions.*;
 
@@ -600,19 +599,17 @@ public class StandardResultWriterTest {
                 .has(not(requiredCodeChecksFailed()))
                 .has(not(zeroScoreExplanation()));
 
-        if (fullHints) {
-            assertThat(output)
-                    .has(metaTestPassing("d"))
-                    .has(metaTestFailing("e"))
-                    .has(metaTestPassing("f"))
-                    .has(codeCheck("a", true, 1))
-                    .has(codeCheck("b", true, 2))
-                    .has(codeCheck("c", false, 1))
-                    .has(codeCheck("a1", true, 1))
-                    .has(codeCheck("b1", true, 1))
-                    .has(codeCheck("c1", true, 1))
-                    .has(codeCheck("d1", true, 1));
-        }
+        assertThat(output)
+                .has(metaTestDisplayed("d", true, fullHints))
+                .has(metaTestDisplayed("e", false, fullHints))
+                .has(metaTestDisplayed("f", true, fullHints))
+                .has(codeCheckDisplayed("a", true, 1, fullHints))
+                .has(codeCheckDisplayed("b", true, 2, fullHints))
+                .has(codeCheckDisplayed("c", false, 1, fullHints))
+                .has(codeCheckDisplayed("a1", true, 1, fullHints))
+                .has(codeCheckDisplayed("b1", true, 1, fullHints))
+                .has(codeCheckDisplayed("c1", true, 1, fullHints))
+                .has(codeCheckDisplayed("d1", true, 1, fullHints));
     }
 
     @ParameterizedTest
@@ -657,13 +654,11 @@ public class StandardResultWriterTest {
                 .has(noCodeChecks())
                 .has(not(zeroScoreExplanation()));
 
-        if (fullHints) {
-            assertThat(output)
-                    .has(codeCheck("a1", true, 1))
-                    .has(codeCheck("b1", false, 1))
-                    .has(codeCheck("c1", true, 1))
-                    .has(codeCheck("d1", true, 1));
-        }
+        assertThat(output)
+                .has(codeCheckDisplayed("a1", true, 1, fullHints))
+                .has(codeCheckDisplayed("b1", false, 1, fullHints))
+                .has(codeCheckDisplayed("c1", true, 1, fullHints))
+                .has(codeCheckDisplayed("d1", true, 1, fullHints));
     }
 
     @Test
@@ -851,6 +846,16 @@ public class StandardResultWriterTest {
 
     protected Condition<? super String> fullGradeDescriptionDisplayed(String check, int scored, int total, double weight) {
         return fullGradeDescription(check, scored, total, weight);
+    }
+
+    protected Condition<? super String> codeCheckDisplayed(String description, boolean pass, int weight, boolean shownInOutput) {
+        var codeCheckCondition = codeCheck(description, pass, weight);
+        return shownInOutput ? codeCheckCondition : not(codeCheckCondition);
+    }
+
+    protected Condition<? super String> metaTestDisplayed(String description, boolean pass, boolean shownInOutput) {
+        var metaTestCondition = pass ? metaTestPassing(description) : metaTestFailing(description);
+        return shownInOutput ? metaTestCondition : not(metaTestCondition);
     }
 
 }
