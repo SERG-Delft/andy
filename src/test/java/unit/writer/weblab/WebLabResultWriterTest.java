@@ -18,8 +18,10 @@ import static nl.tudelft.cse1110.andy.utils.FilesUtils.concatenateDirectories;
 import static nl.tudelft.cse1110.andy.utils.FilesUtils.readFile;
 import static org.assertj.core.api.Assertions.allOf;
 import static org.assertj.core.api.Assertions.assertThat;
+import static unit.writer.standard.StandardResultTestAssertions.fullGradeDescription;
 import static unit.writer.weblab.WebLabHighlightsJsonTestAssertions.*;
 import static unit.writer.standard.StandardResultTestAssertions.finalGradeInXml;
+import static unit.writer.standard.StandardResultTestAssertions.metaScoreInXml;
 
 public class WebLabResultWriterTest extends StandardResultWriterTest {
 
@@ -94,5 +96,11 @@ public class WebLabResultWriterTest extends StandardResultWriterTest {
         return xmlIsCorrect;
     }
 
+    @Override
+    protected Condition<? super String> fullGradeDescriptionDisplayed(String check, int scored, int total, double weight) {
+        Condition<String> descriptionIsCorrect = fullGradeDescription(check, scored, total, weight);
+        Condition<String> xmlIsCorrect = metaScoreInXml(reportDir.toString(), check, scored);
+        return allOf(descriptionIsCorrect, xmlIsCorrect);
+    }
 
 }

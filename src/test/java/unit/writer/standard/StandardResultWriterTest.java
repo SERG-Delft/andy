@@ -278,10 +278,10 @@ public class StandardResultWriterTest {
                 .has(linesCovered(4))
                 .has(instructionsCovered(5))
                 .has(branchesCovered(1))
-                .has(fullGradeDescription("Branch coverage", 1, 2, 0.25))
-                .has(fullGradeDescription("Mutation coverage", 5, 6, 0.25))
-                .has(fullGradeDescription("Code checks", 3, 4, 0.25))
-                .has(fullGradeDescription("Meta tests", 2, 3, 0.25))
+                .has(fullGradeDescriptionDisplayed("Branch coverage", 1, 2, 0.25))
+                .has(fullGradeDescriptionDisplayed("Mutation coverage", 5, 6, 0.25))
+                .has(fullGradeDescriptionDisplayed("Code checks", 3, 4, 0.25))
+                .has(fullGradeDescriptionDisplayed("Meta tests", 2, 3, 0.25))
                 .has(mutationScore(5, 6))
                 .has(noMetaTests())
                 .has(noCodeChecks())
@@ -326,7 +326,7 @@ public class StandardResultWriterTest {
                 .has(linesCovered(4))
                 .has(instructionsCovered(5))
                 .has(branchesCovered(1))
-                .has(fullGradeDescription("Branch coverage", 1, 2, 1))
+                .has(fullGradeDescriptionDisplayed("Branch coverage", 1, 2, 1))
                 .doesNotContain("Mutation coverage")
                 .doesNotContain("Code checks")
                 .doesNotContain("Meta tests")
@@ -589,10 +589,10 @@ public class StandardResultWriterTest {
                 .has(linesCovered(4))
                 .has(instructionsCovered(5))
                 .has(branchesCovered(1))
-                .has(fullGradeDescription("Branch coverage", 1, 2, 0.25))
-                .has(fullGradeDescription("Mutation coverage", 5, 6, 0.25))
-                .has(fullGradeDescription("Code checks", 3, 4, 0.25))
-                .has(fullGradeDescription("Meta tests", 2, 3, 0.25))
+                .has(fullGradeDescriptionDisplayed("Branch coverage", 1, 2, 0.25))
+                .has(fullGradeDescriptionDisplayed("Mutation coverage", 5, 6, 0.25))
+                .has(fullGradeDescriptionDisplayed("Code checks", 3, 4, 0.25))
+                .has(fullGradeDescriptionDisplayed("Meta tests", 2, 3, 0.25))
                 .has(mutationScore(5, 6))
                 .has(scoreOfCodeChecks(3, 4))
                 .has(metaTestsPassing(2))
@@ -651,7 +651,7 @@ public class StandardResultWriterTest {
         assertThat(output)
                 .has(versionInformation(versionInformation))
                 .has(compilationSuccess())
-                .has(fullGradeDescription("Code checks", 0, 0, 0.25))
+                .has(fullGradeDescriptionDisplayed("Code checks", 0, 0, 0.25))
                 .has(mutationScore(5, 6))
                 .has(requiredCodeChecksFailed())
                 .has(noCodeChecks())
@@ -699,8 +699,8 @@ public class StandardResultWriterTest {
                 .has(linesCovered(4))
                 .has(instructionsCovered(5))
                 .has(branchesCovered(1))
-                .has(fullGradeDescription("Branch coverage", 1, 2, 0.5))
-                .has(fullGradeDescription("Mutation coverage", 5, 6, 0.5))
+                .has(fullGradeDescriptionDisplayed("Branch coverage", 1, 2, 0.5))
+                .has(fullGradeDescriptionDisplayed("Mutation coverage", 5, 6, 0.5))
                 .has(mutationScore(5, 6))
                 .doesNotContain("Code checks")
                 .doesNotContain("Meta tests")
@@ -847,6 +847,10 @@ public class StandardResultWriterTest {
 
     protected Condition<? super String> finalGradeNotOnScreen(int grade) {
         return not(StandardResultTestAssertions.finalGrade(grade));
+    }
+
+    protected Condition<? super String> fullGradeDescriptionDisplayed(String check, int scored, int total, double weight) {
+        return fullGradeDescription(check, scored, total, weight);
     }
 
 }
