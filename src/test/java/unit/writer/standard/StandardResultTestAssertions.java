@@ -192,7 +192,7 @@ public class StandardResultTestAssertions {
         };
     }
 
-    private static boolean resultXmlHasCorrectGrade(String workDir, int score) {
+    private static Document parseResultsXmlDocument(String workDir) {
         Document doc;
         try {
             FileInputStream fileIS = new FileInputStream(FilesUtils.concatenateDirectories(workDir, "results.xml"));
@@ -202,6 +202,11 @@ public class StandardResultTestAssertions {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        return doc;
+    }
+
+    private static boolean resultXmlHasCorrectGrade(String workDir, int score) {
+        Document doc = parseResultsXmlDocument(workDir);
 
         int passes = getXmlWeight(doc, "/testsuites/testsuite/testcase[@name=\"Passed\" and not(failure)]");
         int fails = getXmlWeight(doc, "/testsuites/testsuite/testcase[@name=\"Failed\" and failure]");
