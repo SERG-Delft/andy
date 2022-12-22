@@ -192,6 +192,15 @@ public class StandardResultTestAssertions {
         };
     }
 
+    public static Condition<String> metaScoreInXml(String reportDir, String description, int score) {
+        return new Condition<>() {
+            @Override
+            public boolean matches(String value) {
+                return resultXmlHasMetaScore(reportDir, description, score);
+            }
+        };
+    }
+
     private static Document parseResultsXmlDocument(String workDir) {
         Document doc;
         try {
@@ -212,6 +221,20 @@ public class StandardResultTestAssertions {
         int fails = getXmlWeight(doc, "/testsuites/testsuite/testcase[@name=\"Failed\" and failure]");
         boolean resultXmlIsCorrect = passes == score && passes + fails == 100;
         return resultXmlIsCorrect;
+    }
+
+    private static boolean resultXmlHasMetaScore(String workDir, String description, int score) {
+        Document doc = parseResultsXmlDocument(workDir);
+
+        final String xpath = "/testsuites/meta/score[@id=\"%s\"]".formatted(description);
+        try {
+            Element node = (Element) XPathFactory.newInstance().newXPath().compile(xpath)
+                    .evaluate(doc, XPathConstants.NODE);
+            int actualScore = Integer.parseInt(node.getTextContent());
+            return score == actualScore;
+        } catch (XPathExpressionException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static int getXmlWeight(Document doc, String xpath) {
