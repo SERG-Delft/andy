@@ -28,8 +28,8 @@ public class WebLabResultWriterTest extends StandardResultWriterTest {
         return new WebLabResultWriter(versionInformation, asciiArtGenerator, codeSnippetGenerator);
     }
 
-    private String highlightsJson() {
-        return readFile(new File(concatenateDirectories(reportDir.toString(), "highlights.json")));
+    private String editorFeedbackJson() {
+        return readFile(new File(concatenateDirectories(reportDir.toString(), "editor-feedback.json")));
     }
 
     @Test
@@ -41,7 +41,7 @@ public class WebLabResultWriterTest extends StandardResultWriterTest {
 
         writer.write(ctx, result);
 
-        String highlightsJson = highlightsJson();
+        String highlightsJson = editorFeedbackJson();
 
         assertThat(highlightsJson)
                 .has(highlightCompilationError(10, "some compilation error"))
@@ -63,16 +63,13 @@ public class WebLabResultWriterTest extends StandardResultWriterTest {
 
         writer.write(ctx, result);
 
-        String highlightsJson = highlightsJson();
+        String highlightsJson = editorFeedbackJson();
 
         assertThat(highlightsJson)
-                .has(highlightLineFullyCovered(1))
-                .has(highlightLineFullyCovered(2))
-                .has(highlightLineFullyCovered(3))
-                .has(highlightLineFullyCovered(7))
-                .has(highlightLinePartiallyCovered(4))
-                .has(highlightLineNotCovered(5))
-                .has(highlightLineNotCovered(6));
+                .has(editorFeedbackFullyCovered(1, 3))
+                .has(editorFeedbackFullyCovered(7, 7))
+                .has(editorFeedbackPartiallyCovered(4, 4))
+                .has(editorFeedbackNotCovered(5, 6));
     }
 
     @Override
