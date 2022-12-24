@@ -4,7 +4,7 @@ import org.assertj.core.api.Condition;
 
 import static unit.writer.standard.StandardResultTestAssertions.containsString;
 
-public class WebLabHighlightsJsonTestAssertions {
+public class WebLabEditorFeedbackJsonTestAssertions {
 
     public static Condition<String> editorFeedbackFullyCovered(int start, int end) {
         return libraryLine(start, end, "100% coverage", "Info");
@@ -18,7 +18,7 @@ public class WebLabHighlightsJsonTestAssertions {
         return libraryLine(start, end, "No coverage", "Warning");
     }
 
-    public static Condition<String> highlightCompilationError(int line, String message) {
+    public static Condition<String> editorFeedbackCompilationError(int line, String message) {
         return solutionLine(line, line, message, "Error");
     }
 

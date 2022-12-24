@@ -18,7 +18,7 @@ import static nl.tudelft.cse1110.andy.utils.FilesUtils.concatenateDirectories;
 import static nl.tudelft.cse1110.andy.utils.FilesUtils.readFile;
 import static org.assertj.core.api.Assertions.allOf;
 import static org.assertj.core.api.Assertions.assertThat;
-import static unit.writer.weblab.WebLabHighlightsJsonTestAssertions.*;
+import static unit.writer.weblab.WebLabEditorFeedbackJsonTestAssertions.*;
 import static unit.writer.standard.StandardResultTestAssertions.finalGradeInXml;
 
 public class WebLabResultWriterTest extends StandardResultWriterTest {
@@ -41,15 +41,15 @@ public class WebLabResultWriterTest extends StandardResultWriterTest {
 
         writer.write(ctx, result);
 
-        String highlightsJson = editorFeedbackJson();
+        String editorFeedbackJson = editorFeedbackJson();
 
-        assertThat(highlightsJson)
-                .has(highlightCompilationError(10, "some compilation error"))
-                .has(highlightCompilationError(11, "some other compilation error"));
+        assertThat(editorFeedbackJson)
+                .has(editorFeedbackCompilationError(10, "some compilation error"))
+                .has(editorFeedbackCompilationError(11, "some other compilation error"));
     }
 
     @Test
-    void testLineCoverageInHighlightedFile() {
+    void testLineCoverageInEditorFeedback() {
         Result result = new ResultTestDataBuilder()
                 .withCoverageResult(CoverageResult.build(
                         4, 7, 5, 8, 1, 2,
@@ -63,9 +63,9 @@ public class WebLabResultWriterTest extends StandardResultWriterTest {
 
         writer.write(ctx, result);
 
-        String highlightsJson = editorFeedbackJson();
+        String editorFeedbackJson = editorFeedbackJson();
 
-        assertThat(highlightsJson)
+        assertThat(editorFeedbackJson)
                 .has(editorFeedbackFullyCovered(1, 3))
                 .has(editorFeedbackFullyCovered(7, 7))
                 .has(editorFeedbackPartiallyCovered(4, 4))
