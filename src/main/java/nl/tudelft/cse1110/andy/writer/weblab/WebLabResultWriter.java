@@ -2,11 +2,14 @@ package nl.tudelft.cse1110.andy.writer.weblab;
 
 import com.google.gson.Gson;
 import nl.tudelft.cse1110.andy.execution.Context;
-import nl.tudelft.cse1110.andy.result.*;
+import nl.tudelft.cse1110.andy.result.CompilationErrorInfo;
+import nl.tudelft.cse1110.andy.result.Result;
 import nl.tudelft.cse1110.andy.writer.standard.CodeSnippetGenerator;
 import nl.tudelft.cse1110.andy.writer.standard.RandomAsciiArtGenerator;
 import nl.tudelft.cse1110.andy.writer.standard.StandardResultWriter;
 import nl.tudelft.cse1110.andy.writer.standard.VersionInformation;
+import nl.tudelft.cse1110.andy.writer.weblab.EditorFeedbackRange.EditorFeedbackLocation;
+import nl.tudelft.cse1110.andy.writer.weblab.EditorFeedbackRange.EditorFeedbackSeverity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -32,7 +35,7 @@ public class WebLabResultWriter extends StandardResultWriter {
         super.write(ctx, result);
 
         writeResultsXmlFile(ctx, result);
-        writeHighlightsJson(ctx, result);
+        writeEditorFeedbackJson(ctx, result);
         writeAnalyticsFile(ctx, result);
     }
 
@@ -59,41 +62,74 @@ public class WebLabResultWriter extends StandardResultWriter {
     }
 
 
-    private void writeHighlightsJson(Context ctx, Result result){
+    private void writeEditorFeedbackJson(Context ctx, Result result) {
 
-        List<Highlight> highlights = buildHighlights(result);
-        String json = new Gson().toJson(highlights);
+        List<EditorFeedbackRange> editorFeedbackRanges = buildEditorFeedback(result);
+        String json = new Gson().toJson(editorFeedbackRanges);
 
-        File highlightsJson = new File(concatenateDirectories(ctx.getDirectoryConfiguration().getOutputDir(), "highlights.json"));
-        writeToFile(highlightsJson, json);
+        File editorFeedbackFile = new File(concatenateDirectories(ctx.getDirectoryConfiguration().getOutputDir(),
+                "editor-feedback.json"));
+        writeToFile(editorFeedbackFile, json);
     }
 
-    private List<Highlight> buildHighlights(Result result) {
-        List<Highlight> highlights = new ArrayList<>();
+    private List<EditorFeedbackRange> buildEditorFeedback(Result result) {
+        List<EditorFeedbackRange> editorFeedbackRanges = new ArrayList<>();
 
         // coverage
-        for(int line : result.getCoverage().getFullyCoveredLines()) {
-            highlights.add(new Highlight(line, "100% coverage",
-                    Highlight.HighlightLocation.LIBRARY, Highlight.HighlightPurpose.FULL_COVERAGE));
-        }
+        editorFeedbackRanges.addAll(aggregateLinesIntoRanges(
+                result.getCoverage().getFullyCoveredLines(),
+                "100% coverage",
+                EditorFeedbackLocation.LIBRARY,
+                EditorFeedbackSeverity.INFO));
 
-        for(int line : result.getCoverage().getPartiallyCoveredLines()) {
-            highlights.add(new Highlight(line, "Partial coverage",
-                    Highlight.HighlightLocation.LIBRARY, Highlight.HighlightPurpose.PARTIAL_COVERAGE));
-        }
+        editorFeedbackRanges.addAll(aggregateLinesIntoRanges(
+                result.getCoverage().getPartiallyCoveredLines(),
+                "Partial coverage",
+                EditorFeedbackLocation.LIBRARY,
+                EditorFeedbackSeverity.HINT));
 
-        for(int line : result.getCoverage().getNotCoveredLines()) {
-            highlights.add(new Highlight(line, "No coverage",
-                    Highlight.HighlightLocation.LIBRARY, Highlight.HighlightPurpose.NO_COVERAGE));
-        }
+        editorFeedbackRanges.addAll(aggregateLinesIntoRanges(
+                result.getCoverage().getNotCoveredLines(),
+                "No coverage",
+                EditorFeedbackLocation.LIBRARY,
+                EditorFeedbackSeverity.WARNING));
 
         // compilation error
         for (CompilationErrorInfo error : result.getCompilation().getErrors()) {
-            highlights.add(new Highlight(error.getLineNumber(), error.getMessage(), Highlight.HighlightLocation.SOLUTION, Highlight.HighlightPurpose.COMPILATION_ERROR));
+            editorFeedbackRanges.add(new EditorFeedbackRange(
+                    EditorFeedbackLocation.SOLUTION,
+                    error.getLineNumber(),
+                    error.getLineNumber(),
+                    EditorFeedbackSeverity.ERROR,
+                    error.getMessage()));
         }
 
-        return highlights;
+        return editorFeedbackRanges;
     }
+
+    private List<EditorFeedbackRange> aggregateLinesIntoRanges(
+            List<Integer> lines, String message, EditorFeedbackLocation location, EditorFeedbackSeverity severity) {
+        // Convert list of line numbers, e.g. [2,4,8,3,10,7]
+        // into a list of ranges, e.g. [(2,4),(7,8),(10,10)]
+
+        List<EditorFeedbackRange> ranges = new ArrayList<>();
+        if (lines.isEmpty()) return ranges;
+
+        List<Integer> sortedLines = new ArrayList<>(lines);
+        sortedLines.sort(Integer::compareTo);
+
+        int currRangeStart = sortedLines.get(0);
+        for (int i = 0; i < sortedLines.size(); i++) {
+            int currLine = sortedLines.get(i);
+            if (i == sortedLines.size() - 1 || currLine + 1 != sortedLines.get(i + 1)) {
+                ranges.add(new EditorFeedbackRange(location, currRangeStart, currLine, severity, message));
+                if (i != sortedLines.size() - 1) currRangeStart = sortedLines.get(i + 1);
+            }
+        }
+
+        return ranges;
+    }
+
 
     private void writeAnalyticsFile(Context ctx, Result result) {
         if(ctx.getModeActionSelector()==null || !ctx.getModeActionSelector().shouldGenerateAnalytics())
@@ -110,7 +146,4 @@ public class WebLabResultWriter extends StandardResultWriter {
         File file = new File(concatenateDirectories(ctx.getDirectoryConfiguration().getOutputDir(), "post.json"));
         writeToFile(file, json);
     }
-
-
-
 }
