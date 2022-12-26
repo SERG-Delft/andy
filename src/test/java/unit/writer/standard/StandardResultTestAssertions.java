@@ -2,10 +2,16 @@ package unit.writer.standard;
 
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
 import nl.tudelft.cse1110.andy.writer.standard.VersionInformation;
-import org.apache.commons.lang.StringUtils;
 import org.assertj.core.api.Condition;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
-import java.io.File;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+import java.io.FileInputStream;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -186,14 +192,59 @@ public class StandardResultTestAssertions {
         };
     }
 
-    private static boolean resultXmlHasCorrectGrade(String workDir, int score) {
-        File resultXml = new File(FilesUtils.concatenateDirectories(workDir, "results.xml"));
-        String resultXmlContent = FilesUtils.readFile(resultXml);
+    public static Condition<String> metaScoreInXml(String reportDir, String description, int score) {
+        return new Condition<>() {
+            @Override
+            public boolean matches(String value) {
+                return resultXmlHasMetaScore(reportDir, description, score);
+            }
+        };
+    }
 
-        int passes = StringUtils.countMatches(resultXmlContent, "<testcase/>");
-        int fails = StringUtils.countMatches(resultXmlContent, "<testcase><failure></failure></testcase>");
-        boolean resultXmlIsCorrect = passes == score && passes+fails==100;
+    private static Document parseResultsXmlDocument(String workDir) {
+        Document doc;
+        try {
+            FileInputStream fileIS = new FileInputStream(FilesUtils.concatenateDirectories(workDir, "results.xml"));
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = builderFactory.newDocumentBuilder();
+            doc = builder.parse(fileIS);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return doc;
+    }
+
+    private static boolean resultXmlHasCorrectGrade(String workDir, int score) {
+        Document doc = parseResultsXmlDocument(workDir);
+
+        int passes = getXmlWeight(doc, "/testsuites/testsuite/testcase[@name=\"Passed\" and not(failure)]");
+        int fails = getXmlWeight(doc, "/testsuites/testsuite/testcase[@name=\"Failed\" and failure]");
+        boolean resultXmlIsCorrect = passes == score && passes + fails == 100;
         return resultXmlIsCorrect;
+    }
+
+    private static boolean resultXmlHasMetaScore(String workDir, String description, int score) {
+        Document doc = parseResultsXmlDocument(workDir);
+
+        final String xpath = "/testsuites/meta/score[@id=\"%s\"]".formatted(description);
+        try {
+            Element node = (Element) XPathFactory.newInstance().newXPath().compile(xpath)
+                    .evaluate(doc, XPathConstants.NODE);
+            int actualScore = Integer.parseInt(node.getTextContent());
+            return score == actualScore;
+        } catch (XPathExpressionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static int getXmlWeight(Document doc, String xpath) {
+        try {
+            Element node = (Element) XPathFactory.newInstance().newXPath().compile(xpath)
+                    .evaluate(doc, XPathConstants.NODE);
+            return Integer.parseInt(node.getAttribute("weight"));
+        } catch (XPathExpressionException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static Condition<String> mutationScore(int mutantsKilled, int totalMutants) {
