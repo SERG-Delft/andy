@@ -63,7 +63,7 @@ public class SourceCodeSecurityCheckStep implements ExecutionStep {
                 // Block reflection
                 Map.entry("forName", reflectionMsg),
                 Map.entry("getAnnotation", reflectionMsg), // also blocks getAnnotations
-                Map.entry("getClassLoader", reflectionMsg),
+                Map.entry("ClassLoader", reflectionMsg), // blocks ClassLoader-related methods
                 Map.entry("getConstructor", reflectionMsg), // also blocks getConstructors
                 Map.entry("getDeclaredAnnotation", reflectionMsg), // also blocks getDeclaredAnnotations/-ByType
                 Map.entry("getDeclaredConstructor", reflectionMsg), // also blocks getDeclaredConstructors
@@ -75,6 +75,7 @@ public class SourceCodeSecurityCheckStep implements ExecutionStep {
                 Map.entry("getField", reflectionMsg), // also blocks getFields
                 Map.entry("getMethod", reflectionMsg), // also blocks getMethods
                 Map.entry("getModifiers", reflectionMsg),
+                Map.entry("newInstance", reflectionMsg),
                 Map.entry("reflect", reflectionMsg),
                 Map.entry("setAccessible", reflectionMsg),
 
