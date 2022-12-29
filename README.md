@@ -2,6 +2,25 @@
 
 [![tests](https://github.com/cse1110/andy/actions/workflows/tests.yml/badge.svg)](https://github.com/cse1110/andy/actions/workflows/tests.yml)
 
+* [Summary](#andy)
+* [Usage](#usage)
+* [Configuration](#configuration)
+    * [File structure](#file-structure)
+    * [Configuration file](#configuration-file)
+        * [Weights](#weights-required)
+        * [Classes under test](#classes-under-test-required)
+        * [Mode](#mode)
+        * [Code coverage](#code-coverage)
+        * [Mutation coverage](#mutation-coverage)
+        * [Meta tests](#meta-tests)
+        * [Code checks](#code-checks)
+        * [Required code checks](#required-code-checks)
+        * [Success message](#success-message)
+        * [External process](#external-process)
+* [Team](#team)
+* [License](#license)
+* [Acknowledgment](#acknowledgment)
+
 **Andy** is a tool for automated assessment of the quality of students' test suites. It was developed for CSE1110, the TU Delft's course on software testing and quality. 
 Given some method or class to test and the student's test suite, Andy runs a set of checks and metrics and provides students with feedback.
 
