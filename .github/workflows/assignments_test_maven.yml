@@ -35,7 +35,7 @@ jobs:
 
       - name: Compile and install Andy
         run: |
-          mvn install "-Dmaven.test.skip"
+          mvn -f andy/pom.xml install "-Dmaven.test.skip"
 
       - name: Execute python script
         run: |

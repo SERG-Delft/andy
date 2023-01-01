@@ -9,7 +9,7 @@ def get_directories(basedir):
 
 home_dir = os.path.join(os.getcwd(), 'assignments').replace("\\", "/")
 
-expected_andy_version = 'v' + minidom.parse('pom.xml').getElementsByTagName('version')[0].firstChild.data
+expected_andy_version = 'v' + minidom.parse('andy/pom.xml').getElementsByTagName('version')[0].firstChild.data
 
 pipeline_failed = False
 for category_dir in get_directories(home_dir):

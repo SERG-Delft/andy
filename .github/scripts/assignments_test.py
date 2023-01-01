@@ -7,7 +7,6 @@ def get_directories(basedir):
                                        if os.path.isdir(os.path.join(basedir, dir)) \
                                        and not dir.startswith('.')]
 
-target_dir = '/home/runner/work/andy/andy/target'
 home_dir = '/home/runner/work/andy/andy/assignments'
 
 # Set the environment variables.
@@ -18,12 +17,12 @@ os.makedirs(os.environ['OUTPUT_DIR'],  exist_ok = True)
 
 # Build classpath
 mvndeps_file = os.path.join(os.environ['WORKING_DIR'], 'mvndeps.txt')
-os.system(f'mvn dependency:build-classpath -Dmdep.outputFile={mvndeps_file}')
-classpath_string = f'{os.getcwd()}/target/classes:'
+os.system(f'mvn -f andy/pom.xml dependency:build-classpath -Dmdep.outputFile={mvndeps_file}')
+classpath_string = f'{os.getcwd()}/andy/target/classes:'
 with open(mvndeps_file, 'r') as mvndeps_f:
     classpath_string += mvndeps_f.read()
 
-expected_andy_version = 'v' + minidom.parse('pom.xml').getElementsByTagName('version')[0].firstChild.data
+expected_andy_version = 'v' + minidom.parse('andy/pom.xml').getElementsByTagName('version')[0].firstChild.data
 
 pipeline_failed = False
 for category_dir in get_directories(home_dir):
