@@ -28,7 +28,7 @@ jobs:
 
       - name: Compile Andy
         run: |
-          mvn clean compile dependency:copy-dependencies
+          mvn -f andy/pom.xml clean compile dependency:copy-dependencies
 
       - name: Execute python script
         run: |

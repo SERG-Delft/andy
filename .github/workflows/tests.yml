@@ -30,4 +30,4 @@ jobs:
           restore-keys: ${{ matrix.job.os }}-m2
 
       - name: Run tests with Maven
-        run: mvn -B test --file pom.xml
+        run: mvn -f andy/pom.xml -B test --file pom.xml
