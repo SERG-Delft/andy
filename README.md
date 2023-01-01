@@ -34,7 +34,7 @@ More specifically, Andy provides:
 
 The screenshot below shows the final part of the assessment report, containing the final grade.
 
-![](doc/screenshot.png)
+![](.github/doc/screenshot.png)
 
 ## Usage
 
