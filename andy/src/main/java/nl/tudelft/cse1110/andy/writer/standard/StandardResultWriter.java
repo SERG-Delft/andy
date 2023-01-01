@@ -8,11 +8,9 @@ import nl.tudelft.cse1110.andy.result.*;
 import nl.tudelft.cse1110.andy.utils.ImportUtils;
 import nl.tudelft.cse1110.andy.utils.PropertyUtils;
 import nl.tudelft.cse1110.andy.writer.ResultWriter;
-import nl.tudelft.cse1110.andy.writer.weblab.Highlight;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,7 +25,6 @@ public class StandardResultWriter implements ResultWriter {
     private final CodeSnippetGenerator codeSnippetGenerator;
 
     private StringBuilder toDisplay = new StringBuilder();
-    private List<Highlight> highlights = new ArrayList<>();
 
     public StandardResultWriter(VersionInformation versionInformation, RandomAsciiArtGenerator asciiArtGenerator,
                                 CodeSnippetGenerator codeSnippetGenerator) {
@@ -417,8 +414,6 @@ public class StandardResultWriter implements ResultWriter {
                 if (i == 0 && !compilation.hasConfigurationError()) {
                     printCodeSnippet(ctx, lineNumber);
                 }
-
-                highlights.add(new Highlight(lineNumber, message, Highlight.HighlightLocation.SOLUTION, Highlight.HighlightPurpose.COMPILATION_ERROR));
             }
 
             if(compilation.hasConfigurationError()) {

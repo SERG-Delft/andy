@@ -19,7 +19,7 @@ import static nl.tudelft.cse1110.andy.utils.FilesUtils.readFile;
 import static org.assertj.core.api.Assertions.allOf;
 import static org.assertj.core.api.Assertions.assertThat;
 import static unit.writer.standard.StandardResultTestAssertions.*;
-import static unit.writer.weblab.WebLabHighlightsJsonTestAssertions.*;
+import static unit.writer.weblab.WebLabEditorFeedbackJsonTestAssertions.*;
 
 public class WebLabResultWriterTest extends StandardResultWriterTest {
 
@@ -28,8 +28,8 @@ public class WebLabResultWriterTest extends StandardResultWriterTest {
         return new WebLabResultWriter(versionInformation, asciiArtGenerator, codeSnippetGenerator);
     }
 
-    private String highlightsJson() {
-        return readFile(new File(concatenateDirectories(reportDir.toString(), "highlights.json")));
+    private String editorFeedbackJson() {
+        return readFile(new File(concatenateDirectories(reportDir.toString(), "editor-feedback.json")));
     }
 
     @Test
@@ -41,38 +41,64 @@ public class WebLabResultWriterTest extends StandardResultWriterTest {
 
         writer.write(ctx, result);
 
-        String highlightsJson = highlightsJson();
+        String editorFeedbackJson = editorFeedbackJson();
 
-        assertThat(highlightsJson)
-                .has(highlightCompilationError(10, "some compilation error"))
-                .has(highlightCompilationError(11, "some other compilation error"));
+        assertThat(editorFeedbackJson)
+                .has(editorFeedbackCompilationError(10, "some compilation error"))
+                .has(editorFeedbackCompilationError(11, "some other compilation error"));
     }
 
     @Test
-    void testLineCoverageInHighlightedFile() {
+    void testLineCoverageInEditorFeedback() {
         Result result = new ResultTestDataBuilder()
                 .withCoverageResult(CoverageResult.build(
-                        4, 7, 5, 8, 1, 2,
+                        5, 7, 5, 8, 1, 2,
                         new CoverageLineByLine(
-                                List.of(1, 2, 3, 7),
+                                List.of(1, 2, 3, 6, 7),
                                 List.of(4),
-                                List.of(5, 6)
+                                List.of(5)
                         )
                 ))
                 .build();
 
         writer.write(ctx, result);
 
-        String highlightsJson = highlightsJson();
+        String editorFeedbackJson = editorFeedbackJson();
 
-        assertThat(highlightsJson)
-                .has(highlightLineFullyCovered(1))
-                .has(highlightLineFullyCovered(2))
-                .has(highlightLineFullyCovered(3))
-                .has(highlightLineFullyCovered(7))
-                .has(highlightLinePartiallyCovered(4))
-                .has(highlightLineNotCovered(5))
-                .has(highlightLineNotCovered(6));
+        assertThat(editorFeedbackJson)
+                .has(editorFeedbackFullyCovered(1, 3))
+                .has(editorFeedbackFullyCovered(6, 7))
+                .has(editorFeedbackPartiallyCovered(4, 4))
+                .has(editorFeedbackNotCovered(5, 5));
+    }
+
+    @Test
+    void testEditorFeedbackCoverageBoundaries() {
+        Result result = new ResultTestDataBuilder()
+                .withCoverageResult(CoverageResult.build(
+                        8, 13, 0, 0, 0, 0,
+                        new CoverageLineByLine(
+                                List.of(4, 7, 13, 9, 3, 1, 10, 5),
+                                List.of(),
+                                List.of(2, 6, 8, 11, 12)
+                        )
+                ))
+                .build();
+
+        writer.write(ctx, result);
+
+        String editorFeedbackJson = editorFeedbackJson();
+
+        assertThat(editorFeedbackJson)
+                .has(editorFeedbackFullyCovered(1, 1))
+                .has(editorFeedbackFullyCovered(3, 5))
+                .has(editorFeedbackFullyCovered(7, 7))
+                .has(editorFeedbackFullyCovered(9, 10))
+                .has(editorFeedbackFullyCovered(13, 13))
+                .has(editorFeedbackNotCovered(2, 2))
+                .has(editorFeedbackNotCovered(6, 6))
+                .has(editorFeedbackNotCovered(8, 8))
+                .has(editorFeedbackNotCovered(11, 12));
     }
 
     @Override
@@ -114,5 +140,4 @@ public class WebLabResultWriterTest extends StandardResultWriterTest {
         Condition<String> xmlIsCorrect = metaScoreInXml(reportDir.toString(), description, pass ? 1 : 0);
         return allOf(descriptionIsCorrect, xmlIsCorrect);
     }
-
 }
