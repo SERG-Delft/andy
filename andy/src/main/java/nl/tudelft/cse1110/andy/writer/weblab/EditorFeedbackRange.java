@@ -3,7 +3,7 @@ package nl.tudelft.cse1110.andy.writer.weblab;
 import com.google.gson.annotations.SerializedName;
 
 public record EditorFeedbackRange(EditorFeedbackLocation location,
-                                  long startLine, long endLine,
+                                  long startLineNumber, long endLineNumber,
                                   EditorFeedbackSeverity severity,
                                   String message) {
 
@@ -11,15 +11,15 @@ public record EditorFeedbackRange(EditorFeedbackLocation location,
      * [
      *     {
      *         "location": "SOLUTION", //one of ["LIBRARY", "SOLUTION", "TEST"]
-     *         "startLine": 20, //int
-     *         "endLine": 20, //int
+     *         "startLineNumber": 20, //int
+     *         "endLineNumber": 20, //int
      *         "severity": "Info", //one of ["Error", "Hint", "Info", "Warning"]
      *         "message": "100% coverage" //String
      *     },
      *     {
      *         "location": "LIBRARY",
-     *         "startLine": 41,
-     *         "endLine": 48,
+     *         "startLineNumber": 41,
+     *         "endLineNumber": 48,
      *         "severity": "Info",
      *         "message": "Some message"
      *     },

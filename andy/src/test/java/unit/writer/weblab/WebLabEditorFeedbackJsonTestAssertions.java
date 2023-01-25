@@ -32,8 +32,8 @@ public class WebLabEditorFeedbackJsonTestAssertions {
 
     private static Condition<String> line(int start, int end, String message, String location, String purpose) {
         return containsString(String.format("{\"location\":\"%s\"," +
-                                            "\"startLine\":%d," +
-                                            "\"endLine\":%d," +
+                                            "\"startLineNumber\":%d," +
+                                            "\"endLineNumber\":%d," +
                                             "\"severity\":\"%s\"," +
                                             "\"message\":\"%s\"}",
                 location, start, end, purpose, message));
