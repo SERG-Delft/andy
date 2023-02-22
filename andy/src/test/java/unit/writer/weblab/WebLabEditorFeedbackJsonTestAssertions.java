@@ -30,13 +30,13 @@ public class WebLabEditorFeedbackJsonTestAssertions {
         return line(start, end, message, "SOLUTION", purpose);
     }
 
-    private static Condition<String> line(int start, int end, String message, String location, String purpose) {
-        return containsString(String.format("{\"location\":\"%s\"," +
+    private static Condition<String> line(int start, int end, String message, String file, String purpose) {
+        return containsString(String.format("{\"file\":\"%s\"," +
                                             "\"startLineNumber\":%d," +
                                             "\"endLineNumber\":%d," +
                                             "\"severity\":\"%s\"," +
                                             "\"message\":\"%s\"}",
-                location, start, end, purpose, message));
+                file, start, end, purpose, message));
     }
 
 }
