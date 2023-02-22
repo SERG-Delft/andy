@@ -2,7 +2,7 @@ package nl.tudelft.cse1110.andy.writer.weblab;
 
 import com.google.gson.annotations.SerializedName;
 
-public record EditorFeedbackRange(EditorFeedbackLocation location,
+public record EditorFeedbackRange(EditorFeedbackFile file,
                                   long startLineNumber, long endLineNumber,
                                   EditorFeedbackSeverity severity,
                                   String message) {
@@ -10,14 +10,16 @@ public record EditorFeedbackRange(EditorFeedbackLocation location,
     /*
      * [
      *     {
-     *         "location": "SOLUTION", //one of ["LIBRARY", "SOLUTION", "TEST"]
+     *         "file": "SOLUTION", //one of ["LIBRARY", "SOLUTION", "TEST"]
      *         "startLineNumber": 20, //int
      *         "endLineNumber": 20, //int
      *         "severity": "Info", //one of ["Error", "Hint", "Info", "Warning"]
      *         "message": "100% coverage" //String
+     *          // "startColumn": 1, //optional, int
+     *          // "endColumn": 20 //optional, int
      *     },
      *     {
-     *         "location": "LIBRARY",
+     *         "file": "LIBRARY",
      *         "startLineNumber": 41,
      *         "endLineNumber": 48,
      *         "severity": "Info",
@@ -38,7 +40,7 @@ public record EditorFeedbackRange(EditorFeedbackLocation location,
         WARNING
     }
 
-    public enum EditorFeedbackLocation {
+    public enum EditorFeedbackFile {
         @SerializedName("LIBRARY")
         LIBRARY,
         @SerializedName("SOLUTION")

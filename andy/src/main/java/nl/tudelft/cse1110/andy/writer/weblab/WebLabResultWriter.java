@@ -8,7 +8,7 @@ import nl.tudelft.cse1110.andy.writer.standard.CodeSnippetGenerator;
 import nl.tudelft.cse1110.andy.writer.standard.RandomAsciiArtGenerator;
 import nl.tudelft.cse1110.andy.writer.standard.StandardResultWriter;
 import nl.tudelft.cse1110.andy.writer.standard.VersionInformation;
-import nl.tudelft.cse1110.andy.writer.weblab.EditorFeedbackRange.EditorFeedbackLocation;
+import nl.tudelft.cse1110.andy.writer.weblab.EditorFeedbackRange.EditorFeedbackFile;
 import nl.tudelft.cse1110.andy.writer.weblab.EditorFeedbackRange.EditorFeedbackSeverity;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -160,25 +160,25 @@ public class WebLabResultWriter extends StandardResultWriter {
         editorFeedbackRanges.addAll(aggregateLinesIntoRanges(
                 result.getCoverage().getFullyCoveredLines(),
                 "100% coverage",
-                EditorFeedbackLocation.LIBRARY,
+                EditorFeedbackFile.LIBRARY,
                 EditorFeedbackSeverity.INFO));
 
         editorFeedbackRanges.addAll(aggregateLinesIntoRanges(
                 result.getCoverage().getPartiallyCoveredLines(),
                 "Partial coverage",
-                EditorFeedbackLocation.LIBRARY,
+                EditorFeedbackFile.LIBRARY,
                 EditorFeedbackSeverity.HINT));
 
         editorFeedbackRanges.addAll(aggregateLinesIntoRanges(
                 result.getCoverage().getNotCoveredLines(),
                 "No coverage",
-                EditorFeedbackLocation.LIBRARY,
+                EditorFeedbackFile.LIBRARY,
                 EditorFeedbackSeverity.WARNING));
 
         // compilation error
         for (CompilationErrorInfo error : result.getCompilation().getErrors()) {
             editorFeedbackRanges.add(new EditorFeedbackRange(
-                    EditorFeedbackLocation.SOLUTION,
+                    EditorFeedbackFile.SOLUTION,
                     error.getLineNumber(),
                     error.getLineNumber(),
                     EditorFeedbackSeverity.ERROR,
@@ -189,7 +189,7 @@ public class WebLabResultWriter extends StandardResultWriter {
     }
 
     private List<EditorFeedbackRange> aggregateLinesIntoRanges(
-            List<Integer> lines, String message, EditorFeedbackLocation location, EditorFeedbackSeverity severity) {
+            List<Integer> lines, String message, EditorFeedbackFile file, EditorFeedbackSeverity severity) {
         // Convert list of line numbers, e.g. [2,4,8,3,10,7]
         // into a list of ranges, e.g. [(2,4),(7,8),(10,10)]
 
@@ -203,7 +203,7 @@ public class WebLabResultWriter extends StandardResultWriter {
         for (int i = 0; i < sortedLines.size(); i++) {
             int currLine = sortedLines.get(i);
             if (i == sortedLines.size() - 1 || currLine + 1 != sortedLines.get(i + 1)) {
-                ranges.add(new EditorFeedbackRange(location, currRangeStart, currLine, severity, message));
+                ranges.add(new EditorFeedbackRange(file, currRangeStart, currLine, severity, message));
                 if (i != sortedLines.size() - 1) currRangeStart = sortedLines.get(i + 1);
             }
         }
