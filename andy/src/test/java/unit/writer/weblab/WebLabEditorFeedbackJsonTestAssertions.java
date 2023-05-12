@@ -19,24 +19,25 @@ public class WebLabEditorFeedbackJsonTestAssertions {
     }
 
     public static Condition<String> editorFeedbackCompilationError(int line, String message) {
-        return solutionLine(line, line, message, "Error");
+        return solutionLineUnderlined(line, line, message, "Error");
     }
 
     private static Condition<String> libraryLine(int start, int end, String message, String purpose) {
-        return line(start, end, message, "LIBRARY", purpose);
+        return lineUnderlined(start, end, message, "LIBRARY", purpose);
     }
 
-    private static Condition<String> solutionLine(int start, int end, String message, String purpose) {
-        return line(start, end, message, "SOLUTION", purpose);
+    private static Condition<String> solutionLineUnderlined(int start, int end, String message, String purpose) {
+        return lineUnderlined(start, end, message, "SOLUTION", purpose);
     }
 
-    private static Condition<String> line(int start, int end, String message, String file, String purpose) {
-        return containsString(String.format("{\"file\":\"%s\"," +
+    private static Condition<String> lineUnderlined(int start, int end, String message, String file, String purpose) {
+        return containsString(String.format("{\"severity\":\"%s\"," +
+                                            "\"type\":\"Marker\"," +
+                                            "\"file\":\"%s\"," +
                                             "\"startLineNumber\":%d," +
                                             "\"endLineNumber\":%d," +
-                                            "\"severity\":\"%s\"," +
                                             "\"message\":\"%s\"}",
-                file, start, end, purpose, message));
+                purpose, file, start, end, message));
     }
 
 }
