@@ -161,19 +161,19 @@ public class WebLabResultWriter extends StandardResultWriter {
                 result.getCoverage().getFullyCoveredLines(),
                 "100% coverage",
                 EditorFeedbackFile.LIBRARY,
-                EditorFeedbackSeverity.INFO));
+                EditorFeedbackRangeBackground.EditorFeedbackClassName.BACKGROUND_BLUE));
 
         editorFeedbackRanges.addAll(aggregateLinesIntoRanges(
                 result.getCoverage().getPartiallyCoveredLines(),
                 "Partial coverage",
                 EditorFeedbackFile.LIBRARY,
-                EditorFeedbackSeverity.HINT));
+                EditorFeedbackRangeBackground.EditorFeedbackClassName.BACKGROUND_YELLOW));
 
         editorFeedbackRanges.addAll(aggregateLinesIntoRanges(
                 result.getCoverage().getNotCoveredLines(),
                 "No coverage",
                 EditorFeedbackFile.LIBRARY,
-                EditorFeedbackSeverity.WARNING));
+                EditorFeedbackRangeBackground.EditorFeedbackClassName.BACKGROUND_RED));
 
         // compilation error
         for (CompilationErrorInfo error : result.getCompilation().getErrors()) {
@@ -189,7 +189,8 @@ public class WebLabResultWriter extends StandardResultWriter {
     }
 
     private List<EditorFeedbackRange> aggregateLinesIntoRanges(
-            List<Integer> lines, String message, EditorFeedbackFile file, EditorFeedbackSeverity severity) {
+            List<Integer> lines, String message, EditorFeedbackFile file,
+            EditorFeedbackRangeBackground.EditorFeedbackClassName className) {
         // Convert list of line numbers, e.g. [2,4,8,3,10,7]
         // into a list of ranges, e.g. [(2,4),(7,8),(10,10)]
 
@@ -203,7 +204,7 @@ public class WebLabResultWriter extends StandardResultWriter {
         for (int i = 0; i < sortedLines.size(); i++) {
             int currLine = sortedLines.get(i);
             if (i == sortedLines.size() - 1 || currLine + 1 != sortedLines.get(i + 1)) {
-                ranges.add(new EditorFeedbackRangeUnderline(file, currRangeStart, currLine, message, severity));
+                ranges.add(new EditorFeedbackRangeBackground(file, currRangeStart, currLine, message, className));
                 if (i != sortedLines.size() - 1) currRangeStart = sortedLines.get(i + 1);
             }
         }

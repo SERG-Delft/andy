@@ -106,3 +106,31 @@ class EditorFeedbackRangeUnderline extends EditorFeedbackRange {
         WARNING
     }
 }
+
+class EditorFeedbackRangeBackground extends EditorFeedbackRange {
+    private final EditorFeedbackClassName className;
+
+    protected EditorFeedbackRangeBackground(EditorFeedbackFile file,
+                                            long startLineNumber,
+                                            long endLineNumber,
+                                            String message,
+                                            EditorFeedbackClassName className) {
+        super(EditorFeedbackType.DECORATION, file, startLineNumber, endLineNumber, message);
+        this.className = className;
+    }
+
+    public EditorFeedbackClassName className() {
+        return className;
+    }
+
+    public enum EditorFeedbackClassName {
+        @SerializedName("background-blue")
+        BACKGROUND_BLUE,
+        @SerializedName("background-red")
+        BACKGROUND_RED,
+        @SerializedName("background-green")
+        BACKGROUND_GREEN,
+        @SerializedName("background-yellow")
+        BACKGROUND_YELLOW
+    }
+}
