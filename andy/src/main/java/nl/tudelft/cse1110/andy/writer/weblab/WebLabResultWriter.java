@@ -9,7 +9,7 @@ import nl.tudelft.cse1110.andy.writer.standard.RandomAsciiArtGenerator;
 import nl.tudelft.cse1110.andy.writer.standard.StandardResultWriter;
 import nl.tudelft.cse1110.andy.writer.standard.VersionInformation;
 import nl.tudelft.cse1110.andy.writer.weblab.EditorFeedbackRange.EditorFeedbackFile;
-import nl.tudelft.cse1110.andy.writer.weblab.EditorFeedbackRange.EditorFeedbackSeverity;
+import nl.tudelft.cse1110.andy.writer.weblab.EditorFeedbackRangeUnderline.EditorFeedbackSeverity;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -161,35 +161,36 @@ public class WebLabResultWriter extends StandardResultWriter {
                 result.getCoverage().getFullyCoveredLines(),
                 "100% coverage",
                 EditorFeedbackFile.LIBRARY,
-                EditorFeedbackSeverity.INFO));
+                EditorFeedbackRangeBackground.EditorFeedbackClassName.BACKGROUND_BLUE));
 
         editorFeedbackRanges.addAll(aggregateLinesIntoRanges(
                 result.getCoverage().getPartiallyCoveredLines(),
                 "Partial coverage",
                 EditorFeedbackFile.LIBRARY,
-                EditorFeedbackSeverity.HINT));
+                EditorFeedbackRangeBackground.EditorFeedbackClassName.BACKGROUND_YELLOW));
 
         editorFeedbackRanges.addAll(aggregateLinesIntoRanges(
                 result.getCoverage().getNotCoveredLines(),
                 "No coverage",
                 EditorFeedbackFile.LIBRARY,
-                EditorFeedbackSeverity.WARNING));
+                EditorFeedbackRangeBackground.EditorFeedbackClassName.BACKGROUND_RED));
 
         // compilation error
         for (CompilationErrorInfo error : result.getCompilation().getErrors()) {
-            editorFeedbackRanges.add(new EditorFeedbackRange(
+            editorFeedbackRanges.add(new EditorFeedbackRangeUnderline(
                     EditorFeedbackFile.SOLUTION,
                     error.getLineNumber(),
                     error.getLineNumber(),
-                    EditorFeedbackSeverity.ERROR,
-                    error.getMessage()));
+                    error.getMessage(),
+                    EditorFeedbackSeverity.ERROR));
         }
 
         return editorFeedbackRanges;
     }
 
     private List<EditorFeedbackRange> aggregateLinesIntoRanges(
-            List<Integer> lines, String message, EditorFeedbackFile file, EditorFeedbackSeverity severity) {
+            List<Integer> lines, String message, EditorFeedbackFile file,
+            EditorFeedbackRangeBackground.EditorFeedbackClassName className) {
         // Convert list of line numbers, e.g. [2,4,8,3,10,7]
         // into a list of ranges, e.g. [(2,4),(7,8),(10,10)]
 
@@ -203,7 +204,7 @@ public class WebLabResultWriter extends StandardResultWriter {
         for (int i = 0; i < sortedLines.size(); i++) {
             int currLine = sortedLines.get(i);
             if (i == sortedLines.size() - 1 || currLine + 1 != sortedLines.get(i + 1)) {
-                ranges.add(new EditorFeedbackRange(file, currRangeStart, currLine, severity, message));
+                ranges.add(new EditorFeedbackRangeBackground(file, currRangeStart, currLine, message, className));
                 if (i != sortedLines.size() - 1) currRangeStart = sortedLines.get(i + 1);
             }
         }
@@ -213,7 +214,7 @@ public class WebLabResultWriter extends StandardResultWriter {
 
 
     private void writeAnalyticsFile(Context ctx, Result result) {
-        if(ctx.getModeActionSelector()==null || !ctx.getModeActionSelector().shouldGenerateAnalytics())
+        if (ctx.getModeActionSelector() == null || !ctx.getModeActionSelector().shouldGenerateAnalytics())
             return;
 
         Submission submission = new Submission(

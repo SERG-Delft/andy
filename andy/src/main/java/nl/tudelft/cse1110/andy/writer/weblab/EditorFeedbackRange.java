@@ -2,32 +2,98 @@ package nl.tudelft.cse1110.andy.writer.weblab;
 
 import com.google.gson.annotations.SerializedName;
 
-public record EditorFeedbackRange(EditorFeedbackFile file,
-                                  long startLineNumber, long endLineNumber,
-                                  EditorFeedbackSeverity severity,
-                                  String message) {
-
+public abstract class EditorFeedbackRange {
     /*
      * [
      *     {
+     *         "type": "Marker", // one of ["Marker", "Decoration"]
      *         "file": "SOLUTION", //one of ["LIBRARY", "SOLUTION", "TEST"]
      *         "startLineNumber": 20, //int
      *         "endLineNumber": 20, //int
-     *         "severity": "Info", //one of ["Error", "Hint", "Info", "Warning"]
+     *         "severity": "Info", //one of ["Error", "Hint", "Info", "Warning"], only if type is "Marker"
      *         "message": "100% coverage" //String
      *          // "startColumn": 1, //optional, int
      *          // "endColumn": 20 //optional, int
      *     },
      *     {
+     *         "type": "Decoration", // one of ["Marker", "Decoration"]
      *         "file": "LIBRARY",
      *         "startLineNumber": 41,
      *         "endLineNumber": 48,
-     *         "severity": "Info",
+     *         "className": "background-blue", // one of ["background-blue", "background-red", "background-green", "background-yellow"], only if type is "Decoration"
      *         "message": "Some message"
      *     },
      *   [...]
      * ]
      */
+
+    private final EditorFeedbackType type;
+    private final EditorFeedbackFile file;
+    private final long startLineNumber;
+    private final long endLineNumber;
+    private final String message;
+
+    protected EditorFeedbackRange(EditorFeedbackType type,
+                                  EditorFeedbackFile file,
+                                  long startLineNumber, long endLineNumber,
+                                  String message) {
+        this.type = type;
+        this.file = file;
+        this.startLineNumber = startLineNumber;
+        this.endLineNumber = endLineNumber;
+        this.message = message;
+    }
+
+    public EditorFeedbackType type() {
+        return type;
+    }
+
+    public EditorFeedbackFile file() {
+        return file;
+    }
+
+    public long startLineNumber() {
+        return startLineNumber;
+    }
+
+    public long endLineNumber() {
+        return endLineNumber;
+    }
+
+    public String message() {
+        return message;
+    }
+
+    public enum EditorFeedbackFile {
+        @SerializedName("LIBRARY")
+        LIBRARY,
+        @SerializedName("SOLUTION")
+        SOLUTION
+    }
+
+    public enum EditorFeedbackType {
+        @SerializedName("Marker")
+        MARKER,
+        @SerializedName("Decoration")
+        DECORATION
+    }
+}
+
+class EditorFeedbackRangeUnderline extends EditorFeedbackRange {
+    private final EditorFeedbackSeverity severity;
+
+    protected EditorFeedbackRangeUnderline(EditorFeedbackFile file,
+                                           long startLineNumber,
+                                           long endLineNumber,
+                                           String message,
+                                           EditorFeedbackSeverity severity) {
+        super(EditorFeedbackType.MARKER, file, startLineNumber, endLineNumber, message);
+        this.severity = severity;
+    }
+
+    public EditorFeedbackSeverity severity() {
+        return severity;
+    }
 
     public enum EditorFeedbackSeverity {
         @SerializedName("Error")
@@ -39,11 +105,32 @@ public record EditorFeedbackRange(EditorFeedbackFile file,
         @SerializedName("Warning")
         WARNING
     }
+}
 
-    public enum EditorFeedbackFile {
-        @SerializedName("LIBRARY")
-        LIBRARY,
-        @SerializedName("SOLUTION")
-        SOLUTION
+class EditorFeedbackRangeBackground extends EditorFeedbackRange {
+    private final EditorFeedbackClassName className;
+
+    protected EditorFeedbackRangeBackground(EditorFeedbackFile file,
+                                            long startLineNumber,
+                                            long endLineNumber,
+                                            String message,
+                                            EditorFeedbackClassName className) {
+        super(EditorFeedbackType.DECORATION, file, startLineNumber, endLineNumber, message);
+        this.className = className;
+    }
+
+    public EditorFeedbackClassName className() {
+        return className;
+    }
+
+    public enum EditorFeedbackClassName {
+        @SerializedName("background-blue")
+        BACKGROUND_BLUE,
+        @SerializedName("background-red")
+        BACKGROUND_RED,
+        @SerializedName("background-green")
+        BACKGROUND_GREEN,
+        @SerializedName("background-yellow")
+        BACKGROUND_YELLOW
     }
 }
