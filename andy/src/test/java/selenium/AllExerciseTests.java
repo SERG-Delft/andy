@@ -1,5 +1,6 @@
 package selenium;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -15,6 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static unit.writer.standard.StandardResultTestAssertions.compilationSuccess;
 import static unit.writer.standard.StandardResultTestAssertions.finalGrade;
 
+@Tag("ci")
 public class AllExerciseTests extends WebLabSeleniumTestBase {
 
     protected static final String BASE_ASSIGNMENT_ID = "91800";
