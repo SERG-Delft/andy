@@ -1,6 +1,7 @@
 package selenium;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -15,6 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.not;
 import static unit.writer.standard.StandardResultTestAssertions.*;
 
+@Tag("ci")
 public class ExamAssignmentTests extends WebLabSeleniumTestBase {
 
     private static final String ASSIGNMENT_EXAM = "89106";
