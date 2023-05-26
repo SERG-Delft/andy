@@ -5,9 +5,11 @@ import org.apache.commons.io.filefilter.RegexFileFilter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -136,8 +138,12 @@ public class FilesUtils {
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
-
     }
+
+    public static String readFile(Path baseDir, String fileName) {
+        return readFile(baseDir.resolve(fileName).toFile());
+    }
+
 
     public static void writeToFile(File destinationFile, String content) {
         try {
@@ -145,5 +151,19 @@ public class FilesUtils {
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+
+    public static void writeToFile(Path basePath, String fileName, String content) {
+        try {
+            Path filePath = basePath.resolve(fileName);
+            Files.writeString(filePath, content, StandardOpenOption.CREATE);
+        } catch(Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public static void deleteDirectory(Path directory) {
+        deleteDirectory(directory.toFile());
     }
 }

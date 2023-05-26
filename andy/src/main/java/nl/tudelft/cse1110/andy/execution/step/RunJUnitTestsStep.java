@@ -4,6 +4,7 @@ import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.utils.ClassUtils;
+import nl.tudelft.cse1110.andy.utils.FilesUtils;
 import org.junit.platform.engine.reporting.ReportEntry;
 import org.junit.platform.launcher.Launcher;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
@@ -44,6 +45,7 @@ public class RunJUnitTestsStep implements ExecutionStep {
             LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
                     .selectors(selectClass(clazz))
                     .configurationParameter("jqwik.reporting.usejunitplatform", "true")
+                    .configurationParameter("jqwik.database", FilesUtils.createTemporaryDirectory("jqwik").resolve("jqwik-db").toString())
                     .build();
             launcher.execute(request);
 
