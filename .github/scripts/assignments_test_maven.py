@@ -11,7 +11,7 @@ home_dir = os.path.join(os.getcwd(), 'assignments').replace("\\", "/")
 
 expected_andy_version = 'v' + minidom.parse('pom.xml').getElementsByTagName('andy.version')[0].firstChild.data
 
-maven_plugin_version = minidom.parse('andy-maven-plugin/pom.xml').getElementsByTagName('version')[0].firstChild.data
+maven_plugin_version = minidom.parse('andy-maven-plugin/pom.xml').getElementsByTagName('version')[1].firstChild.data
 
 pipeline_failed = False
 for category_dir in get_directories(home_dir):
