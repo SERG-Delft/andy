@@ -66,7 +66,7 @@
         <dependency>
             <groupId>io.github.cse1110</groupId>
             <artifactId>andy</artifactId>
-            <version>[0.27,1.0.0)</version>
+            <version>${andy.version}</version>
         </dependency>
     </dependencies>
 
