@@ -10,6 +10,10 @@
     <name>Andy's parent project</name>
     <url>https://github.com/cse1110/andy</url>
 
+    <properties>
+        <andy.version>1.0</andy.version>
+    </properties>
+
     <modules>
         <module>andy</module>
         <module>andy-aws-lambda</module>
