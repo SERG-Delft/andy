@@ -17,3 +17,7 @@ You can deploy Andy to AWS lambda, so it gets easier for you to embedded it in a
   "configuration": "<RUBRIC CONFIGURATION>"
 }
 ```
+
+For a better performance, enable Lambda's snap start, and define `JAVA_TOOL_OPTIONS` = `-XX:+TieredCompilation -XX:TieredStopAtLevel=1` in the environment variable.
+
+You should expect the request to take around 5 seconds.
