@@ -22,7 +22,7 @@ classpath_string = f'{os.getcwd()}/andy/target/classes:'
 with open(mvndeps_file, 'r') as mvndeps_f:
     classpath_string += mvndeps_f.read()
 
-expected_andy_version = 'v' + minidom.parse('andy/pom.xml').getElementsByTagName('version')[0].firstChild.data
+expected_andy_version = 'v' + minidom.parse('pom.xml').getElementsByTagName('properties').getElementsByTagName('andy.version')[0].firstChild.data
 
 pipeline_failed = False
 for category_dir in get_directories(home_dir):
