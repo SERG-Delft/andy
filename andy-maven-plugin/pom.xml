@@ -16,11 +16,6 @@
     <url>https://github.com/cse1110/andy-maven-plugin</url>
     <description>Andy's plugin for Maven</description>
 
-    <properties>
-        <maven.compiler.source>15</maven.compiler.source>
-        <maven.compiler.target>15</maven.compiler.target>
-    </properties>
-
     <licenses>
         <license>
             <name>MIT License</name>
