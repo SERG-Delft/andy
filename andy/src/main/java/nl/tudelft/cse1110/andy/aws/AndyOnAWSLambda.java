@@ -1,5 +1,10 @@
 package nl.tudelft.cse1110.andy.aws;
 
+import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
+import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
+import com.google.gson.Gson;
 import nl.tudelft.cse1110.andy.Andy;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
@@ -11,7 +16,7 @@ import java.util.Arrays;
 
 import static nl.tudelft.cse1110.andy.utils.FilesUtils.*;
 
-public class AndyOnAWSLambda {
+public class AndyOnAWSLambda implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
     public AWSResult run(AWSInput input) {
 
@@ -45,5 +50,18 @@ public class AndyOnAWSLambda {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent apiGatewayProxyRequestEvent, Context context) {
+
+        Gson gson = new Gson();
+        AWSInput awsInput = gson.fromJson(apiGatewayProxyRequestEvent.getBody(), AWSInput.class);
+
+        AWSResult result = run(awsInput);
+
+        return new APIGatewayProxyResponseEvent()
+                .withStatusCode(200)
+                .withBody(gson.toJson(result));
     }
 }
