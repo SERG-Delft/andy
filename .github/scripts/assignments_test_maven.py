@@ -11,6 +11,8 @@ home_dir = os.path.join(os.getcwd(), 'assignments').replace("\\", "/")
 
 expected_andy_version = 'v' + minidom.parse('pom.xml').getElementsByTagName('andy.version')[0].firstChild.data
 
+maven_plugin_version = minidom.parse('andy-maven-plugin/pom.xml').getElementsByTagName('version')[0].firstChild.data
+
 pipeline_failed = False
 for category_dir in get_directories(home_dir):
     for assignment_dir in get_directories(category_dir):
@@ -20,6 +22,13 @@ for category_dir in get_directories(home_dir):
         # Copy the solution to the correct folder.
         testfile = os.listdir(os.path.join(assignment_dir, 'solution'))[0]
         copyfile(f'{assignment_dir}/solution/{testfile}', f'{assignment_dir}/src/test/java/delft/{testfile}')
+
+        # inject maven plugin version
+        xmldoc = minidom.parse(f'{assignment_dir}/pom.xml')
+        xml_version = xmldoc.getElementsByTagName('version')[3].firstChild
+        xml_version.replaceWholeText(maven_plugin_version)
+        with open(f'{assignment_dir}/pom.xml', 'w') as pom:
+            xmldoc.writexml(pom)
 
         # Run `andy` on the current assignment.
         output = os.popen('mvn andy:run -Dfull=true').read()
