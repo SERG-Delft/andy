@@ -31,6 +31,9 @@ public class CompilationStep implements ExecutionStep {
     public void execute(Context ctx, ResultBuilder result) {
         DirectoryConfiguration dirCfg = ctx.getDirectoryConfiguration();
 
+        /* Set the compilation step to the clean class loader */
+        Thread.currentThread().setContextClassLoader(ctx.getCleanClassloader());
+
         /*
          * creates the java compiler and diagnostic collector object
          * using just the standard configuration. Nothing to optimize here, I believe.

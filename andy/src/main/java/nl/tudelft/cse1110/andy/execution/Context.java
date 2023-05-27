@@ -23,9 +23,14 @@ public class Context {
     private List<String> librariesToBeIncluded;
     private SubmissionMetaData submissionMetaData;
     private boolean securityEnabled = true;
+    private ClassLoader classloaderWithStudentsCode;
 
     public Context(Action action) {
-        this.cleanClassloader = Thread.currentThread().getContextClassLoader();
+        this(Thread.currentThread().getContextClassLoader(), action);
+    }
+
+    public Context(ClassLoader cleanClassloader, Action action) {
+        this.cleanClassloader = cleanClassloader;
         this.action = action;
         this.externalProcess = new EmptyExternalProcess();
     }
@@ -117,5 +122,13 @@ public class Context {
 
     public void disableSecurity() {
         this.securityEnabled = false;
+    }
+
+    public void setClassloaderWithStudentsCode(ClassLoader classloaderWithStudentsCode) {
+        this.classloaderWithStudentsCode = classloaderWithStudentsCode;
+    }
+
+    public ClassLoader getClassloaderWithStudentsCode() {
+        return classloaderWithStudentsCode;
     }
 }

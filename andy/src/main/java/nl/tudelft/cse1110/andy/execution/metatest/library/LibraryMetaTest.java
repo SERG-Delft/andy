@@ -47,9 +47,6 @@ public class LibraryMetaTest extends AbstractMetaTest {
          * We reuse our execution framework to run the code with the meta test.
          */
 
-        /* Set the classloader to the cleanest classloader we have */
-        Thread.currentThread().setContextClassLoader(ctx.getCleanClassloader());
-
         /* Copy the library and replace the library by the meta test */
         File metaWorkingDir = createTemporaryDirectory("metaWorkplace").toFile();
         copyFile(solutionFile, metaWorkingDir.getAbsolutePath());
@@ -67,6 +64,9 @@ public class LibraryMetaTest extends AbstractMetaTest {
 
         /* Clean up the directory */
         deleteDirectory(metaWorkingDir);
+
+        /* Set the classloader back to the one with the student's original code */
+        Thread.currentThread().setContextClassLoader(ctx.getClassloaderWithStudentsCode());
 
         return passesTheMetaTest;
     }
@@ -95,7 +95,7 @@ public class LibraryMetaTest extends AbstractMetaTest {
                 dirCfg.getOutputDir()
         );
 
-        Context metaCtx = new Context(Action.META_TEST);
+        Context metaCtx = new Context(ctx.getCleanClassloader(), Action.META_TEST);
         metaCtx.setDirectoryConfiguration(metaDirCfg);
         metaCtx.setLibrariesToBeIncluded(ctx.getLibrariesToBeIncluded());
 
