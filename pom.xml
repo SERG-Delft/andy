@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+ 
+    <groupId>nl.tudelft.cse1110</groupId>
+    <artifactId>andy-parent-project</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+ 
+    <name>Andy's parent project</name>
+    <url>https://github.com/cse1110/andy</url>
+
+    <modules>
+        <module>andy</module>
+        <module>andy-aws-lambda</module>
+        <module>andy-maven-plugin</module>
+    </modules>
+</project>

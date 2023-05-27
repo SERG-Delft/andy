@@ -14,25 +14,23 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.Arrays;
 
-import static nl.tudelft.cse1110.andy.utils.FilesUtils.*;
-
 public class AndyOnAWSLambda implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
     public AWSResult run(AWSInput input) {
 
-        Path workDir = createTemporaryDirectory("andy-workdir");
-        Path outputDir = createTemporaryDirectory("andy-outputdir");
+        Path workDir = FilesUtils.createTemporaryDirectory("andy-workdir");
+        Path outputDir = FilesUtils.createTemporaryDirectory("andy-outputdir");
 
-        writeToFile(workDir, "Library.java", input.getLibrary());
-        writeToFile(workDir, "Configuration.java", input.getConfiguration());
-        writeToFile(workDir, "Solution.java", input.getSolution());
+        FilesUtils.writeToFile(workDir, "Library.java", input.getLibrary());
+        FilesUtils.writeToFile(workDir, "Configuration.java", input.getConfiguration());
+        FilesUtils.writeToFile(workDir, "Solution.java", input.getSolution());
 
         WebLabResultWriter writer = new WebLabResultWriter();
         new Andy(Action.valueOf(input.getAction()), workDir.toString(), outputDir.toString(), Arrays.asList(myself()), writer).run();
 
-        String textOutput = readFile(outputDir, "stdout.txt");
-        String weblab = readFile(outputDir, "results.xml");
-        String highlights = readFile(outputDir, "editor-feedback.json");
+        String textOutput = FilesUtils.readFile(outputDir, "stdout.txt");
+        String weblab = FilesUtils.readFile(outputDir, "results.xml");
+        String highlights = FilesUtils.readFile(outputDir, "editor-feedback.json");
 
         FilesUtils.deleteDirectory(workDir);
         FilesUtils.deleteDirectory(outputDir);
