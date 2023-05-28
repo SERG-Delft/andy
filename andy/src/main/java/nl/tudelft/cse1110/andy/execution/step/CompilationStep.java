@@ -18,6 +18,8 @@ import javax.tools.*;
 import java.io.File;
 import java.util.*;
 
+import static nl.tudelft.cse1110.andy.utils.ClassUtils.asClassPath;
+
 /**
  * This step compiles the student code and the library code.
  * It makes use of the Java Compiler API.
@@ -54,7 +56,8 @@ public class CompilationStep implements ExecutionStep {
         ClassNameScanner scanner = new ClassNameScanner();
         ClassNameProcessor processor = new ClassNameProcessor(scanner);
 
-        JavaCompiler.CompilationTask task = compiler.getTask(null, manager, diagnostics, null, null, sources);
+        List<String> options = ctx.hasLibrariesToBeIncluded() ? Arrays.asList(new String[] { "-cp", asClassPath(ctx.getLibrariesToBeIncluded()) }) : null;
+        JavaCompiler.CompilationTask task = compiler.getTask(null, manager, diagnostics, options, null, sources);
         task.setProcessors(Arrays.asList(processor));
 
         /*

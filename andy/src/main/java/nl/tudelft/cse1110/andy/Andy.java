@@ -16,10 +16,11 @@ public class Andy {
     private final Action action;
     private final String workDir;
     private final String outputDir;
+    private final List<String> librariesToBeIncluded;
     private final ResultWriter writer;
     private final SubmissionMetaData metaData;
 
-    public Andy(Action action, String workDir, String outputDir, ResultWriter writer, SubmissionMetaData metaData) {
+    public Andy(Action action, String workDir, String outputDir, List<String> librariesToBeIncluded, ResultWriter writer, SubmissionMetaData metaData) {
         this.writer = writer;
         assert action!=null;
         assert workDir!=null;
@@ -28,16 +29,20 @@ public class Andy {
         this.action = action;
         this.workDir = workDir;
         this.outputDir = outputDir;
+        this.librariesToBeIncluded = librariesToBeIncluded;
         this.metaData = metaData;
     }
 
-    // constructor for backward compatibility with andy-maven-plugin version <= 0.3
     public Andy(Action action, String workDir, String outputDir, List<String> librariesToBeIncluded, ResultWriter writer) {
-        this(action, workDir, outputDir, writer);
+        this(action, workDir, outputDir, librariesToBeIncluded, writer, SubmissionMetaData.empty());
+    }
+
+    public Andy(Action action, String workDir, String outputDir, ResultWriter writer, SubmissionMetaData metaData) {
+        this(action, workDir, outputDir, null, writer, metaData);
     }
 
     public Andy(Action action, String workDir, String outputDir, ResultWriter writer) {
-        this(action, workDir, outputDir, writer, SubmissionMetaData.empty());
+        this(action, workDir, outputDir, null, writer);
     }
 
     public void run() {
@@ -66,6 +71,7 @@ public class Andy {
                 outputDir);
 
         ctx.setDirectoryConfiguration(dirCfg);
+        ctx.setLibrariesToBeIncluded(librariesToBeIncluded);
         ctx.setSubmissionMetaData(metaData);
 
         return ctx;

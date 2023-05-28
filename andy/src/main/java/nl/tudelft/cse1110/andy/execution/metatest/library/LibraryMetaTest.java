@@ -97,6 +97,7 @@ public class LibraryMetaTest extends AbstractMetaTest {
 
         Context metaCtx = new Context(ctx.getCleanClassloader(), Action.META_TEST);
         metaCtx.setDirectoryConfiguration(metaDirCfg);
+        metaCtx.setLibrariesToBeIncluded(ctx.getLibrariesToBeIncluded());
 
         if(!ctx.isSecurityEnabled()){
             metaCtx.disableSecurity();
