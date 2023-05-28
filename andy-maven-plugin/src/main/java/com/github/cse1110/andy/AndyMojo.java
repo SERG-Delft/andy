@@ -70,9 +70,6 @@ public class AndyMojo extends AbstractMojo {
             }
             createDirIfNeeded(outputDir.getAbsolutePath());
 
-            /* We get the list of dependencies, to help the Andy's Java compiler to find them all */
-            List<String> compileClasspathElements = project.getCompileClasspathElements();
-
             /* Start printing dots */
             Timer workingIndicator = this.startWorkingIndicationTimer();
 
@@ -81,7 +78,6 @@ public class AndyMojo extends AbstractMojo {
                 action(),
                 workDir.getAbsolutePath(),
                 outputDir.getAbsolutePath(),
-                compileClasspathElements,
                 new StandardResultWriter()
             ).runWithoutSecurity();
 
@@ -127,6 +123,7 @@ public class AndyMojo extends AbstractMojo {
     private void printHeader() {
         out.println(
             """
+            test version
 
      _              _       
     / \\   _ __   __| |_   _ 

@@ -20,7 +20,6 @@ public class Context {
     private Action action;
     private ModeActionSelector modeActionSelector;
     private ExternalProcess externalProcess;
-    private List<String> librariesToBeIncluded;
     private SubmissionMetaData submissionMetaData;
     private boolean securityEnabled = true;
     private ClassLoader classloaderWithStudentsCode;
@@ -94,18 +93,6 @@ public class Context {
         externalProcess.extractErrorMessages();
 
         externalProcess.kill();
-    }
-
-    public void setLibrariesToBeIncluded(List<String> librariesToBeIncluded) {
-        this.librariesToBeIncluded = librariesToBeIncluded;
-    }
-
-    public List<String> getLibrariesToBeIncluded() {
-        return librariesToBeIncluded;
-    }
-
-    public boolean hasLibrariesToBeIncluded() {
-        return librariesToBeIncluded!=null && !librariesToBeIncluded.isEmpty();
     }
 
     public SubmissionMetaData getSubmissionMetaData() {
