@@ -28,7 +28,7 @@ jobs:
 
       - name: Compile Andy
         run: |
-          mvn -f andy/pom.xml clean compile dependency:copy-dependencies
+          mvn -f andy/pom.xml clean package -Djar.finalName=andy -Dmaven.test.skip
 
       - name: Execute python script
         run: |
