@@ -8,7 +8,7 @@ def get_directories(basedir):
                                        and not dir.startswith('.')]
 
 home_dir = '/home/runner/work/andy/andy/assignments'
-andy_jar = '/home/runner/work/andy/andy/target/andy.jar'
+andy_jar = '/home/runner/work/andy/andy.jar'
 
 # Set the environment variables.
 os.environ['WORKING_DIR'] = os.path.join(os.getcwd(), 'code')
