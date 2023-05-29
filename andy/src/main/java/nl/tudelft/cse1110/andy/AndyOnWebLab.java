@@ -26,7 +26,7 @@ public class AndyOnWebLab {
 
         WebLabResultWriter writer = new WebLabResultWriter();
         SubmissionMetaData metaData = getSubmissionMetaData(args, 3);
-        new Andy(getAction(action), workDir, outputDir, writer, metaData).run();
+        new Andy(getAction(action), workDir, outputDir, writer, metaData).runWithoutSecurity();
     }
 
     private static Action getAction(String action) {
