@@ -12,14 +12,13 @@ andy_jar = '/home/runner/work/andy/andy.jar'
 
 dir = os.path.join(os.getcwd(), 'work')
 os.makedirs(dir, exist_ok = True)
-
+os.chdir(dir)
 
 expected_andy_version = 'v' + minidom.parse('pom.xml').getElementsByTagName('andy.version')[0].firstChild.data
 
 pipeline_failed = False
 for category_dir in get_directories(home_dir):
     for assignment_dir in get_directories(category_dir):
-        os.chdir(assignment_dir)
 
         # Remove the contents of the output folder.
         os.system(f'rm -r {dir}/*')
