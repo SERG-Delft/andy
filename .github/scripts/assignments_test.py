@@ -14,11 +14,11 @@ expected_andy_version = 'v' + minidom.parse('pom.xml').getElementsByTagName('and
 
 dir = os.path.join(os.getcwd(), 'work')
 os.makedirs(dir, exist_ok = True)
-os.chdir(dir)
 
 pipeline_failed = False
 for category_dir in get_directories(home_dir):
     for assignment_dir in get_directories(category_dir):
+        os.chdir(assignment_dir)
 
         # Remove the contents of the output folder.
         os.system(f'rm -r {dir}/*')
@@ -29,8 +29,14 @@ for category_dir in get_directories(home_dir):
         solution = os.listdir(os.path.join(assignment_dir, 'solution'))[0]
         copyfile(f'{assignment_dir}/solution/{solution}', os.path.join(dir, 'Solution.java'))
         copyfile(f'{assignment_dir}/config/Configuration.java', os.path.join(dir, 'Configuration.java'))
+        # Copy resources
+        os.system('find . -type f | ' +
+                  'grep -i -v "^\./src/" | grep -i -v "\./config/Configuration.java" | ' +
+                  'grep -i -v "^\./pom.xml$" | grep -i -v "^\./solution/" | grep -i -v "^\./README.md$" | ' +
+                  'xargs -i cp --parents {} ' + f'{dir}/')
 
         # Run Andy and collect the results.
+        os.chdir(dir)
         os.system(f'java -ea -cp {andy_jar} -XX:+TieredCompilation -XX:TieredStopAtLevel=1 nl.tudelft.cse1110.andy.AndyLauncher "FULL_WITH_HINTS"')
 
         with open(f'{dir}/stdout.txt') as file:
