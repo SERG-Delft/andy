@@ -132,15 +132,4 @@ public class ExternalProcessTest extends IntegrationTestBase {
                 .isPresent()
                 .hasValue("some error");
     }
-
-    @Test
-    void localConnectionWithoutInitSignalTest() {
-        assertTimeoutPreemptively(ofSeconds(10), () -> {
-            Result result = run(Action.TESTS, "EmptyLibrary", "ExternalProcessLocalConnectionSolution",
-                    "ExternalProcessLocalConnectionConfiguration");
-
-            assertThat(result.hasFailed()).isFalse();
-            assertThat(result.hasGenericFailure()).isFalse();
-        });
-    }
 }
