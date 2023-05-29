@@ -24,7 +24,7 @@ jobs:
       - name: Configure Dockerfile
         working-directory: ./weblab-docker-v2
         run: |
-          sed -i -E 's|git clone .+|git clone -n ${{ github.server_url }}/${{ github.repository }}.git|; s|RUN mvn clean package.*|RUN git checkout ${{ github.sha }}\nRUN mvn test|' Dockerfile
+          sed -i -E 's|git clone .+|git clone -n ${{ github.server_url }}/${{ github.repository }}.git|; s|RUN mvn clean package.*|RUN git checkout ${{ github.sha }}\nRUN mvn test|; s|RUN mv.+||' Dockerfile
 
       - name: Run tests in Docker
         working-directory: ./weblab-docker-v2
