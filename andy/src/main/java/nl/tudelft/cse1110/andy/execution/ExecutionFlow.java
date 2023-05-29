@@ -18,10 +18,6 @@ public class ExecutionFlow {
     public ExecutionFlow(Context ctx, ResultBuilder result, ResultWriter writer, List<ExecutionStep> steps) {
         this.steps = new LinkedList<>();
 
-        if (ctx.isSecurityEnabled()) {
-            this.steps.add(new SetSecurityManagerStep());
-        }
-
         this.steps.addAll(0, steps);
 
         this.writer = writer;
@@ -57,11 +53,6 @@ public class ExecutionFlow {
 
     public static ExecutionFlow build(Context ctx, ResultBuilder result, ResultWriter writer) {
         return new ExecutionFlow(ctx, result, writer, basicSteps());
-    }
-
-    public static ExecutionFlow buildWithoutSecurityManager(Context ctx, ResultBuilder result, ResultWriter writer) {
-        ctx.disableSecurity();
-        return ExecutionFlow.build(ctx, result, writer);
     }
 
     private static List<ExecutionStep> basicSteps() {

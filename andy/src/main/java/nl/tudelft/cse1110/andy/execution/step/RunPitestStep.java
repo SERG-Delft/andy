@@ -16,7 +16,6 @@ import org.pitest.mutationtest.tooling.AnalysisResult;
 import org.pitest.mutationtest.tooling.CombinedStatistics;
 import org.pitest.mutationtest.tooling.EntryPoint;
 import org.pitest.util.Unchecked;
-import org.apache.commons.io.FileUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -90,24 +89,12 @@ public class RunPitestStep implements ExecutionStep {
         args.add("false");
 
         args.add("--classPath");
-        List<String> librariesToInclude = compiledClassesPlusLibraries(ctx, dirCfg);
-        args.add(commaSeparated(librariesToInclude));
+        args.add(dirCfg.getWorkingDir());
 
         args.add("--mutators");
         args.add(commaSeparated(runCfg.listOfMutants()));
 
         return args.stream().toArray(String[]::new);
-    }
-
-    private List<String> compiledClassesPlusLibraries(Context ctx, DirectoryConfiguration dirCfg) {
-        List<String> toAddToClassPath = new ArrayList<>();
-        toAddToClassPath.add(dirCfg.getWorkingDir());
-
-        if(ctx.hasLibrariesToBeIncluded()) {
-            toAddToClassPath.addAll(ctx.getLibrariesToBeIncluded());
-        }
-
-        return toAddToClassPath;
     }
 
     private String commaSeparated(List<String> list) {

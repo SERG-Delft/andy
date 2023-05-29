@@ -20,12 +20,15 @@ public class Context {
     private Action action;
     private ModeActionSelector modeActionSelector;
     private ExternalProcess externalProcess;
-    private List<String> librariesToBeIncluded;
     private SubmissionMetaData submissionMetaData;
-    private boolean securityEnabled = true;
+    private ClassLoader classloaderWithStudentsCode;
 
     public Context(Action action) {
-        this.cleanClassloader = Thread.currentThread().getContextClassLoader();
+        this(Thread.currentThread().getContextClassLoader(), action);
+    }
+
+    public Context(ClassLoader cleanClassloader, Action action) {
+        this.cleanClassloader = cleanClassloader;
         this.action = action;
         this.externalProcess = new EmptyExternalProcess();
     }
@@ -91,18 +94,6 @@ public class Context {
         externalProcess.kill();
     }
 
-    public void setLibrariesToBeIncluded(List<String> librariesToBeIncluded) {
-        this.librariesToBeIncluded = librariesToBeIncluded;
-    }
-
-    public List<String> getLibrariesToBeIncluded() {
-        return librariesToBeIncluded;
-    }
-
-    public boolean hasLibrariesToBeIncluded() {
-        return librariesToBeIncluded!=null && !librariesToBeIncluded.isEmpty();
-    }
-
     public SubmissionMetaData getSubmissionMetaData() {
         return submissionMetaData;
     }
@@ -111,11 +102,11 @@ public class Context {
         this.submissionMetaData = submissionMetaData;
     }
 
-    public boolean isSecurityEnabled() {
-        return securityEnabled;
+    public void setClassloaderWithStudentsCode(ClassLoader classloaderWithStudentsCode) {
+        this.classloaderWithStudentsCode = classloaderWithStudentsCode;
     }
 
-    public void disableSecurity() {
-        this.securityEnabled = false;
+    public ClassLoader getClassloaderWithStudentsCode() {
+        return classloaderWithStudentsCode;
     }
 }

@@ -18,8 +18,6 @@ import javax.tools.*;
 import java.io.File;
 import java.util.*;
 
-import static nl.tudelft.cse1110.andy.utils.ClassUtils.asClassPath;
-
 /**
  * This step compiles the student code and the library code.
  * It makes use of the Java Compiler API.
@@ -30,6 +28,9 @@ public class CompilationStep implements ExecutionStep {
     @Override
     public void execute(Context ctx, ResultBuilder result) {
         DirectoryConfiguration dirCfg = ctx.getDirectoryConfiguration();
+
+        /* Set the compilation step to the clean class loader */
+        Thread.currentThread().setContextClassLoader(ctx.getCleanClassloader());
 
         /*
          * creates the java compiler and diagnostic collector object
@@ -53,8 +54,7 @@ public class CompilationStep implements ExecutionStep {
         ClassNameScanner scanner = new ClassNameScanner();
         ClassNameProcessor processor = new ClassNameProcessor(scanner);
 
-        List<String> options = ctx.hasLibrariesToBeIncluded() ? Arrays.asList(new String[] { "-cp", asClassPath(ctx.getLibrariesToBeIncluded()) }) : null;
-        JavaCompiler.CompilationTask task = compiler.getTask(null, manager, diagnostics, options, null, sources);
+        JavaCompiler.CompilationTask task = compiler.getTask(null, manager, diagnostics, null, null, sources);
         task.setProcessors(Arrays.asList(processor));
 
         /*

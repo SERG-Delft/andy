@@ -8,21 +8,12 @@ def get_directories(basedir):
                                        and not dir.startswith('.')]
 
 home_dir = '/home/runner/work/andy/andy/assignments'
+andy_jar = '/home/runner/work/andy/andy.jar'
 
-# Set the environment variables.
-os.environ['WORKING_DIR'] = os.path.join(os.getcwd(), 'code')
-os.environ['OUTPUT_DIR']  = os.path.join(os.getcwd(), 'output')
-os.makedirs(os.environ['WORKING_DIR'], exist_ok = True)
-os.makedirs(os.environ['OUTPUT_DIR'],  exist_ok = True)
+expected_andy_version = 'v' + minidom.parse('pom.xml').getElementsByTagName('andy.version')[0].firstChild.data
 
-# Build classpath
-mvndeps_file = os.path.join(os.environ['WORKING_DIR'], 'mvndeps.txt')
-os.system(f'mvn -f andy/pom.xml dependency:build-classpath -Dmdep.outputFile={mvndeps_file}')
-classpath_string = f'{os.getcwd()}/andy/target/classes:'
-with open(mvndeps_file, 'r') as mvndeps_f:
-    classpath_string += mvndeps_f.read()
-
-expected_andy_version = 'v' + minidom.parse('andy/pom.xml').getElementsByTagName('version')[0].firstChild.data
+dir = os.path.join(os.getcwd(), 'work')
+os.makedirs(dir, exist_ok = True)
 
 pipeline_failed = False
 for category_dir in get_directories(home_dir):
@@ -30,19 +21,25 @@ for category_dir in get_directories(home_dir):
         os.chdir(assignment_dir)
 
         # Remove the contents of the output folder.
-        os.system(f'rm -r {os.environ["OUTPUT_DIR"]}/*')
+        os.system(f'rm -r {dir}/*')
 
         # Copy the files to the correct folder.
         source = os.listdir(os.path.join(assignment_dir, 'src/main/java/delft'))[0]
-        copyfile(f'{assignment_dir}/src/main/java/delft/{source}', os.path.join(os.environ['WORKING_DIR'], 'Library.java'))
+        copyfile(f'{assignment_dir}/src/main/java/delft/{source}', os.path.join(dir, 'Library.java'))
         solution = os.listdir(os.path.join(assignment_dir, 'solution'))[0]
-        copyfile(f'{assignment_dir}/solution/{solution}', os.path.join(os.environ['WORKING_DIR'], 'Solution.java'))
-        copyfile(f'{assignment_dir}/config/Configuration.java', os.path.join(os.environ['WORKING_DIR'], 'Configuration.java'))
+        copyfile(f'{assignment_dir}/solution/{solution}', os.path.join(dir, 'Solution.java'))
+        copyfile(f'{assignment_dir}/config/Configuration.java', os.path.join(dir, 'Configuration.java'))
+        # Copy resources
+        os.system('find . -type f | ' +
+                  'grep -i -v "^\./src/" | grep -i -v "\./config/Configuration.java" | ' +
+                  'grep -i -v "^\./pom.xml$" | grep -i -v "^\./solution/" | grep -i -v "^\./README.md$" | ' +
+                  'xargs -i cp --parents {} ' + f'{dir}/')
 
         # Run Andy and collect the results.
-        os.system(f'java -ea -cp {classpath_string} nl.tudelft.cse1110.andy.AndyOnWebLab "FULL_WITH_HINTS" "{os.environ["WORKING_DIR"]}" "{os.environ["OUTPUT_DIR"]}" "123456" "CSE1110 Q4 2022" "An assignment!"')
+        os.chdir(dir)
+        os.system(f'java -ea -cp {andy_jar} -XX:+TieredCompilation -XX:TieredStopAtLevel=1 nl.tudelft.cse1110.andy.AndyLauncher "FULL_WITH_HINTS"')
 
-        with open(f'{os.environ["OUTPUT_DIR"]}/stdout.txt') as file:
+        with open(f'{dir}/stdout.txt') as file:
             # Get the score from the `stdout.txt` file.
             file_content = file.read()
             re_score = re.search('Final grade: [0-9]+', file_content)

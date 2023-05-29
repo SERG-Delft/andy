@@ -25,6 +25,7 @@ public class ReplaceClassloaderStep implements ExecutionStep {
         try {
             String pathToAddToClassloader = dirCfg.getWorkingDir();
             replaceClassloader(pathToAddToClassloader, result);
+            ctx.setClassloaderWithStudentsCode(Thread.currentThread().getContextClassLoader());
         } catch (Exception e) {
             result.genericFailure(this, e);
         }

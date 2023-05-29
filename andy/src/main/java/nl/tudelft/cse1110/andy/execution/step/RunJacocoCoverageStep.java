@@ -144,6 +144,7 @@ public class RunJacocoCoverageStep implements ExecutionStep {
 
         LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
                 .selectors(selectClass(testClass))
+                .configurationParameter("jqwik.database", FilesUtils.createTemporaryDirectory("jqwik").resolve("jqwik-db").toString())
                 .build();
         launcher.execute(request);
     }
