@@ -10,11 +10,11 @@ def get_directories(basedir):
 home_dir = '/home/runner/work/andy/andy/assignments'
 andy_jar = '/home/runner/work/andy/andy.jar'
 
+expected_andy_version = 'v' + minidom.parse('pom.xml').getElementsByTagName('andy.version')[0].firstChild.data
+
 dir = os.path.join(os.getcwd(), 'work')
 os.makedirs(dir, exist_ok = True)
 os.chdir(dir)
-
-expected_andy_version = 'v' + minidom.parse('pom.xml').getElementsByTagName('andy.version')[0].firstChild.data
 
 pipeline_failed = False
 for category_dir in get_directories(home_dir):
