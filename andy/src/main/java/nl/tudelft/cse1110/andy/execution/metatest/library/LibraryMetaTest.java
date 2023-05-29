@@ -98,10 +98,6 @@ public class LibraryMetaTest extends AbstractMetaTest {
         Context metaCtx = new Context(ctx.getCleanClassloader(), Action.META_TEST);
         metaCtx.setDirectoryConfiguration(metaDirCfg);
 
-        if(!ctx.isSecurityEnabled()){
-            metaCtx.disableSecurity();
-        }
-
         ResultBuilder metaResult = new ResultBuilder(metaCtx, new GradeCalculator());
 
         ExecutionFlow flow = ExecutionFlow.build(metaCtx, metaResult, new EmptyWriter());

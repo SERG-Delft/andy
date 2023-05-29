@@ -16,7 +16,7 @@ public class AndyLauncher {
 
         String dir = System.getProperty("user.dir");
 
-        new Andy(getAction(args[0]), dir, dir, new StandardResultWriter()).runWithoutSecurity();
+        new Andy(getAction(args[0]), dir, dir, new StandardResultWriter()).run();
     }
 
     private static Action getAction(String action) {

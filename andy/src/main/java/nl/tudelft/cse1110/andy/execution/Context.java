@@ -21,7 +21,6 @@ public class Context {
     private ModeActionSelector modeActionSelector;
     private ExternalProcess externalProcess;
     private SubmissionMetaData submissionMetaData;
-    private boolean securityEnabled = true;
     private ClassLoader classloaderWithStudentsCode;
 
     public Context(Action action) {
@@ -101,14 +100,6 @@ public class Context {
 
     public void setSubmissionMetaData(SubmissionMetaData submissionMetaData) {
         this.submissionMetaData = submissionMetaData;
-    }
-
-    public boolean isSecurityEnabled() {
-        return securityEnabled;
-    }
-
-    public void disableSecurity() {
-        this.securityEnabled = false;
     }
 
     public void setClassloaderWithStudentsCode(ClassLoader classloaderWithStudentsCode) {
