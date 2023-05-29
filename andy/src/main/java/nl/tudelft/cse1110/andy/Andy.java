@@ -9,8 +9,6 @@ import nl.tudelft.cse1110.andy.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.writer.ResultWriter;
 import nl.tudelft.cse1110.andy.writer.weblab.SubmissionMetaData;
 
-import java.util.List;
-
 public class Andy {
 
     private final Action action;
@@ -31,11 +29,6 @@ public class Andy {
         this.metaData = metaData;
     }
 
-    // constructor for backward compatibility with andy-maven-plugin version <= 0.3
-    public Andy(Action action, String workDir, String outputDir, List<String> librariesToBeIncluded, ResultWriter writer) {
-        this(action, workDir, outputDir, writer);
-    }
-
     public Andy(Action action, String workDir, String outputDir, ResultWriter writer) {
         this(action, workDir, outputDir, writer, SubmissionMetaData.empty());
     }
@@ -45,15 +38,6 @@ public class Andy {
 
         ResultBuilder result = new ResultBuilder(ctx, new GradeCalculator());
         ExecutionFlow flow = ExecutionFlow.build(ctx, result, writer);
-
-        flow.run();
-    }
-
-    public void runWithoutSecurity() {
-        Context ctx = buildContext();
-
-        ResultBuilder result = new ResultBuilder(ctx, new GradeCalculator());
-        ExecutionFlow flow = ExecutionFlow.buildWithoutSecurityManager(ctx, result, writer);
 
         flow.run();
     }
