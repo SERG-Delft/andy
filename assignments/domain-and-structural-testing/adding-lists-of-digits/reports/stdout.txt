@@ -10,16 +10,15 @@ Please copy and paste the information and the complete stacktrace below when rep
 VM : OpenJDK 64-Bit Server VM
 Vendor : Eclipse Adoptium
 Version : 17.0.6+10
-Uptime : 54783
+Uptime : 2533
 Input -> 
- 1 : -agentlib:jdwp=transport=dt_socket,address=127.0.0.1:49970,suspend=y,server=n
- 2 : -Dmaven.multiModuleProjectDirectory=/Users/mauricio/workspace/andy/assignments/domain-and-structural-testing/adding-lists-of-digits
- 3 : -Djansi.passthrough=true
- 4 : -Dmaven.home=/Applications/IntelliJ IDEA.app/Contents/plugins/maven/lib/maven3
- 5 : -Dclassworlds.conf=/Applications/IntelliJ IDEA.app/Contents/plugins/maven/lib/maven3/bin/m2.conf
- 6 : -Dmaven.ext.class.path=/Applications/IntelliJ IDEA.app/Contents/plugins/maven/lib/maven-event-listener.jar
- 7 : -javaagent:/Users/mauricio/Library/Caches/JetBrains/IntelliJIdea2022.3/captureAgent/debugger-agent.jar=file:/private/var/folders/7g/5687ntk574lds7545yyqcwf80000gn/T/capture.props
- 8 : -Dfile.encoding=UTF-8
+ 1 : -Dmaven.multiModuleProjectDirectory=/Users/mauricio/workspace/andy/assignments/domain-and-structural-testing/adding-lists-of-digits
+ 2 : -Djansi.passthrough=true
+ 3 : -Dmaven.home=/Applications/IntelliJ IDEA.app/Contents/plugins/maven/lib/maven3
+ 4 : -Dclassworlds.conf=/Applications/IntelliJ IDEA.app/Contents/plugins/maven/lib/maven3/bin/m2.conf
+ 5 : -Dmaven.ext.class.path=/Applications/IntelliJ IDEA.app/Contents/plugins/maven/lib/maven-event-listener.jar
+ 6 : -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=51119:/Applications/IntelliJ IDEA.app/Contents/bin
+ 7 : -Dfile.encoding=UTF-8
 BootClassPathSupported : false
 
 	at org.pitest.util.Unchecked.translateCheckedException(Unchecked.java:25)

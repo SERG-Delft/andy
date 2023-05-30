@@ -13,7 +13,6 @@ import org.apache.maven.project.MavenProject;
 
 import java.io.File;
 import java.io.PrintStream;
-import java.sql.Array;
 import java.util.*;
 
 import static nl.tudelft.cse1110.andy.utils.FilesUtils.*;
@@ -28,9 +27,6 @@ public class AndyMojo extends AbstractMojo {
 
     @Parameter(property = "full")
     private boolean full;
-
-    @Parameter(property = "coverage")
-    private boolean coverage;
 
     private PrintStream out;
 
@@ -106,8 +102,6 @@ public class AndyMojo extends AbstractMojo {
     private Action action() {
         if(full)
             return Action.FULL_WITH_HINTS;
-        if(coverage)
-            return Action.COVERAGE;
 
         return Action.FULL_WITHOUT_HINTS;
     }

@@ -29,5 +29,8 @@ jobs:
           key: ${{ matrix.job.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ matrix.job.os }}-m2
 
-      - name: Run tests with Maven
-        run: mvn -f andy/pom.xml -B test --file pom.xml
+      - name: Compile and install everything
+        run: mvn clean install
+
+      - name: Run Andy tests
+        run: mvn test -pl andy
