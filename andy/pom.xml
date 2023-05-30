@@ -2,16 +2,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
-        <groupId>nl.tudelft.cse1110</groupId>
+        <groupId>nl.tudelft.cse1110.andy</groupId>
         <artifactId>andy-parent-project</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.github.cse1110</groupId>
+    <groupId>nl.tudelft.cse1110.andy</groupId>
     <artifactId>andy</artifactId>
-    <version>${andy.version}</version>
+    <version>1.0</version>
     <name>Andy</name>
     <url>https://github.com/cse1110/andy</url>
     <description>Andy, a tool that assesses your test suites</description>
@@ -63,27 +63,27 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>3.23.1</version>
+            <version>${assertj.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/net.jqwik/jqwik -->
         <dependency>
             <groupId>net.jqwik</groupId>
             <artifactId>jqwik</artifactId>
-            <version>1.7.0</version>
+            <version>${jqwik.version}</version>
         </dependency>
 
         <dependency>
             <groupId>net.jqwik</groupId>
             <artifactId>jqwik-engine</artifactId>
-            <version>1.7.0</version>
+            <version>${jqwik.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>4.8.0</version>
+            <version>${mockito.version}</version>
         </dependency>
 
         <!-- org.objenesis.objenesis is needed for Mockito to work correctly with Pitest -->
@@ -97,54 +97,54 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.9.1</version>
+            <version>${junit.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
-            <version>5.9.1</version>
+            <version>${junit.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-launcher</artifactId>
-            <version>1.9.1</version>
+            <version>${junit.platform.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.pitest/pitest -->
         <dependency>
             <groupId>org.pitest</groupId>
             <artifactId>pitest</artifactId>
-            <version>1.9.8</version>
+            <version>${pitest.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.pitest/pitest-junit5-plugin -->
         <dependency>
             <groupId>org.pitest</groupId>
             <artifactId>pitest-junit5-plugin</artifactId>
-            <version>1.1.0</version>
+            <version>${pitest.junit.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.pitest/pitest-command-line -->
         <dependency>
             <groupId>org.pitest</groupId>
             <artifactId>pitest-command-line</artifactId>
-            <version>1.9.8</version>
+            <version>${pitest.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.jacoco/org.jacoco.core -->
         <dependency>
             <groupId>org.jacoco</groupId>
             <artifactId>org.jacoco.core</artifactId>
-            <version>0.8.10</version>
+            <version>${jacoco.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.jacoco/org.jacoco.report -->
         <dependency>
             <groupId>org.jacoco</groupId>
             <artifactId>org.jacoco.report</artifactId>
-            <version>0.8.10</version>
+            <version>${jacoco.version}</version>
         </dependency>
 
         <dependency>
@@ -209,17 +209,6 @@
 
     </dependencies>
 
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
-
     <build>
 
         <resources>
@@ -261,7 +250,7 @@
 
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
+                <version>${maven.surefire.version}</version>
                 <configuration>
                     <enableAssertions>true</enableAssertions>
                     <includes>
@@ -309,25 +298,6 @@
                 </configuration>
             </plugin>
 
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.3</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.scm</groupId>
-                        <artifactId>maven-scm-provider-gitexe</artifactId>
-                        <version>1.11.2</version>
-                    </dependency>
-                    <dependency>
-                      <groupId>org.apache.maven.scm</groupId>
-                      <artifactId>maven-scm-api</artifactId>
-                      <version>1.11.2</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -335,24 +305,6 @@
                 <executions>
                     <execution>
                         <id>attach-sources</id>
-                        <goals>
-                        <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.3.1</version>
-                <configuration>
-                    <doclint>none</doclint>
-                    <source>17</source>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
                         <goals>
                         <goal>jar</goal>
                         </goals>
@@ -416,34 +368,4 @@
         </plugins>
 
     </build>
-
-    <profiles>
-        <profile>
-            <id>release-sign-artifacts</id>
-            <activation>
-                <property>
-                    <name>performRelease</name>
-                    <value>true</value>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-    
 </project>

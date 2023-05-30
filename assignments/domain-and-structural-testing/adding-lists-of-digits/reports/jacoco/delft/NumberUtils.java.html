@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NumberUtils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">delft.NumberUtilsTest</a> &gt; <a href="index.source.html" class="el_package">delft</a> &gt; <span class="el_source">NumberUtils.java</span></div><h1>NumberUtils.java</h1><pre class="source lang-java linenums">package delft;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
+class NumberUtils {
+
+	private NumberUtils() {
+		// Empty constructor
+	}
+
+	/**
+	 * This method receives two numbers, `left` and `right`, both represented as a
+	 * list of digits. It adds these numbers and returns the result also as a list
+	 * of digits.
+	 *
+	 * &lt;p&gt;
+	 * For example, if you want to add the numbers 23 and 42, you would need to
+	 * create a (left) list with two elements [2,3] and a (right) list with two
+	 * elements [4,2]. 23+42 = 65, so the program would produce another list with
+	 * two elements [6,5]
+	 *
+	 * &lt;p&gt;
+	 * [2,3] + [4,2] = [6,5]
+	 *
+	 * &lt;p&gt;
+	 * Each element in the left and right lists should be a number from [0-9]. An
+	 * IllegalArgumentException is thrown in case this pre-condition does not hold.
+	 *
+	 * &lt;p&gt;
+	 * Leading zeroes are removed from the result, so [0,3] + [2] = [5] (and not
+	 * [0,5]).
+	 *
+	 * @param left
+	 *            a list containing the left number. Null returns null, empty means
+	 *            0.
+	 * @param right
+	 *            a list containing the right number. Null returns null, empty means
+	 *            0.
+	 * @return the sum of left and right, as a list
+	 */
+	public static List&lt;Integer&gt; add(List&lt;Integer&gt; left, List&lt;Integer&gt; right) {
+		// if any is null, return null
+<span class="pc bpc" id="L46" title="2 of 4 branches missed.">		if (left == null || right == null)</span>
+<span class="nc" id="L47">			return null;</span>
+        // reverse the numbers so that the least significant digit goes to the left.
+<span class="fc" id="L49">		ArrayList&lt;Integer&gt; reversedLeft = new ArrayList&lt;&gt;(left);</span>
+<span class="fc" id="L50">		Collections.reverse(reversedLeft);</span>
+<span class="fc" id="L51">		ArrayList&lt;Integer&gt; reversedRight = new ArrayList&lt;&gt;(right);</span>
+<span class="fc" id="L52">		Collections.reverse(reversedRight);</span>
+<span class="fc" id="L53">		LinkedList&lt;Integer&gt; result = new LinkedList&lt;&gt;();</span>
+		// while there's a digit, keep summing them
+		// if there's carry, take the carry into consideration
+<span class="fc" id="L56">		int carry = 0;</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">		for (int i = 0; i &lt; Math.max(reversedLeft.size(), reversedRight.size()); i++) {</span>
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">			int leftDigit = reversedLeft.size() &gt; i ? reversedLeft.get(i) : 0;</span>
+<span class="pc bpc" id="L59" title="1 of 2 branches missed.">			int rightDigit = reversedRight.size() &gt; i ? reversedRight.get(i) : 0;</span>
+<span class="pc bpc" id="L60" title="4 of 8 branches missed.">			if (leftDigit &lt; 0 || leftDigit &gt; 9 || rightDigit &lt; 0 || rightDigit &gt; 9)</span>
+<span class="nc" id="L61">				throw new IllegalArgumentException();</span>
+<span class="fc" id="L62">			int sum = leftDigit + rightDigit + carry;</span>
+<span class="fc" id="L63">			result.addFirst(sum % 10);</span>
+<span class="fc" id="L64">			carry = sum / 10;</span>
+		}
+        // add leftover carry
+<span class="fc" id="L67">		result.addFirst(carry);</span>
+        // remove leading zeroes from the result
+<span class="pc bpc" id="L69" title="1 of 4 branches missed.">		while (result.size() &gt; 1 &amp;&amp; result.get(0) == 0)</span>
+<span class="fc" id="L70">			result.remove(0);</span>
+<span class="fc" id="L71">		return result;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

@@ -1,0 +1,29 @@
+# User-specific stuff
+.idea/
+*.iml
+
+# Gradle and Maven with auto-import
+*.ipr
+
+# File-based project format
+*.iws
+
+out/
+output/
+target/
+andy/
+assignments/*/target/
+
+*.class
+*.log
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+**/.DS_Store
+
+.jqwik-database

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>nl.tudelft.cse1110.andy</groupId>
+        <artifactId>andy-parent-project</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <groupId>nl.tudelft.cse1110.andy</groupId>
+    <artifactId>maven-plugin</artifactId>
+    <version>1.0</version>
+    <packaging>maven-plugin</packaging>
+    <name>Andy Maven Plugin</name>
+    <url>https://github.com/cse1110/andy</url>
+    <description>Andy's plugin for Maven</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>3.8.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven.plugin-tools</groupId>
+            <artifactId>maven-plugin-annotations</artifactId>
+            <version>3.6.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-core</artifactId>
+            <version>3.8.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>nl.tudelft.cse1110.andy</groupId>
+            <artifactId>andy</artifactId>
+            <version>${andy.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-plugin-plugin</artifactId>
+                    <version>3.6.1</version>
+
+                    <configuration>
+                        <goalPrefix>andy</goalPrefix>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+</project>

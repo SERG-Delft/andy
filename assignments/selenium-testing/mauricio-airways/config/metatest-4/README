@@ -1,0 +1,2 @@
+This metatest will accidentally book for the wrong aircraft, meaning the ticket is wrong.
+Avoids flaky ness by bypassing the #seats check.

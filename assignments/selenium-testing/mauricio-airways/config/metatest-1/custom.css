@@ -1,0 +1,27 @@
+.vertical-spacer {
+    height: 100px;
+}
+
+
+.centered {
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.centered_display {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    overflow: auto;
+}
+
+.selectFlight {
+    white-space: pre-line;
+    border-radius: 25px;
+    color: white;
+    background: #00c0ba;
+    margin: 10px;
+    padding: 15px;
+    width: 200px;
+}
+

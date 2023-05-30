@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="pure-min.css">
+    <link rel="stylesheet" href="custom.css">
+
+    <title>Today's Events</title>
+
+</head>
+
+<body>
+
+    <div class="pure-g mainContainer">
+
+        <div class="pure-u-1-2">
+            <h2 class="centered">Today's Events</h2>
+            <div id="eventList"> </div>
+        </div>
+
+        <div class="pure-u-1-2">
+            <h3 class="centered">Add Event</h3>
+            <form class="pure-form">
+                <fieldset>
+                    <div class="pure-g">
+                        <div class="pure-u-1-2">
+                            <label for="date">Date</label>
+                        </div>
+                        <div class="pure-u-1-2">
+                            <input type="text" class="input_field" id="date" disabled="disabled" value="Today!"
+                                style="color: rgb(80, 80, 80);">
+                        </div>
+                        <div class="pure-u-1-2">
+                            <label for="from">From</label>
+                        </div>
+                        <div class="pure-u-1-2">
+                            <input type="text" class="input_field" id="from" placeholder="10:00">
+                        </div>
+                        <div class="pure-u-1-2">
+                            <label for="to">To</label>
+                        </div>
+                        <div class="pure-u-1-2">
+                            <input type="text" class="input_field" id="to" placeholder="13:00">
+                        </div>
+                        <div class="pure-u-1-2">
+                            <label for="description">Description</label>
+                        </div>
+                        <div class="pure-u-1-2">
+                            <input type="text" class="input_field" id="description" placeholder="SQT exam">
+                        </div>
+                        <div class="pure-u-1 with-padding">
+                            <button id="addEventButton" type="button" class="pure-button pure-button-primary full-width"
+                                onclick="addCalendarEvent()">
+                                Add event </button>
+
+
+                            <div id="alert" class="centered">
+                                <p id="alert-msg" style="color: red;"> </p>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    </div>
+
+    <script src="TodaysEvents.js"></script>
+</body>
+
+</html>

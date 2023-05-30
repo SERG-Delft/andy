@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--    Do not change the order of these links or add any links in between for the dark Mode button will turn your style sheet (index 2) off.-->
+    <link rel="stylesheet" href="pure-min.css">
+    <link rel="stylesheet" href="custom.css">
+    <link rel="stylesheet" href="darkmode.css">
+
+    <title>Mauricio Airways</title>
+
+</head>
+<body>
+
+<button id="darkModeButton" class="pure-button pure-button-active"> Dark Mode </button>
+
+<div class="pure-g">
+    <div class="pure-u-1-4"></div>
+
+    <div class="pure-u-1-4">
+        <h2>Available Flights</h2>
+        <div id="flightList"> </div>
+    </div>
+
+    <div class="pure-u-1-4">
+        <h2>Booked Tickets</h2>
+        <table class="pure-table pure-table-horizontal">
+            <thead>
+            <tr>
+                <th>Flight ID</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Reserved seats</th>
+            </tr>
+            </thead>
+            <tbody id="ticketList">
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pure-u-1-4"></div>
+</div>
+
+<div class="vertical-spacer"> </div>
+
+<div class="pure-g">
+    <div class="pure-u-1-4"></div>
+    <div class="pure-u-1-4">
+        <h2>Selected Flight</h2>
+        <div class="pure-g">
+            <div class="pure-u-1-2">
+                <h3>SelectedFlight</h3>
+                <div id="selectedFlightName"> </div>
+            </div>
+            <div class="pure-u-1-2">
+                <h3>Available seats</h3>
+                <div id="availableSeats"></div>
+            </div>
+        </div>
+
+    </div>
+    <div class="pure-u-1-4">
+        <form class="pure-form">
+            <fieldset>
+                <legend>Book your flight here!</legend>
+                <label for="selectedNumberOfSeats">Amount of seats to book</label>
+                <input type="text" class="input_field" id="selectedNumberOfSeats" placeholder="0"><br>
+
+                <button id="bookButton" type="button" class="pure-button pure-button-primary"> Book </button>
+            </fieldset>
+        </form>
+    </div>
+    <div class="pure-u-1-4"></div>
+</div>
+
+<div id="alert" class="error centered"> <div id="alert-msg"> </div> <button id="closeErrorButton" class="pure-button pure-button-active"> Close </button> </div>
+
+
+<script src="Airline.js"></script>
+</body>
+</html>

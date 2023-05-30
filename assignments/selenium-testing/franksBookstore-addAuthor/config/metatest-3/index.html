@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<!-- I was never trained to be a web dev artist -->
+
+<head>
+  <title>Frank's Bookstore</title>
+  <link rel='stylesheet' href='style.css' />
+</head>
+
+<body>
+  <main>
+    <nav class="topnav">
+      <a class="active" href="#home">Home</a>
+      <a href="#news">News</a>
+      <a href="#contact">Contact</a>
+      <a href="#about">About</a>
+      <input type="text" id="search_bar" placeholder="Search for books, authors">
+    </nav>
+    <div class="centered">
+
+      <div class = "centered_display">
+        <div class = "blue">
+          <h1>Books!</h1>
+          <p>Welcome to my book store, here I will show you all of the books I have for sale.</p>
+        </div>
+      </div>
+      
+      <div id="add_new">
+        <div class = "centered_display">
+          <div id="add_author_div" class = "green">
+            <label for="author_name">Author name:</label><br>
+            <input type="text" class="input_field" id="author_name" name="author_name" placeholder="John Doe"><br>
+            <input id="author_submit_button" type="button" class="submit_button" value="Add an author">
+          </div>
+  
+          <div id="add_book_div" class = "green">
+            <label for="book_name">Book name:</label><br>
+            <input type="text" class="input_field" id="book_name" placeholder="A starry sky"><br>
+            <label for="author_id">Author id:</label><br>
+            <input type="text" class="input_field" id="author_id" placeholder="5300"><br><br>
+            <input id="book_submit_button" type="button" class="submit_button" value="Add a book">
+  
+          </div>
+        </div>
+      </div>
+
+      <div class="centered_display">
+        <div id="search_results" class="green">
+          <span id="close_icon">&times;</span>
+          <br>
+          <label>Authors:</label>
+          <div id="author_list" class="list"></div>
+          <br>
+          <label>Books:</label>
+          <div id="book_list" class="list"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="alert" class="alert">
+      <span class="closebtn" onclick="close_alert()">&times;</span>
+      <span id="alert-msg"></span>
+    </div>
+  </main>
+</body>
+<script src="database.js"></script>
+</html>

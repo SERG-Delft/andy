@@ -22,6 +22,7 @@ public class Context {
     private ExternalProcess externalProcess;
     private SubmissionMetaData submissionMetaData;
     private ClassLoader classloaderWithStudentsCode;
+    private List<String> librariesToBeIncludedInCompilation;
 
     public Context(Action action) {
         this(Thread.currentThread().getContextClassLoader(), action);
@@ -108,5 +109,17 @@ public class Context {
 
     public ClassLoader getClassloaderWithStudentsCode() {
         return classloaderWithStudentsCode;
+    }
+
+    public void setLibrariesToBeIncludedInCompilation(List<String> librariesToBeIncludedInCompilation) {
+        this.librariesToBeIncludedInCompilation = librariesToBeIncludedInCompilation;
+    }
+
+    public List<String> getLibrariesToBeIncludedInCompilation() {
+        return librariesToBeIncludedInCompilation;
+    }
+
+    public boolean hasLibrariesToBeIncluded() {
+        return librariesToBeIncludedInCompilation!=null && !librariesToBeIncludedInCompilation.isEmpty();
     }
 }
