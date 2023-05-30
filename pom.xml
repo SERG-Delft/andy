@@ -20,7 +20,6 @@
     <modules>
         <module>andy</module>
         <module>andy-aws-lambda</module>
-        <module>andy-maven-plugin</module>
     </modules>
 
     <build>
