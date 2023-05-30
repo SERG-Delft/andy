@@ -19,7 +19,7 @@ public class JacocoTest extends IntegrationTestBase {
     @ParameterizedTest
     @MethodSource("generator")
     void differentCoverages(String library, String solution, int lines, int instructions, int branches) {
-        Result result = run(Action.COVERAGE, library, solution);
+        Result result = run(Action.TESTS, library, solution);
 
         assertThat(result.getCoverage().wasExecuted()).isTrue();
 
@@ -53,7 +53,7 @@ public class JacocoTest extends IntegrationTestBase {
 
     @Test
     void nestedClassesInLibrary() {
-        Result result = run(Action.COVERAGE,
+        Result result = run(Action.TESTS,
                 "CollectionUtilsIsEqualCollectionLibrary",
                 "CollectionUtilsIsEqualCollectionFullCoverage",
                 "CollectionUtilsIsEqualCollectionCoverageConfiguration");
@@ -68,7 +68,7 @@ public class JacocoTest extends IntegrationTestBase {
     @ParameterizedTest
     @MethodSource("coveredLinesGenerator")
     void coveredAndUncoveredLines(String library, String solution, List<Integer> coveredLines, List<Integer> partiallyCovered, List<Integer> notCovered) {
-        Result result = run(Action.COVERAGE, library, solution);
+        Result result = run(Action.TESTS, library, solution);
 
         assertThat(result.getCoverage().getFullyCoveredLines()).isEqualTo(coveredLines);
         assertThat(result.getCoverage().getPartiallyCoveredLines()).isEqualTo(partiallyCovered);
@@ -90,7 +90,7 @@ public class JacocoTest extends IntegrationTestBase {
 
     @Test
     void jacocoDisabled() {
-        Result result = run(Action.COVERAGE, "NumberUtilsAddLibrary", "NumberUtilsAddSmoke", "NumberUtilsJacocoSkipped");
+        Result result = run(Action.TESTS, "NumberUtilsAddLibrary", "NumberUtilsAddSmoke", "NumberUtilsJacocoSkipped");
 
         assertThat(result.getCoverage().wasExecuted()).isFalse();
 
