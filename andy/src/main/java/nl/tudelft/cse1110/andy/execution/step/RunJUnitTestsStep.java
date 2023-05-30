@@ -44,6 +44,8 @@ public class RunJUnitTestsStep implements ExecutionStep {
             LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
                     .selectors(selectClass(clazz))
                     .configurationParameter("jqwik.reporting.usejunitplatform", "true")
+                    .configurationParameter("jqwik.tries.default", "100")
+                    .configurationParameter("jqwik.shrinking.default", "OFF")
                     .configurationParameter("jqwik.database", FilesUtils.createTemporaryDirectory("jqwik").resolve("jqwik-db").toString())
                     .build();
             launcher.execute(request);
