@@ -75,17 +75,17 @@ public class ModeActionSelector {
         if (action == FULL_WITH_HINTS || action == FULL_WITHOUT_HINTS) {
             return fullMode();
         } else if (action == COVERAGE) {
-            return withCoverage();
+            return withMutationCoverage();
         } else {
-            return justTests();
+            return testsAndCoverage();
         }
     }
 
     private List<ExecutionStep> getExamMode() {
         if (action == FULL_WITH_HINTS || action == FULL_WITHOUT_HINTS || action == COVERAGE) {
-            return withCoverage();
+            return withMutationCoverage();
         } else {
-            return justTests();
+            return testsAndCoverage();
         }
     }
 
@@ -100,15 +100,20 @@ public class ModeActionSelector {
         return List.of(new RunJUnitTestsStep());
     }
 
-    public static List<ExecutionStep> justTests() {
-        return List.of(new RunExternalProcessStep(), new RunJUnitTestsStep());
-    }
-
-    public static List<ExecutionStep> withCoverage() {
+    public static List<ExecutionStep> testsAndCoverage() {
         return List.of(
                 new RunExternalProcessStep(),
+                new InstrumentCodeForCoverageStep(),
                 new RunJUnitTestsStep(),
-                new RunJacocoCoverageStep(),
+                new CollectCoverageInformationStep());
+    }
+
+    public static List<ExecutionStep> withMutationCoverage() {
+        return List.of(
+                new RunExternalProcessStep(),
+                new InstrumentCodeForCoverageStep(),
+                new RunJUnitTestsStep(),
+                new CollectCoverageInformationStep(),
                 new RunPitestStep()
         );
     }
@@ -116,8 +121,9 @@ public class ModeActionSelector {
     public static List<ExecutionStep> fullMode() {
         return List.of(
                 new RunExternalProcessStep(),
+                new InstrumentCodeForCoverageStep(),
                 new RunJUnitTestsStep(),
-                new RunJacocoCoverageStep(),
+                new CollectCoverageInformationStep(),
                 new RunPitestStep(),
                 new RunRequiredCodeChecksStep(),
                 new RunCodeChecksStep(),

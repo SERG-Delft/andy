@@ -7,6 +7,8 @@ import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.execution.mode.ModeActionSelector;
 import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
 import nl.tudelft.cse1110.andy.writer.weblab.SubmissionMetaData;
+import org.jacoco.core.runtime.IRuntime;
+import org.jacoco.core.runtime.RuntimeData;
 
 import java.util.List;
 
@@ -22,6 +24,8 @@ public class Context {
     private ExternalProcess externalProcess;
     private SubmissionMetaData submissionMetaData;
     private ClassLoader classloaderWithStudentsCode;
+    private IRuntime jacocoRuntime;
+    private RuntimeData jacocoData;
 
     public Context(Action action) {
         this(Thread.currentThread().getContextClassLoader(), action);
@@ -108,5 +112,22 @@ public class Context {
 
     public ClassLoader getClassloaderWithStudentsCode() {
         return classloaderWithStudentsCode;
+    }
+
+    public void setJacocoObjects(IRuntime runtime, RuntimeData data) {
+        jacocoRuntime = runtime;
+        jacocoData = data;
+    }
+
+    public boolean hasJacocoRuntime() {
+        return jacocoRuntime != null && jacocoData != null;
+    }
+
+    public IRuntime getJacocoRuntime() {
+        return jacocoRuntime;
+    }
+
+    public RuntimeData getJacocoData() {
+        return jacocoData;
     }
 }
