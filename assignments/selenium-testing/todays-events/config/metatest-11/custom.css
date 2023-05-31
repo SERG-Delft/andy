@@ -1,0 +1,53 @@
+body {
+    background-color: skyblue;
+}
+
+.vertical-spacer {
+    height: 100px;
+}
+
+.centered {
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.centered_display {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    overflow: auto;
+}
+
+.event {
+    white-space: pre-line;
+    border-radius: 25px;
+    color: white;
+    background: #00c0ba;
+    margin: 25px;
+    padding: 15px;
+}
+
+@media (max-width: 1200px) {
+    .mainContainer {
+        width: 95%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+@media (min-width: 1200px) {
+    .mainContainer {
+        width: 50%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+.full-width{
+    width: 100%;
+    display: block;
+}
+
+.with-padding{
+    padding: 1em;
+}

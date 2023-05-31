@@ -1,0 +1,142 @@
+.selectFlight {
+    color: rgb(252, 236, 206);
+    background: #314b4b;
+}
+
+/*Stolen from dark reader*/
+
+.pure-button-primary, .pure-button-selected, a.pure-button-primary, a.pure-button-selected {
+    background-color: rgb(57, 94, 124);
+    color: rgb(252, 236, 206);
+}
+
+.pure-form legend {
+    color: rgb(217, 201, 174);
+    border-bottom-color: rgb(68, 66, 59);
+}
+
+.pure-form input[type="color"], .pure-form input[type="date"], .pure-form input[type="datetime-local"], .pure-form input[type="datetime"], .pure-form input[type="email"], .pure-form input[type="month"], .pure-form input[type="number"], .pure-form input[type="password"], .pure-form input[type="search"], .pure-form input[type="tel"], .pure-form input[type="text"], .pure-form input[type="time"], .pure-form input[type="url"], .pure-form input[type="week"], .pure-form select, .pure-form textarea {
+    border-color: rgb(76, 74, 66);
+    box-shadow: rgb(55, 53, 48) 0px 1px 3px inset;
+}
+
+.pure-table-horizontal td, .pure-table-horizontal th {
+    border-width: 0 0 1px 0;
+    border-bottom: 1px solid rgb(76, 74, 66);
+}
+
+
+.pure-table thead {
+    background-color: rgb(61, 67, 71) !important;
+    color: rgb(252, 236, 206);
+    border: 1px solid rgb(77, 74, 67);
+}
+
+.pure-table {
+    border-color: rgb(77, 74, 67);
+}
+
+html {
+    background-color: #22211d !important;
+}
+html {
+    color-scheme: dark !important;
+}
+html, body, input, textarea, select, button {
+    background-color: #22211d;
+}
+html, body, input, textarea, select, button {
+    border-color: #7d725e;
+    color: #fcecce;
+}
+a {
+    color: #7091b2;
+}
+table {
+    border-color: #646156;
+}
+::placeholder {
+    color: #c0b197;
+}
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+    background-color: #47451e !important;
+    color: #fcecce !important;
+}
+::-webkit-scrollbar {
+    background-color: #2b2925;
+    color: #b9aa91;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #535048;
+}
+::-webkit-scrollbar-thumb:hover {
+    background-color: #67645a;
+}
+::-webkit-scrollbar-thumb:active {
+    background-color: #57544b;
+}
+::-webkit-scrollbar-corner {
+    background-color: #22211d;
+}
+* {
+    scrollbar-color: #535048 #2b2925;
+}
+::selection {
+    background-color: #314e6f !important;
+    color: #fcecce !important;
+}
+::-moz-selection {
+    background-color: #314e6f !important;
+    color: #fcecce !important;
+}
+
+
+:root {
+    --darkreader-neutral-background: #1d1c19;
+    --darkreader-neutral-text: #eadabd;
+    --darkreader-selection-background: #314e6f;
+    --darkreader-selection-text: #fcecce;
+}
+
+.vimvixen-hint {
+    background-color: #70581e !important;
+    border-color: #ceb055 !important;
+    color: #ffedc2 !important;
+}
+::placeholder {
+    opacity: 0.5 !important;
+}
+#edge-translate-panel-body,
+.MuiTypography-body1 {
+    color: var(--darkreader-neutral-text) !important;
+}
+gr-main-header {
+    background-color: #2b3b3b !important;
+}
+.tou-z65h9k,
+.tou-mignzq,
+.tou-1b6i2ox,
+.tou-lnqlqk {
+    background-color: var(--darkreader-neutral-background) !important;
+}
+.tou-75mvi {
+    background-color: #182323 !important;
+}
+.tou-ta9e87,
+.tou-1w3fhi0,
+.tou-1b8t2us,
+.tou-py7lfi,
+.tou-1lpmd9d,
+.tou-1frrtv8,
+.tou-17ezmgn {
+    background-color: #12110f !important;
+}
+.tou-uknfeu {
+    background-color: #251d11 !important;
+}
+.tou-6i3zyv {
+    background-color: #3f5555 !important;
+}
+embed[type="application/pdf"] { filter: invert(100%) contrast(90%); }

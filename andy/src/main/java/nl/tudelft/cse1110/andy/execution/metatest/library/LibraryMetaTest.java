@@ -97,6 +97,7 @@ public class LibraryMetaTest extends AbstractMetaTest {
 
         Context metaCtx = new Context(ctx.getCleanClassloader(), Action.META_TEST);
         metaCtx.setDirectoryConfiguration(metaDirCfg);
+        metaCtx.setLibrariesToBeIncludedInCompilation(ctx.getLibrariesToBeIncludedInCompilation());
 
         ResultBuilder metaResult = new ResultBuilder(metaCtx, new GradeCalculator());
 

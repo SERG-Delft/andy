@@ -89,12 +89,26 @@ public class RunPitestStep implements ExecutionStep {
         args.add("false");
 
         args.add("--classPath");
-        args.add(dirCfg.getWorkingDir());
+        List<String> librariesToInclude = compiledClassesPlusLibraries(ctx, dirCfg);
+        args.add(commaSeparated(librariesToInclude));
 
         args.add("--mutators");
         args.add(commaSeparated(runCfg.listOfMutants()));
 
         return args.stream().toArray(String[]::new);
+    }
+
+    private List<String> compiledClassesPlusLibraries(Context ctx, DirectoryConfiguration dirCfg) {
+        List<String> toAddToClassPath = new ArrayList<>();
+        toAddToClassPath.add(dirCfg.getWorkingDir());
+
+        if(ctx.hasLibrariesToBeIncluded()) {
+            toAddToClassPath.addAll(ctx.getLibrariesToBeIncludedInCompilation());
+        }
+
+        return toAddToClassPath.stream()
+                .filter(cp -> !cp.contains("pitest"))
+                .toList();
     }
 
     private String commaSeparated(List<String> list) {

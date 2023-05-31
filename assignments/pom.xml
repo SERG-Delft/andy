@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>nl.tudelft.cse1110.andy</groupId>
+        <artifactId>andy-parent-project</artifactId>
+        <version>1.0</version>
+    </parent>
+
+    <groupId>nl.tudelft.cse1110.andy</groupId>
+    <artifactId>assignments-parent-project</artifactId>
+    <version>1.0</version>
+    <packaging>pom</packaging>
+
+    <name>Assignments parent project</name>
+    <url>https://github.com/cse1110/andy</url>
+
+    <modules>
+        <module>domain-and-structural-testing/repeat</module>
+        <module>domain-and-structural-testing/adding-lists-of-digits</module>
+        <module>domain-and-structural-testing/replace</module>
+        <module>domain-and-structural-testing/autoAssignStudents</module>
+        <module>domain-and-structural-testing/reverse</module>
+        <module>domain-and-structural-testing/balancing-arrays</module>
+        <module>domain-and-structural-testing/seatFinder</module>
+        <module>domain-and-structural-testing/concatenate</module>
+        <module>domain-and-structural-testing/sportsHallPlanner</module>
+        <module>domain-and-structural-testing/containsAny</module>
+        <module>domain-and-structural-testing/substringsBetween</module>
+        <module>domain-and-structural-testing/counting-clumps</module>
+        <module>domain-and-structural-testing/subtracting-lists-of-digits</module>
+        <module>domain-and-structural-testing/indexOf</module>
+        <module>domain-and-structural-testing/swapCase</module>
+        <module>domain-and-structural-testing/intersection</module>
+        <module>domain-and-structural-testing/toCamelCase</module>
+        <module>domain-and-structural-testing/isEqualCollection</module>
+        <module>domain-and-structural-testing/unique</module>
+        <module>domain-and-structural-testing/isSorted</module>
+        <module>domain-and-structural-testing/zigZag</module>
+        <module>domain-and-structural-testing/lastIndexOf</module>
+
+        <module>stubs-fakes-and-mocks/add-todo</module>
+        <module>stubs-fakes-and-mocks/complete-all-todos</module>
+        <module>stubs-fakes-and-mocks/downvote</module>
+        <module>stubs-fakes-and-mocks/editTripCapacity</module>
+        <module>stubs-fakes-and-mocks/enrollParticipants</module>
+        <module>stubs-fakes-and-mocks/getPriceForCart</module>
+        <module>stubs-fakes-and-mocks/gradeEmailService</module>
+        <module>stubs-fakes-and-mocks/invoiceFilter</module>
+        <module>stubs-fakes-and-mocks/labResults</module>
+        <module>stubs-fakes-and-mocks/makeReservation</module>
+        <module>stubs-fakes-and-mocks/queue</module>
+        <module>stubs-fakes-and-mocks/readingProgress</module>
+        <module>stubs-fakes-and-mocks/releaseNewEdition</module>
+        <module>stubs-fakes-and-mocks/retrieveTodos</module>
+        <module>stubs-fakes-and-mocks/upvote</module>
+
+        <module>property-based-testing/chocolate-bars</module>
+        <module>property-based-testing/connect-four</module>
+        <module>property-based-testing/isLeapYear</module>
+        <module>property-based-testing/isPalindrome</module>
+        <module>property-based-testing/isTriangle</module>
+        <module>property-based-testing/search</module>
+        <module>property-based-testing/space-signals</module>
+        <module>property-based-testing/summer</module>
+        <module>property-based-testing/tax-income</module>
+        <module>property-based-testing/two-integers</module>
+        <module>property-based-testing/unique</module>
+
+        <module>sql-testing/employees</module>
+        <module>sql-testing/recipes</module>
+        <module>sql-testing/restaurant</module>
+
+        <module>selenium-testing/franksBookstore-addAuthor</module>
+        <module>selenium-testing/franksBookstore-addBook</module>
+        <module>selenium-testing/franksBookstore-search</module>
+        <module>selenium-testing/mauricio-airways</module>
+        <module>selenium-testing/todays-events</module>
+    </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>nl.tudelft.cse1110.andy</groupId>
+            <artifactId>andy</artifactId>
+            <version>${andy.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.jqwik</groupId>
+            <artifactId>jqwik</artifactId>
+            <version>${jqwik.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.jqwik</groupId>
+            <artifactId>jqwik-engine</artifactId>
+            <version>${jqwik.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>${junit.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                </configuration>
+            </plugin>
+
+
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven.surefire.version}</version>
+                <configuration>
+                    <enableAssertions>true</enableAssertions>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>nl.tudelft.cse1110.andy</groupId>
+                <artifactId>maven-plugin</artifactId>
+                <version>1.0</version>
+            </plugin>
+
+        </plugins>
+    </build>
+</project>

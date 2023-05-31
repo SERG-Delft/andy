@@ -2,9 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
  
-    <groupId>nl.tudelft.cse1110</groupId>
+    <groupId>nl.tudelft.cse1110.andy</groupId>
     <artifactId>andy-parent-project</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>pom</packaging>
  
     <name>Andy's parent project</name>
@@ -12,6 +12,16 @@
 
     <properties>
         <andy.version>1.0</andy.version>
+        <junit.version>5.9.1</junit.version>
+        <junit.platform.version>1.9.1</junit.platform.version>
+        <mockito.version>4.8.0</mockito.version>
+        <jqwik.version>1.7.0</jqwik.version>
+        <assertj.version>3.24.2</assertj.version>
+        <pitest.version>1.14.1</pitest.version>
+        <pitest.junit.version>1.2.0</pitest.junit.version>
+        <jacoco.version>0.8.10</jacoco.version>
+        <maven.surefire.version>3.0.0-M5</maven.surefire.version>
+
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF8</project.build.sourceEncoding>
@@ -20,6 +30,8 @@
     <modules>
         <module>andy</module>
         <module>andy-aws-lambda</module>
+        <module>andy-maven-plugin</module>
+        <module>assignments</module>
     </modules>
 
     <build>
