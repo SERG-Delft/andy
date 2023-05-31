@@ -32,5 +32,8 @@ jobs:
       - name: Compile and install everything
         run: mvn clean install
 
-      - name: Run Andy tests
-        run: mvn test -pl andy
+      - name: Run Andy unit tests
+        run: mvn -DexcludedGroups="ci" test -pl andy
+
+      - name: Run Andy slow tests
+        run: mvn -Dgroups="ci" test -pl andy
