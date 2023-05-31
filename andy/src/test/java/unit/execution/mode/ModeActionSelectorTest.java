@@ -45,7 +45,7 @@ public class ModeActionSelectorTest {
         List<ExecutionStep> result = run(PRACTICE, COVERAGE);
 
         assertThat(result)
-                .containsExactlyElementsOf(ModeActionSelector.withCoverage());
+                .containsExactlyElementsOf(ModeActionSelector.withMutationCoverage());
     }
 
     @Test
@@ -53,7 +53,7 @@ public class ModeActionSelectorTest {
         List<ExecutionStep> result = run(PRACTICE, TESTS);
 
         assertThat(result)
-                .containsExactlyElementsOf(ModeActionSelector.justTests());
+                .containsExactlyElementsOf(ModeActionSelector.testsAndCoverage());
     }
 
     @Test
@@ -61,7 +61,7 @@ public class ModeActionSelectorTest {
         List<ExecutionStep> result = run(EXAM, COVERAGE);
 
         assertThat(result)
-                .containsExactlyElementsOf(ModeActionSelector.withCoverage());
+                .containsExactlyElementsOf(ModeActionSelector.withMutationCoverage());
     }
 
     @Test
@@ -69,7 +69,7 @@ public class ModeActionSelectorTest {
         List<ExecutionStep> result = run(EXAM, TESTS);
 
         assertThat(result)
-                .containsExactlyElementsOf(ModeActionSelector.justTests());
+                .containsExactlyElementsOf(ModeActionSelector.testsAndCoverage());
     }
 
     @Test

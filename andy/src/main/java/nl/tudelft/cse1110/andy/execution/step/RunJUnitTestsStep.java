@@ -26,7 +26,6 @@ public class RunJUnitTestsStep implements ExecutionStep {
     @Override
     public void execute(Context ctx, ResultBuilder result) {
         try {
-
             SummaryGeneratingListener listener = new SummaryGeneratingListener();
             AdditionalReportJUnitListener additionalReportJUnitListener = new AdditionalReportJUnitListener(result);
 

@@ -76,7 +76,7 @@ public class ModesAndActionsTest extends IntegrationTestBase {
         assertThat(result.getTests().wasExecuted()).isTrue();
         assertThat(result.getTests().getTestsSucceeded()).isEqualTo(2);
 
-        assertThat(result.getCoverage().wasExecuted()).isFalse();
+        assertThat(result.getCoverage().wasExecuted()).isTrue(); // Since 2023, tests also run coverage
         assertThat(result.getMetaTests().wasExecuted()).isFalse();
         assertThat(result.getMutationTesting().wasExecuted()).isFalse();
         assertThat(result.getCodeChecks().wasExecuted()).isFalse();
