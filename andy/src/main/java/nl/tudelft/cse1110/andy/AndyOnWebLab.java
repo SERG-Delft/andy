@@ -1,6 +1,9 @@
 package nl.tudelft.cse1110.andy;
 
+import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
+import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
+import nl.tudelft.cse1110.andy.result.Result;
 import nl.tudelft.cse1110.andy.writer.weblab.WebLabResultWriter;
 
 import java.util.Arrays;
@@ -22,8 +25,19 @@ public class AndyOnWebLab {
         if (workDir == null) { System.out.println("No WORKING_DIR environment variable."); System.exit(-1); }
         if (outputDir == null) { System.out.println("No OUTPUT_DIR environment variable.");  System.exit(-1); }
 
+        runAndy(action, workDir, outputDir);
+    }
+
+    private static void runAndy(String action, String workDir, String outputDir) {
         WebLabResultWriter writer = new WebLabResultWriter();
-        new Andy(getAction(action), workDir, outputDir, writer).run();
+        Context ctx = Context.build(getAction(action), workDir, outputDir);
+
+        try {
+            Result result = new Andy().run(ctx);
+            writer.write(ctx, result);
+        } catch (Throwable e) {
+            writer.uncaughtError(ctx, e);
+        }
     }
 
     private static Action getAction(String action) {

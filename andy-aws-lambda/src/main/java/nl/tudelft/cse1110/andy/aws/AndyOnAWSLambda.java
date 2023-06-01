@@ -7,35 +7,46 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.google.gson.Gson;
 import nl.tudelft.cse1110.andy.Andy;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
+import nl.tudelft.cse1110.andy.result.Result;
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
-import nl.tudelft.cse1110.andy.writer.weblab.WebLabResultWriter;
+import nl.tudelft.cse1110.andy.writer.ResultWriter;
+import nl.tudelft.cse1110.andy.writer.standard.StandardResultWriter;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Arrays;
 
+import static nl.tudelft.cse1110.andy.execution.Context.build;
+import static nl.tudelft.cse1110.andy.utils.FilesUtils.*;
+
 public class AndyOnAWSLambda implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
     public AWSResult run(AWSInput input) {
 
-        Path workDir = FilesUtils.createTemporaryDirectory("andy-workdir");
-        Path outputDir = FilesUtils.createTemporaryDirectory("andy-outputdir");
+        Path workDir = createTemporaryDirectory("andy-workdir");
+        Path outputDir = createTemporaryDirectory("andy-outputdir");
 
-        FilesUtils.writeToFile(workDir, "Library.java", input.getLibrary());
-        FilesUtils.writeToFile(workDir, "Configuration.java", input.getConfiguration());
-        FilesUtils.writeToFile(workDir, "Solution.java", input.getSolution());
+        writeToFile(workDir, "Library.java", input.getLibrary());
+        writeToFile(workDir, "Configuration.java", input.getConfiguration());
+        writeToFile(workDir, "Solution.java", input.getSolution());
 
-        WebLabResultWriter writer = new WebLabResultWriter();
-        new Andy(Action.valueOf(input.getAction()), workDir.toString(), outputDir.toString(), Arrays.asList(myself()), writer).run();
+        nl.tudelft.cse1110.andy.execution.Context ctx = build(
+                Action.valueOf(input.getAction()),
+                workDir.toString(),
+                outputDir.toString(),
+                Arrays.asList(myself()));
+
+        Result result = new Andy().run(ctx);
+
+        ResultWriter writer = new StandardResultWriter();
+        writer.write(ctx, result);
 
         String textOutput = FilesUtils.readFile(outputDir, "stdout.txt");
-        String weblab = FilesUtils.readFile(outputDir, "results.xml");
-        String highlights = FilesUtils.readFile(outputDir, "editor-feedback.json");
 
-        FilesUtils.deleteDirectory(workDir);
-        FilesUtils.deleteDirectory(outputDir);
+        deleteDirectory(workDir);
+        deleteDirectory(outputDir);
 
-        return new AWSResult(textOutput, weblab, highlights);
+        return new AWSResult(textOutput, result);
     }
 
     private String myself() {

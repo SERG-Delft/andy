@@ -2,7 +2,9 @@ package io.github.cse1110.andy;
 
 import com.google.common.io.Files;
 import nl.tudelft.cse1110.andy.Andy;
+import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
+import nl.tudelft.cse1110.andy.result.Result;
 import nl.tudelft.cse1110.andy.writer.standard.StandardResultWriter;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -70,13 +72,15 @@ public class AndyMojo extends AbstractMojo {
             Timer workingIndicator = this.startWorkingIndicationTimer();
 
             /* Run Andy! */
-            new Andy(
+            Context ctx = Context.build(
                     action(),
                     workDir.getAbsolutePath(),
                     outputDir.getAbsolutePath(),
-                    compileClasspathElements,
-                    new StandardResultWriter()
-            ).run();
+                    compileClasspathElements);
+
+            Result result = new Andy().run(ctx);
+
+            new StandardResultWriter().write(ctx, result);
 
             /* Read output file */
             String output = readFile(new File(concatenateDirectories(outputDir.getAbsolutePath(), "stdout.txt")));
