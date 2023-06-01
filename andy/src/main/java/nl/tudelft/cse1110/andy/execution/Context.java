@@ -6,7 +6,6 @@ import nl.tudelft.cse1110.andy.execution.externalprocess.EmptyExternalProcess;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.execution.mode.ModeActionSelector;
 import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
-import nl.tudelft.cse1110.andy.writer.weblab.SubmissionMetaData;
 import org.jacoco.core.runtime.IRuntime;
 import org.jacoco.core.runtime.RuntimeData;
 
@@ -19,10 +18,9 @@ public class Context {
     private RunConfiguration runConfiguration;
     private List<String> fullClassNames;
     private ExecutionFlow flow;
-    private Action action;
+    private final Action action;
     private ModeActionSelector modeActionSelector;
     private ExternalProcess externalProcess;
-    private SubmissionMetaData submissionMetaData;
     private ClassLoader classloaderWithStudentsCode;
     private List<String> librariesToBeIncludedInCompilation;
     private IRuntime jacocoRuntime;
@@ -97,14 +95,6 @@ public class Context {
         externalProcess.extractErrorMessages();
 
         externalProcess.kill();
-    }
-
-    public SubmissionMetaData getSubmissionMetaData() {
-        return submissionMetaData;
-    }
-
-    public void setSubmissionMetaData(SubmissionMetaData submissionMetaData) {
-        this.submissionMetaData = submissionMetaData;
     }
 
     public void setClassloaderWithStudentsCode(ClassLoader classloaderWithStudentsCode) {
