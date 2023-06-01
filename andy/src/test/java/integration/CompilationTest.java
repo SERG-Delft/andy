@@ -17,7 +17,7 @@ import static nl.tudelft.cse1110.andy.utils.FilesUtils.concatenateDirectories;
 import static nl.tudelft.cse1110.andy.utils.FilesUtils.readFile;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.mock;
-import static unit.writer.standard.StandardResultTestAssertions.compilationErrorOnLine;
+import static testutils.StandardResultTestAssertions.compilationErrorOnLine;
 
 public class CompilationTest extends IntegrationTestBase {
     protected VersionInformation versionInformation = new VersionInformation("testVersion", "testBuildTimestamp", "testCommitId");

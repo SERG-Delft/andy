@@ -1,4 +1,4 @@
-package unit.writer.standard;
+package testutils;
 
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
 import nl.tudelft.cse1110.andy.writer.standard.VersionInformation;

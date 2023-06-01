@@ -13,8 +13,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static unit.writer.standard.StandardResultTestAssertions.compilationSuccess;
-import static unit.writer.standard.StandardResultTestAssertions.finalGrade;
+import static testutils.StandardResultTestAssertions.compilationSuccess;
+import static testutils.StandardResultTestAssertions.finalGrade;
 
 @Tag("ci")
 public class AllExerciseTests extends WebLabSeleniumTestBase {

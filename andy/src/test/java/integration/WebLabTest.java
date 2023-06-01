@@ -30,7 +30,8 @@ public class WebLabTest extends IntegrationTestBase {
         assertThat(reportDir)
                 .isDirectoryContaining(f -> f.getName().equals("stdout.txt"))
                 .isDirectoryContaining(f -> f.getName().equals("results.xml"))
-                .isDirectoryContaining(f -> f.getName().equals("editor-feedback.json"));
+                .isDirectoryContaining(f -> f.getName().equals("editor-feedback.json"))
+                .isDirectoryContaining(f -> f.getName().equals("post.json"));
 
         String stdout = readFile(new File(reportDir.getAbsolutePath() + "/stdout.txt"));
         assertThat(stdout)

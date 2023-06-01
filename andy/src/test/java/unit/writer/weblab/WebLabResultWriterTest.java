@@ -18,7 +18,7 @@ import static nl.tudelft.cse1110.andy.utils.FilesUtils.concatenateDirectories;
 import static nl.tudelft.cse1110.andy.utils.FilesUtils.readFile;
 import static org.assertj.core.api.Assertions.allOf;
 import static org.assertj.core.api.Assertions.assertThat;
-import static unit.writer.standard.StandardResultTestAssertions.*;
+import static testutils.StandardResultTestAssertions.*;
 import static unit.writer.weblab.WebLabEditorFeedbackJsonTestAssertions.*;
 
 public class WebLabResultWriterTest extends StandardResultWriterTest {

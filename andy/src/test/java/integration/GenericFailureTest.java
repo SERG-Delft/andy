@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
-import static unit.writer.standard.StandardResultTestAssertions.startsWithString;
+import static testutils.StandardResultTestAssertions.startsWithString;
 
 public class GenericFailureTest extends IntegrationTestBase {
 

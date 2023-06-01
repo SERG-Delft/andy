@@ -1,6 +1,7 @@
 package integration;
 
 import com.google.common.io.Files;
+import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
@@ -43,26 +44,35 @@ public abstract class IntegrationTestBase {
 
         copyFiles(libraryFile, solutionFile);
 
-        this.ctx = Context.build(action, workDir.toString(), reportDir.toString());
+        this.ctx = new Context(action);
+
+        DirectoryConfiguration dirCfg = new DirectoryConfiguration(
+                workDir.toString(),
+                reportDir.toString()
+        );
+
+        ctx.setDirectoryConfiguration(dirCfg);
+
+        ResultBuilder resultBuilder = new ResultBuilder(ctx, new GradeCalculator());
+
         ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
 
         try {
+            ResultWriter writer = getWriter();
             ExecutionFlow flow = executionStepsOverride == null ?
-                    ExecutionFlow.build(ctx) :
-                    ExecutionFlow.build(ctx, executionStepsOverride);
+                    ExecutionFlow.build(ctx, resultBuilder, writer) :
+                    new ExecutionFlow(ctx, resultBuilder, writer, executionStepsOverride);
 
             addSteps(flow);
 
-            Result result = flow.run();
-            ResultWriter writer = getWriter();
-            writer.write(ctx, result);
-
-            return result;
+            flow.run();
         } catch(Exception e) {
             throw e;
         } finally {
             Thread.currentThread().setContextClassLoader(oldClassLoader);
         }
+
+        return resultBuilder.build();
     }
 
     public Result run(Action action,
@@ -76,6 +86,10 @@ public abstract class IntegrationTestBase {
         return new EmptyWriter();
     }
 
+    public Result run(Action action, String libraryFile, String solutionFile) {
+        return this.run(action, libraryFile, solutionFile, (String) null);
+    }
+
     public Result run(Action action, String libraryFile, String solutionFile,
                       List<ExecutionStep> executionStepsOverride) {
         return this.run(action, libraryFile, solutionFile, null, executionStepsOverride);
@@ -83,10 +97,6 @@ public abstract class IntegrationTestBase {
 
     public Result run(String libraryFile, String solutionFile, String configurationFile) {
         return this.run(Action.FULL_WITH_HINTS, libraryFile, solutionFile, configurationFile);
-    }
-
-    public Result run(Action action, String libraryFile, String solutionFile) {
-        return this.run(action, libraryFile, solutionFile, (String) null);
     }
 
 

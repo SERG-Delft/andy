@@ -54,7 +54,8 @@ public class LibraryMetaTest extends AbstractMetaTest {
         createMetaTestFile(metaWorkingDir, metaFileContent);
 
         /* We then run the meta test, using our infrastructure */
-        Result metaResult = runMetaTest(ctx, dirCfg, metaWorkingDir);
+        ResultBuilder metaResultBuilder = runMetaTest(ctx, dirCfg, metaWorkingDir);
+        Result metaResult = metaResultBuilder.build();
 
         /* And check the result. If there's a failing test, the test suite is good! */
         int testsRan = metaResult.getTests().getTestsRan();
@@ -88,18 +89,20 @@ public class LibraryMetaTest extends AbstractMetaTest {
         FilesUtils.writeToFile(metaFile, metaFileContent);
     }
 
-    private Result runMetaTest(Context ctx, DirectoryConfiguration dirCfg, File metaWorkingDir) {
+    private ResultBuilder runMetaTest(Context ctx, DirectoryConfiguration dirCfg, File metaWorkingDir) {
         DirectoryConfiguration metaDirCfg = new DirectoryConfiguration(
                 metaWorkingDir.toString(),
                 dirCfg.getOutputDir()
         );
 
-        Context metaCtx = Context.build(ctx.getCleanClassloader(), Action.META_TEST);
+        Context metaCtx = new Context(ctx.getCleanClassloader(), Action.META_TEST);
         metaCtx.setDirectoryConfiguration(metaDirCfg);
         metaCtx.setLibrariesToBeIncludedInCompilation(ctx.getLibrariesToBeIncludedInCompilation());
 
-        ExecutionFlow flow = ExecutionFlow.build(metaCtx);
-        Result metaResult = flow.run();
+        ResultBuilder metaResult = new ResultBuilder(metaCtx, new GradeCalculator());
+
+        ExecutionFlow flow = ExecutionFlow.build(metaCtx, metaResult, new EmptyWriter());
+        flow.run();
 
         return metaResult;
     }

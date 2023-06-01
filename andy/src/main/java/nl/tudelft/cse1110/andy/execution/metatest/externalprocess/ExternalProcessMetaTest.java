@@ -35,7 +35,7 @@ public class ExternalProcessMetaTest extends AbstractMetaTest {
         this.startExternalProcess();
 
         /* Run the test suite using our existing JUnit runner */
-        Context jUnitContext = Context.build(Action.META_TEST);
+        Context jUnitContext = new Context(Action.META_TEST);
         jUnitContext.setRunConfiguration(new DefaultRunConfiguration(ctx.getRunConfiguration().classesUnderTest()));
         ResultBuilder metaResultBuilder = new ResultBuilder(null, null);
 

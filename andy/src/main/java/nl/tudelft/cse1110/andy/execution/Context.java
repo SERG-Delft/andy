@@ -6,6 +6,7 @@ import nl.tudelft.cse1110.andy.execution.externalprocess.EmptyExternalProcess;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.execution.mode.ModeActionSelector;
 import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
+import nl.tudelft.cse1110.andy.writer.weblab.SubmissionMetaData;
 import org.jacoco.core.runtime.IRuntime;
 import org.jacoco.core.runtime.RuntimeData;
 
@@ -18,41 +19,23 @@ public class Context {
     private RunConfiguration runConfiguration;
     private List<String> fullClassNames;
     private ExecutionFlow flow;
-    private final Action action;
+    private Action action;
     private ModeActionSelector modeActionSelector;
     private ExternalProcess externalProcess;
+    private SubmissionMetaData submissionMetaData;
     private ClassLoader classloaderWithStudentsCode;
     private List<String> librariesToBeIncludedInCompilation;
     private IRuntime jacocoRuntime;
     private RuntimeData jacocoData;
 
-    private Context(ClassLoader cleanClassloader, Action action, DirectoryConfiguration directoryConfiguration, List<String> librariesToBeIncludedInCompilation) {
+    public Context(Action action) {
+        this(Thread.currentThread().getContextClassLoader(), action);
+    }
+
+    public Context(ClassLoader cleanClassloader, Action action) {
         this.cleanClassloader = cleanClassloader;
         this.action = action;
-        this.directoryConfiguration = directoryConfiguration;
-        this.librariesToBeIncludedInCompilation = librariesToBeIncludedInCompilation;
         this.externalProcess = new EmptyExternalProcess();
-    }
-
-    public static Context build(Action action, String workDir, String outputDir, List<String> librariesToBeIncludedInCompilation) {
-        Context ctx = new Context(
-                Thread.currentThread().getContextClassLoader(),
-                action,
-                new DirectoryConfiguration(workDir, outputDir),
-                librariesToBeIncludedInCompilation);
-
-        return ctx;
-    }
-    public static Context build(Action action, String workDir, String outputDir) {
-        return build(action, workDir, outputDir, null);
-    }
-
-    public static Context build(ClassLoader cleanClassloader, Action action) {
-        return new Context(cleanClassloader, action, null, null);
-    }
-
-    public static Context build(Action action) {
-        return build(Thread.currentThread().getContextClassLoader(), action);
     }
 
     public void setFlow(ExecutionFlow flow) {this.flow = flow;}
@@ -116,6 +99,14 @@ public class Context {
         externalProcess.kill();
     }
 
+    public SubmissionMetaData getSubmissionMetaData() {
+        return submissionMetaData;
+    }
+
+    public void setSubmissionMetaData(SubmissionMetaData submissionMetaData) {
+        this.submissionMetaData = submissionMetaData;
+    }
+
     public void setClassloaderWithStudentsCode(ClassLoader classloaderWithStudentsCode) {
         this.classloaderWithStudentsCode = classloaderWithStudentsCode;
     }
@@ -152,5 +143,4 @@ public class Context {
     public RuntimeData getJacocoData() {
         return jacocoData;
     }
-
 }

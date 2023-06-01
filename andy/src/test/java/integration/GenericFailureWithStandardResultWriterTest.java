@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.not;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static unit.writer.standard.StandardResultTestAssertions.*;
+import static testutils.StandardResultTestAssertions.*;
 
 public class GenericFailureWithStandardResultWriterTest extends IntegrationTestBase {
     protected Context ctx = mock(Context.class);

@@ -19,7 +19,7 @@ import static nl.tudelft.cse1110.andy.utils.FilesUtils.*;
 import static org.assertj.core.api.Assertions.not;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
-import static unit.writer.standard.StandardResultTestAssertions.*;
+import static testutils.StandardResultTestAssertions.*;
 
 public class JUnitTestsTest {
 

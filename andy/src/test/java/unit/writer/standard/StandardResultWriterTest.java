@@ -18,6 +18,7 @@ import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import testutils.ResultTestDataBuilder;
+import testutils.StandardResultTestAssertions;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -28,7 +29,7 @@ import static nl.tudelft.cse1110.andy.utils.FilesUtils.concatenateDirectories;
 import static nl.tudelft.cse1110.andy.utils.FilesUtils.readFile;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static unit.writer.standard.StandardResultTestAssertions.*;
+import static testutils.StandardResultTestAssertions.*;
 
 public class StandardResultWriterTest {
     protected Context ctx = mock(Context.class);

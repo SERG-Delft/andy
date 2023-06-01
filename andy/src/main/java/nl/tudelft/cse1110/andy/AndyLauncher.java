@@ -1,9 +1,6 @@
 package nl.tudelft.cse1110.andy;
 
-import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
-import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
-import nl.tudelft.cse1110.andy.result.Result;
 import nl.tudelft.cse1110.andy.writer.standard.StandardResultWriter;
 
 import java.util.Arrays;
@@ -19,15 +16,7 @@ public class AndyLauncher {
 
         String dir = System.getProperty("user.dir");
 
-        StandardResultWriter writer = new StandardResultWriter();
-        Context ctx = Context.build(getAction(args[0]), dir, dir);
-
-        try {
-            Result result = new Andy().run(ctx);
-            writer.write(ctx, result);
-        } catch (Throwable e) {
-            writer.uncaughtError(ctx, e);
-        }
+        new Andy(getAction(args[0]), dir, dir, new StandardResultWriter()).run();
     }
 
     private static Action getAction(String action) {

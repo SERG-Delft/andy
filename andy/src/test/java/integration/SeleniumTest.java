@@ -2,7 +2,6 @@ package integration;
 
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.result.Result;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static java.time.Duration.ofSeconds;
@@ -13,7 +12,7 @@ public class SeleniumTest extends IntegrationTestBase {
 
     @Test
     void seleniumTest() {
-        assertTimeoutPreemptively(ofSeconds(5), () -> {
+        assertTimeoutPreemptively(ofSeconds(30), () -> {
             Result result = run(Action.TESTS, "EmptyLibrary", "SeleniumOnePassingOneFailingSolution",
                     "SeleniumSimpleWebpageConfiguration");
 

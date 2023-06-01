@@ -2,7 +2,7 @@ package unit.writer.weblab;
 
 import org.assertj.core.api.Condition;
 
-import static unit.writer.standard.StandardResultTestAssertions.containsString;
+import static testutils.StandardResultTestAssertions.containsString;
 
 public class WebLabEditorFeedbackJsonTestAssertions {
 

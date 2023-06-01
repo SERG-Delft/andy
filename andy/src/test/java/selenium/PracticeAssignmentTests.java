@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.not;
-import static unit.writer.standard.StandardResultTestAssertions.*;
+import static testutils.StandardResultTestAssertions.*;
 
 @Tag("ci")
 public class PracticeAssignmentTests extends WebLabSeleniumTestBase {

@@ -1,22 +1,26 @@
 package nl.tudelft.cse1110.andy.aws;
 
-import nl.tudelft.cse1110.andy.result.Result;
-
 public class AWSResult {
 
     private final String textOutput;
-    private final Result result;
+    private final String weblab;
+    private final String highlights;
 
-    public AWSResult(String textOutput, Result result) {
+    public AWSResult(String textOutput, String weblab, String highlights) {
         this.textOutput = textOutput;
-        this.result = result;
+        this.weblab = weblab;
+        this.highlights = highlights;
     }
 
     public String getTextOutput() {
         return textOutput;
     }
 
-    public Result getResult() {
-        return result;
+    public String getWeblab() {
+        return weblab;
+    }
+
+    public String getHighlights() {
+        return highlights;
     }
 }

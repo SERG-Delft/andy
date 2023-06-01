@@ -46,6 +46,7 @@ public class WebLabResultWriter extends StandardResultWriter {
 
         writeResultsXmlFile(ctx, result);
         writeEditorFeedbackJson(ctx, result);
+        writeAnalyticsFile(ctx, result);
     }
 
     private void writeResultsXmlFile(Context ctx, Result result) {
@@ -101,9 +102,17 @@ public class WebLabResultWriter extends StandardResultWriter {
         appendMetaScore(doc, metaElement, "Code checks", result.getCodeChecks().getNumberOfPassedChecks());
         appendMetaScore(doc, metaElement, "Meta tests", result.getMetaTests().getPassedMetaTests());
 
-        result.getCodeChecks().getCheckResults().forEach(check -> appendMetaScore(doc, metaElement, check.getDescription(), check.passed() ? 1 : 0));
-        result.getRequiredCodeChecks().getCheckResults().forEach(check -> appendMetaScore(doc, metaElement, check.getDescription(), check.passed() ? 1 : 0));
-        result.getMetaTests().getMetaTestResults().forEach(metaTest -> appendMetaScore(doc, metaElement, metaTest.getName(), metaTest.succeeded() ? 1 : 0));
+        result.getCodeChecks().getCheckResults().forEach(check -> {
+            appendMetaScore(doc, metaElement, check.getDescription(), check.passed() ? 1 : 0);
+        });
+
+        result.getRequiredCodeChecks().getCheckResults().forEach(check -> {
+            appendMetaScore(doc, metaElement, check.getDescription(), check.passed() ? 1 : 0);
+        });
+
+        result.getMetaTests().getMetaTestResults().forEach(metaTest -> {
+            appendMetaScore(doc, metaElement, metaTest.getName(), metaTest.succeeded() ? 1 : 0);
+        });
 
         testSuitesElement.appendChild(metaElement);
     }
@@ -203,4 +212,20 @@ public class WebLabResultWriter extends StandardResultWriter {
         return ranges;
     }
 
+
+    private void writeAnalyticsFile(Context ctx, Result result) {
+        if (ctx.getModeActionSelector() == null || !ctx.getModeActionSelector().shouldGenerateAnalytics())
+            return;
+
+        Submission submission = new Submission(
+                ctx.getAction(),
+                ctx.getSubmissionMetaData(),
+                result
+        );
+
+        String json = new Gson().toJson(submission);
+
+        File file = new File(concatenateDirectories(ctx.getDirectoryConfiguration().getOutputDir(), "post.json"));
+        writeToFile(file, json);
+    }
 }
