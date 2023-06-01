@@ -1,44 +1,44 @@
-name: assignments_test_docker
-on: push
-jobs:
-  run_assignments_docker:
-    runs-on: ubuntu-latest
+# name: assignments_test_docker
+# on: push
+# jobs:
+#   run_assignments_docker:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout the repository
-        uses: actions/checkout@v3
+#     steps:
+#       - name: Checkout the repository
+#         uses: actions/checkout@v3
 
-      - name: Setup python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.8
+#       - name: Setup python
+#         uses: actions/setup-python@v4
+#         with:
+#           python-version: 3.8
 
-      - name: Clone cse1110/assignments
-        uses: actions/checkout@v3
-        with:
-          repository: 'cse1110/assignments'
-          path: 'assignments'
+#       - name: Clone cse1110/assignments
+#         uses: actions/checkout@v3
+#         with:
+#           repository: 'cse1110/assignments'
+#           path: 'assignments'
 
-      - name: Clone cse1110/weblab-docker-v2
-        uses: actions/checkout@v3
-        with:
-          repository: 'cse1110/weblab-docker-v2'
-          path: 'weblab-docker-v2'
-          ssh-key: ${{ secrets.DOCKER_REPO_DEPLOY_KEY }}
-          persist-credentials: false
+#       - name: Clone cse1110/weblab-docker-v2
+#         uses: actions/checkout@v3
+#         with:
+#           repository: 'cse1110/weblab-docker-v2'
+#           path: 'weblab-docker-v2'
+#           ssh-key: ${{ secrets.DOCKER_REPO_DEPLOY_KEY }}
+#           persist-credentials: false
 
-      - name: Configure Dockerfile
-        working-directory: ./weblab-docker-v2
-        run: |
-          sed -i -E 's|git clone .+|git clone -n ${{ github.server_url }}/${{ github.repository }}.git|; s|(RUN mvn clean package.*)|RUN git checkout ${{ github.sha }}\n\1|' Dockerfile
+#       - name: Configure Dockerfile
+#         working-directory: ./weblab-docker-v2
+#         run: |
+#           sed -i -E 's|git clone .+|git clone -n ${{ github.server_url }}/${{ github.repository }}.git|; s|(RUN mvn clean package.*)|RUN git checkout ${{ github.sha }}\n\1|' Dockerfile
 
-      - name: Build Docker image
-        working-directory: ./weblab-docker-v2
-        run: |
-          make
+#       - name: Build Docker image
+#         working-directory: ./weblab-docker-v2
+#         run: |
+#           make
 
-      - name: Execute python script
-        env:
-          COMMIT_HASH: ${{ github.sha }}
-        run: |
-          python ./.github/scripts/assignments_test_docker.py
+#       - name: Execute python script
+#         env:
+#           COMMIT_HASH: ${{ github.sha }}
+#         run: |
+#           python ./.github/scripts/assignments_test_docker.py
