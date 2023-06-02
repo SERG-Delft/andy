@@ -33,7 +33,10 @@ jobs:
         run: mvn clean install
 
       - name: Run Andy unit tests
-        run: mvn -DexcludedGroups="ci" test -pl andy
+        run: mvn -DexcludedGroups="ci,assignments" test -pl andy
 
       - name: Run Andy slow tests
         run: mvn -Dgroups="ci" test -pl andy
+
+      - name: Run Andy in all assignments
+        run: mvn -Dgroups="assignments" test -pl andy

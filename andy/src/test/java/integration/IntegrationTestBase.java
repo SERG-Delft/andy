@@ -93,11 +93,22 @@ public abstract class IntegrationTestBase {
     protected void addSteps(ExecutionFlow flow) {
     }
 
+    private static boolean containsAbsolutePath(String file) {
+        String fileSeparator = System.getProperty("file.separator");
+        return file.contains(fileSeparator);
+    }
+
     protected void copyFiles(String libraryFile, String solutionFile) {
         String dirWithLibrary = resourceFolder("/grader/fixtures/Library/");
         String dirWithSolution = resourceFolder("/grader/fixtures/Solution/");
-        File library = new File(dirWithLibrary +  libraryFile + ".java");
-        File solution = new File(dirWithSolution + solutionFile + ".java");
+
+        File library = containsAbsolutePath(libraryFile) ?
+                new File(libraryFile) :
+                new File(dirWithLibrary +  libraryFile + ".java");
+
+        File solution = containsAbsolutePath(solutionFile) ?
+                new File(solutionFile) :
+                new File(dirWithSolution + solutionFile + ".java");
 
         String dirToCopy = workDir.toString();
 
@@ -109,9 +120,12 @@ public abstract class IntegrationTestBase {
     }
 
     protected void copyConfigurationFile(String configurationFile) {
-        String dirWithConfiguration = resourceFolder("/grader/fixtures/Config/");
+        File config;
 
-        File config = new File(dirWithConfiguration + configurationFile + ".java");
+        config = containsAbsolutePath(configurationFile) ?
+                new File(configurationFile) :
+                new File(resourceFolder("/grader/fixtures/Config/") + configurationFile + ".java");
+
         File copied = FilesUtils.copyFile(config.getAbsolutePath(), workDir.toString()).toFile();
 
         copied.renameTo(new File(copied.getParentFile() + "/Configuration.java"));

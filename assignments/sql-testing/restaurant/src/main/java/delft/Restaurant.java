@@ -4,6 +4,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
+
 import org.junit.jupiter.api.*;
 
 class Employee {
@@ -344,7 +346,7 @@ class RestaurantDao {
 
 class RestaurantDaoTemplate {
 
-	protected static final String DB_CONNECTION = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1";
+	protected static final String DB_CONNECTION = "jdbc:h2:mem:test" + random() + ";DB_CLOSE_DELAY=-1";
 	protected static final String DB_USER = "";
 	protected static final String DB_PASSWORD = "";
 
@@ -360,6 +362,9 @@ class RestaurantDaoTemplate {
 		connection.commit();
 	}
 
+	private static int random() {
+		return new Random().nextInt();
+	}
 
 	@BeforeEach
 	void openConnectionAndCleanup() throws SQLException {
