@@ -10,7 +10,7 @@ public class AndyOnWebLab {
 
     public static void main(String[] args) {
         if(args.length != 3) {
-            System.out.println("Andy needs six parameters: <ACTION/TASK_MODE> <WORK DIRECTORY> <OUTPUT DIRECTORY> ");
+            System.out.println("Andy needs 3 parameters: <ACTION/TASK_MODE> <WORK DIRECTORY> <OUTPUT DIRECTORY> ");
             System.exit(-1);
         }
 
