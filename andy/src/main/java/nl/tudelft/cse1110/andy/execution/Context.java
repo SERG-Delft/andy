@@ -26,14 +26,33 @@ public class Context {
     private IRuntime jacocoRuntime;
     private RuntimeData jacocoData;
 
-    public Context(Action action) {
-        this(Thread.currentThread().getContextClassLoader(), action);
-    }
-
-    public Context(ClassLoader cleanClassloader, Action action) {
+    private Context(ClassLoader cleanClassloader, Action action, DirectoryConfiguration directoryConfiguration, List<String> librariesToBeIncludedInCompilation) {
         this.cleanClassloader = cleanClassloader;
         this.action = action;
+        this.directoryConfiguration = directoryConfiguration;
+        this.librariesToBeIncludedInCompilation = librariesToBeIncludedInCompilation;
         this.externalProcess = new EmptyExternalProcess();
+    }
+
+    public static Context build(Action action, String workDir, String outputDir, List<String> librariesToBeIncludedInCompilation) {
+        Context ctx = new Context(
+                Thread.currentThread().getContextClassLoader(),
+                action,
+                new DirectoryConfiguration(workDir, outputDir),
+                librariesToBeIncludedInCompilation);
+
+        return ctx;
+    }
+    public static Context build(Action action, String workDir, String outputDir) {
+        return build(action, workDir, outputDir, null);
+    }
+
+    public static Context build(ClassLoader cleanClassloader, Action action) {
+        return new Context(cleanClassloader, action, null, null);
+    }
+
+    public static Context build(Action action) {
+        return build(Thread.currentThread().getContextClassLoader(), action);
     }
 
     public void setFlow(ExecutionFlow flow) {this.flow = flow;}
@@ -133,4 +152,5 @@ public class Context {
     public RuntimeData getJacocoData() {
         return jacocoData;
     }
+
 }
