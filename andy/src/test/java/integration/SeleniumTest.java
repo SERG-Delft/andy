@@ -9,7 +9,6 @@ import static java.time.Duration.ofSeconds;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 
-@Disabled
 public class SeleniumTest extends IntegrationTestBase {
 
     @Test
