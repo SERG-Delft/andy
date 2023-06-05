@@ -3,9 +3,9 @@ package delft;
 import java.util.Iterator;
 import java.util.TreeSet;
 
-class MathArrays {
+class MathArraysPBT {
 
-	private MathArrays() {
+	private MathArraysPBT() {
 		// Empty constructor
 	}
 
