@@ -30,7 +30,7 @@ jobs:
           restore-keys: ${{ matrix.job.os }}-m2
 
       - name: Compile and install everything
-        run: mvn clean install
+        run: mvn clean install -Dmaven.test.skip=true
 
       - name: Run Andy unit tests
         run: mvn -DexcludedGroups="ci,assignments" test -pl andy

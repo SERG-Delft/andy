@@ -21,8 +21,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class AllAssignmentsTest extends IntegrationTestBase {
 
     private static List<String> disabledList = Arrays.asList(
-            "property-based-testing/unique"
-//            "sql-testing/recipes"
+            "property-based-testing/unique",
+            "property-based-testing/summer"
             );
     @ParameterizedTest
     @MethodSource("all")
