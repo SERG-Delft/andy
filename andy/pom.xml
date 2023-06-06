@@ -249,40 +249,6 @@
             </plugin>
 
             <plugin>
-                <groupId>org.pitest</groupId>
-                <artifactId>pitest-maven</artifactId>
-                <version>1.9.8</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.pitest</groupId>
-                        <artifactId>pitest-junit5-plugin</artifactId>
-                        <version>1.1.0</version>
-                    </dependency>
-                </dependencies>
-                <configuration>
-                    <jvmArgs>
-                        <arg>-ea</arg>
-                    </jvmArgs>
-                    <verbose>false</verbose>
-                    <targetClasses>
-                        <param>nl.tudelft.cse1110.*</param>
-                    </targetClasses>
-                    <targetTests>
-                        <param>nl.tudelft.cse1110.*</param>
-                    </targetTests>
-                    <mutators>
-                        <mutator>CONDITIONALS_BOUNDARY</mutator>
-                        <mutator>INCREMENTS</mutator>
-                        <mutator>INVERT_NEGS</mutator>
-                        <mutator>MATH</mutator>
-                        <!--                        <mutator>NEGATE_CONDITIONALS</mutator>-->
-                        <!--                        <mutator>RETURN_VALS</mutator>-->
-                        <!--                        <mutator>VOID_METHOD_CALLS</mutator>-->
-                    </mutators>
-                </configuration>
-            </plugin>
-
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>3.2.0</version>

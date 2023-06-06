@@ -59,10 +59,6 @@
                 </dependencies>
                 <configuration>
                     <enableAssertions>true</enableAssertions>
-                    <includes>
-                        <include>**/*Test.java</include>
-                        <include>%regex[.*Test(\d?).*]</include>
-                    </includes>
                     <reportFormat>plain</reportFormat>
                     <consoleOutputReporter>
                         <disable>true</disable>
