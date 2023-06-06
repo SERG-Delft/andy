@@ -33,7 +33,7 @@ jobs:
         run: mvn clean install -Dmaven.test.skip=true
 
       - name: Run Andy unit tests
-        run: mvn test -pl andy -DexcludedGroups=ci,weblab
+        run: mvn test -pl andy -DexcludedGroups=assignments,weblab
 
 #      - name: Run Weblab tests
 #        run: mvn test -pl andy -Dgroups=weblab
