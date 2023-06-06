@@ -19,9 +19,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SecurityTest extends IntegrationTestBase {
     @ParameterizedTest
     @CsvSource({
-            "OtherPackageName,package name of your solution",
-            "InstantiateConfiguration,Accessing the task configuration",
-            "UseReflection,Using reflection"
+            "SecurityOtherPackageName,package name of your solution",
+            "SecurityInstantiateConfiguration,Accessing the task configuration",
+            "SecurityUseReflection,Using reflection"
     })
     void failingSecurityCheck(String exploitFile, String expectedMessage) {
         Result result = run(Action.FULL_WITHOUT_HINTS, "EmptyLibrary", "securitytests/"+exploitFile, "EmptyConfiguration");
