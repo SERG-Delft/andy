@@ -257,9 +257,6 @@
                         <include>**/*Test.java</include>
                         <include>%regex[.*Test(\d?).*]</include>
                     </includes>
-                    <excludes>
-                        <exclude>selenium/*</exclude>
-                    </excludes>
                 </configuration>
             </plugin>
 
