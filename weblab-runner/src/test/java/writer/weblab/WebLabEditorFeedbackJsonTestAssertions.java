@@ -1,6 +1,7 @@
 package writer.weblab;
 
 import org.assertj.core.api.Condition;
+import unit.writer.standard.StandardResultTestAssertions;
 
 public class WebLabEditorFeedbackJsonTestAssertions {
 
