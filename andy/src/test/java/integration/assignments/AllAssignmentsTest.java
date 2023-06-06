@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Tag("assignments")
@@ -41,7 +42,7 @@ public class AllAssignmentsTest extends IntegrationTestBase {
                 solutionFile,
                 configurationFile);
 
-        assertThat(result.hasFailed()).isFalse();
+        assertThat(result.hasFailed()).as(format("exercise %s", directory)).isFalse();
         assertThat(result.getFinalGrade()).isEqualTo(100);
     }
 
