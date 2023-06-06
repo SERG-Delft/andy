@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.not;
 import static unit.writer.standard.StandardResultTestAssertions.*;
 
-@Tag("ci")
+@Tag("weblab")
 public class PracticeAssignmentTests extends WebLabSeleniumTestBase {
 
     private static final String ASSIGNMENT_PRACTICE = "89104";
