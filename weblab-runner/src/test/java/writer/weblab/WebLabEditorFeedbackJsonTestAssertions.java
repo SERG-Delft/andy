@@ -1,4 +1,4 @@
-package unit.writer.weblab;
+package writer.weblab;
 
 import org.assertj.core.api.Condition;
 

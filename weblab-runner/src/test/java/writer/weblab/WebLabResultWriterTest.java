@@ -1,4 +1,4 @@
-package unit.writer.weblab;
+package writer.weblab;
 
 import nl.tudelft.cse1110.andy.result.CompilationErrorInfo;
 import nl.tudelft.cse1110.andy.result.CoverageLineByLine;
@@ -19,7 +19,7 @@ import static nl.tudelft.cse1110.andy.utils.FilesUtils.concatenateDirectories;
 import static nl.tudelft.cse1110.andy.utils.FilesUtils.readFile;
 import static org.assertj.core.api.Assertions.allOf;
 import static org.assertj.core.api.Assertions.assertThat;
-import static unit.writer.weblab.WebLabEditorFeedbackJsonTestAssertions.*;
+import static writer.weblab.WebLabEditorFeedbackJsonTestAssertions.*;
 
 public class WebLabResultWriterTest extends StandardResultWriterTest {
 

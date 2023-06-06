@@ -1,5 +1,6 @@
-package integration;
+package writer.weblab;
 
+import integration.IntegrationTestBase;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.writer.ResultWriter;
 import nl.tudelft.cse1110.andy.writer.standard.CodeSnippetGenerator;
