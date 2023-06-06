@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static unit.writer.standard.StandardResultTestAssertions.compilationSuccess;
 import static unit.writer.standard.StandardResultTestAssertions.finalGrade;
 
-@Tag("weblab")
+@Tag("selenium")
 public class AllExerciseTests extends WebLabSeleniumTestBase {
 
     protected static final String BASE_ASSIGNMENT_ID = "91800";
