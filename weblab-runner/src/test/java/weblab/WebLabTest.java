@@ -1,4 +1,4 @@
-package writer.weblab;
+package weblab;
 
 import integration.IntegrationTestBase;
 import nl.tudelft.cse1110.andy.execution.mode.Action;

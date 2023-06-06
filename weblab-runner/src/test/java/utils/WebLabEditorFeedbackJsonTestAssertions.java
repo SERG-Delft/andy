@@ -1,4 +1,4 @@
-package writer.weblab;
+package utils;
 
 import org.assertj.core.api.Condition;
 import unit.writer.standard.StandardResultTestAssertions;

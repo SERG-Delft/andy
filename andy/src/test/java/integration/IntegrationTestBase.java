@@ -5,9 +5,7 @@ import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
-import nl.tudelft.cse1110.andy.grade.GradeCalculator;
 import nl.tudelft.cse1110.andy.result.Result;
-import nl.tudelft.cse1110.andy.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
 import nl.tudelft.cse1110.andy.writer.EmptyWriter;
 import nl.tudelft.cse1110.andy.writer.ResultWriter;
@@ -88,7 +86,6 @@ public abstract class IntegrationTestBase {
     public Result run(Action action, String libraryFile, String solutionFile) {
         return this.run(action, libraryFile, solutionFile, (String) null);
     }
-
 
     protected void addSteps(ExecutionFlow flow) {
     }
