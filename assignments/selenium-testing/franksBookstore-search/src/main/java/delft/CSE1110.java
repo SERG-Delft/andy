@@ -6,7 +6,11 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 class CSE1110 {
     public static WebDriver getDriver() {
-        String url = "file://" + System.getProperty("user.dir") + "/BookStore/index.html";
+        String dir = System.getProperty("assignment.directory")==null ?
+                System.getProperty("user.dir") :
+                System.getProperty("assignment.directory");
+
+        String url = "file://" + dir + "/BookStore/index.html";
 
         WebDriver driver = new HtmlUnitDriver(BrowserVersion.FIREFOX, true);
         driver.get(url);

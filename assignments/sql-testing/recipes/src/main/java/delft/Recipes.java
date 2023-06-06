@@ -8,6 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 
 class Recipe {
@@ -136,7 +137,7 @@ class RecipeDao {
 }
 
 class RecipeDaoTemplate {
-    protected static final String DB_CONNECTION = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1";
+    protected static final String DB_CONNECTION = "jdbc:h2:mem:test" + random() + ";DB_CLOSE_DELAY=-1";
     protected static final String DB_USER = "";
     protected static final String DB_PASSWORD = "";
 
@@ -164,4 +165,8 @@ class RecipeDaoTemplate {
     protected void close() throws SQLException {
         connection.close();
     }
+
+	private static int random() {
+		return new Random().nextInt();
+	}
 }

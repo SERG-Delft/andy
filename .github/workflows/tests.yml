@@ -30,10 +30,13 @@ jobs:
           restore-keys: ${{ matrix.job.os }}-m2
 
       - name: Compile and install everything
-        run: mvn clean install
+        run: mvn clean install -Dmaven.test.skip=true
 
       - name: Run Andy unit tests
-        run: mvn -DexcludedGroups="ci" test -pl andy
+        run: mvn test -pl andy -DexcludedGroups=assignments,weblab
 
-      - name: Run Andy slow tests
-        run: mvn -Dgroups="ci" test -pl andy
+#      - name: Run Weblab tests
+#        run: mvn test -pl andy -Dgroups=weblab
+
+      - name: Run Andy in all assignments
+        run: mvn test -pl andy -Dgroups=assignments

@@ -11,7 +11,7 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
 
-class SolutionTest extends RecipeDaoTemplate {
+class RecipesTest extends RecipeDaoTemplate {
     @ParameterizedTest(name = "{0}")
     @MethodSource("getQuickestGenerator")
     public void getQuickest(String description, List<Recipe> recipes, int quickestDessertTime) {
