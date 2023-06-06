@@ -24,7 +24,7 @@ public class SecurityTest extends IntegrationTestBase {
             "SecurityUseReflection,Using reflection"
     })
     void failingSecurityCheck(String exploitFile, String expectedMessage) {
-        Result result = run(Action.FULL_WITHOUT_HINTS, "EmptyLibrary", "securitytests/"+exploitFile, "EmptyConfiguration");
+        Result result = run(Action.FULL_WITHOUT_HINTS, "EmptyLibrary", exploitFile, "EmptyConfiguration");
 
         assertThat(result.getCompilation().successful()).isFalse();
         assertThat(result.getCompilation().getErrors())
