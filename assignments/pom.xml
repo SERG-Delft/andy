@@ -136,15 +136,6 @@
                 </configuration>
             </plugin>
 
-
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven.surefire.version}</version>
-                <configuration>
-                    <enableAssertions>true</enableAssertions>
-                </configuration>
-            </plugin>
-
             <plugin>
                 <groupId>nl.tudelft.cse1110.andy</groupId>
                 <artifactId>maven-plugin</artifactId>

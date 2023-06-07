@@ -1,8 +1,7 @@
-package unit.writer.weblab;
+package utils;
 
 import org.assertj.core.api.Condition;
-
-import static unit.writer.standard.StandardResultTestAssertions.containsString;
+import unit.writer.standard.StandardResultTestAssertions;
 
 public class WebLabEditorFeedbackJsonTestAssertions {
 
@@ -31,7 +30,7 @@ public class WebLabEditorFeedbackJsonTestAssertions {
     }
 
     private static Condition<String> lineUnderlined(int start, int end, String message, String file, String purpose) {
-        return containsString(String.format("{\"severity\":\"%s\"," +
+        return StandardResultTestAssertions.containsString(String.format("{\"severity\":\"%s\"," +
                                             "\"type\":\"Marker\"," +
                                             "\"file\":\"%s\"," +
                                             "\"startLineNumber\":%d," +
@@ -41,7 +40,7 @@ public class WebLabEditorFeedbackJsonTestAssertions {
     }
 
     private static Condition<String> lineHighlighted(int start, int end, String message, String file, String colour) {
-        return containsString(String.format("{\"className\":\"background-%s\"," +
+        return StandardResultTestAssertions.containsString(String.format("{\"className\":\"background-%s\"," +
                                             "\"type\":\"Decoration\"," +
                                             "\"file\":\"%s\"," +
                                             "\"startLineNumber\":%d," +

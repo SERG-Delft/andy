@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.result.CompilationErrorInfo;
 import nl.tudelft.cse1110.andy.result.Result;
+import nl.tudelft.cse1110.andy.utils.FilesUtils;
 import nl.tudelft.cse1110.andy.writer.standard.CodeSnippetGenerator;
 import nl.tudelft.cse1110.andy.writer.standard.RandomAsciiArtGenerator;
 import nl.tudelft.cse1110.andy.writer.standard.StandardResultWriter;
@@ -24,9 +25,6 @@ import java.io.File;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
-
-import static nl.tudelft.cse1110.andy.utils.FilesUtils.concatenateDirectories;
-import static nl.tudelft.cse1110.andy.utils.FilesUtils.writeToFile;
 
 public class WebLabResultWriter extends StandardResultWriter {
 
@@ -51,8 +49,8 @@ public class WebLabResultWriter extends StandardResultWriter {
     private void writeResultsXmlFile(Context ctx, Result result) {
         String xml = buildResultsXml(result);
 
-        File resultsXml = new File(concatenateDirectories(ctx.getDirectoryConfiguration().getOutputDir(), "results.xml"));
-        writeToFile(resultsXml, xml);
+        File resultsXml = new File(FilesUtils.concatenateDirectories(ctx.getDirectoryConfiguration().getOutputDir(), "results.xml"));
+        FilesUtils.writeToFile(resultsXml, xml);
     }
 
     private String buildResultsXml(Result result) {
@@ -139,9 +137,9 @@ public class WebLabResultWriter extends StandardResultWriter {
         List<EditorFeedbackRange> editorFeedbackRanges = buildEditorFeedback(result);
         String json = new Gson().toJson(editorFeedbackRanges);
 
-        File editorFeedbackFile = new File(concatenateDirectories(ctx.getDirectoryConfiguration().getOutputDir(),
+        File editorFeedbackFile = new File(FilesUtils.concatenateDirectories(ctx.getDirectoryConfiguration().getOutputDir(),
                 "editor-feedback.json"));
-        writeToFile(editorFeedbackFile, json);
+        FilesUtils.writeToFile(editorFeedbackFile, json);
     }
 
     private List<EditorFeedbackRange> buildEditorFeedback(Result result) {
