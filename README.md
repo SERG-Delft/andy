@@ -394,6 +394,24 @@ public ExternalProcess externalProcess() {
 
 If this method is not overridden, the external process functionality is disabled.
 
+## Developing Andy
+
+Andy uses a multi-module Maven configuration. IntelliJ should recognize it right away (make sure your Maven plugin is enabled). The Maven tab in IntelliJ is also a useful one in case you need to refresh things.
+
+In the command-line, a great way to see if Andy is working is to install and run all the tests. Call it from the root directory of the project:
+
+```
+mvn clean install -DexcludedGroups=selenium
+```
+
+Other useful commands:
+
+* `mvn test -pl andy -DexcludedGroups=selenium` runs all tests, with the exception of tests you don't have credentials to run
+* `mvn test -pl andy -DexcludedGroups=assignments` runs all fast tests in Andy's core
+* `mvn test -pl andy -Dgroups=assignments` ensures that all the solutions of our assignments are assessed to 100/100
+* `mvn -pl andy package -DskipTests` creates a package of Andy core
+* `mvn -pl weblab-runner package -DskipTests` creates a package of Weblab runner
+
 ## Team
 
 Andy was envisioned by Maurício Aniche and Frank Mulder.
