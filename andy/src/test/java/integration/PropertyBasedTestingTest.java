@@ -15,10 +15,10 @@ public class PropertyBasedTestingTest extends IntegrationTestBase {
         assertThat(result.isFullyCorrect()).isFalse();
         assertThat(result.getFinalGrade()).isEqualTo(84);
 
-        // this one is running in around 31-35 seconds
+        // this one is running in around 31-35 seconds locally, and 71-75 in CI
         // let's use this test as a way to ensure we have no regressions
-        // let's keep it at least under 40 seconds
-        assertThat(result.getTimeInSeconds()).isLessThan(40);
+        // let's keep it at least under 80 seconds
+        assertThat(result.getTimeInSeconds()).isLessThan(80);
     }
 
 }
