@@ -2,12 +2,15 @@ package integration;
 
 import nl.tudelft.cse1110.andy.result.Result;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PropertyBasedTestingTest extends IntegrationTestBase {
 
     @Test
+    @EnabledOnOs(OS.LINUX)
     void slow_student_solution_in_2023_midterm() {
         Result result = run("Midterm2023PBTLibrary", "Midterm2023PBTTest", "Midterm2023PBTConfiguration");
 
