@@ -16,9 +16,8 @@ RUN apt update \
 
 SHELL ["/bin/bash", "-c"]
 
-# Download the andy code from the remote git repository
-RUN git clone --depth 1 https://github.com/cse1110/andy.git
-
+# Copy the full repo to the docker image
+COPY ../ andy/
 
 # Compile and install all dependencies
 WORKDIR /home/andy/
