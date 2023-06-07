@@ -22,10 +22,7 @@ COPY ../ andy/
 # Compile and install all dependencies
 WORKDIR /home/andy/
 RUN mvn clean install
-
-# Generate the JAR file from the andy code
-WORKDIR /home/andy/weblab-runner
-RUN mvn package -Djar.finalName=andy -DskipTests
+RUN mvn package -pl weblab-runner -Djar.finalName=andy -DskipTests
 
 ARG GNAME=student
 ARG GID=1000
