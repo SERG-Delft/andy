@@ -38,13 +38,43 @@ The screenshot below shows the final part of the assessment report, containing t
 
 ## Usage
 
-The easiest way to run Andy is via the [Maven plugin](https://mvnrepository.com/artifact/io.github.cse1110/andy-maven-plugin). All you need is a Maven project with `src/main` and `src/test` folders as well as an Andy configuration file in a `config` folder in the root directory of the project. You can see many examples of exercises configured to use the Maven plugin in the [assignment repository](https://github.com/cse1110/assignments).
+There are different ways you can run Andy.
 
-To run Andy, simply type `mvn andy:run` in the terminal. The output will be printed to the terminal, and JaCoCo and Pitest reports will be saved to the output directory (`andy/`).
+### Using the default launcher
 
-By default, Andy does not show hints when running in practice mode. To view hints, use `mvn andy:run -Dfull=true`.
+If you just want to run Andy on a solution you have in hands (say, as a teacher, you want to double check the assessment of one of the solutions), you can use the default launcher.
 
-TU Delft students can use Andy directly in WebLab, our cloud IDE.
+To that, you first need to install Andy and then build a fat JAR. Then, you run it. Note the three parameters:
+
+* _action_ refers to which action to run (e.g., FULL_WITH_HINTS)
+* _input_ is a directory containing the three files: Solution.java, Configuration.java, and Library.java.
+* _output_ is the directory where the output will be saved
+
+```
+# cleans, compiles, and installs everything
+mvn clean install
+
+# builds a package with the core
+cd andy
+mvn package
+cd ..
+
+# runs it
+java -cp andy/target/andy-1.0.jar nl.tudelft.cse1110.andy.AndyLauncher <action> <input> <output>
+```
+
+### Assignments
+
+If you are just solving one of the exercises inside our `/assignments` folder, you can simply call `mvn andy:run` from any of the exercises. Please, read the README.md under `/assignments`.
+
+### TU Delft students
+
+Andy is available in WebLab. You don't have to do anything.
+
+### Using AWS lambda
+
+As a teacher, you may want to deploy Andy as a AWS lambda. Follow the README file inside the `andy-aws-lambda` folder.
+
 
 ## Configuration
 
@@ -78,9 +108,9 @@ When running Andy via the Maven plugin (`mvn andy:run`), Andy expects the direct
 
 Andy's configuration file is a Java class that extends [`RunConfiguration` from `nl.tudelft.cse1110.andy.config`](https://github.com/cse1110/andy/blob/main/src/main/java/nl/tudelft/cse1110/andy/config/RunConfiguration.java).
 
-You can find an example configuration file [here](https://github.com/cse1110/assignments/blob/577c57e51f9f29b25ad5d0e22e67d65b1f795f45/stubs-fakes-and-mocks/makeReservation/config/Configuration.java).
+Andy generates four grade components (branch coverage, mutation coverage, meta tests, and code checks), which it then combines into a single final grade based on the defined weights.
 
-Andy generates 4 grade components (branch coverage, mutation coverage, meta tests, and code checks), which it then combines into a single final grade based on the defined weights.
+You can find many examples of configuration files under `/andy/src/test/resources/` or under `/assignments`.
 
 #### Weights (required)
 The weights of each grading component must be provided in every configuration file. They are passed as a `HashMap`, with each component (`coverage`, `mutation`, `meta`, and `codechecks`) as the key and its weight as the value. The combined weight of all components must sum up to exactly `1.0`. Unused or ungraded components can have their weight set to 0.

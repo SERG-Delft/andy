@@ -1,5 +1,4 @@
 # Assignments
-This repository contains a local version of [Andy](https://github.com/cse1110/andy) including exercises that can be solved and graded. To use this repository locally you have to [clone it](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) to your own machine.
 
 ## Importing an Exercise
 To open an exercise, you have to choose a folder which corresponds to a category of an exercise. In that folder, there is a list of exercise from which you can choose, each one following the same basic structure. Inside every exercise, there is a `README.md` file explaining the exercise and a `pom.xml` file which contains the full project structure. To work on an exercise, you have to import this `pom.xml` file into your preferred IDE, e.g. IntelliJ or Eclipse.
