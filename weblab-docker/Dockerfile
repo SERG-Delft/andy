@@ -17,11 +17,12 @@ RUN apt update \
 SHELL ["/bin/bash", "-c"]
 
 # Copy the full repo to the docker image
-COPY ../ andy/
+ARG ANDY_DIR=/home/andy/
+COPY . ${ANDY_DIR}
 
 # Compile and install all dependencies
-WORKDIR /home/andy/
-RUN mvn clean install
+WORKDIR ${ANDY_DIR}
+RUN mvn clean install -DskipTests
 RUN mvn package -pl weblab-runner -Djar.finalName=andy -DskipTests
 
 ARG GNAME=student
@@ -33,7 +34,7 @@ RUN set -o errexit -o nounset \
  && addgroup --gid ${GID} "${GNAME}" \
  && useradd --gid ${GID} --home "${UHOME}" --uid ${UID} "${UNAME}"
 
-COPY --chown=${UNAME} user_code/ ${UHOME}
+COPY --chown=${UNAME} ./weblab-docker/user_code/ ${UHOME}
 WORKDIR ${UHOME}
 
 # Move the compiled classes
