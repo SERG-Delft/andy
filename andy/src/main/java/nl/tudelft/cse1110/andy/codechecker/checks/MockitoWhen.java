@@ -32,7 +32,6 @@ public class MockitoWhen extends Check {
     public boolean visit(MethodInvocation mi) {
 
         String methodName = mi.getName().toString();
-
         /**
          * As soon as a Mockito's when happen, we wait for the next method call.
          * We know that a when() method was just called because of the inWhenMode variable flag.
@@ -43,9 +42,13 @@ public class MockitoWhen extends Check {
             if(methodToSetUp.equals(methodName)) {
                 numberOfCallsToWhen++;
             }
-
-            // we turn off the 'when mode' right after the first method call after it.
-            inWhenMode = false;
+            if(!methodName.equals("doReturn")) {
+                // if we don't encounter reverse syntax,
+                // we turn off the 'when mode' right after the first method call after it.
+                // otherwise we wait for one turn,
+                // since reverse syntax is followed by methodToSetUp invocation
+                inWhenMode = false;
+            }
         } else {
             /**
              * We wait for a call to when().

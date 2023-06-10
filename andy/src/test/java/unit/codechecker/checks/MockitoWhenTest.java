@@ -14,8 +14,10 @@ public class MockitoWhenTest extends ChecksBaseTest {
     @CsvSource({
             "add,0,false", "add,1,true", "add,2,false",
             "remove,0,false","remove,1,true","remove,2,false",
-            "contains,3,true", "contains,2,false", "contains,4,false",
-            "equals,1,false","equals,2,true","equals,3,false"
+            "contains,6,true", "contains,7,false", "contains,8,false",
+            "equals,1,false","equals,4,true","equals,5,false",
+            "poll,0,false","poll,1,true","poll,2,false",
+            "offer,0,false","offer,1,true","offer,2,false"
     })
     void findCallsToWhen(String methodThatWeExpectAMockitoWhen, int numberOfOccurrences, boolean expectation) {
         Check check = new MockitoWhen(methodThatWeExpectAMockitoWhen, Comparison.EQ, numberOfOccurrences);
