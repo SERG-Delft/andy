@@ -21,6 +21,7 @@ public class MockitoWhen extends Check {
 
     private int numberOfCallsToWhen = 0;
     private boolean inWhenMode = false;
+    private String previousMethodName = "";
 
     public MockitoWhen(String methodToSetUp, Comparison comparison, int expectedNumberOfOccurrences) {
         this.methodToSetUp = methodToSetUp;
@@ -32,6 +33,7 @@ public class MockitoWhen extends Check {
     public boolean visit(MethodInvocation mi) {
 
         String methodName = mi.getName().toString();
+        int i = 1;
         /**
          * As soon as a Mockito's when happen, we wait for the next method call.
          * We know that a when() method was just called because of the inWhenMode variable flag.
@@ -39,15 +41,22 @@ public class MockitoWhen extends Check {
          * If the method call just after when() matches the one we are expecting, bingo!
          */
         if(inWhenMode) {
-            if(methodToSetUp.equals(methodName)) {
+            if(methodToSetUp.equals(methodName) || methodToSetUp.equals(previousMethodName)) {
                 numberOfCallsToWhen++;
-            }
-            if(!methodName.contains("do")) {
+                inWhenMode = false;
+                previousMethodName = "";
+            } else if(previousMethodName.contains("do") && !methodName.equals("when")){
+                inWhenMode = false;
+                previousMethodName = "";
+            }  else if(!methodName.contains("do") && !methodName.equals("when")){
                 // if we don't encounter reverse syntax,
                 // we turn off the 'when mode' right after the first method call after it.
                 // otherwise we wait for one turn,
                 // since reverse syntax is followed by methodToSetUp invocation
                 inWhenMode = false;
+                previousMethodName = "";
+            } else {
+                previousMethodName = methodName;
             }
         } else {
             /**
@@ -56,9 +65,10 @@ public class MockitoWhen extends Check {
             boolean mockitoWhenCalled = "when".equals(methodName);
             if (mockitoWhenCalled) {
                 inWhenMode = true;
+            } else {
+                previousMethodName = methodName;
             }
         }
-
         return super.visit(mi);
     }
 

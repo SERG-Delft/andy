@@ -15,12 +15,14 @@ public class MockitoWhenCalls {
     void t1() {
         List<String> mockedList = mock(List.class);
 
+        Mockito.doThrow(IllegalAccessError.class).when(mockedList).toString();
         when(mockedList.add("1")).thenReturn(true);
         when(mockedList.remove("1")).thenReturn(true);
         Mockito.when(mockedList.equals("1")).thenReturn(true);
 
         verify(mockedList).add("1");
         verify(mockedList).remove("1");
+        verify(mockedList).toString();
     }
 
     @Test
@@ -31,32 +33,33 @@ public class MockitoWhenCalls {
         Mockito.when(mockedList.contains("b")).thenReturn(true);
         when(mockedList.contains("c")).thenReturn(true);
 
-        when(mockedList.equals("1")).thenReturn(true);
+        when(mockedList.equals("2")).thenReturn(true);
+        verify(mockedList).contains("c");
     }
 
     @Test
-    void t3(){
-        List<String> mockedQueue = mock(Queue.class);
+    void t3() {
+        List<String> mockedList = mock(List.class);
 
-        doReturn(true).when(mockedList.offer("4"));
-        doReturn(true).when(mockedList.poll("4"));
-        Mockito.doReturn(true).when(mockedList.equals("4"));
-        doNothing().when(mockedQueue.toString());
+        doReturn(true).when(mockedList.add("4"));
+        doReturn(true).when(mockedList.remove("4"));
+        Mockito.doReturn(true).when(mockedList.equals("3"));
+        doNothing().when(mockedList.toString());
 
-        verify(mockedList).offer("4");
-        verify(mockedList).poll("4");
+        verify(mockedList).add("4");
+        verify(mockedList).remove("4");
     }
 
     @Test
-    void t4(){
-        List<String> mockedQueue = mock(Queue.class);
+    void t4() {
+        List<String> mockedList = mock(List.class);
 
-        doReturn(true).when(mockedQueue.contains("a"));
-        Mockito.doReturn(true).when(mockedQueue.contains("b"));
-        doReturn(true).when(mockedQueue.contains("c"));
-        doNothing().when(mockedQueue.toString());
+        doReturn(true).when(mockedList.contains("a"));
+        Mockito.doReturn(true).when(mockedList.contains("b"));
+        doReturn(true).when(mockedList.contains("c"));
+        doNothing().when(mockedList).toString();
 
-        doReturn(true).when(mockedQueue.equals("1"));
+        doReturn(true).when(mockedList.equals("4"));
+        verify(mockedList).equals("4");
     }
-
 }
