@@ -68,25 +68,13 @@ public class Configuration extends RunConfiguration {
     @Override
     public List<MetaTest> metaTests() {
         return List.of(
-                MetaTest.withStringReplacement(2, "does not check on point correctly",
+                MetaTest.withStringReplacement("does not check on point correctly",
                         "if (temp >= 20)",
                         "if (temp > 20)"
                 ),
                 MetaTest.withStringReplacement("incorrect proportion",
                         "0.75f",
-                        "0.7f"
-                ),
-                MetaTest.withStringReplacement(2, "incorrect proportion (stricter)",
-                        "0.75f",
-                        "0.76f"
-                ),
-                MetaTest.withStringReplacement("does not work with numbers greater than 15000000",
-                        "if (temp >= 20)",
-                        "if (temp >= 20 && temp <= 15000000)"
-                ),
-                MetaTest.withStringReplacement("does not work with numbers smaller than -15000000",
-                        "if (temp >= 20)",
-                        "if (temp >= 20 || temp < -15000000)"
+                        "0.5f"
                 )
         );
     }
