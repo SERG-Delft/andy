@@ -6,7 +6,7 @@ def get_directories(basedir):
                                        and not dir.startswith('.')]
 
 home_dir = '/home/runner/work/andy/andy/assignments'
-docker_dir = '/home/runner/work/andy/andy/weblab-docker-v2'
+docker_dir = '/home/runner/work/andy/andy/weblab-docker'
 test_dir = docker_dir + '/tests/github-ci'
 output_dir = docker_dir + '/testresults'
 
