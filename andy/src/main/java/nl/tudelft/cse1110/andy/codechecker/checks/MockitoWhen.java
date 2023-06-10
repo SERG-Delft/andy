@@ -33,7 +33,6 @@ public class MockitoWhen extends Check {
     public boolean visit(MethodInvocation mi) {
 
         String methodName = mi.getName().toString();
-        int i = 1;
         /**
          * As soon as a Mockito's when happen, we wait for the next method call.
          * We know that a when() method was just called because of the inWhenMode variable flag.
@@ -42,17 +41,29 @@ public class MockitoWhen extends Check {
          */
         if(inWhenMode) {
             if(methodToSetUp.equals(methodName) || methodToSetUp.equals(previousMethodName)) {
+                // With the normal syntax, if we encounter a match in method name,
+                // it will be right after when(...).
+                // Example: when(mockedList.add("2")).thenReturn(true);
+                // the order in which they will be processed is thenReturn(...) -> when(...) -> add(...)
+                // With the other syntax we can encounter a match either before when or after it
+                // Example: doNothing().when(mockedList).someVoidMethod()
+                // the order will be someVoidMethod() -> when(...) -> doNothing()
+                // Alternatively, we can also write doReturn(true).when(mockedList.add("1"))
+                // the order will be when(...) -> doReturn(...) -> add(...)
+                // So we check if we encounter match on the current command or on the previous
                 numberOfCallsToWhen++;
                 inWhenMode = false;
                 previousMethodName = "";
             } else if(previousMethodName.contains("do") && !methodName.equals("when")){
+                // If we did not encounter a match, and we are at a do* construct
+                // it means that we are going to the next statement and if it starts with "when",
+                // we do not reset inWhenMode. We clear previous to avoid potential bugs
                 inWhenMode = false;
                 previousMethodName = "";
             }  else if(!methodName.contains("do") && !methodName.equals("when")){
-                // if we don't encounter reverse syntax,
-                // we turn off the 'when mode' right after the first method call after it.
-                // otherwise we wait for one turn,
-                // since reverse syntax is followed by methodToSetUp invocation
+                // if we have encountered neither a do* construct, nor when, it means
+                // that the statement that is tested simple does not match our desired methodName.
+                // So we return from inWhenMode
                 inWhenMode = false;
                 previousMethodName = "";
             } else {
@@ -66,6 +77,12 @@ public class MockitoWhen extends Check {
             if (mockitoWhenCalled) {
                 inWhenMode = true;
             } else {
+                // We only memorize the previous, if it is not a "when",
+                // because if we encounter our matching methodName, before reaching when mode
+                // we will miss it
+                // Example: doNothing().when(mockedList).someVoidMethod()
+                // As stated above if we memorize every previous element,
+                // after reaching when mode we would lose someVoidMethod()
                 previousMethodName = methodName;
             }
         }
