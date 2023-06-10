@@ -32,10 +32,10 @@
 
     <modules>
         <module>andy</module>
-<!--        <module>andy-aws-lambda</module>-->
+        <module>andy-aws-lambda</module>
         <module>andy-maven-plugin</module>
-<!--        <module>weblab-runner</module>-->
-<!--        <module>assignments</module>-->
+        <module>weblab-runner</module>
+        <module>assignments</module>
     </modules>
 
     <build>
