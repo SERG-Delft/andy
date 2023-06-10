@@ -41,6 +41,7 @@ public class MockitoWhenCalls {
         doReturn(true).when(mockedList.offer("4"));
         doReturn(true).when(mockedList.poll("4"));
         Mockito.doReturn(true).when(mockedList.equals("4"));
+        doNothing().when(mockedQueue.toString());
 
         verify(mockedList).offer("4");
         verify(mockedList).poll("4");
@@ -48,13 +49,14 @@ public class MockitoWhenCalls {
 
     @Test
     void t4(){
-        List<String> mockedList = mock(Queue.class);
+        List<String> mockedQueue = mock(Queue.class);
 
-        doReturn(true).when(mockedList.contains("a"));
-        Mockito.doReturn(true).when(mockedList.contains("b"));
-        doReturn(true).when(mockedList.contains("c"));
+        doReturn(true).when(mockedQueue.contains("a"));
+        Mockito.doReturn(true).when(mockedQueue.contains("b"));
+        doReturn(true).when(mockedQueue.contains("c"));
+        doNothing().when(mockedQueue.toString());
 
-        doReturn(true).when(mockedList.equals("1"));
+        doReturn(true).when(mockedQueue.equals("1"));
     }
 
 }

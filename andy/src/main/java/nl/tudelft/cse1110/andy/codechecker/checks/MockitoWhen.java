@@ -42,7 +42,7 @@ public class MockitoWhen extends Check {
             if(methodToSetUp.equals(methodName)) {
                 numberOfCallsToWhen++;
             }
-            if(!methodName.equals("doReturn")) {
+            if(!methodName.contains("do")) {
                 // if we don't encounter reverse syntax,
                 // we turn off the 'when mode' right after the first method call after it.
                 // otherwise we wait for one turn,

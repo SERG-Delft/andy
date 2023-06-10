@@ -17,7 +17,8 @@ public class MockitoWhenTest extends ChecksBaseTest {
             "contains,6,true", "contains,7,false", "contains,8,false",
             "equals,1,false","equals,4,true","equals,5,false",
             "poll,0,false","poll,1,true","poll,2,false",
-            "offer,0,false","offer,1,true","offer,2,false"
+            "offer,0,false","offer,1,true","offer,2,false",
+            "toString,1,false","toString,2,true","toString,3,false"
     })
     void findCallsToWhen(String methodThatWeExpectAMockitoWhen, int numberOfOccurrences, boolean expectation) {
         Check check = new MockitoWhen(methodThatWeExpectAMockitoWhen, Comparison.EQ, numberOfOccurrences);
