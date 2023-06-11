@@ -26,6 +26,10 @@ public class GradeCalculator {
         if(finalGrade < 0 || finalGrade > 100)
             throw new RuntimeException("Invalid grade calculation");
 
+        if(gradeValues.getPenalty() < 0){
+            throw new RuntimeException("Negative penalty: " + gradeValues.getPenalty());
+        }
+
         // Apply penalty
         finalGrade -= gradeValues.getPenalty();
 
