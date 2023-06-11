@@ -32,30 +32,30 @@ public class CodeChecksTest extends IntegrationTestBase {
     }
 
     @Test
-    void requiredCodeChecksPass() {
-        Result result = run( "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfigWithRequiredCodeChecksPassingConfiguration");
+    void penaltyCodeChecksPass() {
+        Result result = run( "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfigWithPenaltyCodeChecksPassingConfiguration");
 
         assertThat(result)
                 .has(checksScore(2,5))
-                .has(requiredCodeCheck("Trip Repository should be mocked required", true, 1))
-                .has(requiredCodeCheck("getTripById should be set up required", true, 1))
+                .has(penaltyCodeCheck("Trip Repository should be mocked penalty", true, 1))
+                .has(penaltyCodeCheck("getTripById should be set up penalty", true, 1))
                 .has(codeCheck("Trip Repository should be mocked", true, 1))
                 .has(codeCheck("Trip should be mocked", false, 3)) // this check makes no sense, just for the check to fail
                 .has(codeCheck("getTripById should be set up", true, 1));
     }
 
     @Test
-    void requiredCodeChecksFail() {
-        Result result = run( "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfigWithRequiredCodeChecksFailingConfiguration");
+    void penaltyCodeChecksFail() {
+        Result result = run( "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfigWithPenaltyCodeChecksFailingConfiguration");
 
         assertThat(result)
-                .has(checksScore(0,0))
-                .has(requiredCodeCheck("Trip Repository should be mocked required", true, 1))
-                .has(requiredCodeCheck("getTripById should be set up required", true, 1))
-                .has(requiredCodeCheck("Trip should be mocked required", false, 1))
-                .has(not(codeCheck("Trip Repository should be mocked", true, 1)))
-                .has(not(codeCheck("Trip should be mocked", false, 3)))
-                .has(not(codeCheck("getTripById should be set up", true, 1)));
+                .has(checksScore(2,5))
+                .has(penaltyCodeCheck("Trip Repository should be mocked penalty", true, 1))
+                .has(penaltyCodeCheck("getTripById should be set up req", true, 200))
+                .has(penaltyCodeCheck("Trip should be mocked required", false, 100))
+                .has(codeCheck("Trip Repository should be mocked", true, 1))
+                .has(codeCheck("Trip should be mocked", false, 3))
+                .has(codeCheck("getTripById should be set up", true, 1));
     }
 
     @Test
@@ -89,12 +89,12 @@ public class CodeChecksTest extends IntegrationTestBase {
         };
     }
 
-    public static Condition<Result> requiredCodeCheck(String name, boolean pass, int weight) {
+    public static Condition<Result> penaltyCodeCheck(String name, boolean pass, int penalty) {
         return new Condition<>() {
             @Override
             public boolean matches(Result value) {
-                return value.getRequiredCodeChecks().getCheckResults().stream().anyMatch(cc ->
-                        cc.getWeight() == weight &&
+                return value.getPenaltyCodeChecks().getCheckResults().stream().anyMatch(cc ->
+                        cc.getWeight() == penalty &&
                                 cc.passed() == pass &&
                                 cc.getDescription().equals(name));
 
