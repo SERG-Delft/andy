@@ -298,8 +298,11 @@ Andy provides different checks for JUnit, Mockito, and JQWik tests:
     - `NumberOfTests`: checks whether the test suite has a minimum number of tests.
     - `TestMethodsHaveAssertions`: checks whether all test methods have assertions.
     - `LoopInTestMethods`: checks whether there is a loop in a test method.
-    - `UseOfStringLiterals`: checks whether there is a string literal in a test method.
-    - `MethodCalledInTestMethod`: checks whether a method was invoked in a test method.
+    - `UseOfStringLiterals`: checks whether there is a string of at least a specified length in a test method.
+    - `AnnotatedMethod`: checks whether a method with a specified annotation exists.
+    - `MethodCalled`: checks whether a method was invoked anywhere in the test code.
+    - `MethodCalledInTestMethod`: checks whether a method was invoked in a test method (annotated with `@Test`, `@ParameterizedTest`, `@Property`, or `@Example`).
+    - `MethodCalledInProvideMethod`: checks whether a method was invoked in a method with the `@Provide` annotation.
 
 - Mockito:
     - `MockClass`: Checks whether a class was mocked in the test suite.
