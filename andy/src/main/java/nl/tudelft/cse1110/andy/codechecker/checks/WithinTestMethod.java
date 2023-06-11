@@ -10,6 +10,7 @@ public abstract class WithinTestMethod extends WithinAnnotatedMethod {
                 add("Test"); // junit
                 add("ParameterizedTest"); // junit
                 add("Property"); // jqwik
+                add("Example"); // jqwik
             }};
 
     protected Set<String> annotations() {
