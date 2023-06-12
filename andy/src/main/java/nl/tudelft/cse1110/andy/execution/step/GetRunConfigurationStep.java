@@ -25,6 +25,10 @@ public class GetRunConfigurationStep implements ExecutionStep {
             Class<?> runConfigurationClass = Class.forName(getConfigurationClass(ctx.getNewClassNames()), false, currentClassLoader);
             RunConfiguration runConfiguration = (RunConfiguration) runConfigurationClass.getDeclaredConstructor().newInstance();
 
+            if(!isValidRunConfiguration(runConfiguration)) {
+                throw new RuntimeException("Invalid weights for run configuration");
+            }
+
             ctx.setRunConfiguration(runConfiguration);
         } catch (NoSuchElementException ex) {
             // There's no configuration set. We put a default one!
@@ -33,6 +37,28 @@ public class GetRunConfigurationStep implements ExecutionStep {
         } catch (Exception ex) {
             result.genericFailure(this, ex);
         }
+    }
+
+    /**
+     * Checks whether the config is valid.
+     * - Sum of weights must be 1.0
+     * - If Jacoco / Pitest are skipped, the weight should be 0
+     * @param config The run configuration of the problem
+     * @return validity of the config weights represented as a boolean
+     */
+    public static boolean isValidRunConfiguration(RunConfiguration config) {
+        var weights = config.weights();
+        float coverage = weights.get("coverage");
+        float mutation = weights.get("mutation");
+        float meta = weights.get("meta");
+        float codechecks = weights.get("codechecks");
+        if(coverage + mutation + meta + codechecks != 1.0)
+            return false;
+        if(config.skipPitest() && mutation != 0.0)
+            return false;
+        if(config.skipJacoco() && coverage != 0.0)
+            return false;
+        return true;
     }
 
     @Override
