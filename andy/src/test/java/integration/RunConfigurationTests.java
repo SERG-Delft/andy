@@ -1,16 +1,17 @@
 package integration;
 
 import nl.tudelft.cse1110.andy.config.RunConfiguration;
-import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.execution.step.GetRunConfigurationStep;
 import nl.tudelft.cse1110.andy.result.Result;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -113,7 +114,7 @@ public class RunConfigurationTests extends IntegrationTestBase {
 
     @Test
     void checkExceptionHandling() {
-        // How to catch exception.
         Result result = run("NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddConfigurationInvalid");
+        assertThat(result.getGenericFailure().getExceptionMessage().toString().contains("The run configuration has invalid weights. Please check the file.")).isTrue();
     }
 }

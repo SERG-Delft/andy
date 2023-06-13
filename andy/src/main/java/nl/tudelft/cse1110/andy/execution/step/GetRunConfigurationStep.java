@@ -26,14 +26,15 @@ public class GetRunConfigurationStep implements ExecutionStep {
             RunConfiguration runConfiguration = (RunConfiguration) runConfigurationClass.getDeclaredConstructor().newInstance();
 
             if(!isValidRunConfiguration(runConfiguration)) {
-                throw new RuntimeException("Invalid weights for run configuration");
+                // load default configuration
+                ctx.setRunConfiguration(new DefaultRunConfiguration(allClassesButTestingAndConfigOnes(ctx.getNewClassNames())));
+                throw new RuntimeException("The run configuration has invalid weights. Please check the file.");
             }
 
             ctx.setRunConfiguration(runConfiguration);
         } catch (NoSuchElementException ex) {
-            // There's no configuration set. We put a default one!
-            RunConfiguration runConfiguration = new DefaultRunConfiguration(allClassesButTestingAndConfigOnes(ctx.getNewClassNames()));
-            ctx.setRunConfiguration(runConfiguration);
+            // load default configuration
+            ctx.setRunConfiguration(new DefaultRunConfiguration(allClassesButTestingAndConfigOnes(ctx.getNewClassNames())));
         } catch (Exception ex) {
             result.genericFailure(this, ex);
         }
