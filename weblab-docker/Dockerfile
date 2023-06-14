@@ -22,8 +22,7 @@ COPY . ${ANDY_DIR}
 
 # Compile and install all dependencies
 WORKDIR ${ANDY_DIR}
-RUN mvn clean install -pl andy -DskipTests
-RUN mvn package -pl weblab-runner -Djar.finalName=andy -DskipTests
+RUN mvn package -pl weblab-runner -am -Djar.finalName=andy -DskipTests
 
 ARG GNAME=student
 ARG GID=1000
