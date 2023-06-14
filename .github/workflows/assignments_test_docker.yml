@@ -1,0 +1,30 @@
+name: assignments_test_docker
+on: push
+jobs:
+  run_assignments_docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+
+      - name: Setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+
+      - name: Configure Makefile.inc to use tar instead of gtar
+        working-directory: ./weblab-docker
+        run: |
+          sed -i 's/gtar/tar/' Makefile.inc
+
+      - name: Build Docker image
+        working-directory: ./weblab-docker
+        run: |
+          make
+
+      - name: Run the reference solutions of all assignments and verify the scores are 100/100
+        env:
+          COMMIT_HASH: ${{ github.sha }}
+        run: |
+          python ./.github/scripts/assignments_test_docker.py
