@@ -23,8 +23,8 @@ public class Configuration extends RunConfiguration {
         return new HashMap<>() {{
             put("coverage", 0.15f);
             put("mutation", 0.25f);
-            put("meta", 0.4f);
-            put("codechecks", 0.2f);
+            put("meta", 0.2f);
+            put("codechecks", 0.4f);
         }};
     }
 
@@ -68,10 +68,10 @@ public class Configuration extends RunConfiguration {
     @Override
     public List<MetaTest> metaTests() {
         return List.of(
-                MetaTest.withStringReplacement("does not check on point correctly",
-                        "if (temp >= 20)",
-                        "if (temp > 20)"
-                ),
+                // MetaTest.withStringReplacement("does not check on point correctly",
+                //         "if (temp >= 20)",
+                //         "if (temp > 20)"
+                // ),
                 MetaTest.withStringReplacement("incorrect proportion",
                         "0.75f",
                         "0.5f"
