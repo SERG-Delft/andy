@@ -21,7 +21,7 @@ jobs:
       - name: Build Docker image
         working-directory: ./weblab-docker
         run: |
-          make
+          make build
 
       - name: Run the reference solutions of all assignments and verify the scores are 100/100
         env:
