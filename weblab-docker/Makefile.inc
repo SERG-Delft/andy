@@ -56,6 +56,17 @@ build::
 	  -t $(IMAGE_NAME):$(IMAGE_TAG) $(BUILD_PATH)
 	docker $(DOCKER_ARGS) image tag $(IMAGE_NAME):$(IMAGE_TAG) $(IMAGE_NAME):latest
 
+# Builds the Docker image 
+build-main-branch-github::
+	@:$(call check_defined, DOCKERFILE_PATH, dockerfile path)
+	echo "Building Docker image from the main Andy branch on GitHub"
+	echo "Configuring Dockerfile..."
+	cp -p Dockerfile Dockerfile.bak
+	sed -E -i 's|COPY \. .+|RUN git clone https://github.com/cse1110/andy.git|' Dockerfile
+	@$(MAKE) build
+	echo "Restoring Dockerfile..."
+	mv Dockerfile.bak Dockerfile
+
 # Builds the Docker image in the current Docker machine using the specified cache
 # Usage:
 #     make                          Builds the docker image
