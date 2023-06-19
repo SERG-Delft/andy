@@ -7,6 +7,6 @@ SELF_DIR := $(dir $(MAKEFILE))
 CMD := /bin/bash
 BUILD_PATH := $(SELF_DIR)/../
 
-all: build-main-branch-github
+all: build
 
 include $(SELF_DIR)Makefile.inc
