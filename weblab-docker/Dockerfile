@@ -18,7 +18,8 @@ SHELL ["/bin/bash", "-c"]
 
 # Copy the full repo to the docker image
 ARG ANDY_DIR=/home/andy/
-COPY . ${ANDY_DIR}
+ARG ANDY_BRANCH=main
+RUN git clone --depth 1 --branch ${ANDY_BRANCH} https://github.com/cse1110/andy.git
 
 # Compile and install all dependencies
 WORKDIR ${ANDY_DIR}
@@ -33,7 +34,7 @@ RUN set -o errexit -o nounset \
  && addgroup --gid ${GID} "${GNAME}" \
  && useradd --gid ${GID} --home "${UHOME}" --uid ${UID} "${UNAME}"
 
-COPY --chown=${UNAME} ./weblab-docker/user_code/ ${UHOME}
+COPY --chown=${UNAME} user_code/ ${UHOME}
 WORKDIR ${UHOME}
 
 # Move the compiled classes
