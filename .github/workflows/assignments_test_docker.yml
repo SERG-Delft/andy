@@ -21,7 +21,7 @@ jobs:
       - name: Build Docker image
         working-directory: ./weblab-docker
         env:
-          ANDY_BRANCH: ${{ github.sha }}
+          BUILD_ARGS: "--build-arg ANDY_BRANCH=${{ github.sha }}"
         run: |
           make
 
