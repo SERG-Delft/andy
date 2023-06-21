@@ -1,6 +1,6 @@
 package nl.tudelft.cse1110.andy.execution.step;
 
-import nl.tudelft.cse1110.andy.config.DefaultExamRunConfiguration;
+import nl.tudelft.cse1110.andy.config.SecureExamRunConfiguration;
 import nl.tudelft.cse1110.andy.config.RunConfiguration;
 import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
@@ -20,7 +20,7 @@ public class ExamModeSecurityGuardStep implements ExecutionStep {
         }
 
         // replace the configuration with a default one
-        RunConfiguration defaultConfig = new DefaultExamRunConfiguration(ctx.getRunConfiguration().classesUnderTest());
+        RunConfiguration defaultConfig = new SecureExamRunConfiguration(ctx.getRunConfiguration());
         ctx.setRunConfiguration(defaultConfig);
 
         // remove the configuration source code and byte code from the disk

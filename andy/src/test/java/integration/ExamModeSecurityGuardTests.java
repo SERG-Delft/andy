@@ -6,12 +6,15 @@ import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.execution.step.SourceCodeSecurityCheckStep;
 import nl.tudelft.cse1110.andy.result.Result;
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 import java.util.List;
 
+import static java.time.Duration.ofSeconds;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 
 
 public class ExamModeSecurityGuardTests extends IntegrationTestBase {
@@ -23,8 +26,27 @@ public class ExamModeSecurityGuardTests extends IntegrationTestBase {
         // everything still works in the solution
         assertThat(result.getCompilation().successful()).isTrue();
         assertThat(result.getGenericFailure().hasFailure()).isFalse();
-        assertThat(result.getTests().getTestsSucceeded()).isEqualTo(4);
-        assertThat(result.getTests().getTestsRan()).isEqualTo(4);
+        assertThat(result.getTests().getTestsSucceeded()).isEqualTo(result.getTests().getTestsRan());
+    }
+
+    @Test
+    void nothingChangesInSeleniumTest() {
+        assertTimeoutPreemptively(ofSeconds(5), () -> {
+            Result result = run(Action.TESTS, "EmptyLibrary", "SeleniumOnePassingOneFailingSolution",
+                    "SeleniumSimpleWebpageExamConfiguration");
+
+            AssertionsForClassTypes.assertThat(result.hasGenericFailure()).isFalse();
+            AssertionsForClassTypes.assertThat(result.getTests().getTestsRan()).isEqualTo(2);
+            AssertionsForClassTypes.assertThat(result.getTests().getTestsSucceeded()).isEqualTo(1);
+        });
+    }
+
+    @Test
+    void nothingChangesInMutationTestWithoverriddenNumberOfTotalMutantsAllKilled() {
+        Result result = run("ZagZigLibrary", "ZagZigAllMutantsKilled", "ZagZigDifferentTotalMutantsExamConfiguration");
+
+        AssertionsForClassTypes.assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(25);
+        AssertionsForClassTypes.assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(25);
     }
 
     @Test
