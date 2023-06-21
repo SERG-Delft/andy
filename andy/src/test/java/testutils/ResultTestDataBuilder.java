@@ -17,9 +17,10 @@ public class ResultTestDataBuilder {
     private UnitTestsResult testResults = UnitTestsResult.empty();
     private MutationTestingResult mutationResults = MutationTestingResult.empty();
     private CodeChecksResult codeCheckResults = CodeChecksResult.empty();
-    private CodeChecksResult requiredCodeCheckResults = CodeChecksResult.empty();
+    private CodeChecksResult penaltyCodeCheckResults = CodeChecksResult.empty();
     private CoverageResult coverageResults = CoverageResult.empty();
     private MetaTestsResult metaTestResults = MetaTestsResult.empty();
+    private int penalty = 0;
     private int finalGrade = 0;
     private double timeInSeconds = 10;
     private GradeWeight weights = new GradeWeight(0.25f, 0.25f, 0.25f, 0.25f);
@@ -60,6 +61,11 @@ public class ResultTestDataBuilder {
         return this;
     }
 
+    public ResultTestDataBuilder withPenalty(int penalty) {
+        this.penalty = penalty;
+        return this;
+    }
+
     public ResultTestDataBuilder withGrade(int grade) {
         finalGrade = grade;
         return this;
@@ -75,8 +81,8 @@ public class ResultTestDataBuilder {
         return this;
     }
 
-    public ResultTestDataBuilder withRequiredCodeCheckResults(List<CodeCheckResult> list) {
-        requiredCodeCheckResults = CodeChecksResult.build(list);
+    public ResultTestDataBuilder withPenaltyCodeCheckResults(List<CodeCheckResult> list) {
+        penaltyCodeCheckResults = CodeChecksResult.build(list);
         return this;
     }
 
@@ -107,6 +113,6 @@ public class ResultTestDataBuilder {
     public Result build() {
         GenericFailure genericFailure = GenericFailure.build(genericFailureMessage, genericFailureStepName, genericFailureExceptionMessage, genericFailureExternalProcessExitCode, genericFailureExternalProcessErrorMessages);
 
-        return new Result(compilation, testResults, mutationResults, codeCheckResults, requiredCodeCheckResults, coverageResults, metaTestResults, finalGrade, genericFailure, timeInSeconds, weights, successMessage);
+        return new Result(compilation, testResults, mutationResults, codeCheckResults, penaltyCodeCheckResults, coverageResults, metaTestResults, penalty, finalGrade, genericFailure, timeInSeconds, weights, successMessage);
     }
 }

@@ -1,0 +1,58 @@
+FROM maven:3.6.3-openjdk-17-slim
+
+WORKDIR /home/
+
+RUN apt update \
+ && apt install --no-install-recommends --yes \
+    tini \
+    bc \
+    git \
+    ssh \
+    bash \
+    sudo \
+    wget \
+    unzip \
+ && rm -rf /var/lib/apt/lists/*
+
+SHELL ["/bin/bash", "-c"]
+
+# Copy the full repo to the docker image
+ARG ANDY_DIR=/home/andy/
+ARG ANDY_BRANCH=main
+RUN git clone -n https://github.com/cse1110/andy.git && git -C ${ANDY_DIR} checkout ${ANDY_BRANCH}
+
+# Compile and install all dependencies
+WORKDIR ${ANDY_DIR}
+RUN mvn package -pl weblab-runner -am -Djar.finalName=andy -DskipTests
+
+ARG GNAME=student
+ARG GID=1000
+ARG UNAME=student
+ARG UID=1000
+ARG UHOME=/user_code
+RUN set -o errexit -o nounset \
+ && addgroup --gid ${GID} "${GNAME}" \
+ && useradd --gid ${GID} --home "${UHOME}" --uid ${UID} "${UNAME}"
+
+COPY --chown=${UNAME} user_code/ ${UHOME}
+WORKDIR ${UHOME}
+
+# Move the compiled classes
+RUN mv /home/andy/weblab-runner/target/andy.jar /home/andy.jar
+
+# Clean up
+RUN rm -rf /home/andy/
+
+USER ${UNAME}
+
+# Setup the environment for running the JAR file
+ENV WORKING_DIR=${UHOME}/code
+ENV OUTPUT_DIR=${UHOME}/output
+
+# Run the students solution against andy
+ENTRYPOINT ["/usr/bin/tini", "--"]
+CMD ( { \
+ mv solution.txt ${WORKING_DIR}/Solution.java \
+ && mv library.txt ${WORKING_DIR}/Library.java \
+ && mv test.txt ${WORKING_DIR}/Configuration.java \
+ && java -cp /home/andy.jar -XX:+TieredCompilation -XX:TieredStopAtLevel=1 nl.tudelft.cse1110.andy.AndyOnWebLab "$TASK_MODE" "$WORKING_DIR" "$OUTPUT_DIR"; } )

@@ -183,6 +183,22 @@ public class StandardResultTestAssertions {
         };
     }
 
+    public static Condition<String> penalty(int penalty) {
+        return new Condition<>() {
+            @Override
+            public boolean matches(String value) {
+                // the message in the output string is correct
+                boolean messageIsCorrect = value.contains("Penalty: " + penalty);
+
+                return messageIsCorrect;
+            }
+        };
+    }
+
+    public static Condition<String> noPenalty() {
+        return not(containsString("Penalty: "));
+    }
+
     public static Condition<String> finalGradeInXml(String reportDir, int score) {
         return new Condition<>() {
             @Override
@@ -268,6 +284,15 @@ public class StandardResultTestAssertions {
         return containsString(expectedCheck);
     }
 
+    public static Condition<String> penaltyCodeCheck(String description, boolean pass, int weight) {
+        String expectedCheck = String.format("%s: %s (penalty: %d)",
+                description,
+                pass ? "PASS" : "FAIL",
+                weight);
+
+        return containsString(expectedCheck);
+    }
+
     public static Condition<String> totalTimeItTookToExecute() {
         return containsRegex("took \\d+(.\\d)? seconds");
     }
@@ -294,16 +319,16 @@ public class StandardResultTestAssertions {
     }
 
 
+    public static Condition<String> codeChecks() {
+        return containsString("--- Code checks");
+    }
+
     public static Condition<String> noCodeChecks() {
-        return not(containsString("--- Code checks"));
+        return not(codeChecks());
     }
 
-    public static Condition<String> noRequiredCodeChecks() {
-        return not(containsString("--- Required code checks"));
-    }
-
-    public static Condition<String> requiredCodeChecksFailed() {
-        return containsString("Some required code checks failed. Stopping the assessment.");
+    public static Condition<String> noPenaltyCodeChecks() {
+        return not(containsRegex(".*\\(penalty: \\d+\\)"));
     }
 
     public static Condition<String> noFinalGrade() {

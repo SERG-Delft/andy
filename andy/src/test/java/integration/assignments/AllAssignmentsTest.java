@@ -10,7 +10,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -20,10 +19,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Tag("assignments")
 public class AllAssignmentsTest extends IntegrationTestBase {
 
-    private static List<String> disabledList = Arrays.asList(
-            "property-based-testing/unique",
-            "property-based-testing/summer"
-            );
     @ParameterizedTest
     @MethodSource("all")
     void runAssignment(String directory) {
@@ -49,13 +44,7 @@ public class AllAssignmentsTest extends IntegrationTestBase {
     private static Stream<Arguments> all() {
         return findDirectoriesWithPom(new File("../assignments"))
                 .stream()
-                .filter(file -> !isInDisabledList(file))
                 .map(file -> Arguments.of(file.getAbsolutePath()));
-    }
-
-    private static boolean isInDisabledList(File file) {
-        return disabledList.stream()
-                .anyMatch(disabled -> file.getAbsolutePath().contains(disabled));
     }
 
     private static List<File> findDirectoriesWithPom(File rootDirectory) {
