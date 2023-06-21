@@ -13,7 +13,7 @@
   * [Mutation coverage](#mutation-coverage)
   * [Meta tests](#meta-tests)
   * [Code checks](#code-checks)
-  * [Required code checks](#required-code-checks)
+  * [Penalty code checks](#penalty-code-checks)
   * [Success message](#success-message)
   * [External process](#external-process)
 * [Team](#team)
@@ -370,25 +370,29 @@ should have properties: FAIL (weight: 2)
 either make use of Arbitraries or JQWik IntRange-like annotations: FAIL (weight: 8)
 ```
 
-#### Required code checks
+#### Penalty code checks
 
-Required code checks work in a similar way to regular code checks. However, they are not considered a grading component. Instead, if one or more required code checks fail, the final grade is overridden to 0, irrespective of the score of any of the grading components.
+Penalty code checks work in a similar way to regular code checks. However, they are not considered a grading component. Instead, if a penalty code check passes, this has no effect on the final score. However, if it fails, its weight is subtracted from the final grade.
 
-They can be defined as follows:
+Penalty code checks must have a positive weight, but there is no upper limit on their total weight. For example, if there are two penalty code checks where one of them has a weight of 10 and the other one 100 (see the example below), and a student fails both of them, the total applied penalty would be 110. In case this makes the final grade negative, the grade is reported as 0 instead.
+
+Penalty code checks can be defined as follows:
 
 ```java
 @Override
-public CheckScript requiredCheckScript() {
+public CheckScript penaltyCheckScript() {
     return new CheckScript(List.of(
-            new SingleCheck("Trip Repository should be mocked", 
+            // this check deducts 10 points if it fails
+            new SingleCheck(10, "Trip Repository should be mocked", 
                     new MockClass("TripRepository")),
-            new SingleCheck("Reservation Repository should be mocked", 
+            // this check overrides the grade to 0 if it fails
+            new SingleCheck(100, "Reservation Repository should be mocked", 
                     new MockClass("ReservationRepository"))
     ));
 }
 ```
 
-If this method is not overridden, required code checks are disabled.
+If this method is not overridden, penalty code checks are disabled.
 
 #### Success message
 
