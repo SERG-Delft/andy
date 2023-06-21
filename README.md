@@ -374,7 +374,9 @@ either make use of Arbitraries or JQWik IntRange-like annotations: FAIL (weight:
 
 Penalty code checks work in a similar way to regular code checks. However, they are not considered a grading component. Instead, if a penalty code check passes, this has no effect on the final score. However, if it fails, its weight is subtracted from the final grade.
 
-They can be defined as follows:
+Penalty code checks must have a positive weight, but there is no upper limit on their total weight. For example, if there are two penalty code checks where one of them has a weight of 10 and the other one 100 (see the example below), and a student fails both of them, the total applied penalty would be 110. In case this makes the final grade negative, the grade is reported as 0 instead.
+
+Penalty code checks can be defined as follows:
 
 ```java
 @Override
