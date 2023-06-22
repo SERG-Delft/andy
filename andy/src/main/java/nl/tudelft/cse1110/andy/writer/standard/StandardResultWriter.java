@@ -64,8 +64,7 @@ public class StandardResultWriter implements ResultWriter {
             printTestResults(result.getTests());
             printCoverageResults(result.getCoverage());
             printMutationTestingResults(result.getMutationTesting());
-            printRequiredCodeCheckResults(ctx, result.getRequiredCodeChecks());
-            printCodeCheckResults(ctx, result.getCodeChecks());
+            printCodeCheckResults(ctx, result.getCodeChecks(), result.getPenaltyCodeChecks());
             printMetaTestResults(ctx, result.getMetaTests());
             printFinalGrade(ctx, result);
             printModeAndTimeToRun(ctx, result.getTimeInSeconds());
@@ -176,6 +175,11 @@ public class StandardResultWriter implements ResultWriter {
             printGradeCalculationDetails("Mutation coverage", result.getMutationTesting().getKilledMutants(), result.getMutationTesting().getTotalNumberOfMutants(), result.getWeights().getMutationCoverageWeight());
             printGradeCalculationDetails("Code checks", result.getCodeChecks().getNumberOfPassedChecks(), result.getCodeChecks().getTotalNumberOfChecks(), result.getWeights().getCodeChecksWeight());
             printGradeCalculationDetails("Meta tests", result.getMetaTests().getPassedMetaTests(), result.getMetaTests().getTotalTests(), result.getWeights().getMetaTestsWeight());
+        }
+
+        // print penalty
+        if(result.getPenalty() != 0){
+            l(String.format("Penalty: %d", result.getPenalty()));
             l("");
         }
 
@@ -287,8 +291,8 @@ public class StandardResultWriter implements ResultWriter {
 
     }
 
-    private void printCodeCheckResults(Context ctx, CodeChecksResult codeChecks) {
-        if(!codeChecks.wasExecuted())
+    private void printCodeCheckResults(Context ctx, CodeChecksResult codeChecks, CodeChecksResult penaltyCodeChecks) {
+        if(!codeChecks.wasExecuted() && !penaltyCodeChecks.wasExecuted())
             return;
 
         boolean allHints = modeActionSelector(ctx).shouldShowFullHints();
@@ -297,40 +301,26 @@ public class StandardResultWriter implements ResultWriter {
         if(!allHints && !onlyResult)
             return;
 
-        if(codeChecks.hasChecks()) {
+        if(codeChecks.hasChecks() || penaltyCodeChecks.hasChecks()) {
             l("\n--- Code checks");
-            printCodeCheckOutput(codeChecks, allHints);
+            printCodeCheckOutput(codeChecks, penaltyCodeChecks, allHints);
         }
 
     }
 
-    private void printRequiredCodeCheckResults(Context ctx, CodeChecksResult codeChecks) {
-        if(!codeChecks.wasExecuted())
-            return;
-
-        boolean allHints = modeActionSelector(ctx).shouldShowFullHints();
-        boolean onlyResult = modeActionSelector(ctx).shouldShowPartialHints();
-
-        if(!allHints && !onlyResult)
-            return;
-
-        if(codeChecks.hasChecks()) {
-            l("\n--- Required code checks");
-            printCodeCheckOutput(codeChecks, allHints);
-
-            if(!codeChecks.allChecksPass()){
-                l("\nSome required code checks failed. Stopping the assessment.");
-            }
-        }
-
-    }
-
-    private void printCodeCheckOutput(CodeChecksResult codeChecks, boolean allHints) {
-        l(String.format("%d/%d passed", codeChecks.getNumberOfPassedChecks(), codeChecks.getTotalNumberOfChecks()));
+    private void printCodeCheckOutput(CodeChecksResult codeChecks, CodeChecksResult penaltyCodeChecks, boolean allHints) {
+        l(String.format("%d/%d passed", codeChecks.getNumberOfPassedChecks() + penaltyCodeChecks.getNumberOfPassedChecks(false),
+                codeChecks.getTotalNumberOfChecks() + penaltyCodeChecks.getTotalNumberOfChecks(false)));
 
         if(allHints) {
             for (CodeCheckResult result : codeChecks.getCheckResults()) {
                 l(String.format("%s: %s (weight: %d)",
+                        result.getDescription(),
+                        result.passed() ? "PASS" : "FAIL",
+                        result.getWeight()));
+            }
+            for (CodeCheckResult result : penaltyCodeChecks.getCheckResults()) {
+                l(String.format("%s: %s (penalty: %d)",
                         result.getDescription(),
                         result.passed() ? "PASS" : "FAIL",
                         result.getWeight()));

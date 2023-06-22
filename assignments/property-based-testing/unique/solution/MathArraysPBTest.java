@@ -24,7 +24,7 @@ class MathArraysPBTest {
             List<@IntRange(min = 1, max = 20) Integer> numbers) {
 
         double[] doubles = convertListToArray(numbers);
-        double[] result = MathArrays.unique(doubles);
+        double[] result = MathArraysPBT.unique(doubles);
 
         assertThat(result)
                 .contains(doubles) // contains all the elements

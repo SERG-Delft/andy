@@ -6,7 +6,7 @@ def get_directories(basedir):
                                        and not dir.startswith('.')]
 
 home_dir = '/home/runner/work/andy/andy/assignments'
-docker_dir = '/home/runner/work/andy/andy/weblab-docker-v2'
+docker_dir = '/home/runner/work/andy/andy/weblab-docker'
 test_dir = docker_dir + '/tests/github-ci'
 output_dir = docker_dir + '/testresults'
 
@@ -14,9 +14,6 @@ commit_hash = os.environ['COMMIT_HASH']
 print(f'Running Andy on {commit_hash}')
 
 expected_andy_version = f'-{commit_hash[:7]} '
-
-# Configure Makefile.inc
-os.system(f"sed -i 's/gtar/tar/' {docker_dir}/Makefile.inc")
 
 # Create test structure
 os.makedirs(test_dir)
@@ -32,12 +29,7 @@ for category_dir in get_directories(home_dir):
 
         # Write environment file
         with open(f'{test_dir}/.env', 'w') as envfile:
-            envfile.writelines([
-                'TASK_MODE=FULL_WITH_HINTS\n',
-                'WL_STUDENT=1\n',
-                'WL_COURSE=1\n',
-                'WL_ASSIGNMENT_TITLE=abcde'
-            ])
+            envfile.write('TASK_MODE=FULL_WITH_HINTS')
 
         # Copy the assignment to the test folder.
         os.chdir(assignment_dir)
