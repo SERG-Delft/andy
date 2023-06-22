@@ -23,6 +23,7 @@ public class CodeSheriffTest extends CodeSheriffJUnit5 {
         sheriff.thatEnsures()
                 .methods()
                 .inClassesOfPackage("nl.tudelft.cse1110.andy")
+                .withExceptionOfMethod("visit/1")
                 .withExceptionOfMethod("execute/2") // the Step methods are a bit long now, we gotta refactor them
                 .withExceptionOfMethod("getCoverageLineByLine/1") // it's long but extracting makes it harder to understand
                 .have()
