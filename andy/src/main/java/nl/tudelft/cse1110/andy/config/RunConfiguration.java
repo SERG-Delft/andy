@@ -37,7 +37,7 @@ public abstract class RunConfiguration {
         return new CheckScript(Collections.emptyList());
     }
 
-    public CheckScript requiredCheckScript() {
+    public CheckScript penaltyCheckScript() {
         return new CheckScript(Collections.emptyList());
     }
 

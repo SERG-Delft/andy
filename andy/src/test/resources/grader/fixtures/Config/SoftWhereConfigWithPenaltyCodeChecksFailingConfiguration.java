@@ -38,11 +38,11 @@ public class Configuration extends RunConfiguration {
     }
 
     @Override
-    public CheckScript requiredCheckScript() {
+    public CheckScript penaltyCheckScript() {
         return new CheckScript(List.of(
-                new SingleCheck("Trip Repository should be mocked required", new MockClass("TripRepository")),
-                new SingleCheck(1, "Trip should be mocked required", new MockClass("Trip")),
-                new SingleCheck( "getTripById should be set up required", new MockitoWhen("getTripById", Comparison.GTE, 1))
+                new SingleCheck("Trip Repository should be mocked penalty", new MockClass("TripRepository")),
+                new SingleCheck(100, "Trip should be mocked required", new MockClass("Trip")),
+                new SingleCheck(200, "getTripById should be set up req", new MockitoWhen("getTripById", Comparison.GTE, 1))
         ));
     }
 

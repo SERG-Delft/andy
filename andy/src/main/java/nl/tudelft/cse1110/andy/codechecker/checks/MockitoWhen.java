@@ -2,6 +2,8 @@ package nl.tudelft.cse1110.andy.codechecker.checks;
 
 import org.eclipse.jdt.core.dom.MethodInvocation;
 
+import java.util.List;
+
 /**
  * Checks for calls to Mockito's when(), for a specific method name
  * and a specific number of times.
@@ -18,9 +20,15 @@ public class MockitoWhen extends Check {
     private final String methodToSetUp;
     private final int expectedNumberOfOccurrences;
     private final Comparison comparison;
+    private final List<String> allowedDoInvocations = List.of(new String[]{
+        "doNothing",
+        "doThrow",
+        "doReturn"
+    });
 
     private int numberOfCallsToWhen = 0;
     private boolean inWhenMode = false;
+    private String previousMethodName = "";
 
     public MockitoWhen(String methodToSetUp, Comparison comparison, int expectedNumberOfOccurrences) {
         this.methodToSetUp = methodToSetUp;
@@ -32,7 +40,6 @@ public class MockitoWhen extends Check {
     public boolean visit(MethodInvocation mi) {
 
         String methodName = mi.getName().toString();
-
         /**
          * As soon as a Mockito's when happen, we wait for the next method call.
          * We know that a when() method was just called because of the inWhenMode variable flag.
@@ -40,12 +47,16 @@ public class MockitoWhen extends Check {
          * If the method call just after when() matches the one we are expecting, bingo!
          */
         if(inWhenMode) {
-            if(methodToSetUp.equals(methodName)) {
+            if(methodToSetUp.equals(methodName) || methodToSetUp.equals(previousMethodName)) {
                 numberOfCallsToWhen++;
+                inWhenMode = false;
+                previousMethodName = "";
+            } else if(notInDoWhenOrNoMatch(methodName)){
+                inWhenMode = false;
+                previousMethodName = "";
+            } else {
+                previousMethodName = methodName;
             }
-
-            // we turn off the 'when mode' right after the first method call after it.
-            inWhenMode = false;
         } else {
             /**
              * We wait for a call to when().
@@ -53,13 +64,18 @@ public class MockitoWhen extends Check {
             boolean mockitoWhenCalled = "when".equals(methodName);
             if (mockitoWhenCalled) {
                 inWhenMode = true;
+            } else {
+                previousMethodName = methodName;
             }
         }
-
         return super.visit(mi);
     }
-
-
+    private boolean notInDoWhenOrNoMatch(String methodName){
+        return !methodName.equals("when")
+                &&
+            (allowedDoInvocations.contains(previousMethodName)
+                || !allowedDoInvocations.contains(methodName));
+    }
     @Override
     public boolean result() {
         return comparison.compare(numberOfCallsToWhen, expectedNumberOfOccurrences);
