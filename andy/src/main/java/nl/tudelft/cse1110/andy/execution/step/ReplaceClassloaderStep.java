@@ -24,17 +24,17 @@ public class ReplaceClassloaderStep implements ExecutionStep {
 
         try {
             String pathToAddToClassloader = dirCfg.getWorkingDir();
-            replaceClassloader(pathToAddToClassloader, result);
+            replaceClassloader(ctx, pathToAddToClassloader);
             ctx.setClassloaderWithStudentsCode(Thread.currentThread().getContextClassLoader());
         } catch (Exception e) {
             result.genericFailure(this, e);
         }
     }
 
-    private void replaceClassloader(String pathToAddToClassloader, ResultBuilder result) {
+    private void replaceClassloader(Context ctx, String pathToAddToClassloader) {
         List<Path> additionalClasspathEntries = Arrays.asList(Paths.get(pathToAddToClassloader));
         URL[] urls = additionalClasspathEntries.stream().map(this::toURL).toArray(URL[]::new);
-        ClassLoader currentClassloader = Thread.currentThread().getContextClassLoader();
+        ClassLoader currentClassloader = ctx.getCleanClassloader();
         ClassLoader customClassLoader = URLClassLoader.newInstance(urls, currentClassloader);
 
         Thread.currentThread().setContextClassLoader(customClassLoader);
