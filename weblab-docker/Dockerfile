@@ -19,10 +19,13 @@ SHELL ["/bin/bash", "-c"]
 # Copy the full repo to the docker image
 ARG ANDY_DIR=/home/andy/
 ARG ANDY_BRANCH=main
-RUN git clone -n https://github.com/SERG-Delft/andy.git && git -C ${ANDY_DIR} checkout ${ANDY_BRANCH}
+RUN git clone -n https://github.com/SERG-Delft/andy.git
+
+# Checkout the current branch
+WORKDIR ${ANDY_DIR}
+RUN git checkout ${ANDY_BRANCH}
 
 # Compile and install all dependencies
-WORKDIR ${ANDY_DIR}
 RUN mvn package -pl weblab-runner -am -Djar.finalName=andy -DskipTests
 
 ARG GNAME=student
