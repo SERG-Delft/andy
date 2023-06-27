@@ -16,13 +16,20 @@ RUN apt update \
 
 SHELL ["/bin/bash", "-c"]
 
-# Copy the full repo to the docker image
 ARG ANDY_DIR=/home/andy/
 ARG ANDY_BRANCH=main
-RUN git clone -n https://github.com/cse1110/andy.git && git -C ${ANDY_DIR} checkout ${ANDY_BRANCH}
+
+# Prevent Docker from using an old version of the branch from cache
+ADD "https://api.github.com/repos/SERG-Delft/andy/commits/${ANDY_BRANCH}?per_page=1" latest_commit
+
+# Copy the full repo to the docker image
+RUN git clone -n https://github.com/SERG-Delft/andy.git
+
+# Checkout the current branch
+WORKDIR ${ANDY_DIR}
+RUN git checkout ${ANDY_BRANCH}
 
 # Compile and install all dependencies
-WORKDIR ${ANDY_DIR}
 RUN mvn package -pl weblab-runner -am -Djar.finalName=andy -DskipTests
 
 ARG GNAME=student
