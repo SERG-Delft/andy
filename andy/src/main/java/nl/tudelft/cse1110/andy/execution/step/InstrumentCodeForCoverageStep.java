@@ -4,6 +4,7 @@ import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.config.RunConfiguration;
 import nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
+import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.utils.ClassUtils;
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
@@ -43,6 +44,11 @@ public class InstrumentCodeForCoverageStep implements ExecutionStep {
 
         // Skip step if disabled
         if (ctx.getRunConfiguration().skipJacoco()) {
+            return;
+        }
+
+        // Skip step if running meta test
+        if (ctx.getAction().equals(Action.META_TEST)) {
             return;
         }
 
