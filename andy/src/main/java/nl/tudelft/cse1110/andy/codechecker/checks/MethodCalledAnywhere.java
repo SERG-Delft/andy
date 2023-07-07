@@ -6,7 +6,7 @@ public class MethodCalledAnywhere extends Check {
     private final String methodToBeCalled;
     private boolean methodWasCalled = false;
 
-    public MethodInvokedAnywhere(String methodToBeCalled) {
+    public MethodCalledAnywhere(String methodToBeCalled) {
         this.methodToBeCalled = methodToBeCalled;
     }
 

@@ -1,6 +1,7 @@
 package unit.codechecker.checks;
 
 import nl.tudelft.cse1110.andy.codechecker.checks.Check;
+import nl.tudelft.cse1110.andy.codechecker.checks.MethodCalledAnywhere;
 import nl.tudelft.cse1110.andy.codechecker.checks.MethodCalledInTestMethod;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
