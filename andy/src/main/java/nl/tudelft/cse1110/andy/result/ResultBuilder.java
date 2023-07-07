@@ -207,6 +207,7 @@ public class ResultBuilder {
                 totalCoveredBranches, totalBranches, coverageLineByLine);
     }
 
+    @SuppressWarnings("checkstyle:methodLength")
     private CoverageLineByLine getCoverageLineByLine(Collection<IClassCoverage> coverages) {
         List<Integer> fullyCoveredLines = new ArrayList<>();
         List<Integer> partiallyCoveredLines = new ArrayList<>();
