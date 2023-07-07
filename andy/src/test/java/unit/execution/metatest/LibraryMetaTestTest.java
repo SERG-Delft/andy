@@ -144,6 +144,11 @@ public class LibraryMetaTestTest {
             Arguments.of(" line 1\n   \t\t  line 2\nline 3\n\tline 4\n\tline 5",
                     "\t line 2\n\t\t \tline 3\nline 4",
                     "extra line 1\nextra line 2",
+                    "line 1\nextra line 1\nextra line 2\nline 5"),
+            // different amounts of whitespaces on the end in library and old code
+            Arguments.of(" line 1 \n   \t\t  line 2  \nline 3\n\tline 4   \n\tline 5",
+                    "\t line 2  \n\t\t \tline 3  \nline 4 ",
+                    "extra line 1\nextra line 2",
                     "line 1\nextra line 1\nextra line 2\nline 5")
         );
     }
