@@ -12,6 +12,7 @@ RUN apt update \
     sudo \
     wget \
     unzip \
+    apt-utils\
  && rm -rf /var/lib/apt/lists/*
 
 SHELL ["/bin/bash", "-c"]
