@@ -38,7 +38,7 @@ public class AllAssignmentsTest extends IntegrationTestBase {
                 configurationFile);
 
         assertThat(result.hasFailed()).as(format("exercise %s", directory)).isFalse();
-        assertThat(result.getFinalGrade()).as(format("ercise %s", directory)).isEqualTo(100);
+        assertThat(result.getFinalGrade()).as(format("exercise %s", directory)).isEqualTo(100);
     }
 
     private static Stream<Arguments> all() {
