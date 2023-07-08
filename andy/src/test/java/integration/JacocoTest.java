@@ -65,7 +65,7 @@ public class JacocoTest extends IntegrationTestBase {
         assertThat(result.getCoverage().getCoveredBranches()).isEqualTo(14);
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "[{index}] coveredAndUncoveredLines")
     @MethodSource("coveredLinesGenerator")
     void coveredAndUncoveredLines(String library, String solution, List<Integer> coveredLines, List<Integer> partiallyCovered, List<Integer> notCovered) {
         Result result = run(Action.TESTS, library, solution);
