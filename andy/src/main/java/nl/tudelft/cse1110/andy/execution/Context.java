@@ -14,7 +14,7 @@ import java.util.List;
 public class Context {
 
     private final ClassLoader cleanClassloader;
-    private DirectoryConfiguration directoryConfiguration = null;
+    private final DirectoryConfiguration directoryConfiguration;
     private RunConfiguration runConfiguration;
     private List<String> fullClassNames;
     private ExecutionFlow flow;
@@ -26,36 +26,38 @@ public class Context {
     private IRuntime jacocoRuntime;
     private RuntimeData jacocoData;
 
-    private Context(ClassLoader cleanClassloader, Action action, DirectoryConfiguration directoryConfiguration, List<String> librariesToBeIncludedInCompilation) {
+    public Context(ClassLoader cleanClassloader, DirectoryConfiguration directoryConfiguration,
+                   RunConfiguration runConfiguration, List<String> fullClassNames, ExecutionFlow flow,
+                   Action action, ModeActionSelector modeActionSelector, ExternalProcess externalProcess,
+                   ClassLoader classloaderWithStudentsCode, List<String> librariesToBeIncludedInCompilation,
+                   IRuntime jacocoRuntime, RuntimeData jacocoData) {
         this.cleanClassloader = cleanClassloader;
-        this.action = action;
         this.directoryConfiguration = directoryConfiguration;
+        this.runConfiguration = runConfiguration;
+        this.fullClassNames = fullClassNames;
+        this.flow = flow;
+        this.action = action;
+        this.modeActionSelector = modeActionSelector;
+        this.externalProcess = externalProcess;
+        this.classloaderWithStudentsCode = classloaderWithStudentsCode;
         this.librariesToBeIncludedInCompilation = librariesToBeIncludedInCompilation;
-        this.externalProcess = new EmptyExternalProcess();
-    }
-
-    public static Context build(Action action, String workDir, String outputDir, List<String> librariesToBeIncludedInCompilation) {
-        Context ctx = new Context(
-                Thread.currentThread().getContextClassLoader(),
-                action,
-                new DirectoryConfiguration(workDir, outputDir),
-                librariesToBeIncludedInCompilation);
-
-        return ctx;
-    }
-    public static Context build(Action action, String workDir, String outputDir) {
-        return build(action, workDir, outputDir, null);
-    }
-
-    public static Context build(ClassLoader cleanClassloader, Action action) {
-        return new Context(cleanClassloader, action, null, null);
-    }
-
-    public static Context build(Action action) {
-        return build(Thread.currentThread().getContextClassLoader(), action);
+        this.jacocoRuntime = jacocoRuntime;
+        this.jacocoData = jacocoData;
     }
 
     public void setFlow(ExecutionFlow flow) {this.flow = flow;}
+
+    public void setRunConfiguration(RunConfiguration runConfiguration) {
+        this.runConfiguration = runConfiguration;
+    }
+
+    public void setNewClassNames(List<String> fullClassNames) {
+        this.fullClassNames = fullClassNames;
+    }
+
+    public void setModeSelector(ModeActionSelector modeActionSelector) {
+        this.modeActionSelector = modeActionSelector;
+    }
 
     public ExecutionFlow getFlow() {
         return flow;
@@ -69,20 +71,8 @@ public class Context {
         return runConfiguration;
     }
 
-    public void setDirectoryConfiguration(DirectoryConfiguration directoryConfiguration) {
-        this.directoryConfiguration = directoryConfiguration;
-    }
-
-    public void setRunConfiguration(RunConfiguration runConfiguration) {
-        this.runConfiguration = runConfiguration;
-    }
-
     public ClassLoader getCleanClassloader() {
         return cleanClassloader;
-    }
-
-    public void setNewClassNames(List<String> fullClassNames) {
-        this.fullClassNames = fullClassNames;
     }
 
     public List<String> getNewClassNames() {
@@ -91,10 +81,6 @@ public class Context {
 
     public Action getAction() {
         return action;
-    }
-
-    public void setModeSelector(ModeActionSelector modeActionSelector) {
-        this.modeActionSelector = modeActionSelector;
     }
 
     public ModeActionSelector getModeActionSelector() {

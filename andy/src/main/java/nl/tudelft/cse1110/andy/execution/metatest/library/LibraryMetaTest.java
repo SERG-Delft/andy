@@ -3,6 +3,8 @@ package nl.tudelft.cse1110.andy.execution.metatest.library;
 import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.config.RunConfiguration;
 import nl.tudelft.cse1110.andy.execution.Context;
+import nl.tudelft.cse1110.andy.execution.ContextBuilder;
+import nl.tudelft.cse1110.andy.execution.ContextDirector;
 import nl.tudelft.cse1110.andy.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.execution.metatest.AbstractMetaTest;
 import nl.tudelft.cse1110.andy.execution.metatest.library.evaluators.MetaEvaluator;
@@ -12,6 +14,7 @@ import nl.tudelft.cse1110.andy.result.Result;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
 import nl.tudelft.cse1110.andy.writer.EmptyWriter;
+import org.checkerframework.checker.units.qual.C;
 
 import java.io.File;
 import java.io.IOException;
@@ -94,9 +97,13 @@ public class LibraryMetaTest extends AbstractMetaTest {
                 dirCfg.getOutputDir()
         );
 
-        Context metaCtx = Context.build(ctx.getCleanClassloader(), Action.META_TEST);
-        metaCtx.setDirectoryConfiguration(metaDirCfg);
-        metaCtx.setLibrariesToBeIncludedInCompilation(ctx.getLibrariesToBeIncludedInCompilation());
+        ContextDirector director = new ContextDirector(new ContextBuilder());
+        Context metaCtx = director.constructWithClassLoader(
+                ctx.getCleanClassloader(),
+                Action.META_TEST,
+                metaDirCfg,
+                ctx.getLibrariesToBeIncludedInCompilation()
+        );
 
         ExecutionFlow flow = ExecutionFlow.build(metaCtx);
         Result metaResult = flow.run();
