@@ -1,7 +1,7 @@
 name: tests
 on: [push, pull_request, workflow_dispatch]
 jobs:
-  run_tests:
+  run_tests_:
     runs-on: ${{ matrix.job.os }}
     strategy:
       fail-fast: false
@@ -27,9 +27,6 @@ jobs:
           path: ~/.m2
           key: ${{ matrix.job.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ matrix.job.os }}-m2
-
-      - name: Compile and install everything
-        run: mvn clean install -DskipTests
 
       - name: Run Andy unit tests
         run: mvn test -pl andy -DexcludedGroups=assignments
