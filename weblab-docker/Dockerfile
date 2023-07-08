@@ -17,13 +17,14 @@ RUN apt update \
 SHELL ["/bin/bash", "-c"]
 
 ARG ANDY_DIR=/home/andy/
+ARG ANDY_REPO=SERG-Delft/andy
 ARG ANDY_BRANCH=main
 
 # Prevent Docker from using an old version of the branch from cache
-ADD "https://api.github.com/repos/SERG-Delft/andy/commits/${ANDY_BRANCH}?per_page=1" latest_commit
+ADD "https://api.github.com/repos/${ANDY_REPO}/commits/${ANDY_BRANCH}?per_page=1" latest_commit
 
 # Copy the full repo to the docker image
-RUN git clone -n https://github.com/SERG-Delft/andy.git
+RUN git clone -n https://github.com/${ANDY_REPO}.git andy
 
 # Checkout the current branch
 WORKDIR ${ANDY_DIR}
