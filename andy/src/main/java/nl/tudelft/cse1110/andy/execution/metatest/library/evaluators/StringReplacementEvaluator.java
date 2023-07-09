@@ -12,8 +12,8 @@ public class StringReplacementEvaluator implements MetaEvaluator {
 
     @Override
     public String evaluate(String oldLibraryCode) {
-        String shiftedOld = this.old.replaceAll("(?m)^\\s+|(?m) +$", "");
-        String shiftedOldLibraryCode = oldLibraryCode.replaceAll("(?m)^\\s+|(?m) +$", "");
+        String shiftedOld = this.old.replaceAll("(?m)^\\s+|(?m)\\s+$", "");
+        String shiftedOldLibraryCode = oldLibraryCode.replaceAll("(?m)^\\s+|(?m)\\s+$", "");
         String replaced = shiftedOldLibraryCode.replace(shiftedOld, this.replacement);
 
         if (replaced.equals(shiftedOldLibraryCode)) {
