@@ -1,6 +1,7 @@
 package nl.tudelft.cse1110.andy.execution;
 
 import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
+import nl.tudelft.cse1110.andy.execution.externalprocess.EmptyExternalProcess;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class ContextDirector {
         contextBuilder.setAction(action);
         contextBuilder.setDirectoryConfiguration(directoryConfiguration);
         contextBuilder.setLibrariesToBeIncludedInCompilation(librariesToBeIncludedInCompilation);
+        contextBuilder.setExternalProcess(new EmptyExternalProcess());
         Context ctx = contextBuilder.buildContext();
 
         // reset builder
@@ -29,6 +31,7 @@ public class ContextDirector {
         contextBuilder.setCleanClassloader(Thread.currentThread().getContextClassLoader());
         contextBuilder.setAction(action);
         contextBuilder.setDirectoryConfiguration(directoryConfiguration);
+        contextBuilder.setExternalProcess(new EmptyExternalProcess());
         Context ctx = contextBuilder.buildContext();
 
         // reset builder
@@ -43,6 +46,7 @@ public class ContextDirector {
         contextBuilder.setAction(action);
         contextBuilder.setDirectoryConfiguration(directoryConfiguration);
         contextBuilder.setLibrariesToBeIncludedInCompilation(librariesToBeIncludedInCompilation);
+        contextBuilder.setExternalProcess(new EmptyExternalProcess());
         Context ctx = contextBuilder.buildContext();
 
         // reset builder
