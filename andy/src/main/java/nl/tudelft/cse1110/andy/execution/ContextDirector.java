@@ -14,6 +14,7 @@ public class ContextDirector {
 
     public Context constructWithLibraries(Action action, DirectoryConfiguration directoryConfiguration,
                                           List<String> librariesToBeIncludedInCompilation) {
+        contextBuilder.setCleanClassloader(Thread.currentThread().getContextClassLoader());
         contextBuilder.setAction(action);
         contextBuilder.setDirectoryConfiguration(directoryConfiguration);
         contextBuilder.setLibrariesToBeIncludedInCompilation(librariesToBeIncludedInCompilation);
@@ -25,6 +26,7 @@ public class ContextDirector {
     }
 
     public Context constructWithDirectoryConfig(Action action, DirectoryConfiguration directoryConfiguration) {
+        contextBuilder.setCleanClassloader(Thread.currentThread().getContextClassLoader());
         contextBuilder.setAction(action);
         contextBuilder.setDirectoryConfiguration(directoryConfiguration);
         Context ctx = contextBuilder.buildContext();

@@ -41,9 +41,9 @@ public abstract class IntegrationTestBase {
         copyFiles(libraryFile, solutionFile);
 
         ContextDirector director = new ContextDirector(new ContextBuilder());
-        this.ctx = director.constructWithDirectoryConfig(action, new DirectoryConfiguration(
-                workDir.toString(),
-                reportDir.toString())
+        this.ctx = director.constructWithDirectoryConfig(
+                action,
+                new DirectoryConfiguration(workDir.toString(), reportDir.toString())
         );
 
         ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
