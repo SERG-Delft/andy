@@ -7,8 +7,8 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.google.gson.Gson;
 import nl.tudelft.cse1110.andy.Andy;
 import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
-import nl.tudelft.cse1110.andy.execution.ContextBuilder;
-import nl.tudelft.cse1110.andy.execution.ContextDirector;
+import nl.tudelft.cse1110.andy.execution.Context.ContextBuilder;
+import nl.tudelft.cse1110.andy.execution.Context.ContextDirector;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.result.Result;
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
@@ -33,7 +33,7 @@ public class AndyOnAWSLambda implements RequestHandler<APIGatewayProxyRequestEve
         writeToFile(workDir, "Solution.java", input.getSolution());
 
         ContextDirector director = new ContextDirector(new ContextBuilder());
-        nl.tudelft.cse1110.andy.execution.Context ctx = director.constructWithLibraries(
+        nl.tudelft.cse1110.andy.execution.Context.Context ctx = director.constructWithLibraries(
                 Action.valueOf(input.getAction()),
                 new DirectoryConfiguration(workDir.toString(), outputDir.toString()),
                 Arrays.asList(myself())

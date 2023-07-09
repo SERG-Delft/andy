@@ -2,9 +2,9 @@ package nl.tudelft.cse1110.andy.execution.metatest.library;
 
 import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.config.RunConfiguration;
-import nl.tudelft.cse1110.andy.execution.Context;
-import nl.tudelft.cse1110.andy.execution.ContextBuilder;
-import nl.tudelft.cse1110.andy.execution.ContextDirector;
+import nl.tudelft.cse1110.andy.execution.Context.Context;
+import nl.tudelft.cse1110.andy.execution.Context.ContextBuilder;
+import nl.tudelft.cse1110.andy.execution.Context.ContextDirector;
 import nl.tudelft.cse1110.andy.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.execution.metatest.AbstractMetaTest;
 import nl.tudelft.cse1110.andy.execution.metatest.library.evaluators.MetaEvaluator;
