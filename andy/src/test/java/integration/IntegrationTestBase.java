@@ -41,7 +41,7 @@ public abstract class IntegrationTestBase {
         copyFiles(libraryFile, solutionFile);
 
         ContextDirector director = new ContextDirector(new ContextBuilder());
-        this.ctx = director.constructWithDirectoryConfig(
+        this.ctx = director.constructBase(
                 action,
                 new DirectoryConfiguration(workDir.toString(), reportDir.toString())
         );

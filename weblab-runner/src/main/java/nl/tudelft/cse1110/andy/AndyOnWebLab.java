@@ -34,7 +34,7 @@ public class AndyOnWebLab {
         WebLabResultWriter writer = new WebLabResultWriter();
 
         ContextDirector director = new ContextDirector(new ContextBuilder());
-        Context ctx = director.constructWithDirectoryConfig(
+        Context ctx = director.constructBase(
                 getAction(action),
                 new DirectoryConfiguration(workDir, outputDir)
         );

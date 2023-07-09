@@ -22,7 +22,7 @@ public class Context {
     private ModeActionSelector modeActionSelector;
     private ExternalProcess externalProcess;
     private ClassLoader classloaderWithStudentsCode;
-    private List<String> librariesToBeIncludedInCompilation;
+    private final List<String> librariesToBeIncludedInCompilation;
     private IRuntime jacocoRuntime;
     private RuntimeData jacocoData;
 
@@ -59,6 +59,30 @@ public class Context {
         this.modeActionSelector = modeActionSelector;
     }
 
+    public void setExternalProcess(ExternalProcess externalProcess) {
+        this.externalProcess = externalProcess;
+    }
+
+    public void killExternalProcess() {
+        // Retrieve error messages before killing process
+        externalProcess.extractErrorMessages();
+
+        externalProcess.kill();
+    }
+
+    public void setClassloaderWithStudentsCode(ClassLoader classloaderWithStudentsCode) {
+        this.classloaderWithStudentsCode = classloaderWithStudentsCode;
+    }
+
+    public void setJacocoObjects(IRuntime runtime, RuntimeData data) {
+        jacocoRuntime = runtime;
+        jacocoData = data;
+    }
+
+    public boolean hasJacocoRuntime() {
+        return jacocoRuntime != null && jacocoData != null;
+    }
+
     public ExecutionFlow getFlow() {
         return flow;
     }
@@ -91,27 +115,8 @@ public class Context {
         return externalProcess;
     }
 
-    public void setExternalProcess(ExternalProcess externalProcess) {
-        this.externalProcess = externalProcess;
-    }
-
-    public void killExternalProcess() {
-        // Retrieve error messages before killing process
-        externalProcess.extractErrorMessages();
-
-        externalProcess.kill();
-    }
-
-    public void setClassloaderWithStudentsCode(ClassLoader classloaderWithStudentsCode) {
-        this.classloaderWithStudentsCode = classloaderWithStudentsCode;
-    }
-
     public ClassLoader getClassloaderWithStudentsCode() {
         return classloaderWithStudentsCode;
-    }
-
-    public void setLibrariesToBeIncludedInCompilation(List<String> librariesToBeIncludedInCompilation) {
-        this.librariesToBeIncludedInCompilation = librariesToBeIncludedInCompilation;
     }
 
     public List<String> getLibrariesToBeIncludedInCompilation() {
@@ -120,15 +125,6 @@ public class Context {
 
     public boolean hasLibrariesToBeIncluded() {
         return librariesToBeIncludedInCompilation!=null && !librariesToBeIncludedInCompilation.isEmpty();
-    }
-
-    public void setJacocoObjects(IRuntime runtime, RuntimeData data) {
-        jacocoRuntime = runtime;
-        jacocoData = data;
-    }
-
-    public boolean hasJacocoRuntime() {
-        return jacocoRuntime != null && jacocoData != null;
     }
 
     public IRuntime getJacocoRuntime() {

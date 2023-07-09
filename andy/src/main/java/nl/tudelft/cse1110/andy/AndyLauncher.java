@@ -21,7 +21,7 @@ public class AndyLauncher {
         String outputDir = args[2];
 
         ContextDirector director = new ContextDirector(new ContextBuilder());
-        Context ctx = director.constructWithDirectoryConfig(action, new DirectoryConfiguration(inputDir, outputDir));
+        Context ctx = director.constructBase(action, new DirectoryConfiguration(inputDir, outputDir));
 
         StandardResultWriter writer = new StandardResultWriter();
         try {

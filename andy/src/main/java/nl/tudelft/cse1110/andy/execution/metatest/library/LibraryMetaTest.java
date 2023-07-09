@@ -9,12 +9,8 @@ import nl.tudelft.cse1110.andy.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.execution.metatest.AbstractMetaTest;
 import nl.tudelft.cse1110.andy.execution.metatest.library.evaluators.MetaEvaluator;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
-import nl.tudelft.cse1110.andy.grade.GradeCalculator;
 import nl.tudelft.cse1110.andy.result.Result;
-import nl.tudelft.cse1110.andy.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
-import nl.tudelft.cse1110.andy.writer.EmptyWriter;
-import org.checkerframework.checker.units.qual.C;
 
 import java.io.File;
 import java.io.IOException;
@@ -98,7 +94,7 @@ public class LibraryMetaTest extends AbstractMetaTest {
         );
 
         ContextDirector director = new ContextDirector(new ContextBuilder());
-        Context metaCtx = director.constructWithClassLoader(
+        Context metaCtx = director.constructWithLibrariesAndClassLoader(
                 ctx.getCleanClassloader(),
                 Action.META_TEST,
                 metaDirCfg,

@@ -13,13 +13,21 @@ public class ContextDirector {
         this.contextBuilder = contextBuilder;
     }
 
+    public Context constructBase(Action action, DirectoryConfiguration directoryConfiguration) {
+        this.setBase(action, directoryConfiguration);
+
+        Context ctx = contextBuilder.buildContext();
+
+        // reset builder
+        contextBuilder = new ContextBuilder();
+        return ctx;
+    }
+
     public Context constructWithLibraries(Action action, DirectoryConfiguration directoryConfiguration,
                                           List<String> librariesToBeIncludedInCompilation) {
-        contextBuilder.setCleanClassloader(Thread.currentThread().getContextClassLoader());
-        contextBuilder.setAction(action);
-        contextBuilder.setDirectoryConfiguration(directoryConfiguration);
+        this.setBase(action, directoryConfiguration);
         contextBuilder.setLibrariesToBeIncludedInCompilation(librariesToBeIncludedInCompilation);
-        contextBuilder.setExternalProcess(new EmptyExternalProcess());
+
         Context ctx = contextBuilder.buildContext();
 
         // reset builder
@@ -27,30 +35,24 @@ public class ContextDirector {
         return ctx;
     }
 
-    public Context constructWithDirectoryConfig(Action action, DirectoryConfiguration directoryConfiguration) {
-        contextBuilder.setCleanClassloader(Thread.currentThread().getContextClassLoader());
-        contextBuilder.setAction(action);
-        contextBuilder.setDirectoryConfiguration(directoryConfiguration);
-        contextBuilder.setExternalProcess(new EmptyExternalProcess());
-        Context ctx = contextBuilder.buildContext();
-
-        // reset builder
-        contextBuilder = new ContextBuilder();
-        return ctx;
-    }
-
-    public Context constructWithClassLoader(ClassLoader cleanClassloader, Action action,
-                                            DirectoryConfiguration directoryConfiguration,
-                                            List<String> librariesToBeIncludedInCompilation) {
+    public Context constructWithLibrariesAndClassLoader(ClassLoader cleanClassloader, Action action,
+                                                        DirectoryConfiguration directoryConfiguration,
+                                                        List<String> librariesToBeIncludedInCompilation) {
+        this.setBase(action, directoryConfiguration);
         contextBuilder.setCleanClassloader(cleanClassloader);
-        contextBuilder.setAction(action);
-        contextBuilder.setDirectoryConfiguration(directoryConfiguration);
         contextBuilder.setLibrariesToBeIncludedInCompilation(librariesToBeIncludedInCompilation);
-        contextBuilder.setExternalProcess(new EmptyExternalProcess());
+
         Context ctx = contextBuilder.buildContext();
 
         // reset builder
         contextBuilder = new ContextBuilder();
         return ctx;
+    }
+
+    private void setBase(Action action, DirectoryConfiguration directoryConfiguration) {
+        contextBuilder.setCleanClassloader(Thread.currentThread().getContextClassLoader());
+        contextBuilder.setAction(action);
+        contextBuilder.setDirectoryConfiguration(directoryConfiguration);
+        contextBuilder.setExternalProcess(new EmptyExternalProcess());
     }
 }
