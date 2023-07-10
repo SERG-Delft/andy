@@ -33,6 +33,10 @@ public class ClassUsedInTests extends WithinTestMethod {
         return super.visit(cic);
     }
 
+    /**
+     * Checks for method invocation to check if a static
+     * method of the said class is called. Uses Expression
+     */
     @Override
     public boolean visit(MethodInvocation mi) {
         Expression expression = mi.getExpression();
