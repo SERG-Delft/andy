@@ -1,6 +1,6 @@
 package nl.tudelft.cse1110.andy.codechecker.checks;
 
-import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.*;
 
 /**
  * Checks whether a class is used - instantiated or one of its methods called.
@@ -19,14 +19,28 @@ public class ClassUsedInTests extends WithinTestMethod {
         this.classToBeUsed = classToBeUsed;
     }
 
+    /**
+     * Checks for class instance creations to
+     * check if the instantiated class if one of the classes
+     * we are looking for
+     */
+    @Override
+    public boolean visit(ClassInstanceCreation cic) {
+        String className = cic.getType().toString();
+        if (classToBeUsed.equals(className))
+            classWasUsed = true;
+
+        return super.visit(cic);
+    }
+
     @Override
     public boolean visit(MethodInvocation mi) {
-
-        if(isInTheAnnotatedMethod()) {
-            String className = mi.getClass().toString();
-
-            if (classToBeUsed.equals(className))
+        Expression expression = mi.getExpression();
+        if (expression != null) {
+            if (expression.toString().equals(classToBeUsed))
                 classWasUsed = true;
+
+
         }
 
         return super.visit(mi);
@@ -39,6 +53,6 @@ public class ClassUsedInTests extends WithinTestMethod {
     }
 
     public String toString() {
-        return classToBeUsed + " class is called";
+        return classToBeUsed + " class is used";
     }
 }
