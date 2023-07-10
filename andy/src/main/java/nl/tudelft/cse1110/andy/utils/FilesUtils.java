@@ -81,6 +81,7 @@ public class FilesUtils {
                 .orElseThrow(() -> new FileNotFoundException("Solution file does not exist."));
     }
 
+    @SuppressWarnings("checkstyle:UnnecessaryParenthesesCheck")
     public static String findLibrary(String workdir) throws FileNotFoundException {
         return getAllJavaFiles(workdir)
                 .stream().filter(x -> x.getAbsolutePath().endsWith("Library.java")

@@ -7,17 +7,44 @@
     <module name="BeforeExecutionExclusionFileFilter">
         <property name="fileNamePattern" value="^(?!.*(nl.tudelft.cse1110.andy))" />
     </module>
+
     <module name="SuppressWarningsFilter" />
+
     <module name="TreeWalker">
         <module name="SuppressWarningsHolder" />
+
         <module name="MethodLength">
             <property name="severity" value="error"/>
             <property name="tokens" value="METHOD_DEF, CTOR_DEF, COMPACT_CTOR_DEF"/>
             <property name="max" value="69"/>  <!-- setting to 25 gives 23 violations -->
         </module>
+
         <module name="CyclomaticComplexity">
             <property name="max" value="10"/>
             <property name="tokens" value="LITERAL_WHILE, LITERAL_DO"/>
         </module>
+
+        <module name="NestedIfDepthCheck" >
+            <property name="max" value="2"/>
+        </module>
+
+        <module name="UnnecessaryParenthesesCheck" />
+        <module name="UnnecessarySemicolonInEnumeration"/>
+        <module name="UnnecessarySemicolonInTryWithResources"/>
+        <module name="UnnecessarySemicolonAfterOuterTypeDeclaration"/>
+        <module name="UnnecessarySemicolonAfterTypeMemberDeclaration"/>
+
+        <module name="DeclarationOrderCheck" />
+        <module name="EmptyStatementCheck" />
+        <module name="EqualsHashCodeCheck" />
+        <module name="MissingSwitchDefaultCheck" />
+        <module name="UnusedLocalVariableCheck" />
+        <module name="EmptyBlockCheck" />
+        <module name="EmptyCatchBlockCheck" />
+        <module name="StringLiteralEqualityCheck" />
+
+
     </module>
+
 </module>
+

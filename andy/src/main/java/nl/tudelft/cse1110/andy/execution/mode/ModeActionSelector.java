@@ -9,6 +9,7 @@ import java.util.List;
 import static nl.tudelft.cse1110.andy.execution.mode.Action.*;
 import static nl.tudelft.cse1110.andy.execution.mode.Mode.*;
 
+@SuppressWarnings("checkstyle:UnnecessaryParenthesesCheck")
 public class ModeActionSelector {
 
     private Mode mode;
@@ -45,9 +46,10 @@ public class ModeActionSelector {
             case GRADING -> {
                 return getGradingMode();
             }
+            default -> {
+                return Collections.emptyList();
+            }
         }
-
-        return Collections.emptyList();
     }
 
     public boolean shouldShowFullHints() {

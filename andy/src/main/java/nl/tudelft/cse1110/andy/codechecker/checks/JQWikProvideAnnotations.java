@@ -11,15 +11,15 @@ import java.util.stream.Collectors;
 
 public class JQWikProvideAnnotations extends Check {
 
-    private boolean provideAnnotationIdentified = false;
-
     private static Set<String> JQWIK_PROVIDE_ANNOTATIONS = new HashSet<>() {{
-       add("IntRange");
-       add("Positive");
-       add("Negative");
+        add("IntRange");
+        add("Positive");
+        add("Negative");
 
-       // TODO: add all annotations here
+        // TODO: add all annotations here
     }};
+
+    private boolean provideAnnotationIdentified = false;
 
     @Override
     public boolean visit(MarkerAnnotation node) {

@@ -121,4 +121,8 @@ public class CompilationStep implements ExecutionStep {
         return other instanceof CompilationStep;
     }
 
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

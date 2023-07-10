@@ -141,4 +141,9 @@ public class CollectCoverageInformationStep implements ExecutionStep {
     public boolean equals(Object other) {
         return other instanceof CollectCoverageInformationStep;
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }
