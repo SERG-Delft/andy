@@ -10,12 +10,12 @@ import org.eclipse.jdt.core.dom.*;
  * - true if the class was used.
  *
  */
-public class ClassUsedInTests extends WithinTestMethod {
+public class ClassUsedInSolution extends WithinTestMethod {
 
     private final String classToBeUsed;
     private boolean classWasUsed = false;
 
-    public ClassUsedInTests(String classToBeUsed) {
+    public ClassUsedInSolution(String classToBeUsed) {
         this.classToBeUsed = classToBeUsed;
     }
 

@@ -1,13 +1,13 @@
 package unit.codechecker.checks;
 
 import nl.tudelft.cse1110.andy.codechecker.checks.Check;
-import nl.tudelft.cse1110.andy.codechecker.checks.ClassUsedInTests;
+import nl.tudelft.cse1110.andy.codechecker.checks.ClassUsedInSolution;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ClassUsedInTestsTest extends ChecksBaseTest {
+public class ClassUsedInSolutionTest extends ChecksBaseTest {
 
     @ParameterizedTest
     @CsvSource(value={
@@ -18,7 +18,7 @@ public class ClassUsedInTestsTest extends ChecksBaseTest {
             "CreatedOutside, true"
     })
     void classUsesInTestMethod(String className, boolean expectation) {
-        Check check = new ClassUsedInTests(className);
+        Check check = new ClassUsedInSolution(className);
         run("ClassUsed.java", check);
         assertThat(check.result()).isEqualTo(expectation);
     }
