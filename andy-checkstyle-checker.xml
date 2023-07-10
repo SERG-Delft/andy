@@ -16,7 +16,7 @@
         <module name="MethodLength">
             <property name="severity" value="error"/>
             <property name="tokens" value="METHOD_DEF, CTOR_DEF, COMPACT_CTOR_DEF"/>
-            <property name="max" value="69"/>  <!-- setting to 25 gives 23 violations -->
+            <property name="max" value="50"/>
         </module>
 
         <module name="CyclomaticComplexity">
@@ -28,7 +28,6 @@
             <property name="max" value="2"/>
         </module>
 
-        <module name="UnnecessaryParenthesesCheck" />
         <module name="UnnecessarySemicolonInEnumeration"/>
         <module name="UnnecessarySemicolonInTryWithResources"/>
         <module name="UnnecessarySemicolonAfterOuterTypeDeclaration"/>

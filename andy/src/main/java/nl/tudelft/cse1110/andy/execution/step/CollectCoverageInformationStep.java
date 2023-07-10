@@ -34,19 +34,16 @@ public class CollectCoverageInformationStep implements ExecutionStep {
 
     @Override
     public void execute(Context ctx, ResultBuilder result) {
-
         // Skip step if disabled
         if (ctx.getRunConfiguration().skipJacoco()) {
             return;
         }
-
         if(!ctx.hasJacocoRuntime()) {
             throw new RuntimeException("Failed when getting coverage information!");
         }
 
         DirectoryConfiguration dirCfg = ctx.getDirectoryConfiguration();
         RunConfiguration runCfg = ctx.getRunConfiguration();
-
         RuntimeData data = ctx.getJacocoData();
         IRuntime runtime = ctx.getJacocoRuntime();
 

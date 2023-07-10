@@ -1,6 +1,5 @@
 package nl.tudelft.cse1110.andy.codechecker.checks;
 
-@SuppressWarnings("checkstyle:UnnecessaryParenthesesCheck")
 public interface Comparison {
     Comparison LT = ((actual, expected) -> actual<expected);
     Comparison LTE = ((actual, expected) -> actual<=expected);
