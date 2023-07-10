@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CodeSnippetUtilsTest {
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "[{index}] generateCodeSnippetSimple")
     @MethodSource("generator")
     void generateCodeSnippetSimple(List<String> lines, int lineNumber, String expected) {
         String actual = CodeSnippetUtils.generateCodeSnippet(lines, lineNumber);
