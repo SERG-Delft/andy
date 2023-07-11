@@ -51,7 +51,7 @@
 
                     <compilerArgs>
                         <arg>-XDcompilePolicy=simple</arg>
-                        <arg>-Xplugin:ErrorProne -Xep:DoubleBraceInitialization:WARN -Xep:EqualsHashCode:WARN</arg>
+                        <arg>-Xplugin:ErrorProne -Xep:EqualsHashCode:WARN</arg>
                     </compilerArgs>
                     <annotationProcessorPaths>
                         <path>
