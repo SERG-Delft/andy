@@ -68,6 +68,11 @@ public class RunJUnitTestsStep implements ExecutionStep {
         return other instanceof RunJUnitTestsStep;
     }
 
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
     public static class AdditionalReportJUnitListener implements TestExecutionListener {
 
         private ResultBuilder result;

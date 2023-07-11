@@ -141,4 +141,9 @@ public class RunPitestStep implements ExecutionStep {
     public boolean equals(Object other) {
         return other instanceof RunPitestStep;
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

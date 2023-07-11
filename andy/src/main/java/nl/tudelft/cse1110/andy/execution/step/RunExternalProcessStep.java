@@ -30,4 +30,9 @@ public class RunExternalProcessStep implements ExecutionStep {
     public boolean equals(Object other) {
         return other instanceof RunExternalProcessStep;
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

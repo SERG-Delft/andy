@@ -15,4 +15,9 @@ public class KillExternalProcessStep implements ExecutionStep {
     public boolean equals(Object other) {
         return other instanceof KillExternalProcessStep;
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }
