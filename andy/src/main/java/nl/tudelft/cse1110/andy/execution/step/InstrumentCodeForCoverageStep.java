@@ -102,4 +102,9 @@ public class InstrumentCodeForCoverageStep implements ExecutionStep {
     public boolean equals(Object other) {
         return other instanceof InstrumentCodeForCoverageStep;
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

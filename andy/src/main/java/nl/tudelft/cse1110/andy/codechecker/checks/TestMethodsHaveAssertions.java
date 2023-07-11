@@ -22,9 +22,6 @@ import java.util.Set;
  */
 public class TestMethodsHaveAssertions extends WithinTestMethod {
 
-    private boolean containsATestWithoutAssertion = false;
-    private boolean currentMethodContainsAssertion = false;
-
     /**
      * This is, for now, a non-exhaustive list.
      */
@@ -56,6 +53,9 @@ public class TestMethodsHaveAssertions extends WithinTestMethod {
         add("assertThatObject");
 
     }};
+
+    private boolean containsATestWithoutAssertion = false;
+    private boolean currentMethodContainsAssertion = false;
 
     @Override
     public boolean visit(MethodDeclaration md) {

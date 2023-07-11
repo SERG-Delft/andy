@@ -31,4 +31,9 @@ public class RunPenaltyCodeChecksStep implements ExecutionStep {
     public boolean equals(Object other) {
         return other instanceof RunPenaltyCodeChecksStep;
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

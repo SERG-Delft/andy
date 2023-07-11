@@ -53,4 +53,9 @@ public class ReplaceClassloaderStep implements ExecutionStep {
     public boolean equals(Object other) {
         return other instanceof ReplaceClassloaderStep;
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }
