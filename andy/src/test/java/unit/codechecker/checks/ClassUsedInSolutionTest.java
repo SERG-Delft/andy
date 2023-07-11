@@ -15,7 +15,8 @@ public class ClassUsedInSolutionTest extends ChecksBaseTest {
             "SomeClass, true",
             "SomeUselessClass, true",
             "Math, true",
-            "CreatedOutside, true"
+            "CreatedOutside, true",
+            "NeverSeenClass, false"
     })
     void classUsesInTestMethod(String className, boolean expectation) {
         Check check = new ClassUsedInSolution(className);
