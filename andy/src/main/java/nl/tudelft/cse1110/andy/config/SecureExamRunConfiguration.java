@@ -16,16 +16,16 @@ public class SecureExamRunConfiguration extends RunConfiguration {
     private final int numberOfMutationsToConsider;
     private final ExternalProcess externalProcess;
 
-    public Mode mode() {
-        return Mode.EXAM;
-    }
-
     public SecureExamRunConfiguration(RunConfiguration runConfigurationToClone) {
         this.classesUnderTest = runConfigurationToClone.classesUnderTest();
         this.listOfMutants = runConfigurationToClone.listOfMutants();
         this.numberOfMutationsToConsider = runConfigurationToClone.numberOfMutationsToConsider();
         this.externalProcess = runConfigurationToClone.externalProcess();
         this.successMessage = runConfigurationToClone.successMessage();
+    }
+
+    public Mode mode() {
+        return Mode.EXAM;
     }
 
     @Override

@@ -39,4 +39,9 @@ public class GetRunConfigurationStep implements ExecutionStep {
     public boolean equals(Object other) {
         return other instanceof GetRunConfigurationStep;
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

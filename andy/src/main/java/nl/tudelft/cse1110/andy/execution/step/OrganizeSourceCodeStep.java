@@ -41,4 +41,9 @@ public class OrganizeSourceCodeStep implements ExecutionStep {
     public boolean equals(Object other) {
         return other instanceof OrganizeSourceCodeStep;
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

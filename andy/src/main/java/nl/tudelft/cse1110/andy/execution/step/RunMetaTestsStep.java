@@ -54,4 +54,9 @@ public class RunMetaTestsStep implements ExecutionStep {
     public boolean equals(Object other) {
         return other instanceof RunMetaTestsStep;
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

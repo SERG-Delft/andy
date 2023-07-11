@@ -102,4 +102,9 @@ public class SourceCodeSecurityCheckStep implements ExecutionStep {
     public boolean equals(Object other) {
         return other instanceof SourceCodeSecurityCheckStep;
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

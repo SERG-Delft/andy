@@ -27,15 +27,15 @@ public class UseOfStringLiterals extends WithinAnnotatedMethod {
                 add("Provide"); // jqwik
             }};
 
-    protected Set<String> annotations() {
-        return TEST_ANNOTATIONS;
-    }
-
     private boolean literalFound = false;
     private int length;
 
     public UseOfStringLiterals(int length) {
         this.length = length;
+    }
+
+    protected Set<String> annotations() {
+        return TEST_ANNOTATIONS;
     }
 
     public boolean visit(StringLiteral node) {
