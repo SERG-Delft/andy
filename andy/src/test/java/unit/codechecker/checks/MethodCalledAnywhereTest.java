@@ -16,7 +16,8 @@ public class MethodCalledAnywhereTest extends ChecksBaseTest {
         "update, true",
         "save, true",
         "persist, true",
-        "retrieve, true"
+        "retrieve, true",
+        "ceil, false",
     })
     void methodInvocationsInTestMethod(String methodName, boolean expectation) {
         Check check = new MethodCalledAnywhere(methodName);
