@@ -164,6 +164,11 @@ class Restaurant {
 	}
 
 	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
+
+	@Override
 	public String toString() {
 		return "Restaurant{" +
 			"name='" + name + '\'' +

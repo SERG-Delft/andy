@@ -104,6 +104,11 @@ class Reservation {
 			return false;
 		return people != null ? people.equals(that.people) : that.people == null;
 	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
 }
 
 interface ReservationRepository {

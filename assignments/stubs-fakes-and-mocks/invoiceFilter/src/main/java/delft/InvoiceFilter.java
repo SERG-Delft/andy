@@ -45,4 +45,9 @@ class Invoice {
 		}
 		return false;
 	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
 }

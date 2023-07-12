@@ -81,7 +81,7 @@ public class Configuration extends RunConfiguration {
                 MetaTest.withStringReplacement("does not check save", 
                         "rRepository.save(new Reservation(trip, people));", 
                         ""),
-                MetaTest.withLineReplacement("does not check invalid trip Id", 150, 158,
+                MetaTest.withLineReplacement("does not check invalid trip Id", 155, 163,
                         """
                                    try {
                                         Trip trip = tRepository.getTripById(tripId);
@@ -92,7 +92,7 @@ public class Configuration extends RunConfiguration {
                                         throw new RuntimeException("killed the mutant");
                                    }
                                    """),
-                MetaTest.withLineReplacement("does not check capacity", 150, 158,
+                MetaTest.withLineReplacement("does not check capacity", 155, 163,
                         """
                                    try {
                                         Trip trip = tRepository.getTripById(tripId);
