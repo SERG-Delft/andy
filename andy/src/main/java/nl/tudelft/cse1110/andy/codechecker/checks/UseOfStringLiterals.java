@@ -1,5 +1,6 @@
 package nl.tudelft.cse1110.andy.codechecker.checks;
 
+import com.google.common.collect.ImmutableSet;
 import org.eclipse.jdt.core.dom.StringLiteral;
 
 import java.util.HashSet;
@@ -20,12 +21,12 @@ public class UseOfStringLiterals extends WithinAnnotatedMethod {
      * in JUnit tests and in JQWik methods
      */
     public static Set<String> TEST_ANNOTATIONS =
-            new HashSet<>() {{
-                add("Test"); // junit
-                add("ParameterizedTest"); // junit
-                add("Property"); // jqwik
-                add("Provide"); // jqwik
-            }};
+            new HashSet<>(ImmutableSet.of(
+                "Test", // junit
+                "ParameterizedTest", // junit
+                "Property", // jqwik
+                "Provide" // jqwik
+            ));
 
     private boolean literalFound = false;
     private int length;
