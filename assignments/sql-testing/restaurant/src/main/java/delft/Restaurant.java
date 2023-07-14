@@ -150,7 +150,7 @@ class Recipe {
 
 	@Override
 	public int hashCode() {
-		return super.hashCode();
+		return Objects.hash(name, prepTime, vegan, desert, price, id);
 	}
 
 	@Override
@@ -264,7 +264,7 @@ class Restaurant {
 
 	@Override
 	public int hashCode() {
-		return super.hashCode();
+		return Objects.hash(id, name, cuisine, rating, location);
 	}
 
 	@Override

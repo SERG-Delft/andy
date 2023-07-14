@@ -34,7 +34,7 @@ class EmailAddress {
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return Objects.hash(username, company, domain);
     }
 }
 
@@ -80,7 +80,7 @@ class GradeEmail {
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return Objects.hash(recipient, course, grade);
     }
 }
 
