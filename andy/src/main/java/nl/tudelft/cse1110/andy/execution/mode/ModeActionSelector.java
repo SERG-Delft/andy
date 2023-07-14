@@ -103,7 +103,6 @@ public class ModeActionSelector {
 
     public static List<ExecutionStep> testsAndCoverage() {
         return List.of(
-                new RunExternalProcessStep(),
                 new InstrumentCodeForCoverageStep(),
                 new RunJUnitTestsStep(),
                 new CollectCoverageInformationStep());
@@ -111,7 +110,6 @@ public class ModeActionSelector {
 
     public static List<ExecutionStep> withMutationCoverage() {
         return List.of(
-                new RunExternalProcessStep(),
                 new InstrumentCodeForCoverageStep(),
                 new RunJUnitTestsStep(),
                 new CollectCoverageInformationStep(),
@@ -121,14 +119,12 @@ public class ModeActionSelector {
 
     public static List<ExecutionStep> fullMode() {
         return List.of(
-                new RunExternalProcessStep(),
                 new InstrumentCodeForCoverageStep(),
                 new RunJUnitTestsStep(),
                 new CollectCoverageInformationStep(),
                 new RunPitestStep(),
                 new RunPenaltyCodeChecksStep(),
                 new RunCodeChecksStep(),
-                new KillExternalProcessStep(),
                 new RunMetaTestsStep()
         );
     }

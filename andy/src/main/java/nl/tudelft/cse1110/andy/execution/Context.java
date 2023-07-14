@@ -2,10 +2,8 @@ package nl.tudelft.cse1110.andy.execution;
 
 import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.config.RunConfiguration;
-import nl.tudelft.cse1110.andy.execution.externalprocess.EmptyExternalProcess;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.execution.mode.ModeActionSelector;
-import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
 import org.jacoco.core.runtime.IRuntime;
 import org.jacoco.core.runtime.RuntimeData;
 
@@ -20,7 +18,6 @@ public class Context {
     private ExecutionFlow flow;
     private final Action action;
     private ModeActionSelector modeActionSelector;
-    private ExternalProcess externalProcess;
     private ClassLoader classloaderWithStudentsCode;
     private List<String> librariesToBeIncludedInCompilation;
     private IRuntime jacocoRuntime;
@@ -31,7 +28,6 @@ public class Context {
         this.action = action;
         this.directoryConfiguration = directoryConfiguration;
         this.librariesToBeIncludedInCompilation = librariesToBeIncludedInCompilation;
-        this.externalProcess = new EmptyExternalProcess();
     }
 
     public static Context build(Action action, String workDir, String outputDir, List<String> librariesToBeIncludedInCompilation) {
@@ -101,20 +97,6 @@ public class Context {
         return modeActionSelector;
     }
 
-    public ExternalProcess getExternalProcess() {
-        return externalProcess;
-    }
-
-    public void setExternalProcess(ExternalProcess externalProcess) {
-        this.externalProcess = externalProcess;
-    }
-
-    public void killExternalProcess() {
-        // Retrieve error messages before killing process
-        externalProcess.extractErrorMessages();
-
-        externalProcess.kill();
-    }
 
     public void setClassloaderWithStudentsCode(ClassLoader classloaderWithStudentsCode) {
         this.classloaderWithStudentsCode = classloaderWithStudentsCode;

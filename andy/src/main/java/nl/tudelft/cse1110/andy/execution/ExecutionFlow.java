@@ -34,8 +34,6 @@ public class ExecutionFlow {
             }
         } while (!steps.isEmpty() && !resultBuilder.hasFailed());
 
-        ctx.killExternalProcess();
-
         return resultBuilder.build();
     }
 

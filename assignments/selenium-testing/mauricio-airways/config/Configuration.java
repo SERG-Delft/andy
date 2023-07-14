@@ -3,8 +3,6 @@ package delft;
 import nl.tudelft.cse1110.andy.config.MetaTest;
 import nl.tudelft.cse1110.andy.config.RunConfiguration;
 import nl.tudelft.cse1110.andy.execution.mode.Mode;
-import nl.tudelft.cse1110.andy.execution.externalprocess.CommandExternalProcess;
-import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
 
 import java.util.HashMap;
 import java.util.List;

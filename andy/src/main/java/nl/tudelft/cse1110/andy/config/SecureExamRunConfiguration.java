@@ -1,6 +1,5 @@
 package nl.tudelft.cse1110.andy.config;
 
-import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
 import nl.tudelft.cse1110.andy.execution.mode.Mode;
 
 import java.util.Collections;
@@ -14,13 +13,11 @@ public class SecureExamRunConfiguration extends RunConfiguration {
     private final String successMessage;
     private final List<String> listOfMutants;
     private final int numberOfMutationsToConsider;
-    private final ExternalProcess externalProcess;
 
     public SecureExamRunConfiguration(RunConfiguration runConfigurationToClone) {
         this.classesUnderTest = runConfigurationToClone.classesUnderTest();
         this.listOfMutants = runConfigurationToClone.listOfMutants();
         this.numberOfMutationsToConsider = runConfigurationToClone.numberOfMutationsToConsider();
-        this.externalProcess = runConfigurationToClone.externalProcess();
         this.successMessage = runConfigurationToClone.successMessage();
     }
 
@@ -49,10 +46,6 @@ public class SecureExamRunConfiguration extends RunConfiguration {
 
     public int numberOfMutationsToConsider() {
         return numberOfMutationsToConsider;
-    }
-
-    public ExternalProcess externalProcess() {
-        return externalProcess;
     }
 
     public String successMessage() {
