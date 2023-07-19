@@ -1,4 +1,4 @@
-FROM maven:3.6.3-openjdk-17-slim
+FROM maven:3-amazoncorretto-17-debian
 
 WORKDIR /home/
 
@@ -31,7 +31,7 @@ WORKDIR ${ANDY_DIR}
 RUN git checkout ${ANDY_BRANCH}
 
 # Compile and install all dependencies
-RUN mvn package -pl weblab-runner -am -Djar.finalName=andy -DskipTests
+RUN mvn package -pl weblab-runner -am -DskipTests
 
 ARG GNAME=student
 ARG GID=1000
@@ -46,7 +46,7 @@ COPY --chown=${UNAME} user_code/ ${UHOME}
 WORKDIR ${UHOME}
 
 # Move the compiled classes
-RUN mv /home/andy/weblab-runner/target/andy.jar /home/andy.jar
+RUN mv /home/andy/weblab-runner/target/weblab-runner-1.0.jar /home/andy.jar
 
 # Clean up
 RUN rm -rf /home/andy/
