@@ -20,7 +20,7 @@ jobs:
           path: ~/.m2
           key: ${{ matrix.job.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ matrix.job.os }}-m2
-          
+
       - name: Run checkstyle
         run: mvn checkstyle:check
 
@@ -113,6 +113,9 @@ jobs:
           path: ~/.m2
           key: ${{ matrix.job.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ matrix.job.os }}-m2
+
+      - name: Compile and install everything
+        run: mvn clean install -DskipTests
         
       - name: Run Weblab runner tests
         run: mvn test -pl weblab-runner -DexcludedGroups=selenium
