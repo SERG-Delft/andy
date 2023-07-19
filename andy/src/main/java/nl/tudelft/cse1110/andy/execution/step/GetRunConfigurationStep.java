@@ -2,12 +2,8 @@ package nl.tudelft.cse1110.andy.execution.step;
 
 import nl.tudelft.cse1110.andy.config.DefaultRunConfiguration;
 import nl.tudelft.cse1110.andy.config.RunConfiguration;
-import nl.tudelft.cse1110.andy.execution.Context;
-import nl.tudelft.cse1110.andy.execution.ExecutionFlow;
+import nl.tudelft.cse1110.andy.execution.Context.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
-import nl.tudelft.cse1110.andy.execution.mode.Action;
-import nl.tudelft.cse1110.andy.execution.mode.Mode;
-import nl.tudelft.cse1110.andy.execution.mode.ModeActionSelector;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
 
 import java.util.NoSuchElementException;

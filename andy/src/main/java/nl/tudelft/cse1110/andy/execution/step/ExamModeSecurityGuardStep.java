@@ -2,7 +2,7 @@ package nl.tudelft.cse1110.andy.execution.step;
 
 import nl.tudelft.cse1110.andy.config.SecureExamRunConfiguration;
 import nl.tudelft.cse1110.andy.config.RunConfiguration;
-import nl.tudelft.cse1110.andy.execution.Context;
+import nl.tudelft.cse1110.andy.execution.Context.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.execution.mode.Mode;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
