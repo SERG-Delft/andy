@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class LibraryMetaTestTest {
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "[{index}] insertInLine")
     @MethodSource("insertInLineGenerator")
     void insertInLine(String oldCode, int lineToInsert, String contentToAdd, String expectedResult) {
         LibraryMetaTest metaTest = (LibraryMetaTest) MetaTest.insertAt("some meta test", lineToInsert, contentToAdd);
@@ -66,7 +66,7 @@ public class LibraryMetaTestTest {
         );
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "[{index}] withLineReplacement")
     @MethodSource("withLineReplacementGenerator")
     void withLineReplacement(String oldCode, int start, int end, String replacement, String expectedResult) {
         LibraryMetaTest metaTest = (LibraryMetaTest) MetaTest.withLineReplacement("some meta test", start,end, replacement);
@@ -112,7 +112,7 @@ public class LibraryMetaTestTest {
         );
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "[{index}] withStringReplacement")
     @MethodSource("withStringReplacementGenerator")
     void withStringReplacement(String oldCode, String old, String replacement, String expectedResult) {
         LibraryMetaTest metaTest = (LibraryMetaTest) MetaTest.withStringReplacement("some meta test", old, replacement);

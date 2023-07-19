@@ -1,6 +1,9 @@
 package nl.tudelft.cse1110.andy;
 
-import nl.tudelft.cse1110.andy.execution.Context;
+import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
+import nl.tudelft.cse1110.andy.execution.Context.Context;
+import nl.tudelft.cse1110.andy.execution.Context.ContextBuilder;
+import nl.tudelft.cse1110.andy.execution.Context.ContextDirector;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.result.Result;
 import nl.tudelft.cse1110.andy.writer.weblab.WebLabResultWriter;
@@ -29,7 +32,12 @@ public class AndyOnWebLab {
 
     private static void runAndy(String action, String workDir, String outputDir) {
         WebLabResultWriter writer = new WebLabResultWriter();
-        Context ctx = Context.build(getAction(action), workDir, outputDir);
+
+        ContextDirector director = new ContextDirector(new ContextBuilder());
+        Context ctx = director.constructBase(
+                getAction(action),
+                new DirectoryConfiguration(workDir, outputDir)
+        );
 
         try {
             Result result = new Andy().run(ctx);

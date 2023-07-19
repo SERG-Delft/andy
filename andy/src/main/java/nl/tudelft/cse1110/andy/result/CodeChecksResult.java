@@ -35,7 +35,7 @@ public class CodeChecksResult {
     }
 
     public int getTotalNumberOfChecks(boolean includeWeight) {
-        return checkResults.stream().mapToInt(c -> (includeWeight ? c.getWeight() : 1)).sum();
+        return checkResults.stream().mapToInt(c -> includeWeight ? c.getWeight() : 1).sum();
     }
 
     public List<CodeCheckResult> getCheckResults() {

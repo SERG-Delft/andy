@@ -1,6 +1,9 @@
 package nl.tudelft.cse1110.andy;
 
-import nl.tudelft.cse1110.andy.execution.Context;
+import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
+import nl.tudelft.cse1110.andy.execution.Context.Context;
+import nl.tudelft.cse1110.andy.execution.Context.ContextBuilder;
+import nl.tudelft.cse1110.andy.execution.Context.ContextDirector;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.result.Result;
 import nl.tudelft.cse1110.andy.writer.standard.StandardResultWriter;
@@ -16,7 +19,9 @@ public class AndyLauncher {
         Action action = getAction(args[0]);
         String inputDir = args[1];
         String outputDir = args[2];
-        Context ctx = Context.build(action, inputDir, outputDir);
+
+        ContextDirector director = new ContextDirector(new ContextBuilder());
+        Context ctx = director.constructBase(action, new DirectoryConfiguration(inputDir, outputDir));
 
         StandardResultWriter writer = new StandardResultWriter();
         try {

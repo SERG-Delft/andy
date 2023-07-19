@@ -300,6 +300,8 @@ Andy provides different checks for JUnit, Mockito, and JQWik tests:
     - `LoopInTestMethods`: checks whether there is a loop in a test method.
     - `UseOfStringLiterals`: checks whether there is a string literal in a test method.
     - `MethodCalledInTestMethod`: checks whether a method was invoked in a test method.
+    - `ClassUsedInSolution`: checks whether a class was used anywhere in the test suite.
+    - `MethodCalledAnywhere`: checks whether a method was invoked in any scope.
 
 - Mockito:
     - `MockClass`: Checks whether a class was mocked in the test suite.

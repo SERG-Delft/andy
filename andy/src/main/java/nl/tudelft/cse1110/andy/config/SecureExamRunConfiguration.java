@@ -1,5 +1,6 @@
 package nl.tudelft.cse1110.andy.config;
 
+import com.google.common.collect.ImmutableMap;
 import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
 import nl.tudelft.cse1110.andy.execution.mode.Mode;
 
@@ -16,10 +17,6 @@ public class SecureExamRunConfiguration extends RunConfiguration {
     private final int numberOfMutationsToConsider;
     private final ExternalProcess externalProcess;
 
-    public Mode mode() {
-        return Mode.EXAM;
-    }
-
     public SecureExamRunConfiguration(RunConfiguration runConfigurationToClone) {
         this.classesUnderTest = runConfigurationToClone.classesUnderTest();
         this.listOfMutants = runConfigurationToClone.listOfMutants();
@@ -28,14 +25,18 @@ public class SecureExamRunConfiguration extends RunConfiguration {
         this.successMessage = runConfigurationToClone.successMessage();
     }
 
+    public Mode mode() {
+        return Mode.EXAM;
+    }
+
     @Override
     public Map<String, Float> weights() {
-        return new HashMap<>() {{
-            put("coverage", 0.25f);
-            put("mutation", 0.25f);
-            put("meta", 0.25f);
-            put("codechecks", 0.25f);
-        }};
+        return new HashMap<>(ImmutableMap.of(
+            "coverage", 0.25f,
+            "mutation", 0.25f,
+            "meta", 0.25f,
+            "codechecks", 0.25f
+        ));
     }
 
     @Override

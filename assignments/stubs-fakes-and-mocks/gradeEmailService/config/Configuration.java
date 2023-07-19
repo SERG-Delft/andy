@@ -52,37 +52,37 @@ public class Configuration extends RunConfiguration {
         return List.of(
             MetaTest.withLineReplacement(
                 "does not check whether email is null",
-                174, 181,
+                182, 189,
                 "emails.add(new GradeEmail(address, course, grades.get(student)));"
             ),
             MetaTest.withLineReplacement(
                 "does not add non-sendable email errors",
-                187, 190,
+                195, 198,
                 ""
             ),
             MetaTest.withLineReplacement(
                 "does not include student number in error string",
-                179, 179,
+                187, 187,
                 "\"\""
             ),
             MetaTest.withLineReplacement(
                 "does not add no matching email errors",
-                177, 180,
+                185, 188,
                 ""
             ),
             MetaTest.withLineReplacement(
                 "does not include email in error string",
-                189, 189,
+                197, 197,
                 "e.getAddresses().stream().map(a -> \"\").collect(Collectors.toList())"
             ),
             MetaTest.withLineReplacement(
                 "only executes loop once",
-                181, 181,
+                189, 189,
                 "} break;"
             ),
             MetaTest.withLineReplacement(
                 "zero iterations in the loop",
-                165, 165,
+                173, 173,
                 "if(studentNumbers.isEmpty()) throw new RuntimeException();"
             ),
             MetaTest.withStringReplacement(

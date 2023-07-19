@@ -6,6 +6,9 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.google.gson.Gson;
 import nl.tudelft.cse1110.andy.Andy;
+import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
+import nl.tudelft.cse1110.andy.execution.Context.ContextBuilder;
+import nl.tudelft.cse1110.andy.execution.Context.ContextDirector;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.result.Result;
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
@@ -16,7 +19,6 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.Arrays;
 
-import static nl.tudelft.cse1110.andy.execution.Context.build;
 import static nl.tudelft.cse1110.andy.utils.FilesUtils.*;
 
 public class AndyOnAWSLambda implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
@@ -30,11 +32,12 @@ public class AndyOnAWSLambda implements RequestHandler<APIGatewayProxyRequestEve
         writeToFile(workDir, "Configuration.java", input.getConfiguration());
         writeToFile(workDir, "Solution.java", input.getSolution());
 
-        nl.tudelft.cse1110.andy.execution.Context ctx = build(
+        ContextDirector director = new ContextDirector(new ContextBuilder());
+        nl.tudelft.cse1110.andy.execution.Context.Context ctx = director.constructWithLibraries(
                 Action.valueOf(input.getAction()),
-                workDir.toString(),
-                outputDir.toString(),
-                Arrays.asList(myself()));
+                new DirectoryConfiguration(workDir.toString(), outputDir.toString()),
+                Arrays.asList(myself())
+        );
 
         Result result = new Andy().run(ctx);
 
