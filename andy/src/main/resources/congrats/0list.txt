@@ -22,4 +22,5 @@ rickroll.txt
 smiley.txt
 smilingcat.txt
 sun.txt
+shrek.txt
 winniethepooh.txt

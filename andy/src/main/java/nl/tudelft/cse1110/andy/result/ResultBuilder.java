@@ -2,7 +2,7 @@ package nl.tudelft.cse1110.andy.result;
 
 import nl.tudelft.cse1110.andy.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.andy.codechecker.engine.CheckType;
-import nl.tudelft.cse1110.andy.execution.Context;
+import nl.tudelft.cse1110.andy.execution.Context.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
 import nl.tudelft.cse1110.andy.grade.GradeCalculator;
@@ -46,7 +46,7 @@ public class ResultBuilder {
     private UnitTestsResult testResults = UnitTestsResult.empty();
     private MutationTestingResult mutationResults = MutationTestingResult.empty();
     private CodeChecksResult codeCheckResults = CodeChecksResult.empty();
-    private CodeChecksResult requiredCodeCheckResults = CodeChecksResult.empty();
+    private CodeChecksResult penaltyCodeCheckResults = CodeChecksResult.empty();
     private CoverageResult coverageResults = CoverageResult.empty();
     private MetaTestsResult metaTestResults = MetaTestsResult.empty();
 
@@ -168,10 +168,10 @@ public class ResultBuilder {
     }
 
     /*
-     * Required code checks
+     * Penalty code checks (subtract points from the final score if they fail)
      */
-    public void logRequiredCodeChecks(CheckScript script) {
-        this.requiredCodeCheckResults = buildCodeChecksResult(script);
+    public void logPenaltyCodeChecks(CheckScript script) {
+        this.penaltyCodeCheckResults = buildCodeChecksResult(script);
     }
 
     private static CodeChecksResult buildCodeChecksResult(CheckScript script) {
@@ -207,6 +207,7 @@ public class ResultBuilder {
                 totalCoveredBranches, totalBranches, coverageLineByLine);
     }
 
+    @SuppressWarnings("checkstyle:methodLength")
     private CoverageLineByLine getCoverageLineByLine(Collection<IClassCoverage> coverages) {
         List<Integer> fullyCoveredLines = new ArrayList<>();
         List<Integer> partiallyCoveredLines = new ArrayList<>();
@@ -270,21 +271,23 @@ public class ResultBuilder {
         if(!compilation.successful()) {
             return new Result(compilation, timeInSeconds);
         } else {
-            GradeValues grades = GradeValues.fromResults(coverageResults, codeCheckResults, mutationResults, metaTestResults);
+            GradeValues grades = GradeValues.fromResults(coverageResults, codeCheckResults, mutationResults, metaTestResults, penaltyCodeCheckResults);
             GradeWeight weights = GradeWeight.fromConfig(ctx.getRunConfiguration().weights());
             String successMessage = ctx.getRunConfiguration().successMessage();
 
             this.checkExternalProcessExit();
 
-            int finalGrade = calculateFinalGrade(grades, weights);
+            final int finalGrade = calculateFinalGrade(grades, weights);
+            final int penalty = grades.getPenalty();
 
             return new Result(compilation,
                     testResults,
                     mutationResults,
                     codeCheckResults,
-                    requiredCodeCheckResults,
+                    penaltyCodeCheckResults,
                     coverageResults,
                     metaTestResults,
+                    penalty,
                     finalGrade,
                     genericFailureObject,
                     timeInSeconds,
@@ -332,9 +335,8 @@ public class ResultBuilder {
         boolean compilationFailed = compilation!=null && !compilation.successful();
         boolean unitTestsFailed = testResults != null && testResults.didNotGoWell();
         boolean hasGenericFailure = genericFailureObject.hasFailure();
-        boolean requiredCodeChecksFailed = !requiredCodeCheckResults.allChecksPass();
 
-        return compilationFailed || unitTestsFailed || hasGenericFailure || requiredCodeChecksFailed;
+        return compilationFailed || unitTestsFailed || hasGenericFailure;
     }
 
     public UnitTestsResult getTestResults() {

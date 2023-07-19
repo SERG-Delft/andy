@@ -1,5 +1,6 @@
 package nl.tudelft.cse1110.andy.codechecker.checks;
 
+import com.google.common.collect.ImmutableSet;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 
@@ -22,40 +23,40 @@ import java.util.Set;
  */
 public class TestMethodsHaveAssertions extends WithinTestMethod {
 
-    private boolean containsATestWithoutAssertion = false;
-    private boolean currentMethodContainsAssertion = false;
-
     /**
      * This is, for now, a non-exhaustive list.
      */
-    private static Set<String> ASSERT_METHODS = new HashSet<>() {{
+    private static Set<String> ASSERT_METHODS = new HashSet<>(ImmutableSet.of(
         // junit
-        add("assertEquals");
-        add("assertNotEquals");
-        add("assertTrue");
-        add("assertFalse");
-        add("assertThrows");
-        add("assertNull");
-        add("assertArrayEquals");
-        add("assertDoesNotThrow");
-        add("assertIterableEquals");
-        add("assertLinesMatch");
-        add("assertNotNull");
-        add("assertNotSame");
-        add("assertSame");
+        "assertEquals",
+        "assertNotEquals",
+        "assertTrue",
+        "assertFalse",
+        "assertThrows",
+        "assertNull",
+        "assertArrayEquals",
+        "assertDoesNotThrow",
+        "assertIterableEquals",
+        "assertLinesMatch",
+        "assertNotNull",
+        "assertNotSame",
+        "assertSame",
 
         // assertj
-        add("assertThat");
-        add("assertThatThrownBy");
-        add("assertThatExceptionOfType");
-        add("assertThatCode");
-        add("assertThatIllegalArgumentException");
-        add("assertThatIllegalStateException");
-        add("assertThatIOException");
-        add("assertThatNullPointerException");
-        add("assertThatObject");
+        "assertThat",
+        "assertThatThrownBy",
+        "assertThatExceptionOfType",
+        "assertThatCode",
+        "assertThatIllegalArgumentException",
+        "assertThatIllegalStateException",
+        "assertThatIOException",
+        "assertThatNullPointerException",
+        "assertThatObject"
 
-    }};
+    ));
+
+    private boolean containsATestWithoutAssertion = false;
+    private boolean currentMethodContainsAssertion = false;
 
     @Override
     public boolean visit(MethodDeclaration md) {

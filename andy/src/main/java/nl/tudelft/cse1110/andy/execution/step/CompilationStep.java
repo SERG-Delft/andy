@@ -1,7 +1,7 @@
 package nl.tudelft.cse1110.andy.execution.step;
 
 import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
-import nl.tudelft.cse1110.andy.execution.Context;
+import nl.tudelft.cse1110.andy.execution.Context.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
@@ -49,20 +49,18 @@ public class CompilationStep implements ExecutionStep {
          * So, all the libraries available (JUnit, etc) will be reused here
          */
         Collection<File> listOfFiles = FilesUtils.getAllJavaFiles(dirCfg.getWorkingDir());
-
-        Iterable<? extends JavaFileObject > sources =
-                manager.getJavaFileObjectsFromFiles(listOfFiles);
+        Iterable<? extends JavaFileObject > sources = manager.getJavaFileObjectsFromFiles(listOfFiles);
 
         ClassNameScanner scanner = new ClassNameScanner();
         ClassNameProcessor processor = new ClassNameProcessor(scanner);
 
-        List<String> options = ctx.hasLibrariesToBeIncluded() ? Arrays.asList(new String[] { "-cp", asClassPath(ctx.getLibrariesToBeIncludedInCompilation()) }) : null;
+        List<String> options = ctx.hasLibrariesToBeIncluded() ? Arrays.asList(
+                new String[] { "-cp", asClassPath(ctx.getLibrariesToBeIncludedInCompilation()) }) : null;
         JavaCompiler.CompilationTask task = compiler.getTask(null, manager, diagnostics, options, null, sources);
         task.setProcessors(Arrays.asList(processor));
 
         /*
-         * Compiles. The .class files will be saved in the same directory
-         * as the java files.
+         * Compiles. The .class files will be saved in the same directory as the java files.
          */
         try {
             boolean compilationResult = task.call();
@@ -121,4 +119,8 @@ public class CompilationStep implements ExecutionStep {
         return other instanceof CompilationStep;
     }
 
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

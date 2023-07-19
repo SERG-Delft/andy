@@ -26,6 +26,18 @@ public class GradeCalculator {
         if(finalGrade < 0 || finalGrade > 100)
             throw new RuntimeException("Invalid grade calculation");
 
+        if(gradeValues.getPenalty() < 0){
+            throw new RuntimeException("Negative penalty: " + gradeValues.getPenalty());
+        }
+
+        // Apply penalty
+        finalGrade -= gradeValues.getPenalty();
+
+        // Grade should not go below 0
+        // The total penalty can be more than 100: for example, if there are two failing code checks
+        //  which both have a penalty of 100, the total penalty will be 200, and the final grade should be 0.
+        if(finalGrade < 0) finalGrade = 0;
+
         // Grades between 99.5 and 100 should be rounded down to 99 instead of up
         if (finalGrade == 100 && hasIncompleteComponents(gradeValues, weights)) {
             finalGrade = 99;

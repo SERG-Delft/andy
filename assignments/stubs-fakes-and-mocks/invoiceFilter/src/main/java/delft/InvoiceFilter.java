@@ -3,6 +3,7 @@ package delft;
 import static java.util.stream.Collectors.toList;
 
 import java.util.List;
+import java.util.Objects;
 
 class InvoiceFilter {
 
@@ -44,5 +45,10 @@ class Invoice {
 			return value == ((Invoice) o).value;
 		}
 		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(value);
 	}
 }

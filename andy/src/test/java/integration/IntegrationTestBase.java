@@ -1,9 +1,11 @@
 package integration;
 
 import com.google.common.io.Files;
-import nl.tudelft.cse1110.andy.execution.Context;
-import nl.tudelft.cse1110.andy.execution.ExecutionFlow;
-import nl.tudelft.cse1110.andy.execution.ExecutionStep;
+import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
+import nl.tudelft.cse1110.andy.execution.*;
+import nl.tudelft.cse1110.andy.execution.Context.Context;
+import nl.tudelft.cse1110.andy.execution.Context.ContextBuilder;
+import nl.tudelft.cse1110.andy.execution.Context.ContextDirector;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.result.Result;
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
@@ -41,7 +43,12 @@ public abstract class IntegrationTestBase {
 
         copyFiles(libraryFile, solutionFile);
 
-        this.ctx = Context.build(action, workDir.toString(), reportDir.toString());
+        ContextDirector director = new ContextDirector(new ContextBuilder());
+        this.ctx = director.constructBase(
+                action,
+                new DirectoryConfiguration(workDir.toString(), reportDir.toString())
+        );
+
         ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
 
         try {

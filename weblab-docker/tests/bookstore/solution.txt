@@ -1,0 +1,44 @@
+package delft;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterAll;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.Keys;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+class FranksBookStoreTests {
+
+    private static WebDriver driver;
+
+    @BeforeAll
+    public static void initDriver() {
+        driver = CSE1110.getDriver();
+    }
+
+    @Test
+    public void searchTest() {
+        WebElement authorName = driver.findElement(By.id("author_name"));
+        authorName.sendKeys("Mauricio");
+
+        WebElement submitButton = driver.findElement(By.id("author_submit_button"));
+        submitButton.click();
+
+        WebElement searchBar = driver.findElement(By.id("search_bar"));
+        searchBar.sendKeys("Mauricio");
+        searchBar.sendKeys(Keys.RETURN);
+
+        WebElement authorList = driver.findElement(By.id("author_list"));
+        WebElement firstResult = driver.findElement(By.xpath("//*[@id=\"author_list\"]/div"));
+        assertThat(firstResult.getText()).contains("Mauricio");
+    }
+
+    @AfterAll
+    public static void close() {
+        driver.close();
+    }
+
+}

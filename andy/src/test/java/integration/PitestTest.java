@@ -49,7 +49,6 @@ public class PitestTest extends IntegrationTestBase {
 
         assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(25);
         assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(25);
-
     }
 
 

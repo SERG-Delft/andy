@@ -5,7 +5,6 @@ import org.apache.commons.io.filefilter.RegexFileFilter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,19 +23,18 @@ public class FilesUtils {
                 .collect(Collectors.toList());
     }
 
-    public static Collection<File> getAllJavaFiles(String sourceDir) {
+    public static Collection<File> getAllFiles(String sourceDir, String extension) {
         Collection<File> files = org.apache.commons.io.FileUtils.listFiles(
                 new File(sourceDir),
-                new RegexFileFilter("^.*\\.java$"),
+                new RegexFileFilter(String.format("^.*\\.%s$", extension)),
                 DirectoryFileFilter.DIRECTORY
         );
 
         return files;
     }
 
-    public static File[] getAllFiles(File directoryPath) {
-        File[] files = directoryPath.listFiles();
-        return files;
+    public static Collection<File> getAllJavaFiles(String sourceDir) {
+        return getAllFiles(sourceDir, "java");
     }
 
 
@@ -83,6 +81,7 @@ public class FilesUtils {
                 .orElseThrow(() -> new FileNotFoundException("Solution file does not exist."));
     }
 
+    @SuppressWarnings("checkstyle:UnnecessaryParenthesesCheck")
     public static String findLibrary(String workdir) throws FileNotFoundException {
         return getAllJavaFiles(workdir)
                 .stream().filter(x -> x.getAbsolutePath().endsWith("Library.java")

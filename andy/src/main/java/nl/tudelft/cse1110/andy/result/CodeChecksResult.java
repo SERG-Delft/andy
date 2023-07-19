@@ -21,11 +21,21 @@ public class CodeChecksResult {
     }
 
     public int getNumberOfPassedChecks() {
-        return checkResults.stream().mapToInt(check -> check.passed() ? check.getWeight() : 0).sum();
+        return getNumberOfPassedChecks(true);
+    }
+
+    public int getNumberOfPassedChecks(boolean includeWeight) {
+        return checkResults.stream().mapToInt(check -> check.passed() ?
+                (includeWeight ? check.getWeight() : 1) :
+                0).sum();
     }
 
     public int getTotalNumberOfChecks() {
-        return checkResults.stream().mapToInt(c -> c.getWeight()).sum();
+        return getTotalNumberOfChecks(true);
+    }
+
+    public int getTotalNumberOfChecks(boolean includeWeight) {
+        return checkResults.stream().mapToInt(c -> includeWeight ? c.getWeight() : 1).sum();
     }
 
     public List<CodeCheckResult> getCheckResults() {
@@ -38,10 +48,6 @@ public class CodeChecksResult {
 
     public boolean wasExecuted() {
         return wasExecuted;
-    }
-
-    public boolean allChecksPass() {
-        return getNumberOfPassedChecks() == getTotalNumberOfChecks();
     }
 
     @Override

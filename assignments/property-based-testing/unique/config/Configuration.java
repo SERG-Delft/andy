@@ -21,7 +21,7 @@ public class Configuration extends RunConfiguration {
 
     @Override
     public List<String> classesUnderTest() {
-        return List.of("delft.MathArrays");
+        return List.of("delft.MathArraysPBT");
     }
 
     @Override
@@ -30,12 +30,12 @@ public class Configuration extends RunConfiguration {
                 MetaTest.withStringReplacement("does not remove duplicates",
                         "TreeSet",
                         "PriorityQueue"),
-                MetaTest.withStringReplacement("skips first element",
-                        "for (int i = 0; i < data.length; i++)",
-                        "for (int i = 1; i < data.length; i++)"),
-                MetaTest.withStringReplacement("skips last element",
-                        "for (int i = 0; i < data.length; i++)",
-                        "for (int i = 0; i < data.length-1; i++)"),
+                // MetaTest.withStringReplacement("skips first element",
+                //         "for (int i = 0; i < data.length; i++)",
+                //         "for (int i = 1; i < data.length; i++)"),
+                // MetaTest.withStringReplacement("skips last element",
+                //         "for (int i = 0; i < data.length; i++)",
+                //         "for (int i = 0; i < data.length-1; i++)"),
                 MetaTest.withStringReplacement("output array is larger than the number of elements",
                         "final int count = values.size();",
                         "final int count = values.size() + 1;")

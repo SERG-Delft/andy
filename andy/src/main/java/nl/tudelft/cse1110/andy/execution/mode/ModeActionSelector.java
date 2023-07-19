@@ -45,9 +45,10 @@ public class ModeActionSelector {
             case GRADING -> {
                 return getGradingMode();
             }
+            default -> {
+                return Collections.emptyList();
+            }
         }
-
-        return Collections.emptyList();
     }
 
     public boolean shouldShowFullHints() {
@@ -125,7 +126,7 @@ public class ModeActionSelector {
                 new RunJUnitTestsStep(),
                 new CollectCoverageInformationStep(),
                 new RunPitestStep(),
-                new RunRequiredCodeChecksStep(),
+                new RunPenaltyCodeChecksStep(),
                 new RunCodeChecksStep(),
                 new KillExternalProcessStep(),
                 new RunMetaTestsStep()

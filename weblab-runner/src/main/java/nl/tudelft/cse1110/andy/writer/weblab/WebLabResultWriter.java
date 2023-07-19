@@ -1,7 +1,7 @@
 package nl.tudelft.cse1110.andy.writer.weblab;
 
 import com.google.gson.Gson;
-import nl.tudelft.cse1110.andy.execution.Context;
+import nl.tudelft.cse1110.andy.execution.Context.Context;
 import nl.tudelft.cse1110.andy.result.CompilationErrorInfo;
 import nl.tudelft.cse1110.andy.result.Result;
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
@@ -100,7 +100,7 @@ public class WebLabResultWriter extends StandardResultWriter {
         appendMetaScore(doc, metaElement, "Meta tests", result.getMetaTests().getPassedMetaTests());
 
         result.getCodeChecks().getCheckResults().forEach(check -> appendMetaScore(doc, metaElement, check.getDescription(), check.passed() ? 1 : 0));
-        result.getRequiredCodeChecks().getCheckResults().forEach(check -> appendMetaScore(doc, metaElement, check.getDescription(), check.passed() ? 1 : 0));
+        result.getPenaltyCodeChecks().getCheckResults().forEach(check -> appendMetaScore(doc, metaElement, check.getDescription(), check.passed() ? 1 : 0));
         result.getMetaTests().getMetaTestResults().forEach(metaTest -> appendMetaScore(doc, metaElement, metaTest.getName(), metaTest.succeeded() ? 1 : 0));
 
         testSuitesElement.appendChild(metaElement);

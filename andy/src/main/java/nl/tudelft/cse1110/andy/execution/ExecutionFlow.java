@@ -1,5 +1,6 @@
 package nl.tudelft.cse1110.andy.execution;
 
+import nl.tudelft.cse1110.andy.execution.Context.Context;
 import nl.tudelft.cse1110.andy.execution.step.*;
 import nl.tudelft.cse1110.andy.grade.GradeCalculator;
 import nl.tudelft.cse1110.andy.result.Result;
@@ -43,6 +44,10 @@ public class ExecutionFlow {
         this.steps.addAll(steps);
     }
 
+    public void addStepAsNext(ExecutionStep step) {
+        this.steps.add(0, step);
+    }
+
     public static ExecutionFlow build(Context ctx) {
         return new ExecutionFlow(ctx, basicSteps());
     }
@@ -51,13 +56,14 @@ public class ExecutionFlow {
         return new ExecutionFlow(ctx, steps);
     }
 
-    private static List<ExecutionStep> basicSteps() {
+    public static List<ExecutionStep> basicSteps() {
         return Arrays.asList(
                 new OrganizeSourceCodeStep(),
                 new SourceCodeSecurityCheckStep(),
                 new CompilationStep(),
                 new ReplaceClassloaderStep(),
                 new GetRunConfigurationStep(),
+                new ExamModeSecurityGuardStep(),
                 new InjectModeActionStepsStep());
     }
 }

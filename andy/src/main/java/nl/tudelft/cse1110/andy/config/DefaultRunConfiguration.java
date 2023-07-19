@@ -1,5 +1,7 @@
 package nl.tudelft.cse1110.andy.config;
 
+import com.google.common.collect.ImmutableMap;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -15,12 +17,12 @@ public class DefaultRunConfiguration extends RunConfiguration {
 
     @Override
     public Map<String, Float> weights() {
-        return new HashMap<>() {{
-            put("coverage", 0.25f);
-            put("mutation", 0.25f);
-            put("meta", 0.25f);
-            put("codechecks", 0.25f);
-        }};
+        return new HashMap<>(ImmutableMap.of(
+            "coverage", 0.25f,
+            "mutation", 0.25f,
+            "meta", 0.25f,
+            "codechecks", 0.25f
+        ));
     }
 
     @Override

@@ -1,7 +1,7 @@
 package unit.writer.standard;
 
 import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
-import nl.tudelft.cse1110.andy.execution.Context;
+import nl.tudelft.cse1110.andy.execution.Context.Context;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.execution.mode.Mode;
 import nl.tudelft.cse1110.andy.execution.mode.ModeActionSelector;
@@ -284,7 +284,8 @@ public class StandardResultWriterTest {
                 .has(mutationScore(5, 6))
                 .has(noMetaTests())
                 .has(noCodeChecks())
-                .has(noRequiredCodeChecks())
+                .has(noPenaltyCodeChecks())
+                .has(noPenalty())
                 .has(not(zeroScoreExplanation()))
                 .doesNotContain("test success message");
 
@@ -569,11 +570,11 @@ public class StandardResultWriterTest {
                         new MetaTestResult("e", 3, false),
                         new MetaTestResult("f", 1, true)
                 ))
-                .withRequiredCodeCheckResults(List.of(
+                .withPenaltyCodeCheckResults(List.of(
                         new CodeCheckResult("a1", 1, true),
                         new CodeCheckResult("b1", 1, true),
-                        new CodeCheckResult("c1", 1, true),
-                        new CodeCheckResult("d1", 1, true)
+                        new CodeCheckResult("c1", 100, true),
+                        new CodeCheckResult("d1", 5, true)
                 ))
                 .build();
 
@@ -593,10 +594,10 @@ public class StandardResultWriterTest {
                 .has(fullGradeDescriptionDisplayed("Code checks", 3, 4, 0.25))
                 .has(fullGradeDescriptionDisplayed("Meta tests", 2, 3, 0.25))
                 .has(mutationScore(5, 6))
-                .has(scoreOfCodeChecks(3, 4))
+                .has(scoreOfCodeChecks(7, 8))
                 .has(metaTestsPassing(2))
                 .has(metaTests(3))
-                .has(not(requiredCodeChecksFailed()))
+                .has(noPenalty())
                 .has(not(zeroScoreExplanation()));
 
         assertThat(output)
@@ -606,10 +607,10 @@ public class StandardResultWriterTest {
                 .has(codeCheckDisplayed("a", true, 1, fullHints))
                 .has(codeCheckDisplayed("b", true, 2, fullHints))
                 .has(codeCheckDisplayed("c", false, 1, fullHints))
-                .has(codeCheckDisplayed("a1", true, 1, fullHints))
-                .has(codeCheckDisplayed("b1", true, 1, fullHints))
-                .has(codeCheckDisplayed("c1", true, 1, fullHints))
-                .has(codeCheckDisplayed("d1", true, 1, fullHints));
+                .has(penaltyCodeCheckDisplayed("a1", true, 1, fullHints))
+                .has(penaltyCodeCheckDisplayed("b1", true, 1, fullHints))
+                .has(penaltyCodeCheckDisplayed("c1", true, 100, fullHints))
+                .has(penaltyCodeCheckDisplayed("d1", true, 5, fullHints));
     }
 
     @ParameterizedTest
@@ -618,7 +619,7 @@ public class StandardResultWriterTest {
             "false,true",
             "true,true"
     })
-    void testPrintFinalGradeWithRequiredCodeChecksFailing(boolean fullHints, boolean partialHints) {
+    void testPrintFinalGradeWithPenaltyCodeChecksFailing(boolean fullHints, boolean partialHints) {
         ModeActionSelector modeActionSelector = mock(ModeActionSelector.class);
         when(modeActionSelector.shouldCalculateAndShowGrades()).thenReturn(true);
         when(modeActionSelector.shouldGenerateAnalytics()).thenReturn(false);
@@ -633,12 +634,13 @@ public class StandardResultWriterTest {
                         4, 7, 5, 8, 1, 2,
                         new CoverageLineByLine(List.of(), List.of(), List.of())))
                 .withMutationTestingResults(5, 6)
-                .withRequiredCodeCheckResults(List.of(
-                        new CodeCheckResult("a1", 1, true),
-                        new CodeCheckResult("b1", 1, false),
-                        new CodeCheckResult("c1", 1, true),
+                .withPenaltyCodeCheckResults(List.of(
+                        new CodeCheckResult("a1", 1, false),
+                        new CodeCheckResult("b1", 100, false),
+                        new CodeCheckResult("c1", 50, true),
                         new CodeCheckResult("d1", 1, true)
                 ))
+                .withPenalty(101)
                 .build();
 
         writer.write(ctx, result);
@@ -650,15 +652,16 @@ public class StandardResultWriterTest {
                 .has(compilationSuccess())
                 .has(fullGradeDescriptionDisplayed("Code checks", 0, 0, 0.25))
                 .has(mutationScore(5, 6))
-                .has(requiredCodeChecksFailed())
-                .has(noCodeChecks())
+                .has(penalty(101))
+                .has(codeChecks())
+                .has(scoreOfCodeChecks(2, 4))
                 .has(not(zeroScoreExplanation()));
 
         assertThat(output)
-                .has(codeCheckDisplayed("a1", true, 1, fullHints))
-                .has(codeCheckDisplayed("b1", false, 1, fullHints))
-                .has(codeCheckDisplayed("c1", true, 1, fullHints))
-                .has(codeCheckDisplayed("d1", true, 1, fullHints));
+                .has(penaltyCodeCheckDisplayed("a1", false, 1, fullHints))
+                .has(penaltyCodeCheckDisplayed("b1", false, 100, fullHints))
+                .has(penaltyCodeCheckDisplayed("c1", true, 50, fullHints))
+                .has(penaltyCodeCheckDisplayed("d1", true, 1, fullHints));
     }
 
     @Test
@@ -850,6 +853,11 @@ public class StandardResultWriterTest {
 
     protected Condition<? super String> codeCheckDisplayed(String description, boolean pass, int weight, boolean shownInOutput) {
         var codeCheckCondition = codeCheck(description, pass, weight);
+        return shownInOutput ? codeCheckCondition : not(codeCheckCondition);
+    }
+
+    protected Condition<? super String> penaltyCodeCheckDisplayed(String description, boolean pass, int weight, boolean shownInOutput) {
+        var codeCheckCondition = penaltyCodeCheck(description, pass, weight);
         return shownInOutput ? codeCheckCondition : not(codeCheckCondition);
     }
 

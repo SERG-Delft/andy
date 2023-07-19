@@ -19,6 +19,8 @@ public class GradeValues {
     private int checksPassed;
     private int totalChecks;
 
+    private int penalty;
+
     public int getCoveredBranches() {
         return coveredBranches;
     }
@@ -75,14 +77,25 @@ public class GradeValues {
         this.totalChecks = totalChecks;
     }
 
-    public static GradeValues fromResults(CoverageResult coverageResults, CodeChecksResult codeCheckResults, MutationTestingResult mutationResults, MetaTestsResult metaTestResults) {
+    public int getPenalty() {
+        return penalty;
+    }
+
+    public GradeValues setPenalty(int penalty) {
+        this.penalty = penalty;
+        return this;
+    }
+
+    public static GradeValues fromResults(CoverageResult coverageResults, CodeChecksResult codeCheckResults, MutationTestingResult mutationResults, MetaTestsResult metaTestResults, CodeChecksResult penaltyCodeCheckResults) {
         GradeValues grades = new GradeValues();
         grades.setBranchGrade(coverageResults.getCoveredBranches(), coverageResults.getTotalNumberOfBranches());
         grades.setCheckGrade(codeCheckResults.getNumberOfPassedChecks(), codeCheckResults.getTotalNumberOfChecks());
         grades.setMutationGrade(mutationResults.getKilledMutants(), mutationResults.getTotalNumberOfMutants());
         grades.setMetaGrade(metaTestResults.getPassedMetaTests(), metaTestResults.getTotalTests());
 
+        // penalty is equal to the sum of the weights of all failed penalty code checks
+        grades.setPenalty(penaltyCodeCheckResults.getCheckResults().stream().mapToInt(check -> check.passed() ? 0 : check.getWeight()).sum());
+
         return grades;
     }
-
 }

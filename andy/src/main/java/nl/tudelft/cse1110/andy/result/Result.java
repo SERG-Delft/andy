@@ -10,23 +10,25 @@ public class Result {
     private final UnitTestsResult tests;
     private final MutationTestingResult mutationTesting;
     private final CodeChecksResult codeChecks;
-    private final CodeChecksResult requiredCodeChecks;
+    private final CodeChecksResult penaltyCodeChecks;
     private final CoverageResult coverage;
     private final MetaTestsResult metaTests;
+    private final int penalty;
     private final int finalGrade;
     private final GenericFailure genericFailure;
     private final double timeInSeconds;
     private final GradeWeight weights;
     private final String successMessage;
 
-    public Result(CompilationResult compilation, UnitTestsResult tests, MutationTestingResult mutationTesting, CodeChecksResult codeChecks, CodeChecksResult requiredCodeChecks, CoverageResult coverage, MetaTestsResult metaTests, int finalGrade, GenericFailure genericFailure, double timeInSeconds, GradeWeight weights, String successMessage) {
+    public Result(CompilationResult compilation, UnitTestsResult tests, MutationTestingResult mutationTesting, CodeChecksResult codeChecks, CodeChecksResult penaltyCodeChecks, CoverageResult coverage, MetaTestsResult metaTests, int penalty, int finalGrade, GenericFailure genericFailure, double timeInSeconds, GradeWeight weights, String successMessage) {
         this.compilation = compilation;
         this.tests = tests;
         this.mutationTesting = mutationTesting;
         this.codeChecks = codeChecks;
-        this.requiredCodeChecks = requiredCodeChecks;
+        this.penaltyCodeChecks = penaltyCodeChecks;
         this.coverage = coverage;
         this.metaTests = metaTests;
+        this.penalty = penalty;
         this.finalGrade = finalGrade;
         this.genericFailure = genericFailure;
         this.timeInSeconds = timeInSeconds;
@@ -38,7 +40,7 @@ public class Result {
     }
 
     public Result(CompilationResult compilation, double timeInSeconds) {
-        this(compilation, UnitTestsResult.empty(), MutationTestingResult.empty(), CodeChecksResult.empty(), CodeChecksResult.empty(), CoverageResult.empty(), MetaTestsResult.empty(), 0, GenericFailure.noFailure(), timeInSeconds, null, null);
+        this(compilation, UnitTestsResult.empty(), MutationTestingResult.empty(), CodeChecksResult.empty(), CodeChecksResult.empty(), CoverageResult.empty(), MetaTestsResult.empty(), 0, 0, GenericFailure.noFailure(), timeInSeconds, null, null);
     }
 
     public CompilationResult getCompilation() {
@@ -53,8 +55,8 @@ public class Result {
         return mutationTesting;
     }
 
-    public CodeChecksResult getRequiredCodeChecks() {
-        return requiredCodeChecks;
+    public CodeChecksResult getPenaltyCodeChecks() {
+        return penaltyCodeChecks;
     }
 
     public CodeChecksResult getCodeChecks() {
@@ -67,6 +69,10 @@ public class Result {
 
     public MetaTestsResult getMetaTests() {
         return metaTests;
+    }
+
+    public int getPenalty() {
+        return penalty;
     }
 
     public int getFinalGrade() {

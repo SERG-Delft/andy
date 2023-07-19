@@ -6,7 +6,9 @@ import nl.tudelft.cse1110.andy.grade.GradeWeight;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.stream.Stream;
 
@@ -188,5 +190,107 @@ public class GradeCalculatorTest {
                 of(1, 1, 1, 0, 0.25f, 0.25f, 0.5f, 0f),
                 of(0, 0, 0, 1, 0f, 0f, 0f, 1f)
         );
+    }
+
+    @Test
+    void fullWithZeroPenalty() {
+        GradeWeight weights = new GradeWeight(0.25f, 0.25f, 0.25f, 0.25f);
+
+        GradeValues grades = new GradeValues();
+        grades.setBranchGrade(25, 25);
+        grades.setMutationGrade(25, 25);
+        grades.setMetaGrade(25, 25);
+        grades.setCheckGrade(25, 25);
+
+        grades.setPenalty(0);
+
+        int finalGrade = new GradeCalculator().calculateFinalGrade(grades, weights);
+
+        assertThat(finalGrade).isEqualTo(100);
+    }
+
+    @Test
+    void fullWithSomePenalty() {
+        GradeWeight weights = new GradeWeight(0.25f, 0.25f, 0.25f, 0.25f);
+
+        GradeValues grades = new GradeValues();
+        grades.setBranchGrade(25, 25);
+        grades.setMutationGrade(25, 25);
+        grades.setMetaGrade(25, 25);
+        grades.setCheckGrade(25, 25);
+
+        grades.setPenalty(15);
+
+        int finalGrade = new GradeCalculator().calculateFinalGrade(grades, weights);
+
+        assertThat(finalGrade).isEqualTo(85);
+    }
+
+    @Test
+    void fullWithMaxPenalty() {
+        GradeWeight weights = new GradeWeight(0.25f, 0.25f, 0.25f, 0.25f);
+
+        GradeValues grades = new GradeValues();
+        grades.setBranchGrade(25, 25);
+        grades.setMutationGrade(25, 25);
+        grades.setMetaGrade(25, 25);
+        grades.setCheckGrade(25, 25);
+
+        grades.setPenalty(100);
+
+        int finalGrade = new GradeCalculator().calculateFinalGrade(grades, weights);
+
+        assertThat(finalGrade).isEqualTo(0);
+    }
+
+    @Test
+    void notFullWithZeroPenalty() {
+        GradeWeight weights = new GradeWeight(0.25f, 0.25f, 0.25f, 0.25f);
+
+        GradeValues grades = new GradeValues();
+        grades.setBranchGrade(25, 25);
+        grades.setMutationGrade(25, 25);
+        grades.setMetaGrade(25, 25);
+        grades.setCheckGrade(10, 25);
+
+        grades.setPenalty(0);
+
+        int finalGrade = new GradeCalculator().calculateFinalGrade(grades, weights);
+
+        assertThat(finalGrade).isEqualTo(85);
+    }
+
+    @Test
+    void notFullWithSomePenalty() {
+        GradeWeight weights = new GradeWeight(0.25f, 0.25f, 0.25f, 0.25f);
+
+        GradeValues grades = new GradeValues();
+        grades.setBranchGrade(25, 25);
+        grades.setMutationGrade(25, 25);
+        grades.setMetaGrade(25, 25);
+        grades.setCheckGrade(10, 25);
+
+        grades.setPenalty(10);
+
+        int finalGrade = new GradeCalculator().calculateFinalGrade(grades, weights);
+
+        assertThat(finalGrade).isEqualTo(75);
+    }
+
+    @Test
+    void notFullWithMaxPenalty() {
+        GradeWeight weights = new GradeWeight(0.25f, 0.25f, 0.25f, 0.25f);
+
+        GradeValues grades = new GradeValues();
+        grades.setBranchGrade(25, 25);
+        grades.setMutationGrade(25, 25);
+        grades.setMetaGrade(25, 25);
+        grades.setCheckGrade(10, 25);
+
+        grades.setPenalty(100);
+
+        int finalGrade = new GradeCalculator().calculateFinalGrade(grades, weights);
+
+        assertThat(finalGrade).isEqualTo(0);
     }
 }
