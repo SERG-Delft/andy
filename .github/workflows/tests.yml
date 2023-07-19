@@ -3,7 +3,7 @@ on: [push, pull_request, workflow_dispatch]
 
 jobs:
   checkstyle:
-
+    runs-on: ubuntu-22.04
     steps:
       - name: Run checkstyle
         run: mvn checkstyle:check
