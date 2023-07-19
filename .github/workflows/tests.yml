@@ -1,7 +1,31 @@
 name: tests
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
+
 jobs:
-  run_tests:
+  checkstyle:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ matrix.job.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ matrix.job.os }}-m2
+
+      - name: Run checkstyle
+        run: mvn checkstyle:check
+
+  run_unit_tests:
+    needs: checkstyle
     runs-on: ${{ matrix.job.os }}
     strategy:
       fail-fast: false
@@ -28,20 +52,70 @@ jobs:
           key: ${{ matrix.job.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ matrix.job.os }}-m2
 
-      - name: Compile and install everything
-        run: mvn clean install -DskipTests
-
       - name: Run Andy unit tests
         run: mvn test -pl andy -DexcludedGroups=assignments
+
+  run_andy_tests:
+    needs: checkstyle
+    runs-on: ${{ matrix.job.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        job:
+          - os: ubuntu-22.04
+          - os: macos-12
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ matrix.job.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ matrix.job.os }}-m2
 
       - name: Run Andy in all assignments
         run: mvn test -pl andy -Dgroups=assignments
 
+  run_weblab_tests:
+    needs: checkstyle
+    runs-on: ${{ matrix.job.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        job:
+          - os: ubuntu-22.04
+          - os: macos-12
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
+
+    steps:
+      - name: Checkout the repository # Anchors not available in github actions :(
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ matrix.job.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ matrix.job.os }}-m2
+
+      ###- name: Compile and install everything
+      ###  run: mvn clean install -DskipTests
+        
       - name: Run Weblab runner tests
         run: mvn test -pl weblab-runner -DexcludedGroups=selenium
-
-#      - name: Run Weblab selenium tests
-#        run: mvn test -pl weblab-runner -Dgroups=selenium
-
-      - name: Run Checkstyle
-        run: mvn checkstyle:check

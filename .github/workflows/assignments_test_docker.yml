@@ -1,5 +1,5 @@
 name: assignments_test_docker
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 env:
   # PR: github.sha is the SHA of the PR, not commit, we can't check this out
   GHA_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
