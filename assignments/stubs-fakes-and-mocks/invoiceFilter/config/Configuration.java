@@ -52,7 +52,7 @@ public class Configuration extends RunConfiguration {
                 MetaTest.withStringReplacement("change boundary",
                         "return issuedInvoices.all().stream().filter(invoice -> invoice.getValue() < 100).collect(toList());",
                         "return issuedInvoices.all().stream().filter(invoice -> invoice.getValue() <= 100).collect(toList());" ),
-                        MetaTest.insertAt("at least two invoices used", 16,
+                        MetaTest.insertAt("at least two invoices used", 17,
                         """
                         if (issuedInvoices.all().size() >= 2) {
                             throw new RuntimeException("killed the mutant");

@@ -1,6 +1,6 @@
 package nl.tudelft.cse1110.andy.execution.step;
 
-import nl.tudelft.cse1110.andy.execution.Context;
+import nl.tudelft.cse1110.andy.execution.Context.Context;
 import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.config.RunConfiguration;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
@@ -140,5 +140,10 @@ public class RunPitestStep implements ExecutionStep {
     @Override
     public boolean equals(Object other) {
         return other instanceof RunPitestStep;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

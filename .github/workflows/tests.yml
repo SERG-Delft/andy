@@ -88,7 +88,9 @@ jobs:
           path: ~/.m2
           key: ${{ matrix.job.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ matrix.job.os }}-m2
-
+          
+      - name: Run Checkstyle
+        run: mvn checkstyle:check
+        
       - name: Run Weblab runner tests
         run: mvn test -pl weblab-runner -DexcludedGroups=selenium
-

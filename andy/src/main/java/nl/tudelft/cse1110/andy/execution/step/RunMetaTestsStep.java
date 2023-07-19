@@ -3,7 +3,7 @@ package nl.tudelft.cse1110.andy.execution.step;
 import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.config.MetaTest;
 import nl.tudelft.cse1110.andy.config.RunConfiguration;
-import nl.tudelft.cse1110.andy.execution.Context;
+import nl.tudelft.cse1110.andy.execution.Context.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.result.MetaTestResult;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
@@ -53,5 +53,10 @@ public class RunMetaTestsStep implements ExecutionStep {
     @Override
     public boolean equals(Object other) {
         return other instanceof RunMetaTestsStep;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

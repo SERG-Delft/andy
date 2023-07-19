@@ -52,6 +52,7 @@ public class AndCheckTest {
         verify(check2).runCheck(unit);
     }
 
+    @SuppressWarnings("SelfEquals")
     @Test
     void testSameObjectEquals() {
 

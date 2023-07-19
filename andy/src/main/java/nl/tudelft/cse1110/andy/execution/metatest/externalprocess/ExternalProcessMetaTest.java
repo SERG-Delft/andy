@@ -1,12 +1,10 @@
 package nl.tudelft.cse1110.andy.execution.metatest.externalprocess;
 
-import nl.tudelft.cse1110.andy.config.DefaultRunConfiguration;
 import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.config.RunConfiguration;
-import nl.tudelft.cse1110.andy.execution.Context;
+import nl.tudelft.cse1110.andy.execution.Context.Context;
 import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
 import nl.tudelft.cse1110.andy.execution.metatest.AbstractMetaTest;
-import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.execution.step.RunJUnitTestsStep;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
 
@@ -34,9 +32,6 @@ public class ExternalProcessMetaTest extends AbstractMetaTest {
         /* Start the meta external process */
         this.startExternalProcess();
 
-        /* Run the test suite using our existing JUnit runner */
-        Context jUnitContext = Context.build(Action.META_TEST);
-        jUnitContext.setRunConfiguration(new DefaultRunConfiguration(ctx.getRunConfiguration().classesUnderTest()));
         ResultBuilder metaResultBuilder = new ResultBuilder(null, null);
 
         RunJUnitTestsStep jUnitStep = new RunJUnitTestsStep();

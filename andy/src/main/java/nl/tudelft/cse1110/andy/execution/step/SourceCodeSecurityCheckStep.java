@@ -1,7 +1,7 @@
 package nl.tudelft.cse1110.andy.execution.step;
 
 import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
-import nl.tudelft.cse1110.andy.execution.Context;
+import nl.tudelft.cse1110.andy.execution.Context.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
@@ -101,5 +101,10 @@ public class SourceCodeSecurityCheckStep implements ExecutionStep {
     @Override
     public boolean equals(Object other) {
         return other instanceof SourceCodeSecurityCheckStep;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

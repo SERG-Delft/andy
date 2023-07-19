@@ -2,7 +2,7 @@ package nl.tudelft.cse1110.andy.result;
 
 import nl.tudelft.cse1110.andy.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.andy.codechecker.engine.CheckType;
-import nl.tudelft.cse1110.andy.execution.Context;
+import nl.tudelft.cse1110.andy.execution.Context.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
 import nl.tudelft.cse1110.andy.grade.GradeCalculator;
@@ -207,6 +207,7 @@ public class ResultBuilder {
                 totalCoveredBranches, totalBranches, coverageLineByLine);
     }
 
+    @SuppressWarnings("checkstyle:methodLength")
     private CoverageLineByLine getCoverageLineByLine(Collection<IClassCoverage> coverages) {
         List<Integer> fullyCoveredLines = new ArrayList<>();
         List<Integer> partiallyCoveredLines = new ArrayList<>();

@@ -1,10 +1,9 @@
 package nl.tudelft.cse1110.andy.execution.step;
 
 import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
-import nl.tudelft.cse1110.andy.execution.Context;
+import nl.tudelft.cse1110.andy.execution.Context.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
-import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -40,5 +39,10 @@ public class OrganizeSourceCodeStep implements ExecutionStep {
     @Override
     public boolean equals(Object other) {
         return other instanceof OrganizeSourceCodeStep;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }
