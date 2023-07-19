@@ -115,7 +115,7 @@ jobs:
           restore-keys: ${{ matrix.job.os }}-m2
 
       - name: Compile and install everything
-        run: mvn install -pl andy
+        run: mvn clean install -DskipTests
         
       - name: Run Weblab runner tests
         run: mvn test -pl weblab-runner -DexcludedGroups=selenium
