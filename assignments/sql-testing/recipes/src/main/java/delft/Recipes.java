@@ -43,6 +43,11 @@ class Recipe {
 	}
 
 	@Override
+	public int hashCode() {
+		return Objects.hash(id, name, prepTime, vegan, dessert, price);
+	}
+
+	@Override
 	public String toString() {
 		return "Recipe{" +
 			"name='" + name + '\'' +

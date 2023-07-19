@@ -2,6 +2,7 @@ package delft;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 class ElementNotFoundException extends RuntimeException {
 }
@@ -103,6 +104,11 @@ class Reservation {
 		if (trip != null ? !trip.equals(that.trip) : that.trip != null)
 			return false;
 		return people != null ? people.equals(that.people) : that.people == null;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(code, trip, people);
 	}
 }
 
