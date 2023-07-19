@@ -1,6 +1,6 @@
 # Andy
 
-[![tests](https://github.com/cse1110/andy/actions/workflows/tests.yml/badge.svg)](https://github.com/cse1110/andy/actions/workflows/tests.yml)
+[![tests](https://github.com/SERG-Delft/andy/actions/workflows/tests.yml/badge.svg)](https://github.com/SERG-Delft/andy/actions/workflows/tests.yml)
 
 * [Summary](#andy)
 * [Usage](#usage)
@@ -106,7 +106,7 @@ When running Andy via the Maven plugin (`mvn andy:run`), Andy expects the direct
 
 ### Configuration file
 
-Andy's configuration file is a Java class that extends [`RunConfiguration` from `nl.tudelft.cse1110.andy.config`](https://github.com/cse1110/andy/blob/main/src/main/java/nl/tudelft/cse1110/andy/config/RunConfiguration.java).
+Andy's configuration file is a Java class that extends [`RunConfiguration` from `nl.tudelft.cse1110.andy.config`](https://github.com/SERG-Delft/andy/blob/main/src/main/java/nl/tudelft/SERG-Delft/andy/config/RunConfiguration.java).
 
 Andy generates four grade components (branch coverage, mutation coverage, meta tests, and code checks), which it then combines into a single final grade based on the defined weights.
 
@@ -317,7 +317,7 @@ Andy provides different checks for JUnit, Mockito, and JQWik tests:
     - `JQWikArbitraries`: checks whether a Arbitraries.x() is used in the test suite.
     - `JQWikProvideAnnotations`: checks whether tests use Provide annotations, e.g., @ForAll, @Positive.
 
-Each of these checks receives different parameters. Check their specific Javadoc for more details. [All code checks and their full documentation can be found here.](https://github.com/cse1110/andy/tree/main/src/main/java/nl/tudelft/cse1110/andy/codechecker/checks)
+Each of these checks receives different parameters. Check their specific Javadoc for more details. [All code checks and their full documentation can be found here.](https://github.com/SERG-Delft/andy/tree/main/src/main/java/nl/tudelft/SDFSERG-Delft/andy/codechecker/checks)
 
 ##### Boolean logic
 
