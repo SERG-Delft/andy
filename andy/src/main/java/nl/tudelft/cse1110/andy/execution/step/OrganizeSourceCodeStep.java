@@ -32,6 +32,9 @@ public class OrganizeSourceCodeStep implements ExecutionStep {
                 createDirIfNeeded(directoryName);
                 moveFile(pathOfJavaClass, directoryName, new File(pathOfJavaClass).getName());
             }
+
+            // new UnzipStep().execute(ctx, result);
+
         } catch (Exception e) {
             result.genericFailure(this, e);
         }

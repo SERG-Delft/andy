@@ -27,9 +27,15 @@ public abstract class RunConfiguration {
             "EXPERIMENTAL_BIG_INTEGER", "EXPERIMENTAL_NAKED_RECEIVER", "EXPERIMENTAL_MEMBER_VARIABLE", "ABS",
             "AOR", "AOD", "CRCR", "OBBN", "ROR", "UOI");
 
+    protected static final List<String> ZIPPED = Collections.emptyList();
+
     public abstract List<String> classesUnderTest();
 
     public abstract Map<String, Float> weights();
+
+    public List<String> zippedFiles() {
+        return ZIPPED;
+    };
 
     public CheckScript checkScript() {
         return new CheckScript(Collections.emptyList());

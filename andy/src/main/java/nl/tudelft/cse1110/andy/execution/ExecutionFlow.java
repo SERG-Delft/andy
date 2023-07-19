@@ -60,6 +60,7 @@ public class ExecutionFlow {
                 new CompilationStep(),
                 new ReplaceClassloaderStep(),
                 new GetRunConfigurationStep(),
+                new UnzipStep(),
                 new ExamModeSecurityGuardStep(),
                 new InjectModeActionStepsStep());
     }
