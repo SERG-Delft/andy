@@ -1,5 +1,10 @@
 name: assignments_test_docker
-on: push
+on: [push, pull_request]
+env:
+  # PR: github.sha is the SHA of the PR, not commit, we can't check this out
+  GHA_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+  # PR: github.repository is the repository the PR is made in, not the fork
+  GHA_REPO: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}
 jobs:
   run_assignments_docker:
     runs-on: ubuntu-latest
@@ -21,12 +26,14 @@ jobs:
       - name: Build Docker image
         working-directory: ./weblab-docker
         env:
-          BUILD_ARGS: "--build-arg ANDY_BRANCH=${{ github.sha }}"
+          BUILD_ARGS: "--build-arg ANDY_BRANCH=${{ env.GHA_SHA }} --build-arg ANDY_REPO=${{ env.GHA_REPO }}"
         run: |
           make
 
       - name: Run the reference solutions of all assignments and verify the scores are 100/100
         env:
-          COMMIT_HASH: ${{ github.sha }}
+          # github.repository contains owner, we don't want that
+          REPO_NAME: ${{ github.event.repository.name }}
+          COMMIT_HASH: ${{ env.GHA_SHA }}
         run: |
           python ./.github/scripts/assignments_test_docker.py
