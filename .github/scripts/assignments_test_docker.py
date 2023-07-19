@@ -5,8 +5,9 @@ def get_directories(basedir):
                                        if os.path.isdir(os.path.join(basedir, dir)) \
                                        and not dir.startswith('.')]
 
-home_dir = '/home/runner/work/andy/andy/assignments'
-docker_dir = '/home/runner/work/andy/andy/weblab-docker'
+repo_name = os.environ['REPO_NAME']
+home_dir = f'/home/runner/work/{repo_name}/{repo_name}/assignments'
+docker_dir = f'/home/runner/work/{repo_name}/{repo_name}/weblab-docker'
 test_dir = docker_dir + '/tests/github-ci'
 output_dir = docker_dir + '/testresults'
 
