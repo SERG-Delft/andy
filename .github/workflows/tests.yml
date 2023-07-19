@@ -4,6 +4,8 @@ on: [push, pull_request, workflow_dispatch]
 jobs:
   checkstyle:
     runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: true
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
@@ -55,7 +57,7 @@ jobs:
       - name: Run Andy unit tests
         run: mvn test -pl andy -DexcludedGroups=assignments
 
-  run_andy_tests:
+  run_assignment_tests:
     needs: checkstyle
     runs-on: ${{ matrix.job.os }}
     strategy:
@@ -115,7 +117,7 @@ jobs:
           restore-keys: ${{ matrix.job.os }}-m2
 
       - name: Compile and install everything
-        run: mvn clean install -DskipTests
+        run: mvn install -pl andy -DskipTests
         
       - name: Run Weblab runner tests
         run: mvn test -pl weblab-runner -DexcludedGroups=selenium
