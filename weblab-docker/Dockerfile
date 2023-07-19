@@ -1,4 +1,4 @@
-FROM maven:3.6.3-openjdk-17-slim
+FROM maven:3-amazoncorretto-17-debian
 
 WORKDIR /home/
 
