@@ -180,12 +180,22 @@ public class JUnitTestsTest {
 
 
         @Test
+        void testBadAssumptionFilteringPropertyTest() {
+            Result result = run(Action.TESTS, "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfAssumptionJqwikError");
+
+            assertThat(result.getTests())
+                    .has(failingTest("testNoElementInWholeArray"));
+        }
+
+
+        @Test
         void testMultiplePropertyTestsFailing() {
             Result result = run(Action.TESTS, "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfMultipleJqwikErrors");
 
             assertThat(result.getTests())
                     .has(failingTest("testNoElementInWholeArray"))
-                    .has(failingTest("testValueInArrayUniqueElements"));
+                    .has(failingTest("testValueInArrayUniqueElements"))
+                    .has(failingTest("testNoElementInWholeArrayWithAssumption"));
         }
 
 
