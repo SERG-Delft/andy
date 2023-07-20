@@ -45,6 +45,7 @@ public class RunJUnitTestsStep implements ExecutionStep {
                     .configurationParameter("jqwik.reporting.usejunitplatform", "true")
                     .configurationParameter("jqwik.tries.default", "100")
                     .configurationParameter("jqwik.shrinking.default", "OFF")
+                    .configurationParameter("jqwik.maxdiscardratio.default", "2")
                     .configurationParameter("jqwik.database", FilesUtils.createTemporaryDirectory("jqwik").resolve("jqwik-db").toString())
                     .build();
             launcher.execute(request);
