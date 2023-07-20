@@ -13,7 +13,7 @@
     <artifactId>andy</artifactId>
     <version>1.0</version>
     <name>Andy</name>
-    <url>https://github.com/cse1110/andy</url>
+    <url>https://github.com/SERG-Delft/andy</url>
     <description>Andy, a tool that assesses your test suites</description>
 
     <licenses>
@@ -38,9 +38,9 @@
     </developers>
 
     <scm>
-        <url>http://github.com/cse1110/andy</url>
-        <connection>scm:git:git://github.com/cse1110/andy.git</connection>
-        <developerConnection>scm:git:git@github.com:cse1110/andy.git</developerConnection>
+        <url>http://github.com/SERG-Delft/andy</url>
+        <connection>scm:git:git://github.com/SERG-Delft/andy.git</connection>
+        <developerConnection>scm:git:git@github.com:SERG-Delft/andy.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
