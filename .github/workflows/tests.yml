@@ -88,7 +88,7 @@ jobs:
       - name: Run Andy in all assignments
         run: mvn test -pl andy -Dgroups=assignments
 
-  run_weblab_tests:
+  run_weblab_runner_tests:
     needs: checkstyle
     runs-on: ${{ matrix.job.os }}
     strategy:
