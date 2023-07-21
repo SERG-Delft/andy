@@ -4,6 +4,7 @@
 
 * [Summary](#andy)
 * [Usage](#usage)
+* [OriginHamar](#originHamar)
 * [Configuration](#configuration)
   * [File structure](#file-structure)
   * [Weights](#weights-required)
