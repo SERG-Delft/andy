@@ -32,6 +32,10 @@ class EmailAddress {
         return Objects.equals(domain, that.domain);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(username, company, domain);
+    }
 }
 
 class GradeEmail {
@@ -74,6 +78,10 @@ class GradeEmail {
         return Objects.equals(course, that.course);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(recipient, course, grade);
+    }
 }
 
 class CouldNotSendAllEmailsException extends RuntimeException {

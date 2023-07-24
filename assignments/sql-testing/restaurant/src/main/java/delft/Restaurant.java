@@ -149,6 +149,11 @@ class Recipe {
 	}
 
 	@Override
+	public int hashCode() {
+		return Objects.hash(name, prepTime, vegan, desert, price, id);
+	}
+
+	@Override
 	public String toString() {
 		return "Recipe{" +
 			"name='" + name + '\'' +
@@ -255,6 +260,11 @@ class Restaurant {
 			name.equals(restaurant.name) &&
 			cuisine.equals(restaurant.cuisine) &&
 			location.equals(restaurant.location);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, name, cuisine, rating, location);
 	}
 
 	@Override

@@ -5,7 +5,7 @@ To open an exercise, you have to choose a folder which corresponds to a category
 
 ## Structure of an Exercise
 Every exercise contains three folders: `config`, `solution` and `src`. The folders have the following functionality:
-- `config`: contains a `Configuration.java` file, which is used by `andy` for grading your exercise. You do not have to change this, but if you want to have a different type of grading, check out the [Andy](https://github.com/cse1110/andy) repository on how to change this file.
+- `config`: contains a `Configuration.java` file, which is used by `andy` for grading your exercise. You do not have to change this, but if you want to have a different type of grading, check out the [Andy](https://github.com/SERG-Delft/andy) repository on how to change this file.
 - `solution`: contains a `ExerciseNameTest.java` file, which is a solution to the exercise. You could use this if you're stuck.
 - `src`: contains two files, `ExerciseName.java` and `ExerciseNameTest.java`. The file without `Test` is the file that you need to test, the file including `Test` is the file where you have to write your solution.
 

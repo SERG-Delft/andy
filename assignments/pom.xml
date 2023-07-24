@@ -14,7 +14,7 @@
     <packaging>pom</packaging>
 
     <name>Assignments parent project</name>
-    <url>https://github.com/cse1110/andy</url>
+    <url>https://github.com/SERG-Delft/andy</url>
 
     <modules>
         <module>domain-and-structural-testing/repeat</module>

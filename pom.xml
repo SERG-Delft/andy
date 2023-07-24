@@ -8,7 +8,7 @@
     <packaging>pom</packaging>
  
     <name>Andy's parent project</name>
-    <url>https://github.com/cse1110/andy</url>
+    <url>https://github.com/SERG-Delft/andy</url>
 
     <properties>
         <andy.version>1.0</andy.version>
@@ -48,6 +48,18 @@
                 <configuration>
                     <source>17</source>
                     <target>17</target>
+
+                    <compilerArgs>
+                        <arg>-XDcompilePolicy=simple</arg>
+                        <arg>-Xplugin:ErrorProne</arg>
+                    </compilerArgs>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>com.google.errorprone</groupId>
+                            <artifactId>error_prone_core</artifactId>
+                            <version>2.20.0</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
 

@@ -1,6 +1,6 @@
 package nl.tudelft.cse1110.andy.writer.standard;
 
-import nl.tudelft.cse1110.andy.execution.Context;
+import nl.tudelft.cse1110.andy.execution.Context.Context;
 import nl.tudelft.cse1110.andy.utils.CodeSnippetUtils;
 
 import java.io.FileNotFoundException;

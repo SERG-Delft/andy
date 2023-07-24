@@ -1,6 +1,6 @@
 package nl.tudelft.cse1110.andy.execution.step;
 
-import nl.tudelft.cse1110.andy.execution.Context;
+import nl.tudelft.cse1110.andy.execution.Context.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.utils.ClassUtils;
@@ -17,7 +17,6 @@ import org.junit.platform.launcher.listeners.TestExecutionSummary;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.List;
 
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
@@ -46,6 +45,7 @@ public class RunJUnitTestsStep implements ExecutionStep {
                     .configurationParameter("jqwik.reporting.usejunitplatform", "true")
                     .configurationParameter("jqwik.tries.default", "100")
                     .configurationParameter("jqwik.shrinking.default", "OFF")
+                    .configurationParameter("jqwik.maxdiscardratio.default", "2")
                     .configurationParameter("jqwik.database", FilesUtils.createTemporaryDirectory("jqwik").resolve("jqwik-db").toString())
                     .build();
             launcher.execute(request);

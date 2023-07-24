@@ -1,6 +1,7 @@
 package nl.tudelft.cse1110.andy.config;
 
-import nl.tudelft.cse1110.andy.execution.Context;
+import nl.tudelft.cse1110.andy.execution.Context.Context;
+import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
 import nl.tudelft.cse1110.andy.execution.metatest.AbstractMetaTestFactory;
 
 public interface MetaTest {
@@ -36,4 +37,11 @@ public interface MetaTest {
         return new AbstractMetaTestFactory().insertAt(name, lineToInsertStartingIn1, contentToAdd);
     }
 
+    static MetaTest withExternalProcess(int weight, String name, ExternalProcess externalProcess) {
+        return new AbstractMetaTestFactory().withExternalProcess(weight, name, externalProcess);
+    }
+
+    static MetaTest withExternalProcess(String name, ExternalProcess externalProcess) {
+        return new AbstractMetaTestFactory().withExternalProcess(name, externalProcess);
+    }
 }

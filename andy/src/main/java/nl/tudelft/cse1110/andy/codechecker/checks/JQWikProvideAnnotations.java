@@ -1,5 +1,6 @@
 package nl.tudelft.cse1110.andy.codechecker.checks;
 
+import com.google.common.collect.ImmutableSet;
 import org.eclipse.jdt.core.dom.MarkerAnnotation;
 import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.NormalAnnotation;
@@ -11,13 +12,13 @@ import java.util.stream.Collectors;
 
 public class JQWikProvideAnnotations extends Check {
 
-    private static Set<String> JQWIK_PROVIDE_ANNOTATIONS = new HashSet<>() {{
-        add("IntRange");
-        add("Positive");
-        add("Negative");
+    private static Set<String> JQWIK_PROVIDE_ANNOTATIONS = new HashSet<>(ImmutableSet.of(
+        "IntRange",
+        "Positive",
+        "Negative"
 
         // TODO: add all annotations here
-    }};
+    ));
 
     private boolean provideAnnotationIdentified = false;
 
