@@ -1,14 +1,11 @@
 package nl.tudelft.cse1110.andy.execution.step;
 
 import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
-import nl.tudelft.cse1110.andy.execution.Context;
+import nl.tudelft.cse1110.andy.execution.Context.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -26,7 +23,7 @@ public class UnzipStep implements ExecutionStep {
 
             List<String> zippedFiles = ctx.getRunConfiguration().zippedFiles();
             byte[] buffer = new byte[1024];
-            String destDir = dirCfg.getOutputDir();
+            File destDir = new File(dirCfg.getOutputDir());
 
             if(zippedFiles.size() < 1){
                 return;
@@ -35,26 +32,56 @@ public class UnzipStep implements ExecutionStep {
             for (String fileP : zippedFiles) {
 
                 ZipInputStream zis = new ZipInputStream(new FileInputStream(fileP));
-                ZipEntry ze = zis.getNextEntry();
+                ZipEntry zipEntry = zis.getNextEntry();
 
-                while (ze != null) {
-                    File file = new File(destDir, ze.getName());
+                while (zipEntry != null) {
+                    File newFile = newFile(destDir, zipEntry);
 
-                    FileOutputStream fos = new FileOutputStream(file);
-                    int length;
-                    while ((length = zis.read(buffer)) > 0) {
-                        fos.write(buffer, 0, length);
+                    if (zipEntry.isDirectory()) {
+                        if (!newFile.isDirectory() && !newFile.mkdirs()) {
+                            throw new IOException("Failed to create directory " + newFile);
+                        }
+                    } else {
+
+                        // fix for Windows-created archives
+                        File parent = newFile.getParentFile();
+                        if (!parent.isDirectory() && !parent.mkdirs()) {
+                            throw new IOException("Failed to create directory " + parent);
+                        }
+
+                        // write file content
+                        FileOutputStream fos = new FileOutputStream(newFile);
+                        int len;
+                        while ((len = zis.read(buffer)) > 0) {
+                            fos.write(buffer, 0, len);
+                        }
+                        fos.close();
+
+                        zipEntry = zis.getNextEntry();
                     }
-
-                    fos.close();
-
-                    ze = zis.getNextEntry();
                 }
+
+                zis.closeEntry();
+                zis.close();
             }
+
 
         } catch (Exception e) {
             result.genericFailure(this, e);
         }
+    }
+
+    public static File newFile(File destinationDir, ZipEntry zipEntry) throws IOException {
+        File destFile = new File(destinationDir, zipEntry.getName());
+
+        String destDirPath = destinationDir.getCanonicalPath();
+        String destFilePath = destFile.getCanonicalPath();
+
+        if (!destFilePath.startsWith(destDirPath + File.separator)) {
+            throw new IOException("Entry is outside of the target dir: " + zipEntry.getName());
+        }
+
+        return destFile;
     }
 
     @Override
