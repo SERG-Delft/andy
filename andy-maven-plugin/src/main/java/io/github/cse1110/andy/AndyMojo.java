@@ -2,7 +2,10 @@ package io.github.cse1110.andy;
 
 import com.google.common.io.Files;
 import nl.tudelft.cse1110.andy.Andy;
-import nl.tudelft.cse1110.andy.execution.Context;
+import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
+import nl.tudelft.cse1110.andy.execution.Context.Context;
+import nl.tudelft.cse1110.andy.execution.Context.ContextBuilder;
+import nl.tudelft.cse1110.andy.execution.Context.ContextDirector;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.result.Result;
 import nl.tudelft.cse1110.andy.writer.standard.StandardResultWriter;
@@ -72,11 +75,12 @@ public class AndyMojo extends AbstractMojo {
             Timer workingIndicator = this.startWorkingIndicationTimer();
 
             /* Run Andy! */
-            Context ctx = Context.build(
+            ContextDirector director = new ContextDirector(new ContextBuilder());
+            Context ctx = director.constructWithLibraries(
                     action(),
-                    workDir.getAbsolutePath(),
-                    outputDir.getAbsolutePath(),
-                    compileClasspathElements);
+                    new DirectoryConfiguration(workDir.getAbsolutePath(), outputDir.getAbsolutePath()),
+                    compileClasspathElements
+            );
 
             Result result = new Andy().run(ctx);
 

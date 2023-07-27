@@ -1,7 +1,7 @@
 package integration;
 
 import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
-import nl.tudelft.cse1110.andy.execution.Context;
+import nl.tudelft.cse1110.andy.execution.Context.Context;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.result.Result;
 import nl.tudelft.cse1110.andy.result.UnitTestsResult;
@@ -180,12 +180,22 @@ public class JUnitTestsTest {
 
 
         @Test
+        void testBadAssumptionFilteringPropertyTest() {
+            Result result = run(Action.TESTS, "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfAssumptionJqwikError");
+
+            assertThat(result.getTests())
+                    .has(failingTest("testNoElementInWholeArray"));
+        }
+
+
+        @Test
         void testMultiplePropertyTestsFailing() {
             Result result = run(Action.TESTS, "ArrayUtilsIndexOfLibrary", "ArrayUtilsIndexOfMultipleJqwikErrors");
 
             assertThat(result.getTests())
                     .has(failingTest("testNoElementInWholeArray"))
-                    .has(failingTest("testValueInArrayUniqueElements"));
+                    .has(failingTest("testValueInArrayUniqueElements"))
+                    .has(failingTest("testNoElementInWholeArrayWithAssumption"));
         }
 
 

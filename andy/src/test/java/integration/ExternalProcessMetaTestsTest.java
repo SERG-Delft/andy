@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 
 
 // Disabled as this test is flaky and this feature is not used in the current version of Andy
-// See https://github.com/cse1110/andy/issues/144
+// See https://github.com/SERG-Delft/andy/issues/144
 @Disabled
 public class ExternalProcessMetaTestsTest extends BaseMetaTestsTest {
 

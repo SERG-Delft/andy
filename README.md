@@ -1,9 +1,10 @@
 # Andy
 
-[![tests](https://github.com/cse1110/andy/actions/workflows/tests.yml/badge.svg)](https://github.com/cse1110/andy/actions/workflows/tests.yml)
+[![tests](https://github.com/SERG-Delft/andy/actions/workflows/tests.yml/badge.svg)](https://github.com/SERG-Delft/andy/actions/workflows/tests.yml)
 
 * [Summary](#andy)
 * [Usage](#usage)
+* [OriginHamar](#originHamar)
 * [Configuration](#configuration)
   * [File structure](#file-structure)
   * [Weights](#weights-required)
@@ -78,7 +79,7 @@ As a teacher, you may want to deploy Andy as a AWS lambda. Follow the README fil
 
 ## Configuration
 
-Teachers can configure how the student's test should be assessed. To that aim, the teacher writes a `RunConfiguration` class. You can see many examples of configuration files in our [assignment repository](https://github.com/cse1110/assignments).
+Teachers can configure how the student's test should be assessed. To that aim, the teacher writes a `RunConfiguration` class. You can see many examples of configuration files in our [assignment repository](https://github.com/SERG-Delft/andy/tree/main/assignments).
 
 ### File structure
 
@@ -100,13 +101,13 @@ When running Andy via the Maven plugin (`mvn andy:run`), Andy expects the direct
 ```
 
 * `Configuration.java` - Andy's configuration file (described below). It must be named exactly `Configuration.java` and it must be placed in a `config` folder in the root of the Maven project.
-* `pom.xml` - A Maven POM file defining `andy-maven-plugin` from `io.github.cse1110` as a plugin. [Example](https://github.com/cse1110/assignments/blob/577c57e51f9f29b25ad5d0e22e67d65b1f795f45/domain-and-structural-testing/adding-lists-of-digits/pom.xml)
+* `pom.xml` - A Maven POM file defining `andy-maven-plugin` from `io.github.cse1110` as a plugin. [Example](https://github.com/SERG-Delft/andy/blob/main/assignments/domain-and-structural-testing/adding-lists-of-digits/pom.xml)
 * `NumberUtils.java` - The class under test. The class name and the package name (and therefore the path) given here are only an example and may be different.
 * `NumberUtilsTest.java` - The test suite to be assessed. As with the class under test, the class name and the path may be different.
 
 ### Configuration file
 
-Andy's configuration file is a Java class that extends [`RunConfiguration` from `nl.tudelft.cse1110.andy.config`](https://github.com/cse1110/andy/blob/main/src/main/java/nl/tudelft/cse1110/andy/config/RunConfiguration.java).
+Andy's configuration file is a Java class that extends [`RunConfiguration` from `nl.tudelft.cse1110.andy.config`](https://github.com/SERG-Delft/andy/blob/main/andy/src/main/java/nl/tudelft/cse1110/andy/config/RunConfiguration.java).
 
 Andy generates four grade components (branch coverage, mutation coverage, meta tests, and code checks), which it then combines into a single final grade based on the defined weights.
 
@@ -317,7 +318,7 @@ Andy provides different checks for JUnit, Mockito, and JQWik tests:
     - `JQWikArbitraries`: checks whether a Arbitraries.x() is used in the test suite.
     - `JQWikProvideAnnotations`: checks whether tests use Provide annotations, e.g., @ForAll, @Positive.
 
-Each of these checks receives different parameters. Check their specific Javadoc for more details. [All code checks and their full documentation can be found here.](https://github.com/cse1110/andy/tree/main/src/main/java/nl/tudelft/cse1110/andy/codechecker/checks)
+Each of these checks receives different parameters. Check their specific Javadoc for more details. [All code checks and their full documentation can be found here.](https://github.com/SERG-Delft/andy/tree/main/andy/src/main/java/nl/tudelft/cse1110/andy/codechecker/checks)
 
 ##### Boolean logic
 
