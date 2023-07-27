@@ -12,7 +12,7 @@ public class StringReplacementEvaluator implements MetaEvaluator {
 
     @Override
     public String evaluate(String oldLibraryCode) {
-        final String leadingAndTrailingWhitespaceRegex = "(?m)^[ \\t]+|[ \\t]+$";
+        final String leadingAndTrailingWhitespaceRegex = "(?m)^\\s+|[ \\t]+$";
         String shiftedOld = this.old.replaceAll(leadingAndTrailingWhitespaceRegex, "");
         String shiftedOldLibraryCode = oldLibraryCode.replaceAll(leadingAndTrailingWhitespaceRegex, "");
         String replaced = shiftedOldLibraryCode.replace(shiftedOld, this.replacement);
