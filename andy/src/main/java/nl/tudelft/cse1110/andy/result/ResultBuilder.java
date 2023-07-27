@@ -49,6 +49,7 @@ public class ResultBuilder {
     private CodeChecksResult penaltyCodeCheckResults = CodeChecksResult.empty();
     private CoverageResult coverageResults = CoverageResult.empty();
     private MetaTestsResult metaTestResults = MetaTestsResult.empty();
+    private MetaTestsResult penaltyMetaTestResults = MetaTestsResult.empty();
 
     public ResultBuilder(Context ctx, GradeCalculator gradeCalculator) {
         this.ctx = ctx;
@@ -271,7 +272,7 @@ public class ResultBuilder {
         if(!compilation.successful()) {
             return new Result(compilation, timeInSeconds);
         } else {
-            GradeValues grades = GradeValues.fromResults(coverageResults, codeCheckResults, mutationResults, metaTestResults, penaltyCodeCheckResults);
+            GradeValues grades = GradeValues.fromResults(coverageResults, codeCheckResults, mutationResults, metaTestResults, penaltyMetaTestResults, penaltyCodeCheckResults);
             GradeWeight weights = GradeWeight.fromConfig(ctx.getRunConfiguration().weights());
             String successMessage = ctx.getRunConfiguration().successMessage();
 
@@ -287,6 +288,7 @@ public class ResultBuilder {
                     penaltyCodeCheckResults,
                     coverageResults,
                     metaTestResults,
+                    penaltyMetaTestResults,
                     penalty,
                     finalGrade,
                     genericFailureObject,
