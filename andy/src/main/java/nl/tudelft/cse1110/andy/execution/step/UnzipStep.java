@@ -10,9 +10,6 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import static nl.tudelft.cse1110.andy.utils.FilesUtils.filePathsAsString;
-import static nl.tudelft.cse1110.andy.utils.FilesUtils.getAllZippedFiles;
-
 public class UnzipStep implements ExecutionStep {
 
     @Override
@@ -21,7 +18,7 @@ public class UnzipStep implements ExecutionStep {
         try {
             DirectoryConfiguration dirCfg = ctx.getDirectoryConfiguration();
 
-            List<String> zippedFiles = ctx.getRunConfiguration().zippedFiles();
+            List<String> zippedFiles = ctx.getRunConfiguration().getZippedFiles();
             byte[] buffer = new byte[1024];
             File destDir = new File(dirCfg.getOutputDir());
 
@@ -85,12 +82,12 @@ public class UnzipStep implements ExecutionStep {
     }
 
     @Override
-    public int hashCode() {
-        return super.hashCode();
+    public boolean equals(Object other) {
+        return other instanceof UnzipStep;
     }
 
     @Override
-    public String toString() {
-        return super.toString();
+    public int hashCode() {
+        return super.hashCode();
     }
 }

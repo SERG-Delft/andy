@@ -16,6 +16,7 @@ import org.junit.jupiter.api.AfterEach;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static nl.tudelft.cse1110.andy.utils.ResourceUtils.resourceFolder;
@@ -30,6 +31,12 @@ public abstract class IntegrationTestBase {
     public void cleanup() throws IOException {
         FileUtils.deleteDirectory(workDir);
         FileUtils.deleteDirectory(reportDir);
+    }
+
+    public void addZippedFiles(List<String> files) {
+        if(files != null){
+            this.ctx.getRunConfiguration().setZippedFiles(files);
+        }
     }
 
     public Result run(Action action,

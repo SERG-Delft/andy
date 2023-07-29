@@ -3,7 +3,6 @@ package nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.config.RunConfiguration;
 import nl.tudelft.cse1110.andy.execution.ExecutionFlow;
-import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.execution.mode.ModeActionSelector;
 import org.jacoco.core.runtime.IRuntime;
@@ -19,7 +18,6 @@ public class ContextBuilder {
     private ExecutionFlow flow;
     private Action action;
     private ModeActionSelector modeActionSelector;
-    private ExternalProcess externalProcess;
     private ClassLoader classloaderWithStudentsCode;
     private List<String> librariesToBeIncludedInCompilation;
     private IRuntime jacocoRuntime;
@@ -45,9 +43,6 @@ public class ContextBuilder {
         this.action = action;
     }
 
-    public void setExternalProcess(ExternalProcess externalProcess) {
-        this.externalProcess = externalProcess;
-    }
 
     public void setLibrariesToBeIncludedInCompilation(List<String> librariesToBeIncludedInCompilation) {
         this.librariesToBeIncludedInCompilation = librariesToBeIncludedInCompilation;
@@ -55,7 +50,7 @@ public class ContextBuilder {
 
     public Context buildContext() {
         return new Context(cleanClassloader, directoryConfiguration, runConfiguration, fullClassNames, flow,
-                action, modeActionSelector, externalProcess, classloaderWithStudentsCode,
+                action, modeActionSelector, classloaderWithStudentsCode,
                 librariesToBeIncludedInCompilation, jacocoRuntime, jacocoData);
     }
 }

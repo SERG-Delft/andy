@@ -26,6 +26,7 @@ public class SecureExamRunConfiguration extends RunConfiguration {
     }
 
     @Override
+    @SuppressWarnings("DoubleBraceInitialization")
     public Map<String, Float> weights() {
         return new HashMap<>() {{
             put("coverage", 0.25f);

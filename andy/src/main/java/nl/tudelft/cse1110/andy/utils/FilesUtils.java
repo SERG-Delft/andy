@@ -37,11 +37,6 @@ public class FilesUtils {
         return getAllFiles(sourceDir, "java");
     }
 
-    public static Collection<File> getAllZippedFiles(String sourceDir) {
-        return getAllFiles(sourceDir, "zip");
-    }
-
-
     public static void createDirIfNeeded(String dir) {
         // inspired by: https://stackoverflow.com/questions/3634853/how-to-create-a-directory-in-java
         File theDir = new File(dir);
