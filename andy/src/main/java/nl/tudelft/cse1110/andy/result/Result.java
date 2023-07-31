@@ -72,6 +72,9 @@ public class Result {
     public MetaTestsResult getMetaTests() {
         return metaTests;
     }
+    public MetaTestsResult getPenaltyMetaTests() {
+        return penaltyMetaTests;
+    }
 
     public int getPenalty() {
         return penalty;
