@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class MockClassTest extends ChecksBaseTest {
 
     @ParameterizedTest
-    @CsvSource({"List,true", "Set,true", "Queue,true", "HashMap,false"})
+    @CsvSource({"List,true", "Set,true", "Queue,true", "Deque,true", "HashMap,false"})
     void findMocks(String classToMock, boolean expectation) {
         Check check = new MockClass(classToMock);
         run("ManyMocks.java", check);

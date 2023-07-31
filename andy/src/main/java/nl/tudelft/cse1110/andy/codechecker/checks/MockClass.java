@@ -43,16 +43,18 @@ public class MockClass extends Check {
 
     @Override
     public boolean visit(FieldDeclaration fd) {
-        boolean hasMockAnnotation = fd.modifiers().stream()
-                .anyMatch(m -> m instanceof Annotation &&
-                        ((Annotation)m).getTypeName().getFullyQualifiedName().equals("Mock"));
+        // added this if-check to avoid overriding classWasMocked erroneously.
+        if(!classWasMocked) {
+            boolean hasMockAnnotation = fd.modifiers().stream()
+                    .anyMatch(m -> m instanceof Annotation &&
+                            ((Annotation) m).getTypeName().getFullyQualifiedName().equals("Mock"));
 
-        // If the field is annotated with @Mock, check if it's the class we are interested in
-        if (hasMockAnnotation) {
-            String className = fd.getType().toString();
-            classWasMocked = className.contains(classToBeMocked);
+            // If the field is annotated with @Mock, check if it's the class we are interested in
+            if (hasMockAnnotation) {
+                String className = fd.getType().toString();
+                classWasMocked = className.contains(classToBeMocked);
+            }
         }
-
         return super.visit(fd);
     }
 

@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.Queue;
+import java.util.Deque;
+import java.util.SortedSet;
 
 import static org.mockito.Mockito.mock;
 import org.mockito.MockitoAnnotations;
@@ -27,6 +29,12 @@ public class ManyMocks {
     // Mock with annotation
     @Mock
     Queue<String> mockedQueue;
+
+    @Mock
+    SortedSet<String> sortedSetMocked;
+
+    @Mock
+    Deque<String> mockedDQ;
 
     @BeforeEach
     public void setup() {
