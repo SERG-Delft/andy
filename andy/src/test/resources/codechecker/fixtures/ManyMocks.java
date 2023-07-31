@@ -6,8 +6,11 @@ import org.mockito.Mockito;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.Queue;
 
 import static org.mockito.Mockito.mock;
+import org.mockito.MockitoAnnotations;
+import org.junit.jupiter.api.BeforeEach;
 
 /**
  * Check if a specific class was mocked at least once, anywhere in
@@ -21,6 +24,15 @@ import static org.mockito.Mockito.mock;
  */
 public class ManyMocks {
 
+    // Mock with annotation
+    @Mock
+    Queue<String> mockedQueue;
+
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+    }
+
     @Test
     void t1() {
         // full call to the static method
@@ -30,4 +42,5 @@ public class ManyMocks {
         // no mock
         HashMap<String, String> concreteHashMap = new HashMap<>();
     }
+
 }
