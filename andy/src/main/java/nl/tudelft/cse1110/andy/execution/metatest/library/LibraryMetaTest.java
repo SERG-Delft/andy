@@ -72,10 +72,6 @@ public class LibraryMetaTest extends AbstractMetaTest {
     private String generateMetaFileContent(String originalLibraryContent) {
         String metaFileContent = evaluate(originalLibraryContent);
 
-        if (metaFileContent.equals(originalLibraryContent)) {
-            throw new RuntimeException("Meta test " + getName() + " failed to replace code.");
-        }
-
         return metaFileContent;
     }
 
