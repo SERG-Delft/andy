@@ -129,6 +129,7 @@ public class ModeActionSelector {
                 new RunPenaltyCodeChecksStep(),
                 new RunCodeChecksStep(),
                 new KillExternalProcessStep(),
+                new RunPenaltyMetaTestsStep(),
                 new RunMetaTestsStep()
         );
     }
