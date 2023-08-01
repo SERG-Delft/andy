@@ -245,6 +245,10 @@ public class ResultBuilder {
         this.metaTestResults.addResults(score, totalTests, metaTestResults);
     }
 
+    public void logPenaltyMetaTests(int score, int totalTests, List<MetaTestResult> metaTestResults) {
+        this.penaltyMetaTestResults.addResults(score, totalTests, metaTestResults);
+    }
+
     /*
      * Generic failures
      */

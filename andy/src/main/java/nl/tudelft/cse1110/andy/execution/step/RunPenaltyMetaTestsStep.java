@@ -26,7 +26,7 @@ public class RunPenaltyMetaTestsStep implements ExecutionStep {
 
         try {
 
-            List<MetaTest> metaTests = runCfg.metaTests();
+            List<MetaTest> metaTests = runCfg.penaltyMetaTests();
             List<MetaTestResult> metaTestResults = new ArrayList<>();
 
             for (MetaTest metaTest : metaTests) {
@@ -42,7 +42,7 @@ public class RunPenaltyMetaTestsStep implements ExecutionStep {
                 totalWeight += metaTest.getWeight();
             }
 
-            result.logMetaTests(score, totalWeight, metaTestResults);
+            result.logPenaltyMetaTests(score, totalWeight, metaTestResults);
         } catch (Exception ex) {
             result.genericFailure(this, ex);
         } finally {
