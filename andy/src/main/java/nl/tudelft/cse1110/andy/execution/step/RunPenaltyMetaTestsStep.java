@@ -53,7 +53,7 @@ public class RunPenaltyMetaTestsStep implements ExecutionStep {
 
     @Override
     public boolean equals(Object other) {
-        return other instanceof RunMetaTestsStep;
+        return other instanceof RunPenaltyMetaTestsStep;
     }
 
     @Override
