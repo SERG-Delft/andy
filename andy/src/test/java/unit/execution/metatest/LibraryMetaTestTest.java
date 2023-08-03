@@ -173,42 +173,4 @@ public class LibraryMetaTestTest {
         assertThrows(RuntimeException.class,
                 () -> metaTest.evaluate("line 1\nline 2\nline 3\nline 4\nline 5"));
     }
-// I initially wrote this test because try-catch was inside LibraryMetaTest. Will remove it when decision is final.
-//    @Test
-//    void testExecuteWithCompilationErrorExamMode() throws Exception {
-//        // Create mock objects
-//        Context ctxMock = mock(Context.class);
-//        DirectoryConfiguration dirCfgMock = mock(DirectoryConfiguration.class);
-//        RunConfiguration runCfgMock = mock(RunConfiguration.class);
-//
-//        // Set up the behavior of the mock objects
-//        when(runCfgMock.mode()).thenReturn(Mode.EXAM);
-//        when(dirCfgMock.getWorkingDir()).thenThrow(new RuntimeException("Working directory exception."));
-//
-//        // Create the LibraryMetaTest object
-//        LibraryMetaTest metaTest = (LibraryMetaTest) MetaTest.withStringReplacement("some meta test",
-//                "line 5\nline 6",
-//                "extra line 1\nextra line 2");
-//
-//        // Create a stream to hold the output
-//        // if tests run in parallel, this could cause an issue as we capture logging and change system out settings.
-//        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-//        PrintStream originalOut = System.out;
-//        System.setOut(new PrintStream(outContent));
-//
-//        // Test the execute method with the mocked objects
-//        boolean result = metaTest.execute(ctxMock, dirCfgMock, runCfgMock);
-//
-//        // Assertions
-//        assertFalse(result); // The test should fail due to the compilation error
-//
-//        // Verify that the proper methods were called on the mock objects
-//        verify(runCfgMock, times(1)).mode();
-//
-//        // Assert that the correct message was logged
-//        assertEquals("Meta test compilation error occurred.\n", outContent.toString());
-//
-//        // Restore System.out to its original
-//        System.setOut(originalOut);
-//    }
 }
