@@ -115,9 +115,6 @@ jobs:
           path: ~/.m2
           key: ${{ matrix.job.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ matrix.job.os }}-m2
-
-      - name: Compile and install everything
-        run: mvn install -pl andy -DskipTests
         
       - name: Run Weblab runner tests
         run: mvn test -pl weblab-runner -am -DexcludedGroups=selenium
