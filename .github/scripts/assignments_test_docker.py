@@ -22,6 +22,7 @@ os.makedirs(test_dir)
 pipeline_failed = False
 for category_dir in get_directories(home_dir):
     for assignment_dir in random.choices(get_directories(category_dir), k=4):
+        
         # Remove the contents of the output directory.
         os.system(f'rm -r {output_dir}')
 
