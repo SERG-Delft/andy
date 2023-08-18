@@ -39,6 +39,10 @@ public class SecureExamRunConfiguration extends RunConfiguration {
         ));
     }
 
+    public List<MetaTest> metaTests() {
+        return Collections.emptyList();
+    }
+
     @Override
     public List<String> classesUnderTest() {
         return Collections.unmodifiableList(classesUnderTest);

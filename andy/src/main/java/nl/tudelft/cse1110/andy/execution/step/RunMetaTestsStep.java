@@ -7,6 +7,7 @@ import nl.tudelft.cse1110.andy.execution.Context.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.result.MetaTestResult;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
+import nl.tudelft.cse1110.andy.execution.mode.Mode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,14 @@ public class RunMetaTestsStep implements ExecutionStep {
 
             result.logMetaTests(score, totalWeight, metaTestResults);
         } catch (Exception ex) {
-            result.genericFailure(this, ex);
+            if(runCfg.mode().equals(Mode.EXAM)){
+                result.genericFailure(this, ex, "Compilation Error occured while running meta tests.");
+            }
+            else {
+                System.err.println("Meta test compilation error occurred:");
+                result.genericFailure(this, ex);
+                ex.printStackTrace(System.err);
+            }
         } finally {
             /* restore the class loader to the one before meta tests */
             Thread.currentThread().setContextClassLoader(currentClassLoader);

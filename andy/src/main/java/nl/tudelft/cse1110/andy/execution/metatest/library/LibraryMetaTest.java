@@ -30,7 +30,7 @@ public class LibraryMetaTest extends AbstractMetaTest {
     }
 
     @Override
-    public boolean execute(Context ctx, DirectoryConfiguration dirCfg, RunConfiguration runCfg) throws Exception {
+    public boolean execute(Context ctx, DirectoryConfiguration dirCfg, RunConfiguration runCfg) throws Exception{
         /* Get the student solution, which we will run for each meta test */
         String solutionFile = findSolution(dirCfg.getWorkingDir());
 
