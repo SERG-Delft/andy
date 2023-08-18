@@ -88,4 +88,15 @@ public class LibraryMetaTestsTest extends BaseMetaTestsTest {
                 .isEqualTo(RunMetaTestsStep.class.getSimpleName());
     }
 
+    @Test
+    void metaTestInternalFailureExamMode() {
+        Result result = run("NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddConfigurationWithMetaTestInternalFailureExamMode");
+
+        assertThat(result.hasGenericFailure()).isTrue();
+        assertThat(result.getGenericFailure().getGenericFailureMessage())
+                .isPresent()
+                .get()
+                .isEqualTo("Compilation Error occured while running meta tests.");
+    }
+
 }

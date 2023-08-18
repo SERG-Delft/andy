@@ -30,44 +30,43 @@ public class LibraryMetaTest extends AbstractMetaTest {
     }
 
     @Override
-    public boolean execute(Context ctx, DirectoryConfiguration dirCfg, RunConfiguration runCfg)throws Exception{
-        {/* Get the student solution, which we will run for each meta test */
-            String solutionFile = findSolution(dirCfg.getWorkingDir());
+    public boolean execute(Context ctx, DirectoryConfiguration dirCfg, RunConfiguration runCfg) throws Exception{
+        /* Get the student solution, which we will run for each meta test */
+        String solutionFile = findSolution(dirCfg.getWorkingDir());
 
-            /* Get the original library content that we will keep changing according to the meta test */
-            File libraryFile = new File(findLibrary(dirCfg.getWorkingDir()));
-            String originalLibraryContent = readFile(libraryFile);
+        /* Get the original library content that we will keep changing according to the meta test */
+        File libraryFile = new File(findLibrary(dirCfg.getWorkingDir()));
+        String originalLibraryContent = readFile(libraryFile);
 
-            /*
-             * For each meta test, we basically perform a string replace in the
-             * original library code, recompile it, and run the tests.
-             * If there's a failing test, the meta test is killed.
-             *
-             * We reuse our execution framework to run the code with the meta test.
-             */
+        /*
+         * For each meta test, we basically perform a string replace in the
+         * original library code, recompile it, and run the tests.
+         * If there's a failing test, the meta test is killed.
+         *
+         * We reuse our execution framework to run the code with the meta test.
+         */
 
-            /* Copy the library and replace the library by the meta test */
-            File metaWorkingDir = createTemporaryDirectory("metaWorkplace").toFile();
-            copyFile(solutionFile, metaWorkingDir.getAbsolutePath());
-            String metaFileContent = generateMetaFileContent(originalLibraryContent);
-            createMetaTestFile(metaWorkingDir, metaFileContent);
+        /* Copy the library and replace the library by the meta test */
+        File metaWorkingDir = createTemporaryDirectory("metaWorkplace").toFile();
+        copyFile(solutionFile, metaWorkingDir.getAbsolutePath());
+        String metaFileContent = generateMetaFileContent(originalLibraryContent);
+        createMetaTestFile(metaWorkingDir, metaFileContent);
 
-            /* We then run the meta test, using our infrastructure */
-            Result metaResult = runMetaTest(ctx, dirCfg, metaWorkingDir);
+        /* We then run the meta test, using our infrastructure */
+        Result metaResult = runMetaTest(ctx, dirCfg, metaWorkingDir);
 
-            /* And check the result. If there's a failing test, the test suite is good! */
-            int testsRan = metaResult.getTests().getTestsRan();
-            int testsSucceeded = metaResult.getTests().getTestsSucceeded();
-            boolean passesTheMetaTest = testsSucceeded < testsRan;
+        /* And check the result. If there's a failing test, the test suite is good! */
+        int testsRan = metaResult.getTests().getTestsRan();
+        int testsSucceeded = metaResult.getTests().getTestsSucceeded();
+        boolean passesTheMetaTest = testsSucceeded < testsRan;
 
-            /* Clean up the directory */
-            deleteDirectory(metaWorkingDir);
+        /* Clean up the directory */
+        deleteDirectory(metaWorkingDir);
 
-            /* Set the classloader back to the one with the student's original code */
-            Thread.currentThread().setContextClassLoader(ctx.getClassloaderWithStudentsCode());
+        /* Set the classloader back to the one with the student's original code */
+        Thread.currentThread().setContextClassLoader(ctx.getClassloaderWithStudentsCode());
 
-            return passesTheMetaTest;
-        }
+        return passesTheMetaTest;
     }
 
     private String generateMetaFileContent(String originalLibraryContent) {

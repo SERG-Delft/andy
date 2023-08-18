@@ -262,6 +262,17 @@ public class ResultBuilder {
         this.genericFailure(step.getClass().getSimpleName(), exceptionMessage(e));
     }
 
+    public void genericFailure(String step, String genericFailureExceptionMessage, String msg) {
+        this.genericFailureStepName = step;
+        this.genericFailureExceptionMessage = genericFailureExceptionMessage;
+        this.genericFailureMessage = msg;
+        this.buildGenericFailure();
+    }
+
+    public void genericFailure(ExecutionStep step, Throwable e, String msg) {
+        this.genericFailure(step.getClass().getSimpleName(), exceptionMessage(e), msg);
+    }
+
     /*
      * Build the final result
      */

@@ -45,8 +45,7 @@ public class RunMetaTestsStep implements ExecutionStep {
             result.logMetaTests(score, totalWeight, metaTestResults);
         } catch (Exception ex) {
             if(runCfg.mode().equals(Mode.EXAM)){
-                System.out.println("Meta test compilation error occurred.");
-                result.genericFailure(this, ex);
+                result.genericFailure(this, ex, "Compilation Error occured while running meta tests.");
             }
             else {
                 System.err.println("Meta test compilation error occurred:");
