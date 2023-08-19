@@ -4,7 +4,6 @@ import nl.tudelft.cse1110.andy.codechecker.engine.CheckScript;
 import nl.tudelft.cse1110.andy.codechecker.engine.CheckType;
 import nl.tudelft.cse1110.andy.execution.Context.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
-import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
 import nl.tudelft.cse1110.andy.grade.GradeCalculator;
 import nl.tudelft.cse1110.andy.grade.GradeValues;
 import nl.tudelft.cse1110.andy.grade.GradeWeight;
@@ -275,8 +274,6 @@ public class ResultBuilder {
             GradeWeight weights = GradeWeight.fromConfig(ctx.getRunConfiguration().weights());
             String successMessage = ctx.getRunConfiguration().successMessage();
 
-            this.checkExternalProcessExit();
-
             final int finalGrade = calculateFinalGrade(grades, weights);
             final int penalty = grades.getPenalty();
 
@@ -299,15 +296,6 @@ public class ResultBuilder {
     private void buildGenericFailure() {
         this.genericFailureObject = GenericFailure.build(genericFailureMessage, genericFailureStepName, genericFailureExceptionMessage,
                 genericFailureExternalProcessExitCode, genericFailureExternalProcessErrorMessages);
-    }
-
-    private void checkExternalProcessExit() {
-        ExternalProcess process = ctx.getExternalProcess();
-        if (!process.hasExitedNormally()) {
-            this.genericFailureExternalProcessExitCode = process.getExitCode();
-            this.genericFailureExternalProcessErrorMessages = process.getErrorMessages();
-            this.buildGenericFailure();
-        }
     }
 
     private double calculateTimeItTookToRun() {

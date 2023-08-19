@@ -1,9 +1,7 @@
 package nl.tudelft.cse1110.andy.config;
 
 import nl.tudelft.cse1110.andy.codechecker.engine.CheckScript;
-import nl.tudelft.cse1110.andy.execution.externalprocess.EmptyExternalProcess;
 import nl.tudelft.cse1110.andy.execution.mode.Mode;
-import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
 
 import java.util.Collections;
 import java.util.List;
@@ -29,10 +27,19 @@ public abstract class RunConfiguration {
             "EXPERIMENTAL_BIG_INTEGER", "EXPERIMENTAL_NAKED_RECEIVER", "EXPERIMENTAL_MEMBER_VARIABLE", "ABS",
             "AOR", "AOD", "CRCR", "OBBN", "ROR", "UOI");
 
+    private static  List<String> ZIPPED = Collections.emptyList();
+
     public abstract List<String> classesUnderTest();
 
     public abstract Map<String, Float> weights();
 
+    public void setZippedFiles(List<String> files) {
+        ZIPPED = files;
+    };
+
+    public List<String> getZippedFiles() {
+        return ZIPPED;
+    }
     public CheckScript checkScript() {
         return new CheckScript(Collections.emptyList());
     }
@@ -55,10 +62,6 @@ public abstract class RunConfiguration {
 
     public Mode mode() {
         return Mode.PRACTICE;
-    }
-
-    public ExternalProcess externalProcess() {
-        return new EmptyExternalProcess();
     }
 
     public String successMessage() {

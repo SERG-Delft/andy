@@ -35,8 +35,6 @@ public class ExecutionFlow {
             }
         } while (!steps.isEmpty() && !resultBuilder.hasFailed());
 
-        ctx.killExternalProcess();
-
         return resultBuilder.build();
     }
 
@@ -63,6 +61,7 @@ public class ExecutionFlow {
                 new CompilationStep(),
                 new ReplaceClassloaderStep(),
                 new GetRunConfigurationStep(),
+                new UnzipStep(),
                 new ExamModeSecurityGuardStep(),
                 new InjectModeActionStepsStep());
     }

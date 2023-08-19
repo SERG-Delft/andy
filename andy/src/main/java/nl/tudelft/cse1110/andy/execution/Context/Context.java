@@ -3,10 +3,8 @@ package nl.tudelft.cse1110.andy.execution.Context;
 import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.config.RunConfiguration;
 import nl.tudelft.cse1110.andy.execution.ExecutionFlow;
-import nl.tudelft.cse1110.andy.execution.externalprocess.EmptyExternalProcess;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.execution.mode.ModeActionSelector;
-import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
 import org.jacoco.core.runtime.IRuntime;
 import org.jacoco.core.runtime.RuntimeData;
 
@@ -21,7 +19,6 @@ public class Context {
     private ExecutionFlow flow;
     private final Action action;
     private ModeActionSelector modeActionSelector;
-    private ExternalProcess externalProcess;
     private ClassLoader classloaderWithStudentsCode;
     private final List<String> librariesToBeIncludedInCompilation;
     private IRuntime jacocoRuntime;
@@ -29,7 +26,7 @@ public class Context {
 
     public Context(ClassLoader cleanClassloader, DirectoryConfiguration directoryConfiguration,
                    RunConfiguration runConfiguration, List<String> fullClassNames, ExecutionFlow flow,
-                   Action action, ModeActionSelector modeActionSelector, ExternalProcess externalProcess,
+                   Action action, ModeActionSelector modeActionSelector,
                    ClassLoader classloaderWithStudentsCode, List<String> librariesToBeIncludedInCompilation,
                    IRuntime jacocoRuntime, RuntimeData jacocoData) {
         this.cleanClassloader = cleanClassloader;
@@ -39,7 +36,6 @@ public class Context {
         this.flow = flow;
         this.action = action;
         this.modeActionSelector = modeActionSelector;
-        this.externalProcess = externalProcess;
         this.classloaderWithStudentsCode = classloaderWithStudentsCode;
         this.librariesToBeIncludedInCompilation = librariesToBeIncludedInCompilation;
         this.jacocoRuntime = jacocoRuntime;
@@ -60,16 +56,6 @@ public class Context {
         this.modeActionSelector = modeActionSelector;
     }
 
-    public void setExternalProcess(ExternalProcess externalProcess) {
-        this.externalProcess = externalProcess;
-    }
-
-    public void killExternalProcess() {
-        // Retrieve error messages before killing process
-        externalProcess.extractErrorMessages();
-
-        externalProcess.kill();
-    }
 
     public void setClassloaderWithStudentsCode(ClassLoader classloaderWithStudentsCode) {
         this.classloaderWithStudentsCode = classloaderWithStudentsCode;
@@ -110,10 +96,6 @@ public class Context {
 
     public ModeActionSelector getModeActionSelector() {
         return modeActionSelector;
-    }
-
-    public ExternalProcess getExternalProcess() {
-        return externalProcess;
     }
 
     public ClassLoader getClassloaderWithStudentsCode() {

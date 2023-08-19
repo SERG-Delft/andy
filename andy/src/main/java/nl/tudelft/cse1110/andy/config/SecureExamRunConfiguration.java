@@ -1,7 +1,5 @@
 package nl.tudelft.cse1110.andy.config;
 
-import com.google.common.collect.ImmutableMap;
-import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
 import nl.tudelft.cse1110.andy.execution.mode.Mode;
 
 import java.util.Collections;
@@ -15,13 +13,11 @@ public class SecureExamRunConfiguration extends RunConfiguration {
     private final String successMessage;
     private final List<String> listOfMutants;
     private final int numberOfMutationsToConsider;
-    private final ExternalProcess externalProcess;
 
     public SecureExamRunConfiguration(RunConfiguration runConfigurationToClone) {
         this.classesUnderTest = runConfigurationToClone.classesUnderTest();
         this.listOfMutants = runConfigurationToClone.listOfMutants();
         this.numberOfMutationsToConsider = runConfigurationToClone.numberOfMutationsToConsider();
-        this.externalProcess = runConfigurationToClone.externalProcess();
         this.successMessage = runConfigurationToClone.successMessage();
     }
 
@@ -30,13 +26,14 @@ public class SecureExamRunConfiguration extends RunConfiguration {
     }
 
     @Override
+    @SuppressWarnings("DoubleBraceInitialization")
     public Map<String, Float> weights() {
-        return new HashMap<>(ImmutableMap.of(
-            "coverage", 0.25f,
-            "mutation", 0.25f,
-            "meta", 0.25f,
-            "codechecks", 0.25f
-        ));
+        return new HashMap<>() {{
+            put("coverage", 0.25f);
+            put("mutation", 0.25f);
+            put("meta", 0.25f);
+            put("codechecks", 0.25f);
+        }};
     }
 
     @Override
@@ -50,10 +47,6 @@ public class SecureExamRunConfiguration extends RunConfiguration {
 
     public int numberOfMutationsToConsider() {
         return numberOfMutationsToConsider;
-    }
-
-    public ExternalProcess externalProcess() {
-        return externalProcess;
     }
 
     public String successMessage() {

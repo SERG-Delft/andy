@@ -80,8 +80,8 @@ class ContextDirectorTest {
                 && context.getAction().equals(action)
                 && context.getDirectoryConfiguration().getWorkingDir().equals(directoryConfiguration.getWorkingDir())
                 && context.getDirectoryConfiguration().getOutputDir().equals(directoryConfiguration.getOutputDir())
-                && context.getCleanClassloader() != null
-                && context.getExternalProcess() != null;
+                && context.getCleanClassloader() != null;
+
     }
 
     private static boolean restIsNull(Context context) {
