@@ -88,4 +88,48 @@ public class LibraryMetaTestsTest extends BaseMetaTestsTest {
                 .isEqualTo(RunMetaTestsStep.class.getSimpleName());
     }
 
+    @Test
+    void allPenaltyMetaTestsPassing() {
+        Result result = run("NumberUtilsAddLibrary",
+                "NumberUtilsAddOfficialSolution", "NumberUtilsAddWithPenaltyMetaTestsConfiguration");
+
+        assertThat(result.getPenaltyMetaTests().getTotalTests()).isEqualTo(4);
+        assertThat(result.getPenaltyMetaTests().getPassedMetaTests()).isEqualTo(4);
+        assertThat(result.getPenaltyMetaTests())
+                .has(passedMetaTest("AppliesMultipleCarriesWrongly"))
+                .has(passedMetaTest("DoesNotApplyCarryAtAll"))
+                .has(passedMetaTest("DoesNotApplyLastCarry"))
+                .has(passedMetaTest("DoesNotCheckNumbersOutOfRange"));
+    }
+
+    @Test
+    void somePenaltyMetaTestFailing() {
+        Result result = run("NumberUtilsAddLibrary",
+                "NumberUtilsAddAllTestsPass", "NumberUtilsAddWithPenaltyMetaTestsConfiguration");
+
+        assertThat(result.getPenaltyMetaTests().getTotalTests()).isEqualTo(4);
+        assertThat(result.getPenaltyMetaTests().getPassedMetaTests()).isEqualTo(1);
+
+        assertThat(result.getPenaltyMetaTests())
+                .has(passedMetaTest("DoesNotCheckNumbersOutOfRange"))
+                .has(failedMetaTest("AppliesMultipleCarriesWrongly"))
+                .has(failedMetaTest("DoesNotApplyCarryAtAll"))
+                .has(failedMetaTest("DoesNotApplyLastCarry"));
+    }
+
+    @Test
+    void somePenaltyMetaTestFailingWithWeights() {
+        Result result = run("NumberUtilsAddLibrary",
+                "NumberUtilsAddAllTestsPass", "NumberUtilsAddConfigurationWithWeightWithPenaltyMetaTests");
+
+        assertThat(result.getPenaltyMetaTests().getTotalTests()).isEqualTo(7);
+        assertThat(result.getPenaltyMetaTests().getPassedMetaTests()).isEqualTo(2);
+
+        assertThat(result.getPenaltyMetaTests())
+                .has(passedMetaTest("DoesNotCheckNumbersOutOfRange"))
+                .has(failedMetaTest("AppliesMultipleCarriesWrongly"))
+                .has(failedMetaTest("DoesNotApplyCarryAtAll"))
+                .has(failedMetaTest("DoesNotApplyLastCarry"));
+    }
+
 }
