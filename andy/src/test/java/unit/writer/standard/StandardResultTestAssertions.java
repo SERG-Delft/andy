@@ -170,6 +170,13 @@ public class StandardResultTestAssertions {
     public static Condition<String> metaTestPassing(String metaTestName) {
         return containsRegex("Meta test: " + metaTestName + " \\(.*\\) PASSED");
     }
+    public static Condition<String> penaltyMetaTestFailing(String metaTestName, int penalty) {
+        return containsRegex("Penalty meta test: " + metaTestName + " \\(.*" + penalty +".*\\) FAILED");
+    }
+
+    public static Condition<String> penaltyMetaTestPassing(String metaTestName, int penalty) {
+        return containsRegex("Penalty meta test: " + metaTestName + " \\(.*" + penalty +".*\\) PASSED");
+    }
 
     public static Condition<String> finalGrade(int score) {
         return new Condition<>() {
@@ -276,19 +283,19 @@ public class StandardResultTestAssertions {
     }
 
     public static Condition<String> codeCheck(String description, boolean pass, int weight) {
-        String expectedCheck = String.format("%s: %s (weight: %d)",
+        String expectedCheck = String.format("Code check %s (weight: %d): %s",
                 description,
-                pass ? "PASS" : "FAIL",
-                weight);
+                weight,
+                pass ? "PASSED" : "FAILED");
 
         return containsString(expectedCheck);
     }
 
     public static Condition<String> penaltyCodeCheck(String description, boolean pass, int weight) {
-        String expectedCheck = String.format("%s: %s (penalty: %d)",
+        String expectedCheck = String.format("Penalty code check %s (penalty: %d): %s",
                 description,
-                pass ? "PASS" : "FAIL",
-                weight);
+                weight,
+                pass ? "PASS" : "FAIL");
 
         return containsString(expectedCheck);
     }
@@ -317,7 +324,9 @@ public class StandardResultTestAssertions {
     public static Condition<String> noMetaTests() {
         return not(containsRegex("--- Meta tests"));
     }
-
+    public static Condition<String> noPenaltyMetaTests() {
+        return not(containsRegex(".*Penalty meta test.*\\(penalty: \\d+\\)"));
+    }
 
     public static Condition<String> codeChecks() {
         return containsString("--- Code checks");
@@ -328,7 +337,7 @@ public class StandardResultTestAssertions {
     }
 
     public static Condition<String> noPenaltyCodeChecks() {
-        return not(containsRegex(".*\\(penalty: \\d+\\)"));
+        return not(containsRegex(".*Penalty code check.*\\(penalty: \\d+\\)"));
     }
 
     public static Condition<String> noFinalGrade() {
