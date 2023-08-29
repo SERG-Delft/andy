@@ -268,9 +268,9 @@ public class StandardResultWriter implements ResultWriter {
             }
             for (MetaTestResult penaltyResult : penaltyMetaTests.getMetaTestResults()) {
                 if (penaltyResult.succeeded()) {
-                    l(String.format("Meta test: %s (weight: %d) PASSED", penaltyResult.getName(), penaltyResult.getWeight()));
+                    l(String.format("Penalty meta test: %s (penalty: %d) PASSED", penaltyResult.getName(), penaltyResult.getWeight()));
                 } else {
-                    l(String.format("Meta test: %s (weight: %d) FAILED", penaltyResult.getName(), penaltyResult.getWeight()));
+                    l(String.format("Penalty meta test: %s (penalty: %d) FAILED", penaltyResult.getName(), penaltyResult.getWeight()));
                 }
             }
         }
@@ -322,16 +322,16 @@ public class StandardResultWriter implements ResultWriter {
 
         if(allHints) {
             for (CodeCheckResult result : codeChecks.getCheckResults()) {
-                l(String.format("%s: %s (weight: %d)",
+                l(String.format("Code check %s (weight: %d): %s",
                         result.getDescription(),
-                        result.passed() ? "PASS" : "FAIL",
-                        result.getWeight()));
+                        result.getWeight(),
+                        result.passed() ? "PASSED" : "FAILED"));
             }
             for (CodeCheckResult result : penaltyCodeChecks.getCheckResults()) {
-                l(String.format("%s: %s (penalty: %d)",
+                l(String.format("Penalty code check %s (penalty: %d): %s",
                         result.getDescription(),
-                        result.passed() ? "PASS" : "FAIL",
-                        result.getWeight()));
+                        result.getWeight(),
+                        result.passed() ? "PASSED" : "FAILED"));
             }
 
         }
