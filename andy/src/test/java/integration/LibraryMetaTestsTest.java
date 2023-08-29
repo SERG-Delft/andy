@@ -93,10 +93,9 @@ public class LibraryMetaTestsTest extends BaseMetaTestsTest {
         Result result = run("NumberUtilsAddLibrary",
                 "NumberUtilsAddOfficialSolution", "NumberUtilsAddWithPenaltyMetaTestsConfiguration");
 
-        assertThat(result.getPenaltyMetaTests().getTotalTests()).isEqualTo(4);
-        assertThat(result.getPenaltyMetaTests().getPassedMetaTests()).isEqualTo(4);
+        assertThat(result.getPenaltyMetaTests().getTotalTests()).isEqualTo(3);
+        assertThat(result.getPenaltyMetaTests().getPassedMetaTests()).isEqualTo(3);
         assertThat(result.getPenaltyMetaTests())
-                .has(passedMetaTest("AppliesMultipleCarriesWrongly"))
                 .has(passedMetaTest("DoesNotApplyCarryAtAll"))
                 .has(passedMetaTest("DoesNotApplyLastCarry"))
                 .has(passedMetaTest("DoesNotCheckNumbersOutOfRange"));
@@ -107,12 +106,11 @@ public class LibraryMetaTestsTest extends BaseMetaTestsTest {
         Result result = run("NumberUtilsAddLibrary",
                 "NumberUtilsAddAllTestsPass", "NumberUtilsAddWithPenaltyMetaTestsConfiguration");
 
-        assertThat(result.getPenaltyMetaTests().getTotalTests()).isEqualTo(4);
+        assertThat(result.getPenaltyMetaTests().getTotalTests()).isEqualTo(3);
         assertThat(result.getPenaltyMetaTests().getPassedMetaTests()).isEqualTo(1);
 
         assertThat(result.getPenaltyMetaTests())
                 .has(passedMetaTest("DoesNotCheckNumbersOutOfRange"))
-                .has(failedMetaTest("AppliesMultipleCarriesWrongly"))
                 .has(failedMetaTest("DoesNotApplyCarryAtAll"))
                 .has(failedMetaTest("DoesNotApplyLastCarry"));
     }

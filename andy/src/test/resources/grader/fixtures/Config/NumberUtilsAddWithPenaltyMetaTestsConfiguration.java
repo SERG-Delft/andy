@@ -13,8 +13,8 @@ public class Configuration extends RunConfiguration {
     public Map<String, Float> weights() {
         return new HashMap<>() {{
             put("coverage", 0.1f);
-            put("mutation", 0.9f);
-            put("meta", 0.0f);
+            put("mutation", 0.7f);
+            put("meta", 0.2f);
             put("codechecks", 0f);
         }};
     }
@@ -25,7 +25,7 @@ public class Configuration extends RunConfiguration {
     }
 
     @Override
-    public List<MetaTest> penaltyMetaTests() {
+    public List<MetaTest> metaTests() {
         return List.of(
                 MetaTest.withStringReplacement("AppliesMultipleCarriesWrongly",
                         """
@@ -46,7 +46,12 @@ public class Configuration extends RunConfiguration {
                             carry = 0;
                         }
                         result.addFirst(sum % 10);
-                        """),
+                        """)
+        );
+    }
+    @Override
+    public List<MetaTest> penaltyMetaTests() {
+        return List.of(
                 MetaTest.withLineReplacement("DoesNotApplyCarryAtAll", 47, 68,
                         """
                         for (int i = 0; i < Math.max(reversedLeft.size(), reversedRight.size()); i++) {
