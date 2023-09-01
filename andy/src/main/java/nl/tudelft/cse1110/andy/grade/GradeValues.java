@@ -86,7 +86,7 @@ public class GradeValues {
         return this;
     }
 
-    public static GradeValues fromResults(CoverageResult coverageResults, CodeChecksResult codeCheckResults, MutationTestingResult mutationResults, MetaTestsResult metaTestResults, CodeChecksResult penaltyCodeCheckResults) {
+    public static GradeValues fromResults(CoverageResult coverageResults, CodeChecksResult codeCheckResults, MutationTestingResult mutationResults, MetaTestsResult metaTestResults, MetaTestsResult penaltyMetaTestResults, CodeChecksResult penaltyCodeCheckResults) {
         GradeValues grades = new GradeValues();
         grades.setBranchGrade(coverageResults.getCoveredBranches(), coverageResults.getTotalNumberOfBranches());
         grades.setCheckGrade(codeCheckResults.getNumberOfPassedChecks(), codeCheckResults.getTotalNumberOfChecks());
@@ -94,7 +94,8 @@ public class GradeValues {
         grades.setMetaGrade(metaTestResults.getPassedMetaTests(), metaTestResults.getTotalTests());
 
         // penalty is equal to the sum of the weights of all failed penalty code checks
-        grades.setPenalty(penaltyCodeCheckResults.getCheckResults().stream().mapToInt(check -> check.passed() ? 0 : check.getWeight()).sum());
+        grades.setPenalty(penaltyCodeCheckResults.getCheckResults().stream().mapToInt(check -> check.passed() ? 0 : check.getWeight()).sum()
+                + penaltyMetaTestResults.getMetaTestResults().stream().mapToInt(check -> check.succeeded() ? 0 : check.getWeight()).sum());
 
         return grades;
     }

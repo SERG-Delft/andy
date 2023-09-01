@@ -283,6 +283,7 @@ public class StandardResultWriterTest {
                 .has(fullGradeDescriptionDisplayed("Meta tests", 2, 3, 0.25))
                 .has(mutationScore(5, 6))
                 .has(noMetaTests())
+                .has(noPenaltyMetaTests())
                 .has(noCodeChecks())
                 .has(noPenaltyCodeChecks())
                 .has(noPenalty())
@@ -570,6 +571,11 @@ public class StandardResultWriterTest {
                         new MetaTestResult("e", 3, false),
                         new MetaTestResult("f", 1, true)
                 ))
+                .withPenaltyMetaTestResults(List.of(
+                        new MetaTestResult("d1", 16, true),
+                        new MetaTestResult("e1", 32, false),
+                        new MetaTestResult("f1", 64, true)
+                ))
                 .withPenaltyCodeCheckResults(List.of(
                         new CodeCheckResult("a1", 1, true),
                         new CodeCheckResult("b1", 1, true),
@@ -581,7 +587,6 @@ public class StandardResultWriterTest {
         writer.write(ctx, result);
 
         String output = generatedResult();
-
         assertThat(output)
                 .has(versionInformation(versionInformation))
                 .has(finalGradeOnScreen(34))
@@ -595,8 +600,8 @@ public class StandardResultWriterTest {
                 .has(fullGradeDescriptionDisplayed("Meta tests", 2, 3, 0.25))
                 .has(mutationScore(5, 6))
                 .has(scoreOfCodeChecks(7, 8))
-                .has(metaTestsPassing(2))
-                .has(metaTests(3))
+                .has(metaTestsPassing(4))
+                .has(metaTests(6))
                 .has(noPenalty())
                 .has(not(zeroScoreExplanation()));
 
@@ -604,6 +609,9 @@ public class StandardResultWriterTest {
                 .has(metaTestDisplayed("d", true, fullHints))
                 .has(metaTestDisplayed("e", false, fullHints))
                 .has(metaTestDisplayed("f", true, fullHints))
+                .has(penaltyMetaTestDisplayed("d1", true, fullHints, 16))
+                .has(penaltyMetaTestDisplayed("e1", false, fullHints, 32))
+                .has(penaltyMetaTestDisplayed("f1", true, fullHints, 64))
                 .has(codeCheckDisplayed("a", true, 1, fullHints))
                 .has(codeCheckDisplayed("b", true, 2, fullHints))
                 .has(codeCheckDisplayed("c", false, 1, fullHints))
@@ -662,6 +670,55 @@ public class StandardResultWriterTest {
                 .has(penaltyCodeCheckDisplayed("b1", false, 100, fullHints))
                 .has(penaltyCodeCheckDisplayed("c1", true, 50, fullHints))
                 .has(penaltyCodeCheckDisplayed("d1", true, 1, fullHints));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "true,false",
+            "false,true",
+            "true,true"
+    })
+    void testPrintFinalGradeWithPenaltyMetaTestsFailing(boolean fullHints, boolean partialHints) {
+        ModeActionSelector modeActionSelector = mock(ModeActionSelector.class);
+        when(modeActionSelector.shouldCalculateAndShowGrades()).thenReturn(true);
+        when(modeActionSelector.shouldGenerateAnalytics()).thenReturn(false);
+        when(modeActionSelector.shouldShowFullHints()).thenReturn(fullHints);
+        when(modeActionSelector.shouldShowPartialHints()).thenReturn(partialHints);
+        when(modeActionSelector.getMode()).thenReturn(Mode.PRACTICE);
+
+        when(ctx.getModeActionSelector()).thenReturn(modeActionSelector);
+
+        Result result = new ResultTestDataBuilder()
+                .withCoverageResult(CoverageResult.build(
+                        4, 7, 5, 8, 1, 2,
+                        new CoverageLineByLine(List.of(), List.of(), List.of())))
+                .withMutationTestingResults(5, 6)
+                .withPenaltyMetaTestResults(List.of(
+                        new MetaTestResult("a1", 8, false),
+                        new MetaTestResult("b1", 16, false),
+                        new MetaTestResult("c1", 32, true),
+                        new MetaTestResult("d1", 64, true)
+                ))
+                .withPenalty(24)
+                .build();
+
+        writer.write(ctx, result);
+
+        String output = generatedResult();
+
+        assertThat(output)
+                .has(versionInformation(versionInformation))
+                .has(compilationSuccess())
+                .has(fullGradeDescriptionDisplayed("Meta tests", 0, 0, 0.25))
+                .has(mutationScore(5, 6))
+                .has(penalty(24))
+                .has(not(zeroScoreExplanation()));
+
+        assertThat(output)
+                .has(penaltyMetaTestDisplayed("a1", false, fullHints, 8))
+                .has(penaltyMetaTestDisplayed("b1", false, fullHints, 16))
+                .has(penaltyMetaTestDisplayed("c1", true, fullHints, 32))
+                .has(penaltyMetaTestDisplayed("d1", true, fullHints, 64));
     }
 
     @Test
@@ -864,6 +921,10 @@ public class StandardResultWriterTest {
     protected Condition<? super String> metaTestDisplayed(String description, boolean pass, boolean shownInOutput) {
         var metaTestCondition = pass ? metaTestPassing(description) : metaTestFailing(description);
         return shownInOutput ? metaTestCondition : not(metaTestCondition);
+    }
+    protected Condition<? super String> penaltyMetaTestDisplayed(String description, boolean pass, boolean shownInOutput, int penalty) {
+        var penaltyMetaTestCondition = pass ? penaltyMetaTestPassing(description, penalty) : penaltyMetaTestFailing(description, penalty);
+        return shownInOutput ? penaltyMetaTestCondition : not(penaltyMetaTestCondition);
     }
 
 }

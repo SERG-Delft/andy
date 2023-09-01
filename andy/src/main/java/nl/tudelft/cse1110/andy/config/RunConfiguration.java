@@ -45,6 +45,10 @@ public abstract class RunConfiguration {
         return Collections.emptyList();
     }
 
+    public List<MetaTest> penaltyMetaTests() {
+        return Collections.emptyList();
+    }
+
     public List<String> listOfMutants() {
         return DEFAULTS;
     }

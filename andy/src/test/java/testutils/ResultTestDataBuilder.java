@@ -20,6 +20,7 @@ public class ResultTestDataBuilder {
     private CodeChecksResult penaltyCodeCheckResults = CodeChecksResult.empty();
     private CoverageResult coverageResults = CoverageResult.empty();
     private MetaTestsResult metaTestResults = MetaTestsResult.empty();
+    private MetaTestsResult penaltyMetaTestResults = MetaTestsResult.empty();
     private int penalty = 0;
     private int finalGrade = 0;
     private double timeInSeconds = 10;
@@ -95,6 +96,15 @@ public class ResultTestDataBuilder {
         return this;
     }
 
+    public ResultTestDataBuilder withPenaltyMetaTestResults(List<MetaTestResult> list) {
+        penaltyMetaTestResults = MetaTestsResult.build(
+                (int) list.stream().filter(MetaTestResult::succeeded).count(),
+                list.size(),
+                list
+        );
+        return this;
+    }
+
     public ResultTestDataBuilder withWeights(float branchCoverageWeight, float mutationCoverageWeight, float metaTestsWeight, float codeChecksWeight) {
         weights = new GradeWeight(branchCoverageWeight, mutationCoverageWeight, metaTestsWeight, codeChecksWeight);
         return this;
@@ -113,6 +123,6 @@ public class ResultTestDataBuilder {
     public Result build() {
         GenericFailure genericFailure = GenericFailure.build(genericFailureMessage, genericFailureStepName, genericFailureExceptionMessage, genericFailureExternalProcessExitCode, genericFailureExternalProcessErrorMessages);
 
-        return new Result(compilation, testResults, mutationResults, codeCheckResults, penaltyCodeCheckResults, coverageResults, metaTestResults, penalty, finalGrade, genericFailure, timeInSeconds, weights, successMessage);
+        return new Result(compilation, testResults, mutationResults, codeCheckResults, penaltyCodeCheckResults, coverageResults, metaTestResults, penaltyMetaTestResults, penalty, finalGrade, genericFailure, timeInSeconds, weights, successMessage);
     }
 }

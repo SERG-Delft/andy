@@ -31,6 +31,8 @@ public class ModesAndActionsTest extends IntegrationTestBase {
                 .has(codeCheck("getTripById should be set up", true, 1));
         assertThat(result.getMetaTests().getTotalTests()).isEqualTo(4);
         assertThat(result.getMetaTests().getPassedMetaTests()).isEqualTo(3);
+        assertThat(result.getPenaltyMetaTests().wasExecuted()).isTrue();
+        assertThat(result.getPenaltyMetaTests().getTotalTests()).isEqualTo(0);
         assertThat(result.getMetaTests()).has(failedMetaTest("DoesNotCheckInvalidTripId"));
         assertThat(result.getFinalGrade()).isEqualTo(91);
     }
@@ -49,8 +51,31 @@ public class ModesAndActionsTest extends IntegrationTestBase {
         assertThat(result.getPenaltyCodeChecks().wasExecuted()).isTrue();
         assertThat(result.getMetaTests().getTotalTests()).isEqualTo(4);
         assertThat(result.getMetaTests().getPassedMetaTests()).isEqualTo(3);
+        assertThat(result.getPenaltyMetaTests().wasExecuted()).isTrue();
+        assertThat(result.getPenaltyMetaTests().getTotalTests()).isEqualTo(0);
         assertThat(result.getMetaTests()).has(failedMetaTest("DoesNotCheckInvalidTripId"));
         assertThat(result.getFinalGrade()).isEqualTo(91);
+    }
+
+    @Test
+    void failingPenaltyMetaTests() {
+        Result result = run(Action.FULL_WITH_HINTS, "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigPenaltyMetaTestsFailing");
+
+        assertThat(result.getTests().getTestsSucceeded()).isEqualTo(2);
+        assertThat(result.getCoverage().getCoveredLines()).isEqualTo(11);
+        assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(8);
+        assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(9);
+        assertThat(result.getCodeChecks().getNumberOfPassedChecks()).isEqualTo(3);
+        assertThat(result.getCodeChecks().getTotalNumberOfChecks()).isEqualTo(3);
+        assertThat(result.getPenaltyCodeChecks().hasChecks()).isFalse();
+        assertThat(result.getPenaltyCodeChecks().wasExecuted()).isTrue();
+        assertThat(result.getMetaTests().getTotalTests()).isEqualTo(4);
+        assertThat(result.getMetaTests().getPassedMetaTests()).isEqualTo(3);
+        assertThat(result.getPenaltyMetaTests().wasExecuted()).isTrue();
+        assertThat(result.getPenaltyMetaTests().getTotalTests()).isEqualTo(20);
+        assertThat(result.getPenaltyMetaTests().getPassedMetaTests()).isEqualTo(0);
+        assertThat(result.getPenaltyMetaTests()).has(failedMetaTest("DoesNotCheckInvalidTripId"));
+        assertThat(result.getFinalGrade()).isEqualTo(91 - 20);
     }
 
     @Test
@@ -67,6 +92,8 @@ public class ModesAndActionsTest extends IntegrationTestBase {
         assertThat(result.getPenaltyCodeChecks().wasExecuted()).isTrue();
         assertThat(result.getMetaTests().getTotalTests()).isEqualTo(4);
         assertThat(result.getMetaTests().getPassedMetaTests()).isEqualTo(3);
+        assertThat(result.getPenaltyMetaTests().wasExecuted()).isTrue();
+        assertThat(result.getPenaltyMetaTests().getTotalTests()).isEqualTo(0);
         assertThat(result.getPenaltyCodeChecks().getNumberOfPassedChecks()).isEqualTo(10);
         assertThat(result.getPenaltyCodeChecks().getTotalNumberOfChecks()).isEqualTo(10 + 5 + 3);
         assertThat(result)
@@ -75,6 +102,29 @@ public class ModesAndActionsTest extends IntegrationTestBase {
                 .has(penaltyCodeCheck("getTripById should be set up penalty", true, 10));
         assertThat(result.getFinalGrade()).isEqualTo(91 - (5 + 3));
     }
+
+    @Test
+    void failingPenaltyMetaTestsOverrideGradeTo0() {
+        Result result = run(Action.FULL_WITH_HINTS, "SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfigPenaltyMetaTestsFailing2");
+
+        assertThat(result.getTests().getTestsSucceeded()).isEqualTo(2);
+        assertThat(result.getCoverage().getCoveredLines()).isEqualTo(11);
+        assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(8);
+        assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(9);
+        assertThat(result.getCodeChecks().getNumberOfPassedChecks()).isEqualTo(3);
+        assertThat(result.getCodeChecks().getTotalNumberOfChecks()).isEqualTo(3);
+        assertThat(result.getPenaltyCodeChecks().hasChecks()).isFalse();
+        assertThat(result.getPenaltyCodeChecks().wasExecuted()).isTrue();
+        assertThat(result.getMetaTests().getTotalTests()).isEqualTo(4);
+        assertThat(result.getMetaTests().getPassedMetaTests()).isEqualTo(3);
+        assertThat(result.getPenaltyMetaTests().wasExecuted()).isTrue();
+        assertThat(result.getPenaltyMetaTests().getTotalTests()).isEqualTo(220);
+        assertThat(result.getPenaltyMetaTests().getPassedMetaTests()).isEqualTo(0);
+        assertThat(result.getPenaltyMetaTests()).has(failedMetaTest("DoesNotCheckInvalidTripId"));
+        assertThat(result.getPenaltyMetaTests()).has(failedMetaTest("DoesNotCheckInvalidTripId2"));
+        assertThat(result.getFinalGrade()).isEqualTo(0);
+    }
+
 
     @Test
     void failingPenaltyCodeChecksOverrideGradeTo0() {
@@ -90,6 +140,8 @@ public class ModesAndActionsTest extends IntegrationTestBase {
         assertThat(result.getPenaltyCodeChecks().wasExecuted()).isTrue();
         assertThat(result.getMetaTests().getTotalTests()).isEqualTo(4);
         assertThat(result.getMetaTests().getPassedMetaTests()).isEqualTo(3);
+        assertThat(result.getPenaltyMetaTests().wasExecuted()).isTrue();
+        assertThat(result.getPenaltyMetaTests().getTotalTests()).isEqualTo(0);
         assertThat(result.getPenaltyCodeChecks().getNumberOfPassedChecks(false)).isEqualTo(1);
         assertThat(result.getPenaltyCodeChecks().getTotalNumberOfChecks(false)).isEqualTo(3);
         assertThat(result)
@@ -111,6 +163,7 @@ public class ModesAndActionsTest extends IntegrationTestBase {
         assertThat(result.getMutationTesting().wasExecuted()).isFalse();
         assertThat(result.getCodeChecks().wasExecuted()).isFalse();
         assertThat(result.getPenaltyCodeChecks().wasExecuted()).isFalse();
+        assertThat(result.getPenaltyMetaTests().wasExecuted()).isFalse();
 
         assertThat(result.getFinalGrade()).isEqualTo(0);
     }
@@ -130,6 +183,7 @@ public class ModesAndActionsTest extends IntegrationTestBase {
         assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(9);
 
         assertThat(result.getMetaTests().wasExecuted()).isFalse();
+        assertThat(result.getPenaltyMetaTests().wasExecuted()).isFalse();
         assertThat(result.getCodeChecks().wasExecuted()).isFalse();
         assertThat(result.getPenaltyCodeChecks().wasExecuted()).isFalse();
 
@@ -157,6 +211,8 @@ public class ModesAndActionsTest extends IntegrationTestBase {
                 .has(penaltyCodeCheck("getTripById should not be set up penalty", false, 5));
         assertThat(result.getMetaTests().getTotalTests()).isEqualTo(4);
         assertThat(result.getMetaTests().getPassedMetaTests()).isEqualTo(3);
+        assertThat(result.getPenaltyMetaTests().wasExecuted()).isTrue();
+        assertThat(result.getPenaltyMetaTests().getTotalTests()).isEqualTo(0);
         assertThat(result.getMetaTests()).has(failedMetaTest("DoesNotCheckInvalidTripId"));
         assertThat(result.getFinalGrade()).isEqualTo(86);
     }
