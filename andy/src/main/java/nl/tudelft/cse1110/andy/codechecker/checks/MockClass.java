@@ -1,6 +1,9 @@
 package nl.tudelft.cse1110.andy.codechecker.checks;
 
 import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.Annotation;
+import org.eclipse.jdt.core.dom.FieldDeclaration;
+
 
 /**
  * Checks whether the class was mocked via Mockito.mock(..).
@@ -36,6 +39,23 @@ public class MockClass extends Check {
         }
 
         return super.visit(mi);
+    }
+
+    @Override
+    public boolean visit(FieldDeclaration fd) {
+        // added this if-check to avoid overriding classWasMocked erroneously.
+        if(!classWasMocked) {
+            boolean hasMockAnnotation = fd.modifiers().stream()
+                    .anyMatch(m -> m instanceof Annotation &&
+                            ((Annotation) m).getTypeName().getFullyQualifiedName().equals("Mock"));
+
+            // If the field is annotated with @Mock, check if it's the class we are interested in
+            if (hasMockAnnotation) {
+                String className = fd.getType().toString();
+                classWasMocked = className.contains(classToBeMocked);
+            }
+        }
+        return super.visit(fd);
     }
 
 
