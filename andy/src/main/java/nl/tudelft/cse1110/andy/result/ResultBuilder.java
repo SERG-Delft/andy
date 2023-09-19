@@ -78,9 +78,9 @@ public class ResultBuilder {
         this.compilation = CompilationResult.compilationFail(compilationErrors);
     }
 
-    public void compilationSecurityFail(String message) {
+    public void compilationSecurityFail(String message, Optional<Integer> lineNumber) {
         this.compilation = CompilationResult.compilationFail(List.of(
-                new CompilationErrorInfo("Solution.java", 1, message)
+                new CompilationErrorInfo("Solution.java", lineNumber.orElse(1), message) // Highlight first line if the line number does not exist
         ));
     }
 
