@@ -21,10 +21,10 @@ public class ModesAndActionsTest extends IntegrationTestBase {
         assertThat(result.getCoverage().getCoveredLines()).isEqualTo(11);
         assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(8);
         assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(9);
-        assertThat(result.getCodeChecks().getNumberOfPassedChecks()).isEqualTo(3);
-        assertThat(result.getCodeChecks().getTotalNumberOfChecks()).isEqualTo(3);
-        assertThat(result.getPenaltyCodeChecks().getNumberOfPassedChecks()).isEqualTo(200);
-        assertThat(result.getPenaltyCodeChecks().getTotalNumberOfChecks()).isEqualTo(200);
+        assertThat(result.getCodeChecks().getWeightedNumberOfPassedChecks()).isEqualTo(3);
+        assertThat(result.getCodeChecks().getTotalWeightedNumberOfChecks()).isEqualTo(3);
+        assertThat(result.getPenaltyCodeChecks().getWeightedNumberOfPassedChecks()).isEqualTo(200);
+        assertThat(result.getPenaltyCodeChecks().getTotalWeightedNumberOfChecks()).isEqualTo(200);
         assertThat(result)
                 .has(codeCheck("Trip Repository should be mocked", true, 1))
                 .has(codeCheck("Trip should not be mocked", true, 1))
@@ -43,8 +43,8 @@ public class ModesAndActionsTest extends IntegrationTestBase {
         assertThat(result.getCoverage().getCoveredLines()).isEqualTo(11);
         assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(8);
         assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(9);
-        assertThat(result.getCodeChecks().getNumberOfPassedChecks()).isEqualTo(3);
-        assertThat(result.getCodeChecks().getTotalNumberOfChecks()).isEqualTo(3);
+        assertThat(result.getCodeChecks().getWeightedNumberOfPassedChecks()).isEqualTo(3);
+        assertThat(result.getCodeChecks().getTotalWeightedNumberOfChecks()).isEqualTo(3);
         assertThat(result.getPenaltyCodeChecks().hasChecks()).isFalse();
         assertThat(result.getPenaltyCodeChecks().wasExecuted()).isTrue();
         assertThat(result.getMetaTests().getTotalTests()).isEqualTo(4);
@@ -61,14 +61,14 @@ public class ModesAndActionsTest extends IntegrationTestBase {
         assertThat(result.getCoverage().getCoveredLines()).isEqualTo(11);
         assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(8);
         assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(9);
-        assertThat(result.getCodeChecks().getNumberOfPassedChecks()).isEqualTo(3);
-        assertThat(result.getCodeChecks().getTotalNumberOfChecks()).isEqualTo(3);
+        assertThat(result.getCodeChecks().getWeightedNumberOfPassedChecks()).isEqualTo(3);
+        assertThat(result.getCodeChecks().getTotalWeightedNumberOfChecks()).isEqualTo(3);
         assertThat(result.getPenaltyCodeChecks().hasChecks()).isTrue();
         assertThat(result.getPenaltyCodeChecks().wasExecuted()).isTrue();
         assertThat(result.getMetaTests().getTotalTests()).isEqualTo(4);
         assertThat(result.getMetaTests().getPassedMetaTests()).isEqualTo(3);
-        assertThat(result.getPenaltyCodeChecks().getNumberOfPassedChecks()).isEqualTo(10);
-        assertThat(result.getPenaltyCodeChecks().getTotalNumberOfChecks()).isEqualTo(10 + 5 + 3);
+        assertThat(result.getPenaltyCodeChecks().getWeightedNumberOfPassedChecks()).isEqualTo(10);
+        assertThat(result.getPenaltyCodeChecks().getTotalWeightedNumberOfChecks()).isEqualTo(10 + 5 + 3);
         assertThat(result)
                 .has(penaltyCodeCheck("Trip Repository should not be mocked penalty", false, 5))
                 .has(penaltyCodeCheck("Trip should be mocked penalty", false, 3))
@@ -84,14 +84,14 @@ public class ModesAndActionsTest extends IntegrationTestBase {
         assertThat(result.getCoverage().getCoveredLines()).isEqualTo(11);
         assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(8);
         assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(9);
-        assertThat(result.getCodeChecks().getNumberOfPassedChecks()).isEqualTo(3);
-        assertThat(result.getCodeChecks().getTotalNumberOfChecks()).isEqualTo(3);
+        assertThat(result.getCodeChecks().getWeightedNumberOfPassedChecks()).isEqualTo(3);
+        assertThat(result.getCodeChecks().getTotalWeightedNumberOfChecks()).isEqualTo(3);
         assertThat(result.getPenaltyCodeChecks().hasChecks()).isTrue();
         assertThat(result.getPenaltyCodeChecks().wasExecuted()).isTrue();
         assertThat(result.getMetaTests().getTotalTests()).isEqualTo(4);
         assertThat(result.getMetaTests().getPassedMetaTests()).isEqualTo(3);
-        assertThat(result.getPenaltyCodeChecks().getNumberOfPassedChecks(false)).isEqualTo(1);
-        assertThat(result.getPenaltyCodeChecks().getTotalNumberOfChecks(false)).isEqualTo(3);
+        assertThat(result.getPenaltyCodeChecks().getUnweightedNumberOfPassedChecks()).isEqualTo(1);
+        assertThat(result.getPenaltyCodeChecks().getTotalUnweightedNumberOfChecks()).isEqualTo(3);
         assertThat(result)
                 .has(penaltyCodeCheck("Trip Repository should not be mocked penalty", false, 100))
                 .has(penaltyCodeCheck("Trip should be mocked penalty", false, 30))
@@ -145,10 +145,10 @@ public class ModesAndActionsTest extends IntegrationTestBase {
         assertThat(result.getCoverage().getCoveredLines()).isEqualTo(11);
         assertThat(result.getMutationTesting().getKilledMutants()).isEqualTo(8);
         assertThat(result.getMutationTesting().getTotalNumberOfMutants()).isEqualTo(9);
-        assertThat(result.getCodeChecks().getNumberOfPassedChecks()).isEqualTo(3);
-        assertThat(result.getCodeChecks().getTotalNumberOfChecks()).isEqualTo(3);
-        assertThat(result.getPenaltyCodeChecks().getNumberOfPassedChecks()).isEqualTo(100);
-        assertThat(result.getPenaltyCodeChecks().getTotalNumberOfChecks()).isEqualTo(105);
+        assertThat(result.getCodeChecks().getWeightedNumberOfPassedChecks()).isEqualTo(3);
+        assertThat(result.getCodeChecks().getTotalWeightedNumberOfChecks()).isEqualTo(3);
+        assertThat(result.getPenaltyCodeChecks().getWeightedNumberOfPassedChecks()).isEqualTo(100);
+        assertThat(result.getPenaltyCodeChecks().getTotalWeightedNumberOfChecks()).isEqualTo(105);
         assertThat(result)
                 .has(codeCheck("Trip Repository should be mocked", true, 1))
                 .has(codeCheck("Trip should not be mocked", true, 1))

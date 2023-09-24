@@ -173,7 +173,7 @@ public class StandardResultWriter implements ResultWriter {
         if(result.getCompilation().successful()) {
             printGradeCalculationDetails("Branch coverage", result.getCoverage().getCoveredBranches(), result.getCoverage().getTotalNumberOfBranches(), result.getWeights().getBranchCoverageWeight());
             printGradeCalculationDetails("Mutation coverage", result.getMutationTesting().getKilledMutants(), result.getMutationTesting().getTotalNumberOfMutants(), result.getWeights().getMutationCoverageWeight());
-            printGradeCalculationDetails("Code checks", result.getCodeChecks().getNumberOfPassedChecks(), result.getCodeChecks().getTotalNumberOfChecks(), result.getWeights().getCodeChecksWeight());
+            printGradeCalculationDetails("Code checks", result.getCodeChecks().getWeightedNumberOfPassedChecks(), result.getCodeChecks().getTotalWeightedNumberOfChecks(), result.getWeights().getCodeChecksWeight());
             printGradeCalculationDetails("Meta tests", result.getMetaTests().getPassedMetaTests(), result.getMetaTests().getTotalTests(), result.getWeights().getMetaTestsWeight());
         }
 
@@ -309,8 +309,8 @@ public class StandardResultWriter implements ResultWriter {
     }
 
     private void printCodeCheckOutput(CodeChecksResult codeChecks, CodeChecksResult penaltyCodeChecks, boolean allHints) {
-        l(String.format("%d/%d passed", codeChecks.getNumberOfPassedChecks() + penaltyCodeChecks.getNumberOfPassedChecks(false),
-                codeChecks.getTotalNumberOfChecks() + penaltyCodeChecks.getTotalNumberOfChecks(false)));
+        l(String.format("%d/%d passed", codeChecks.getWeightedNumberOfPassedChecks() + penaltyCodeChecks.getUnweightedNumberOfPassedChecks(),
+                codeChecks.getTotalWeightedNumberOfChecks() + penaltyCodeChecks.getTotalUnweightedNumberOfChecks()));
 
         if(allHints) {
             for (CodeCheckResult result : codeChecks.getCheckResults()) {

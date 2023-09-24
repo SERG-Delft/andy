@@ -96,7 +96,7 @@ public class WebLabResultWriter extends StandardResultWriter {
 
         appendMetaScore(doc, metaElement, "Branch coverage", result.getCoverage().getCoveredBranches());
         appendMetaScore(doc, metaElement, "Mutation coverage", result.getMutationTesting().getKilledMutants());
-        appendMetaScore(doc, metaElement, "Code checks", result.getCodeChecks().getNumberOfPassedChecks());
+        appendMetaScore(doc, metaElement, "Code checks", result.getCodeChecks().getWeightedNumberOfPassedChecks());
         appendMetaScore(doc, metaElement, "Meta tests", result.getMetaTests().getPassedMetaTests());
 
         result.getCodeChecks().getCheckResults().forEach(check -> appendMetaScore(doc, metaElement, check.getDescription(), check.passed() ? 1 : 0));

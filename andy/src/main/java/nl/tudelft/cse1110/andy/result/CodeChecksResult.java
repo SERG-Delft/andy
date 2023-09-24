@@ -20,22 +20,22 @@ public class CodeChecksResult {
         return new CodeChecksResult(true, checkResults);
     }
 
-    public int getNumberOfPassedChecks() {
-        return getNumberOfPassedChecks(true);
+    public int getWeightedNumberOfPassedChecks() {
+        return checkResults.stream().mapToInt(
+                check -> check.passed() ? check.getWeight() : 0
+        ).sum();
     }
 
-    public int getNumberOfPassedChecks(boolean includeWeight) {
-        return checkResults.stream().mapToInt(check -> check.passed() ?
-                (includeWeight ? check.getWeight() : 1) :
-                0).sum();
+    public int getUnweightedNumberOfPassedChecks() {
+        return checkResults.stream().mapToInt(check -> check.passed() ? 1 : 0).sum();
     }
 
-    public int getTotalNumberOfChecks() {
-        return getTotalNumberOfChecks(true);
+    public int getTotalWeightedNumberOfChecks() {
+        return checkResults.stream().mapToInt(CodeCheckResult::getWeight).sum();
     }
 
-    public int getTotalNumberOfChecks(boolean includeWeight) {
-        return checkResults.stream().mapToInt(c -> includeWeight ? c.getWeight() : 1).sum();
+    public int getTotalUnweightedNumberOfChecks() {
+        return checkResults.size();
     }
 
     public List<CodeCheckResult> getCheckResults() {
