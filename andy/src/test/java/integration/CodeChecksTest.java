@@ -68,8 +68,8 @@ public class CodeChecksTest extends IntegrationTestBase {
         return new Condition<>() {
             @Override
             public boolean matches(Result value) {
-                boolean testsPassed = value.getCodeChecks().getNumberOfPassedChecks() == passed;
-                boolean totalChecks = value.getCodeChecks().getTotalNumberOfChecks() == total;
+                boolean testsPassed = value.getCodeChecks().getWeightedNumberOfPassedChecks() == passed;
+                boolean totalChecks = value.getCodeChecks().getTotalWeightedNumberOfChecks() == total;
 
                 return testsPassed && totalChecks;
             }

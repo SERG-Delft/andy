@@ -116,7 +116,7 @@ public class JacocoTest extends IntegrationTestBase {
 
         // verify that the grade is only 0 because there is no coverage
         assertThat(result.getCodeChecks().wasExecuted()).isTrue();
-        assertThat(result.getCodeChecks().getNumberOfPassedChecks()).isEqualTo(1);
+        assertThat(result.getCodeChecks().getWeightedNumberOfPassedChecks()).isEqualTo(1);
         assertThat(result.getWeights().getCodeChecksWeight()).isNotZero();
     }
 
