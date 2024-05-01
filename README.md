@@ -12,6 +12,7 @@
   * [Code coverage](#code-coverage)
   * [Mutation coverage](#mutation-coverage)
   * [Meta tests](#meta-tests)
+  * [Penalty meta tests](#penalty-meta-tests)
   * [Code checks](#code-checks)
   * [Penalty code checks](#penalty-code-checks)
   * [Success message](#success-message)
@@ -285,6 +286,39 @@ Meta test: returns wrong elements (weight: 1) FAILED
 Meta test: compares only elements in the same index (weight: 3) FAILED
 Meta test: background service does not work (weight: 2) PASSED
 ```
+#### Penalty meta tests
+
+Penalty meta tests work in a similar way to regular meta tests. However, they are not considered a grading component. Instead, if a penalty meta test passes, this has no effect on the final score. However, if it fails, its weight is subtracted from the final grade.
+
+Penalty meta tests must have a positive weight, but there is no upper limit on their total weight. For example, if there are two penalty meta tests where one of them has a weight of 10 and the other one 100 (see the example below), and a student fails both of them, the total applied penalty would be 110. In case this makes the final grade negative, the grade is reported as 0 instead.
+
+Penalty meta tests can be defined as follows:
+
+```java
+@Override
+public List<MetaTest> penaltyMetaTests() {
+        return List.of(
+            MetaTest.insertAt(2, "returns empty list when list1 is null", 29,
+                "if (list1 == null) return result;"
+            ),
+            MetaTest.withStringReplacement("returns wrong elements",
+                "if (hashSet.contains(e))",
+                "if (!hashSet.contains(e))"
+            ),
+            MetaTest.withLineReplacement(3, "compares only elements in the same index", 29, 41,
+                    """
+                    for (int i = 0; i < list1.size() && i < list2.size(); i++) {
+                        if (list1.get(i).equals(list2.get(i))) {
+                            result.add(list1.get(i));
+                        }
+                    }
+                    """
+            )
+        );
+}
+```
+
+If this method is not overridden, penalty meta tests are disabled.
 
 #### Code checks
 

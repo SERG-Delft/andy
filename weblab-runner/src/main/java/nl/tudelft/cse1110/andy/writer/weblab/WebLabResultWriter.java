@@ -102,6 +102,7 @@ public class WebLabResultWriter extends StandardResultWriter {
         result.getCodeChecks().getCheckResults().forEach(check -> appendMetaScore(doc, metaElement, check.getDescription(), check.passed() ? 1 : 0));
         result.getPenaltyCodeChecks().getCheckResults().forEach(check -> appendMetaScore(doc, metaElement, check.getDescription(), check.passed() ? 1 : 0));
         result.getMetaTests().getMetaTestResults().forEach(metaTest -> appendMetaScore(doc, metaElement, metaTest.getName(), metaTest.succeeded() ? 1 : 0));
+        result.getPenaltyMetaTests().getMetaTestResults().forEach(metaTest -> appendMetaScore(doc, metaElement, metaTest.getName(), metaTest.succeeded() ? 1 : 0));
 
         testSuitesElement.appendChild(metaElement);
     }
