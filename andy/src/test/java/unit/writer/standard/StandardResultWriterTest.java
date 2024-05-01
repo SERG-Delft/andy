@@ -283,9 +283,8 @@ public class StandardResultWriterTest {
                 .has(fullGradeDescriptionDisplayed("Meta tests", 2, 3, 0.25))
                 .has(mutationScore(5, 6))
                 .has(noMetaTests())
-                .has(noPenaltyMetaTests())
                 .has(noCodeChecks())
-                .has(noPenaltyCodeChecks())
+                .has(noPenaltyCodeChecksOrMetaTests())
                 .has(noPenalty())
                 .has(not(zeroScoreExplanation()))
                 .doesNotContain("test success message");
@@ -609,9 +608,9 @@ public class StandardResultWriterTest {
                 .has(metaTestDisplayed("d", true, fullHints))
                 .has(metaTestDisplayed("e", false, fullHints))
                 .has(metaTestDisplayed("f", true, fullHints))
-                .has(penaltyMetaTestDisplayed("d1", true, fullHints, 16))
-                .has(penaltyMetaTestDisplayed("e1", false, fullHints, 32))
-                .has(penaltyMetaTestDisplayed("f1", true, fullHints, 64))
+                .has(penaltyMetaTestDisplayed("d1", true, fullHints))
+                .has(penaltyMetaTestDisplayed("e1", false, fullHints))
+                .has(penaltyMetaTestDisplayed("f1", true, fullHints))
                 .has(codeCheckDisplayed("a", true, 1, fullHints))
                 .has(codeCheckDisplayed("b", true, 2, fullHints))
                 .has(codeCheckDisplayed("c", false, 1, fullHints))
@@ -715,10 +714,10 @@ public class StandardResultWriterTest {
                 .has(not(zeroScoreExplanation()));
 
         assertThat(output)
-                .has(penaltyMetaTestDisplayed("a1", false, fullHints, 8))
-                .has(penaltyMetaTestDisplayed("b1", false, fullHints, 16))
-                .has(penaltyMetaTestDisplayed("c1", true, fullHints, 32))
-                .has(penaltyMetaTestDisplayed("d1", true, fullHints, 64));
+                .has(penaltyMetaTestDisplayed("a1", false, fullHints))
+                .has(penaltyMetaTestDisplayed("b1", false, fullHints))
+                .has(penaltyMetaTestDisplayed("c1", true, fullHints))
+                .has(penaltyMetaTestDisplayed("d1", true, fullHints));
     }
 
     @Test
@@ -922,8 +921,8 @@ public class StandardResultWriterTest {
         var metaTestCondition = pass ? metaTestPassing(description) : metaTestFailing(description);
         return shownInOutput ? metaTestCondition : not(metaTestCondition);
     }
-    protected Condition<? super String> penaltyMetaTestDisplayed(String description, boolean pass, boolean shownInOutput, int penalty) {
-        var penaltyMetaTestCondition = pass ? penaltyMetaTestPassing(description, penalty) : penaltyMetaTestFailing(description, penalty);
+    protected Condition<? super String> penaltyMetaTestDisplayed(String description, boolean pass, boolean shownInOutput) {
+        var penaltyMetaTestCondition = pass ? penaltyMetaTestPassing(description) : penaltyMetaTestFailing(description);
         return shownInOutput ? penaltyMetaTestCondition : not(penaltyMetaTestCondition);
     }
 

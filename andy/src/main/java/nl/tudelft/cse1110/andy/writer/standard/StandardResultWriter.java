@@ -268,9 +268,9 @@ public class StandardResultWriter implements ResultWriter {
             }
             for (MetaTestResult penaltyResult : penaltyMetaTests.getMetaTestResults()) {
                 if (penaltyResult.succeeded()) {
-                    l(String.format("Meta test: %s (weight: %d) PASSED", penaltyResult.getName(), penaltyResult.getWeight()));
+                    l(String.format("Meta test: %s (penalty: %d) PASSED", penaltyResult.getName(), penaltyResult.getWeight()));
                 } else {
-                    l(String.format("Meta test: %s (weight: %d) FAILED", penaltyResult.getName(), penaltyResult.getWeight()));
+                    l(String.format("Meta test: %s (penalty: %d) FAILED", penaltyResult.getName(), penaltyResult.getWeight()));
                 }
             }
         }
