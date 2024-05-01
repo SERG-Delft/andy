@@ -245,7 +245,7 @@ public class StandardResultWriter implements ResultWriter {
     }
 
     private void printMetaTestResults(Context ctx, MetaTestsResult metaTests, MetaTestsResult penaltyMetaTests) {
-        if ((!metaTests.wasExecuted() && !penaltyMetaTests.wasExecuted()) || (metaTests.hasNoMetaTests() && penaltyMetaTests.hasNoMetaTests() ))
+        if ((!metaTests.wasExecuted() || metaTests.hasNoMetaTests()) && (!penaltyMetaTests.wasExecuted() || penaltyMetaTests.hasNoMetaTests()))
             return;
 
         boolean allHints = modeActionSelector(ctx).shouldShowFullHints();
