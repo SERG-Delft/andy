@@ -1,6 +1,5 @@
 package nl.tudelft.cse1110.andy.execution.step;
 
-import dev.failsafe.Execution;
 import nl.tudelft.cse1110.andy.config.DirectoryConfiguration;
 import nl.tudelft.cse1110.andy.config.MetaTest;
 import nl.tudelft.cse1110.andy.config.RunConfiguration;
