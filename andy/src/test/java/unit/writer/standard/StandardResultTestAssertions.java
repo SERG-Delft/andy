@@ -171,6 +171,14 @@ public class StandardResultTestAssertions {
         return containsRegex("Meta test: " + metaTestName + " \\(.*\\) PASSED");
     }
 
+    public static Condition<String> penaltyMetaTestFailing(String metaTestName) {
+        return containsRegex("Meta test: " + metaTestName + " \\(penalty: .*\\) FAILED");
+    }
+
+    public static Condition<String> penaltyMetaTestPassing(String metaTestName) {
+        return containsRegex("Meta test: " + metaTestName + " \\(penalty: .*\\) PASSED");
+    }
+
     public static Condition<String> finalGrade(int score) {
         return new Condition<>() {
             @Override
@@ -327,7 +335,7 @@ public class StandardResultTestAssertions {
         return not(codeChecks());
     }
 
-    public static Condition<String> noPenaltyCodeChecks() {
+    public static Condition<String> noPenaltyCodeChecksOrMetaTests() {
         return not(containsRegex(".*\\(penalty: \\d+\\)"));
     }
 

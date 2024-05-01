@@ -65,7 +65,7 @@ public class StandardResultWriter implements ResultWriter {
             printCoverageResults(result.getCoverage());
             printMutationTestingResults(result.getMutationTesting());
             printCodeCheckResults(ctx, result.getCodeChecks(), result.getPenaltyCodeChecks());
-            printMetaTestResults(ctx, result.getMetaTests());
+            printMetaTestResults(ctx, result.getMetaTests(), result.getPenaltyMetaTests());
             printFinalGrade(ctx, result);
             printModeAndTimeToRun(ctx, result.getTimeInSeconds());
         }
@@ -244,8 +244,8 @@ public class StandardResultWriter implements ResultWriter {
             l(String.format("\nAndy took %.1f seconds to assess your solution.", timeInSeconds));
     }
 
-    private void printMetaTestResults(Context ctx, MetaTestsResult metaTests) {
-        if (!metaTests.wasExecuted() || metaTests.hasNoMetaTests())
+    private void printMetaTestResults(Context ctx, MetaTestsResult metaTests, MetaTestsResult penaltyMetaTests) {
+        if ((!metaTests.wasExecuted() || metaTests.hasNoMetaTests()) && (!penaltyMetaTests.wasExecuted() || penaltyMetaTests.hasNoMetaTests()))
             return;
 
         boolean allHints = modeActionSelector(ctx).shouldShowFullHints();
@@ -255,7 +255,8 @@ public class StandardResultWriter implements ResultWriter {
             return;
 
         l("\n--- Meta tests");
-        l(String.format("%d/%d passed", metaTests.getPassedMetaTests(), metaTests.getTotalTests()));
+        l(String.format("%d/%d passed", metaTests.getPassedMetaTests() + penaltyMetaTests.getPassedMetaTests(),
+                metaTests.getTotalTests() + penaltyMetaTests.getTotalTests()));
 
         if (allHints) {
             for (MetaTestResult metaTestResult : metaTests.getMetaTestResults()) {
@@ -263,6 +264,13 @@ public class StandardResultWriter implements ResultWriter {
                     l(String.format("Meta test: %s (weight: %d) PASSED", metaTestResult.getName(), metaTestResult.getWeight()));
                 } else {
                     l(String.format("Meta test: %s (weight: %d) FAILED", metaTestResult.getName(), metaTestResult.getWeight()));
+                }
+            }
+            for (MetaTestResult penaltyResult : penaltyMetaTests.getMetaTestResults()) {
+                if (penaltyResult.succeeded()) {
+                    l(String.format("Meta test: %s (penalty: %d) PASSED", penaltyResult.getName(), penaltyResult.getWeight()));
+                } else {
+                    l(String.format("Meta test: %s (penalty: %d) FAILED", penaltyResult.getName(), penaltyResult.getWeight()));
                 }
             }
         }
