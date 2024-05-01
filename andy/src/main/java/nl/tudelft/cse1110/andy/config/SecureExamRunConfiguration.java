@@ -16,6 +16,8 @@ public class SecureExamRunConfiguration extends RunConfiguration {
     private final List<String> listOfMutants;
     private final int numberOfMutationsToConsider;
     private final ExternalProcess externalProcess;
+    private final boolean skipJacoco;
+    private final boolean skipPitest;
 
     public SecureExamRunConfiguration(RunConfiguration runConfigurationToClone) {
         this.classesUnderTest = runConfigurationToClone.classesUnderTest();
@@ -23,6 +25,8 @@ public class SecureExamRunConfiguration extends RunConfiguration {
         this.numberOfMutationsToConsider = runConfigurationToClone.numberOfMutationsToConsider();
         this.externalProcess = runConfigurationToClone.externalProcess();
         this.successMessage = runConfigurationToClone.successMessage();
+        this.skipJacoco = runConfigurationToClone.skipJacoco();
+        this.skipPitest = runConfigurationToClone.skipPitest();
     }
 
     public Mode mode() {
@@ -60,5 +64,13 @@ public class SecureExamRunConfiguration extends RunConfiguration {
         return successMessage;
     }
 
+    @Override
+    public boolean skipJacoco() {
+        return this.skipJacoco;
+    }
 
+    @Override
+    public boolean skipPitest() {
+        return this.skipPitest;
+    }
 }
