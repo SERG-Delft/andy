@@ -11,7 +11,7 @@
 
     <groupId>nl.tudelft.cse1110.andy</groupId>
     <artifactId>andy</artifactId>
-    <version>1.0</version>
+    <version>${andy.version}</version>
     <name>Andy</name>
     <url>https://github.com/SERG-Delft/andy</url>
     <description>Andy, a tool that assesses your test suites</description>
