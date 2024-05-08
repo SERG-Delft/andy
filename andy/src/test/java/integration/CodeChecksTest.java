@@ -21,6 +21,17 @@ public class CodeChecksTest extends IntegrationTestBase {
     }
 
     @Test
+    void mockChecksWithAnnotationPass() {
+        Result result = run( "SoftWhereLibrary", "SoftWhereTestsWithAnnotation", "SoftWhereConfigWithCodeChecksConfiguration");
+
+        assertThat(result)
+                .has(checksScore(3,3))
+                .has(codeCheck("Trip Repository should be mocked", true, 1))
+                .has(codeCheck("Trip should not be mocked", true, 1))
+                .has(codeCheck("getTripById should be set up", true, 1));
+    }
+
+    @Test
     void someChecksFail() {
         Result result = run( "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfigWithCodeChecks2Configuration");
 
