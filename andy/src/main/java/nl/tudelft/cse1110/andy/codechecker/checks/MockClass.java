@@ -51,8 +51,8 @@ public class MockClass extends Check {
 
             // If the field is annotated with @Mock, check if it's the class we are interested in
             if (hasMockAnnotation) {
-                String className = fd.getType().toString();
-                classWasMocked = className.contains(classToBeMocked);
+                String className = fd.getType().resolveBinding().getName();
+                classWasMocked = className.equals(classToBeMocked);
             }
         }
         return super.visit(fd);
