@@ -91,6 +91,24 @@ public class JUnitTestsTest {
             assertThat(result.getTests().hasTestsFailingOrFailures()).isFalse();
         }
 
+        @Test
+        void mocksWithAnnotationWork() {
+            Result result = run(Action.TESTS, "SoftWhereLibrary", "SoftWhereTestsWithAnnotation");
+
+            assertThat(result.getTests().getTestsSucceeded()).isEqualTo(3);
+            assertThat(result.getTests().getTestsRan()).isEqualTo(3);
+            assertThat(result.getTests().hasTestsFailingOrFailures()).isFalse();
+        }
+
+        @Test
+        void mocksWithAnnotationExtendWithWork() {
+            Result result = run(Action.TESTS, "SoftWhereLibrary", "SoftWhereTestsWithAnnotationExtendWith");
+
+            assertThat(result.getTests().getTestsSucceeded()).isEqualTo(3);
+            assertThat(result.getTests().getTestsRan()).isEqualTo(3);
+            assertThat(result.getTests().hasTestsFailingOrFailures()).isFalse();
+        }
+
     }
 
 
