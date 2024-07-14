@@ -42,7 +42,10 @@ public class Configuration extends RunConfiguration {
         return List.of(
                 MetaTest.withStringReplacement("my meta test",
                         "a == 10",
-                        "a == 15")
+                        "a == 15"),
+                MetaTest.withStringReplacement("another meta test",
+                        "a == 10",
+                        "a == 20")
         );
     }
 }

@@ -135,7 +135,7 @@ public class LibraryMetaTestsTest extends BaseMetaTestsTest {
         Result result = run("MockingAssignmentWithCustomExceptionLibrary", "MockingAssignmentWithCustomExceptionWrongWithoutAssertions", "MockingAssignmentWithCustomExceptionConfiguration");
 
         assertThat(result.getMetaTests().getPassedMetaTests()).isEqualTo(0);
-        assertThat(result.getMetaTests().getTotalTests()).isEqualTo(1);
+        assertThat(result.getMetaTests().getTotalTests()).isEqualTo(2);
     }
 
 }
