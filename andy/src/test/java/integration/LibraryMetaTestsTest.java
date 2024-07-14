@@ -130,4 +130,12 @@ public class LibraryMetaTestsTest extends BaseMetaTestsTest {
                 .has(failedMetaTest("DoesNotApplyLastCarry"));
     }
 
+    @Test
+    void metaTestsWithMockitoAndCustomException() {
+        Result result = run("MockingAssignmentWithCustomExceptionLibrary", "MockingAssignmentWithCustomExceptionWrongWithoutAssertions", "MockingAssignmentWithCustomExceptionConfiguration");
+
+        assertThat(result.getMetaTests().getPassedMetaTests()).isEqualTo(0);
+        assertThat(result.getMetaTests().getTotalTests()).isEqualTo(1);
+    }
+
 }
