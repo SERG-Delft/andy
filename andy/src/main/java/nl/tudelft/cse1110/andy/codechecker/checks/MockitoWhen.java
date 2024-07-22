@@ -47,16 +47,12 @@ public class MockitoWhen extends Check {
          * If the method call just after when() matches the one we are expecting, bingo!
          */
         if(inWhenMode) {
-            if(methodToSetUp.equals(methodName) || methodToSetUp.equals(previousMethodName)) {
+            if(methodToSetUp.equals(methodName) ||
+                    methodToSetUp.equals(previousMethodName) && allowedDoInvocations.contains(methodName)) {
                 numberOfCallsToWhen++;
-                inWhenMode = false;
-                previousMethodName = "";
-            } else if(notInDoWhenOrNoMatch(methodName)){
-                inWhenMode = false;
-                previousMethodName = "";
-            } else {
-                previousMethodName = methodName;
             }
+            inWhenMode = false;
+            previousMethodName = "";
         } else {
             /**
              * We wait for a call to when().
@@ -70,12 +66,7 @@ public class MockitoWhen extends Check {
         }
         return super.visit(mi);
     }
-    private boolean notInDoWhenOrNoMatch(String methodName){
-        return !methodName.equals("when")
-                &&
-            (allowedDoInvocations.contains(previousMethodName)
-                || !allowedDoInvocations.contains(methodName));
-    }
+
     @Override
     public boolean result() {
         return comparison.compare(numberOfCallsToWhen, expectedNumberOfOccurrences);
