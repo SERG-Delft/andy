@@ -36,7 +36,7 @@ public class MockitoWhenCalls {
     void t3(){
         List<String> mockedList = mock(List.class);
         Mockito.doThrow(IllegalArgumentException.class).when(mockedList).toString();
-        doNothing().when(mockedList.size());
+        doNothing().when(mockedList).size();
         doReturn("2").when(mockedList).get(any(Integer.class));
 
         verify(mockedList, times(2)).toString();
@@ -46,15 +46,29 @@ public class MockitoWhenCalls {
     @Test
     void t4(){
         List<String> mockedList = mock(List.class);
-        Mockito.doNothing().when(mockedList.size());
-        doReturn("2").when(mockedList.get(any(Integer.class)));
-        doReturn("3").when(mockedList.remove(any(Integer.class)));
+        Mockito.doNothing().when(mockedList).size();
+        doReturn("2").when(mockedList).get(any(Integer.class));
+        doReturn("3").when(mockedList).remove(any(Integer.class));
 
         verify(mockedList, times(1)).remove(1);
         verify(mockedList, times(1)).remove(2);
         verify(mockedList, times(1)).remove(3);
         verify(mockedList, times(1)).get(4);
         verify(mockedList, times(1)).get(5);
+    }
+
+    @Test
+    void t5(){
+        List<String> mockedList = mock(List.class);
+        Mockito.doReturn(3).when(mockedList).size();
+        mockedList.get(3);
+    }
+
+    @Test
+    void t6(){
+        List<String> mockedList = mock(List.class);
+        Mockito.doReturn(3).when(mockedList.get(3));
+        mockedList.get(3);
     }
 
 }
