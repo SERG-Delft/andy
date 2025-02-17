@@ -68,11 +68,11 @@ public class TestMethodsHaveAssertions extends WithinTestMethod {
 
     @Override
     public void endVisit(MethodDeclaration md) {
-        /**
-         * if we are in a test method, and at the end of the method,
-         * we did not find any assertions, then, we have a problem.
+        /*
+         * if we are in a test method, and at the end of the method
+         * we did not find any assertions, then we have a problem.
          */
-        if(isInTheAnnotatedMethod() && !currentMethodContainsAssertion) {
+        if(isInTheAnnotatedMethod() && !currentMethodContainsAssertion && !inAnonymousClass) {
             this.containsATestWithoutAssertion = true;
         }
 
