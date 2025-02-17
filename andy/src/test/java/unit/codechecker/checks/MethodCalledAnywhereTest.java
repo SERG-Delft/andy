@@ -37,4 +37,23 @@ public class MethodCalledAnywhereTest extends ChecksBaseTest {
         run("StackOverflowTestWithAnonymousClass.java", check);
         assertThat(check.result()).isTrue();
     }
+
+    @Test
+    void shouldMatchExpression() { // checks whether the alternate constructor works
+        Check check = new MethodCalledAnywhere("Utils", "fromString");
+        run("MethodCalled.java", check);
+        assertThat(check.result()).isTrue();
+
+        check = new MethodCalledAnywhere("MethodCalled.Utils", "fromString");
+        run("MethodCalled.java", check);
+        assertThat(check.result()).isTrue();
+
+        check = new MethodCalledAnywhere("utils", "fromString");
+        run("MethodCalled.java", check);
+        assertThat(check.result()).isFalse();
+
+        check = new MethodCalledAnywhere("repo", "retrieve");
+        run("MethodCalled.java", check);
+        assertThat(check.result()).isTrue();
+    }
 }

@@ -57,6 +57,10 @@ public class MethodCalledInTestMethodTest extends ChecksBaseTest {
         check = new MethodCalledInTestMethod("utils", "fromString");
         run("MethodCalled.java", check);
         assertThat(check.result()).isFalse();
+
+        check = new MethodCalledInTestMethod("repo", "retrieve");
+        run("MethodCalled.java", check);
+        assertThat(check.result()).isFalse();
     }
 
 }
