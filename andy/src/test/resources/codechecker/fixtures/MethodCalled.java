@@ -16,6 +16,10 @@ public class MethodCalled {
         void retrieve(){}
     }
 
+    class Utils {
+        int fromString(String x) { return 1; }
+    }
+
     @Test void t1() {
 
         SomeRepo repo = new SomeRepo();
@@ -33,5 +37,10 @@ public class MethodCalled {
     void t4() {
         SomeRepo repo = new SomeRepo();
         repo.retrieve();
+    }
+
+    @Test void t5() {
+        assertEquals(1, Utils.fromString("1"));
+        assertEquals(1, MethodCalled.Utils.fromString("1"));
     }
 }

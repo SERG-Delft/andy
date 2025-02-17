@@ -30,4 +30,19 @@ public class MethodCalledInTestMethodTest extends ChecksBaseTest {
         assertThat(check.result()).isTrue();
     }
 
+    @Test
+    void shouldMatchExpression() { // checks whether the alternate constructor works
+        Check check = new MethodCalledInTestMethod("Utils", "fromString");
+        run("MethodCalled.java", check);
+        assertThat(check.result()).isTrue();
+
+        check = new MethodCalledInTestMethod("MethodCalled.Utils", "fromString");
+        run("MethodCalled.java", check);
+        assertThat(check.result()).isTrue();
+
+        check = new MethodCalledInTestMethod("utils", "fromString");
+        run("MethodCalled.java", check);
+        assertThat(check.result()).isFalse();
+    }
+
 }
