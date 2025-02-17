@@ -2,7 +2,6 @@ package unit.codechecker.checks;
 
 import nl.tudelft.cse1110.andy.codechecker.checks.Check;
 import nl.tudelft.cse1110.andy.codechecker.checks.MethodCalledAnywhere;
-import nl.tudelft.cse1110.andy.codechecker.checks.MethodCalledInTestMethod;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -26,10 +25,16 @@ public class MethodCalledAnywhereTest extends ChecksBaseTest {
     }
 
     @Test
-    void shouldIgnoreAnonymousClasses() { // was breaking in midterm 2021
-        Check check = new MethodCalledInTestMethod("getPoints");
+    void shouldNotBreakWhenAnonymousClassesAreUsed() { // was breaking in midterm 2021
+        Check check = new MethodCalledAnywhere("getPoints");
         run("StackOverflowTestWithAnonymousClass.java", check);
         assertThat(check.result()).isTrue();
     }
 
+    @Test
+    void shouldCheckForMethodCallsInsideAnonymousClasses() {
+        Check check = new MethodCalledAnywhere("disableGravity");
+        run("StackOverflowTestWithAnonymousClass.java", check);
+        assertThat(check.result()).isTrue();
+    }
 }

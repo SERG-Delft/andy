@@ -24,10 +24,24 @@ public class MethodCalledInTestMethodTest extends ChecksBaseTest {
     }
 
     @Test
-    void shouldIgnoreAnonymousClasses() { // was breaking in midterm 2021
+    void shouldNotBreakWhenAnonymousClassesAreUsed() { // was breaking in midterm 2021
         Check check = new MethodCalledInTestMethod("getPoints");
         run("StackOverflowTestWithAnonymousClass.java", check);
         assertThat(check.result()).isTrue();
+    }
+
+    @Test
+    void shouldCheckForMethodCallsInsideAnonymousClasses() {
+        Check check = new MethodCalledInTestMethod("disableGravity");
+        run("StackOverflowTestWithAnonymousClass.java", check);
+        assertThat(check.result()).isTrue();
+    }
+
+    @Test
+    void shouldIgnoreAnnotationsInsideAnonymousClasses() {
+        Check check = new MethodCalledInTestMethod("fromString");
+        run("StackOverflowTestWithAnonymousClass.java", check);
+        assertThat(check.result()).isFalse();
     }
 
     @Test
