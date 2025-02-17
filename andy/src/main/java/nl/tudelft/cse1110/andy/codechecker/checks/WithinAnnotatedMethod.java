@@ -6,8 +6,8 @@ import java.util.Set;
 
 public abstract class WithinAnnotatedMethod extends Check {
 
-    private boolean annotationFound = false;
     protected boolean inAnonymousClass = false;
+    private boolean annotationFound = false;
 
     protected abstract Set<String> annotations();
 
