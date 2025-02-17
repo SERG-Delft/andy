@@ -6,6 +6,7 @@ import java.util.Set;
 
 public abstract class WithinAnnotatedMethod extends Check {
 
+    protected boolean inAnonymousClass = false;
     private boolean annotationFound = false;
 
     protected abstract Set<String> annotations();
@@ -30,6 +31,11 @@ public abstract class WithinAnnotatedMethod extends Check {
 
 
     private void checkIfThisIsATestAnnotation(Name name) {
+        if (inAnonymousClass) {
+            // Ignore all annotations within anonymous classes
+            return;
+        }
+
         if (annotations().contains(name.getFullyQualifiedName()))
             annotationFound = true;
     }
@@ -40,17 +46,23 @@ public abstract class WithinAnnotatedMethod extends Check {
 
     @Override
     public void endVisit(MethodDeclaration md) {
-        /**
-         * whenever we finish visiting a method, we remove the
-         * flag.
+        /*
+         * whenever we finish visiting a method, we remove the flag,
+         * unless we're in an anonymous class (because then we haven't reached the end of the annotated method)
          */
-        annotationFound = false;
+        if (!inAnonymousClass) {
+            annotationFound = false;
+        }
     }
-
 
     @Override
     public boolean visit(AnonymousClassDeclaration classDeclaration) {
-        // we fully ignore anonymous classes
-        return false;
+        inAnonymousClass = true;
+        return super.visit(classDeclaration);
+    }
+
+    @Override
+    public void endVisit(AnonymousClassDeclaration classDeclaration) {
+        inAnonymousClass = false;
     }
 }

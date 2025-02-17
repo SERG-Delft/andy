@@ -12,12 +12,19 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
 class StackOverflowTest {
+    class Utils {
+        public void disableGravity() {}
+        public int fromString(String x) { return 1; }
+    }
+
     @Test
     void postFeaturedTest() {
 
         UserRepository userRepo = spy(new UserRepository() {
             @Override
-            public void update(User user) {}
+            public void update(User user) {
+                Utils.disableGravity();
+            }
         });
         Scoring score = mock(Scoring.class);
 
@@ -52,4 +59,21 @@ class StackOverflowTest {
         verify(userRepo).update(u);
         assertThat(u.getPoints()).isEqualTo(6);
     }
+
+    void notATest() {
+        UserRepository userRepo = spy(new UserRepository() {
+            @Override
+            public void update(User user) {}
+
+            @Test
+            public void testBogus() {
+                assertThat(Utils.fromString("1")).isEqualTo(1);
+            }
+        });
+        Scoring score = mock(Scoring.class);
+
+        StackOverflow sO = new StackOverflow(userRepo, score);
+    }
+
+
 }
