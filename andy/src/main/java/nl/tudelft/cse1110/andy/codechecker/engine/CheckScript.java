@@ -41,7 +41,7 @@ public class CheckScript {
     public void runChecks(String sourceCodePath) {
         if (!hasChecks()) return;
 
-        ASTParser parser = ASTParser.newParser(AST.JLS15);
+        ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
         parser.setResolveBindings(true);
         parser.setBindingsRecovery(true);
 
