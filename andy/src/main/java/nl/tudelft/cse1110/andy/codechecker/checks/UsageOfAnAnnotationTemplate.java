@@ -5,6 +5,8 @@ import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.NormalAnnotation;
 import org.eclipse.jdt.core.dom.SingleMemberAnnotation;
 
+import java.util.Set;
+
 public abstract class UsageOfAnAnnotationTemplate extends Check {
     protected final int minimumNumberOfUsage;
     protected final Comparison comparison;
@@ -35,11 +37,11 @@ public abstract class UsageOfAnAnnotationTemplate extends Check {
     }
 
     private void count(Name name) {
-        if (annotationName().equals(name.getFullyQualifiedName()))
+        if (annotationNames().contains(name.getFullyQualifiedName()))
             numberOfTestsInCU++;
     }
 
-    protected abstract String annotationName();
+    protected abstract Set<String> annotationNames();
 
     @Override
     public boolean result() {

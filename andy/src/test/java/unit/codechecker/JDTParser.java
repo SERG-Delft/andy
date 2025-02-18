@@ -12,7 +12,7 @@ import java.util.Map;
 public class JDTParser {
 
     public void run(String file, Check check) {
-        ASTParser parser = ASTParser.newParser(AST.JLS15);
+        ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
         parser.setResolveBindings(true);
         parser.setBindingsRecovery(true);
 
