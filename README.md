@@ -329,27 +329,29 @@ Code checks are manually specified static checks executed on the source code of 
 Andy provides different checks for JUnit, Mockito, and JQWik tests:
 
 - Test methods:
-    - `NumberOfTests`: checks whether the test suite has a minimum number of tests.
+    - `NumberOfTests`: checks how many methods there are with a `@Test` annotation.
+    - `NumberOfExampleBasedTestMethods`: checks how many example-based test methods there are (i.e. methods with any of the annotations `@Test`, `@ParameterizedTest`, and `@Example`).
     - `TestMethodsHaveAssertions`: checks whether all test methods have assertions.
     - `LoopInTestMethods`: checks whether there is a loop in a test method.
     - `UseOfStringLiterals`: checks whether there is a string literal in a test method.
-    - `MethodCalledInTestMethod`: checks whether a method was invoked in a test method.
-    - `ClassUsedInSolution`: checks whether a class was used anywhere in the test suite.
+    - `MethodCalledInTestMethod`: checks whether a method was invoked in a test method (annotated with `@Test`, `@ParameterizedTest`, `@Property`, or `@Example`).
+    - `MethodCalledInProvideMethod`: checks whether a method was invoked in a method with the `@Provide` annotation.
     - `MethodCalledAnywhere`: checks whether a method was invoked in any scope.
+    - `ClassUsedInSolution`: checks whether a class was used anywhere in the test suite.
 
 - Mockito:
     - `MockClass`: Checks whether a class was mocked in the test suite.
     - `MockitoSpy`: Checks whether spies are used.
-    - `MockitoVerify`: Checks whether a specific verify has happened.
-    - `MockitoWhen`: Checks whether a specific when() has happened.
+    - `MockitoVerify`: Checks whether a specific `verify` has happened.
+    - `MockitoWhen`: Checks whether a specific `when()` has happened.
 
 - JQWik:
     - `JQWikProperty`: checks whether the test suite has a minimum number of properties.
     - `JQWikProvide`: checks whether the test suite has a minimum number of provide.
-    - `JQWikCombinator`: checks whether a Combinator was used.
-    - `JQWikArbitrary`: checks whether a specific Arbitrary<X> is provided by any method in the test suite.
-    - `JQWikArbitraries`: checks whether a Arbitraries.x() is used in the test suite.
-    - `JQWikProvideAnnotations`: checks whether tests use Provide annotations, e.g., @ForAll, @Positive.
+    - `JQWikCombinator`: checks whether a `Combinator` was used.
+    - `JQWikArbitrary`: checks whether a specific `Arbitrary<X>` is provided by any method in the test suite.
+    - `JQWikArbitraries`: checks whether a `Arbitraries.x()` is used in the test suite.
+    - `JQWikProvideAnnotations`: checks whether tests use Provide annotations, e.g., `@ForAll`, `@Positive`.
 
 Each of these checks receives different parameters. Check their specific Javadoc for more details. [All code checks and their full documentation can be found here.](https://github.com/SERG-Delft/andy/tree/main/andy/src/main/java/nl/tudelft/cse1110/andy/codechecker/checks)
 

@@ -9,9 +9,10 @@ public abstract class WithinTestMethod extends WithinAnnotatedMethod {
 
     public static Set<String> TEST_ANNOTATIONS =
             new HashSet<>(ImmutableSet.of(
-                "Test", // junit
-                "ParameterizedTest", // junit
-                "Property" // jqwik
+                    "Test", // junit
+                    "ParameterizedTest", // junit
+                    "Property", // jqwik
+                    "Example"  // jqwik
             ));
 
     protected Set<String> annotations() {
