@@ -1,5 +1,9 @@
 package nl.tudelft.cse1110.andy.codechecker.checks;
 
+import com.google.common.collect.ImmutableSet;
+
+import java.util.Set;
+
 /**
  * Counts the number of JQWik's @Property.
  *
@@ -16,12 +20,12 @@ public class JQWikProperty extends UsageOfAnAnnotationTemplate {
     }
 
     @Override
-    protected String annotationName() {
-        return "Property";
+    protected Set<String> annotationNames() {
+        return ImmutableSet.of("Property");
     }
 
     public String toString() {
-        return "Number of JQWik property(ies) is " + comparison.toString() + " " + minimumNumberOfUsage;
+        return "Number of JQWik properties is " + comparison.toString() + " " + minimumNumberOfUsage;
     }
 
 

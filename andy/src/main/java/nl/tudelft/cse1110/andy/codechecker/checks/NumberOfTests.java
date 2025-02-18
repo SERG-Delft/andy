@@ -1,5 +1,9 @@
 package nl.tudelft.cse1110.andy.codechecker.checks;
 
+import com.google.common.collect.ImmutableSet;
+
+import java.util.Set;
+
 /**
  * Counts the number of JUnit tests in a file
  * More specifically, it counts the number of
@@ -18,8 +22,8 @@ public class NumberOfTests extends UsageOfAnAnnotationTemplate {
     }
 
     @Override
-    protected String annotationName() {
-        return "Test";
+    protected Set<String> annotationNames() {
+        return ImmutableSet.of("Test");
     }
 
     public String toString() {

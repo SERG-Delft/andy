@@ -14,6 +14,7 @@ public class JUnitUtils {
                 .contains("You must configure at least one set of arguments"))    {
             return "Make sure you have provided a @MethodSource for this @ParameterizedTest!";
         }
+        failure.getException().printStackTrace();
         return failure.getException().toString();
     }
 

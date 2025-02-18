@@ -1,5 +1,9 @@
 package nl.tudelft.cse1110.andy.codechecker.checks;
 
+import com.google.common.collect.ImmutableSet;
+
+import java.util.Set;
+
 /**
  * Counts the number of JQWik's @Provide.
  *
@@ -16,8 +20,8 @@ public class JQWikProvide extends UsageOfAnAnnotationTemplate {
     }
 
     @Override
-    protected String annotationName() {
-        return "Provide";
+    protected Set<String> annotationNames() {
+        return ImmutableSet.of("Provide");
     }
 
     public String toString() {
