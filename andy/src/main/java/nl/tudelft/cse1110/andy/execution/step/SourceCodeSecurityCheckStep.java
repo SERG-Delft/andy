@@ -12,6 +12,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -30,7 +32,6 @@ public class SourceCodeSecurityCheckStep implements ExecutionStep {
         }
 
         String code;
-
         try {
             code = Files.readString(Path.of(solutionFile.get(0).getPath()));
         } catch (IOException e) {
@@ -38,6 +39,7 @@ public class SourceCodeSecurityCheckStep implements ExecutionStep {
             return;
         }
 
+        code = removeComments(code);
         if (!checkPackageName(code, result)) return;
 
         if (!checkForKeywords(code, result)) return;
@@ -46,7 +48,7 @@ public class SourceCodeSecurityCheckStep implements ExecutionStep {
     private boolean checkPackageName(String code, ResultBuilder result) {
         Pattern pattern = Pattern.compile("^\\s*package\\s+delft\\s*;.*", Pattern.DOTALL);
         if (!pattern.matcher(code).find()) {
-            result.compilationSecurityFail("The package name of your solution must be \"delft\"");
+            result.compilationSecurityFail("The package name of your solution must be \"delft\"", null);
             return false;
         }
 
@@ -90,12 +92,30 @@ public class SourceCodeSecurityCheckStep implements ExecutionStep {
         );
         for (String keyword : keywords.keySet()) {
             if (code.contains(keyword)) {
-                result.compilationSecurityFail(keywords.get(keyword));
-                return false;
+                String[] lines = code.split("\\n");
+                // Split lines and search every line for keyword
+                for (int lineNumber = 0; lineNumber < lines.length; lineNumber++)
+                    if (lines[lineNumber].contains(keyword)) {
+                        // Adding 1 to lineNumber to convert from zero-based index to one-based index
+                        result.compilationSecurityFail(keywords.get(keyword), Optional.of(lineNumber+1));
+                        return false;
+                    }
             }
         }
 
         return true;
+    }
+
+    public String removeComments(String code) {
+        // Remove single-line comments (//)
+        code = code.replaceAll("//.*", "");
+
+        // Remove multi-line comments (/* */)
+        Pattern pattern = Pattern.compile("/\\*.*?\\*/", Pattern.DOTALL);
+        Matcher matcher = pattern.matcher(code);
+        code = matcher.replaceAll("");
+
+        return code;
     }
 
     @Override
