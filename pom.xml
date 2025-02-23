@@ -15,11 +15,11 @@
         <junit.version>5.9.1</junit.version>
         <junit.platform.version>1.9.1</junit.platform.version>
         <mockito.version>4.8.0</mockito.version>
-        <jqwik.version>1.7.0</jqwik.version>
-        <assertj.version>3.24.2</assertj.version>
+        <jqwik.version>1.9.0</jqwik.version>
+        <assertj.version>3.27.3</assertj.version>
         <pitest.version>1.14.1</pitest.version>
         <pitest.junit.version>1.2.0</pitest.junit.version>
-        <jacoco.version>0.8.10</jacoco.version>
+        <jacoco.version>0.8.12</jacoco.version>
 
         <maven.surefire.version>3.5.2</maven.surefire.version>
         <maven.jar.plugin.version>3.4.2</maven.jar.plugin.version>
