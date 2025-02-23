@@ -16,6 +16,10 @@
     <url>https://github.com/SERG-Delft/andy</url>
     <description>Andy, a tool that assesses your test suites</description>
 
+    <properties>
+        <skipTests>${andy.skipTests}</skipTests>
+    </properties>
+
     <licenses>
         <license>
             <name>MIT License</name>
