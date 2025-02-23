@@ -6,10 +6,10 @@ public class JUnitUtils {
 
     public static String simplifyTestErrorMessage(TestExecutionSummary.Failure failure) {
         if (failure.getException().toString()
-                .contains("Cannot invoke non-static method")) {
+                .contains("local factory methods must be static")) {
             String failingMethod = getFailingMethod(failure);
 
-            return "Make sure your corresponding method " + failingMethod + " is static!";
+            return "Make sure your corresponding method " + failingMethod + "() is static!";
         } else if (failure.getException().toString()
                 .contains("You must configure at least one set of arguments"))    {
             return "Make sure you have provided a @MethodSource for this @ParameterizedTest!";
@@ -32,7 +32,7 @@ public class JUnitUtils {
 
     public static String getFailingMethod(TestExecutionSummary.Failure failure) {
         int open = failure.getException().toString().indexOf('>');
-        int close = failure.getException().toString().indexOf(']');
+        int close = failure.getException().toString().indexOf('(');
 
         return failure.getException().toString().substring(open+2, close);
     }
