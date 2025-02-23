@@ -23,7 +23,7 @@
 
         <maven.surefire.version>3.0.0-M5</maven.surefire.version>
         <maven.jar.plugin.version>3.3.0</maven.jar.plugin.version>
-        <maven.shade.plugin>3.4.1</maven.shade.plugin>
+        <maven.shade.plugin>3.6.0</maven.shade.plugin>
 
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
