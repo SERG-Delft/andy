@@ -120,4 +120,4 @@ jobs:
           restore-keys: ${{ matrix.job.os }}-m2
 
       - name: Run Weblab runner tests
-        run: mvn test -pl weblab-runner -am -Dandy.skipTests=true -DexcludedGroups=selenium
+        run: mvn test -pl weblab-runner -am "-Dandy.skipTests=true" -DexcludedGroups=selenium
