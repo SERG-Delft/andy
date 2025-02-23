@@ -20,7 +20,7 @@ public class MethodCalledInProvideMethodTest extends ChecksBaseTest {
 
     @Test
     void shouldNotMatchMethodCallElsewhere() {
-        Check check = new MethodCalledInProvideMethod( "sum");
+        Check check = new MethodCalledInProvideMethod("sum");
         run("MethodCalledInProvideMethod.java", check);
         assertThat(check.result()).isFalse();
     }
