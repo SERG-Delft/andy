@@ -329,13 +329,14 @@ Code checks are manually specified static checks executed on the source code of 
 Andy provides different checks for JUnit, Mockito, and JQWik tests:
 
 - Test methods:
-    - `NumberOfTests`: checks whether the test suite has a minimum number of tests.
     - `TestMethodsHaveAssertions`: checks whether all test methods have assertions.
     - `LoopInTestMethods`: checks whether there is a loop in a test method.
     - `UseOfStringLiterals`: checks whether there is a string literal in a test method.
     - `MethodCalledInTestMethod`: checks whether a method was invoked in a test method.
     - `ClassUsedInSolution`: checks whether a class was used anywhere in the test suite.
     - `MethodCalledAnywhere`: checks whether a method was invoked in any scope.
+    - `NumberOfTests`: compares the number of JUnit test cases annotated with `@Test` to a given number.
+    - `NumberOfExampleBasedTestMethods`: compares the number of example-based test cases in the test suite to a given number.
 
 - Mockito:
     - `MockClass`: Checks whether a class was mocked in the test suite.
