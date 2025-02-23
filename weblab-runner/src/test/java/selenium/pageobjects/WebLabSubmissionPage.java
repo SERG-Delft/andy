@@ -1,6 +1,6 @@
 package selenium.pageobjects;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -62,7 +62,7 @@ public class WebLabSubmissionPage extends BasePageObject {
         // No way to set content without javascript: element is not visible.
         String script = String.format("document.getElementById('%s').value = '%s';",
                 solutionTextAreaHidden.getAttribute("id"),
-                StringEscapeUtils.escapeJavaScript(solution));
+                StringEscapeUtils.escapeEcmaScript(solution));
 
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript(script);
