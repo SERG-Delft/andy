@@ -1,6 +1,6 @@
 package delft;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
+import org.htmlunit.BrowserVersion;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
