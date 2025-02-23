@@ -56,7 +56,7 @@ public abstract class WebLabSeleniumTestBase {
 
         FirefoxOptions options = new FirefoxOptions();
         if (StringUtils.isNotEmpty(System.getenv(WEBLAB_SELENIUM_HEADLESS_ENV_VAR))) {
-            options.setHeadless(true);
+            options.addArguments("--headless");
         }
 
         this.driver = new FirefoxDriver(options);
