@@ -85,14 +85,6 @@
             <version>${mockito.version}</version>
         </dependency>
 
-        <!-- org.objenesis.objenesis is needed for Mockito to work correctly with Pitest -->
-        <!-- https://mvnrepository.com/artifact/org.objenesis/objenesis -->
-        <dependency>
-            <groupId>org.objenesis</groupId>
-            <artifactId>objenesis</artifactId>
-            <version>3.2</version>
-        </dependency>
-
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
