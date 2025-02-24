@@ -1,7 +1,7 @@
 package selenium;
 
 import nl.tudelft.cse1110.andy.utils.ResourceUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -56,7 +56,7 @@ public abstract class WebLabSeleniumTestBase {
 
         FirefoxOptions options = new FirefoxOptions();
         if (StringUtils.isNotEmpty(System.getenv(WEBLAB_SELENIUM_HEADLESS_ENV_VAR))) {
-            options.setHeadless(true);
+            options.addArguments("--headless");
         }
 
         this.driver = new FirefoxDriver(options);
