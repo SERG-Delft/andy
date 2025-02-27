@@ -24,4 +24,4 @@ Requires the image to be built first.
 
 Note that checking whether submissions lead to a 100% score is done by the "run_assignments_docker" CI step. 
 
-The "tests" that are run when running `make test` do *not* necessarily have to result in 100/100.
+The "tests" that are run when running `make test` in this directory do *not* necessarily have to result in 100/100.
