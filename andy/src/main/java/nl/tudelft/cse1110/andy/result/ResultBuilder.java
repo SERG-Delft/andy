@@ -8,6 +8,7 @@ import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
 import nl.tudelft.cse1110.andy.grade.GradeCalculator;
 import nl.tudelft.cse1110.andy.grade.GradeValues;
 import nl.tudelft.cse1110.andy.grade.GradeWeight;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jacoco.core.analysis.IClassCoverage;
 import org.jacoco.core.analysis.IMethodCoverage;
 import org.junit.platform.engine.reporting.ReportEntry;
@@ -120,7 +121,7 @@ public class ResultBuilder {
             String testCaseNumber = getParameterizedTestCaseNumber(failure);
 
             testCase = String.format("%s (%d)", methodName, Integer.parseInt(testCaseNumber));
-            message = failure.getException().toString();
+            message = ExceptionUtils.getStackTrace(failure.getException());
         } else {
             String methodName = failure.getTestIdentifier().getDisplayName();
             testCase = methodName;

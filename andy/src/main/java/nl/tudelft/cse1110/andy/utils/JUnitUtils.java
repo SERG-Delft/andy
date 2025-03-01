@@ -1,5 +1,6 @@
 package nl.tudelft.cse1110.andy.utils;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.junit.platform.launcher.listeners.TestExecutionSummary;
 
 public class JUnitUtils {
@@ -14,7 +15,7 @@ public class JUnitUtils {
                 .contains("You must configure at least one set of arguments"))    {
             return "Make sure you have provided a @MethodSource for this @ParameterizedTest!";
         }
-        return failure.getException().toString();
+        return ExceptionUtils.getStackTrace(failure.getException());
     }
 
     public static String getParameterizedMethodName(TestExecutionSummary.Failure failure) {
