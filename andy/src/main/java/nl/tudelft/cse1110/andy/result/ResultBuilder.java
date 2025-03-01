@@ -21,7 +21,6 @@ import javax.tools.JavaFileObject;
 import java.util.*;
 
 import static javax.tools.Diagnostic.Kind.ERROR;
-import static nl.tudelft.cse1110.andy.utils.ExceptionUtils.exceptionMessage;
 import static nl.tudelft.cse1110.andy.utils.JUnitUtils.*;
 
 public class ResultBuilder {
@@ -265,7 +264,7 @@ public class ResultBuilder {
     }
 
     public void genericFailure(ExecutionStep step, Throwable e) {
-        this.genericFailure(step.getClass().getSimpleName(), exceptionMessage(e));
+        this.genericFailure(step.getClass().getSimpleName(), ExceptionUtils.getStackTrace(e));
     }
 
     /*
