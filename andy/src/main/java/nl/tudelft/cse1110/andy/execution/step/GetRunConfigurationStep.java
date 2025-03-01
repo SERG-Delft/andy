@@ -18,14 +18,17 @@ public class GetRunConfigurationStep implements ExecutionStep {
         try {
             ClassLoader currentClassLoader = Thread.currentThread().getContextClassLoader();
 
-            Class<?> runConfigurationClass = Class.forName(getConfigurationClass(ctx.getNewClassNames()), false, currentClassLoader);
-            RunConfiguration runConfiguration = (RunConfiguration) runConfigurationClass.getDeclaredConstructor().newInstance();
+            String runConfigurationClassName = getConfigurationClass(ctx.getNewClassNames());
+            if (runConfigurationClassName != null) {
+                Class<?> runConfigurationClass = Class.forName(runConfigurationClassName, false, currentClassLoader);
+                RunConfiguration runConfiguration = (RunConfiguration) runConfigurationClass.getDeclaredConstructor().newInstance();
 
-            ctx.setRunConfiguration(runConfiguration);
-        } catch (NoSuchElementException ex) {
-            // There's no configuration set. We put a default one!
-            RunConfiguration runConfiguration = new DefaultRunConfiguration(allClassesButTestingAndConfigOnes(ctx.getNewClassNames()));
-            ctx.setRunConfiguration(runConfiguration);
+                ctx.setRunConfiguration(runConfiguration);
+            } else {
+                // There's no configuration set. We put a default one!
+                RunConfiguration runConfiguration = new DefaultRunConfiguration(allClassesButTestingAndConfigOnes(ctx.getNewClassNames()));
+                ctx.setRunConfiguration(runConfiguration);
+            }
         } catch (Exception ex) {
             result.genericFailure(this, ex);
         }
