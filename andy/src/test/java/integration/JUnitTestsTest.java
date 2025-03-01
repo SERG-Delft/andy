@@ -77,6 +77,19 @@ public class JUnitTestsTest {
 
         }
 
+        @Test
+        void unicodeCharacters() {
+
+            Result result = run(Action.TESTS, "EmptyLibrary", "UnicodeTest");
+
+            assertThat(result.getCompilation().successful()).isTrue();
+            assertThat(result.getTests().wasExecuted()).isTrue();
+            assertThat(result.getGenericFailure().hasFailure()).isFalse();
+            assertThat(result.getTests().getTestsSucceeded()).isEqualTo(1);
+            assertThat(result.getTests().getTestsRan()).isEqualTo(1);
+            assertThat(result.getTests().getNumberOfFailingTests()).isEqualTo(0);
+        }
+
     }
 
     @Nested
