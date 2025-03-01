@@ -276,14 +276,26 @@ public class ResultBuilder {
         if(!compilation.successful()) {
             return new Result(compilation, timeInSeconds);
         } else {
-            GradeValues grades = GradeValues.fromResults(coverageResults, codeCheckResults, mutationResults, metaTestResults, penaltyMetaTestResults, penaltyCodeCheckResults);
-            GradeWeight weights = GradeWeight.fromConfig(ctx.getRunConfiguration().weights());
-            String successMessage = ctx.getRunConfiguration().successMessage();
+            String successMessage;
+            GradeWeight weights;
+            int finalGrade, penalty;
 
-            this.checkExternalProcessExit();
+            if (ctx.getRunConfiguration() != null) {
+                GradeValues grades = GradeValues.fromResults(coverageResults, codeCheckResults, mutationResults, metaTestResults, penaltyMetaTestResults, penaltyCodeCheckResults);
+                weights = GradeWeight.fromConfig(ctx.getRunConfiguration().weights());
+                successMessage = ctx.getRunConfiguration().successMessage();
 
-            final int finalGrade = calculateFinalGrade(grades, weights);
-            final int penalty = grades.getPenalty();
+                this.checkExternalProcessExit();
+
+                finalGrade = calculateFinalGrade(grades, weights);
+                penalty = grades.getPenalty();
+            } else {
+                // Andy has crashed before loading the RunConfiguration
+                finalGrade = 0;
+                penalty = 0;
+                successMessage = null;
+                weights = null;
+            }
 
             return new Result(compilation,
                     testResults,
