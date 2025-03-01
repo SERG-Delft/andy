@@ -54,30 +54,33 @@ public class SourceCodeSecurityCheckStep implements ExecutionStep {
     }
 
     private boolean checkForKeywords(String code, ResultBuilder result) {
-        String reflectionMsg = "Using reflection in your code is not allowed";
+        String msg = "It is not allowed to use '%s' in your code";
         String seleniumUnsupportedDriverMsg = "Please use HtmlUnitDriver as Andy does not have a browser installed";
         var keywords = Map.ofEntries(
                 // Block attempts to access the RunConfiguration
-                Map.entry("Configuration", "Accessing the task configuration in your code is not allowed"),
+                Map.entry("Configuration", msg),
 
                 // Block reflection
-                Map.entry("forName", reflectionMsg),
-                Map.entry("getAnnotation", reflectionMsg), // also blocks getAnnotations
-                Map.entry("ClassLoader", reflectionMsg), // blocks ClassLoader-related methods
-                Map.entry("getConstructor", reflectionMsg), // also blocks getConstructors
-                Map.entry("getDeclaredAnnotation", reflectionMsg), // also blocks getDeclaredAnnotations/-ByType
-                Map.entry("getDeclaredConstructor", reflectionMsg), // also blocks getDeclaredConstructors
-                Map.entry("getDeclaredField", reflectionMsg), // also blocks getDeclaredFields
-                Map.entry("getDeclaredMethod", reflectionMsg), // also blocks getDeclaredMethods
-                Map.entry("getDeclaredMethods", reflectionMsg),
-                Map.entry("getEnclosingConstructor", reflectionMsg),
-                Map.entry("getEnclosingMethod", reflectionMsg),
-                Map.entry("getField", reflectionMsg), // also blocks getFields
-                Map.entry("getMethod", reflectionMsg), // also blocks getMethods
-                Map.entry("getModifiers", reflectionMsg),
-                Map.entry("newInstance", reflectionMsg),
-                Map.entry("reflect", reflectionMsg),
-                Map.entry("setAccessible", reflectionMsg),
+                Map.entry("forName", msg),
+                Map.entry("getAnnotation", msg), // also blocks getAnnotations
+                Map.entry("ClassLoader", msg), // blocks ClassLoader-related methods
+                Map.entry("getConstructor", msg), // also blocks getConstructors
+                Map.entry("getDeclaredAnnotation", msg), // also blocks getDeclaredAnnotations/-ByType
+                Map.entry("getDeclaredConstructor", msg), // also blocks getDeclaredConstructors
+                Map.entry("getDeclaredField", msg), // also blocks getDeclaredFields
+                Map.entry("getDeclaredMethod", msg), // also blocks getDeclaredMethods
+                Map.entry("getDeclaredMethods", msg),
+                Map.entry("getEnclosingConstructor", msg),
+                Map.entry("getEnclosingMethod", msg),
+                Map.entry("getField", msg), // also blocks getFields
+                Map.entry("getMethod", msg), // also blocks getMethods
+                Map.entry("getModifiers", msg),
+                Map.entry("newInstance", msg),
+                Map.entry("reflect", msg),
+                Map.entry("setAccessible", msg),
+                Map.entry("currentThread", msg),
+                Map.entry("getStackTrace", msg),
+                Map.entry("getContextClassLoader", msg),
 
                 // Block unsupported Selenium drivers
                 Map.entry("ChromeDriver", seleniumUnsupportedDriverMsg),
@@ -90,7 +93,7 @@ public class SourceCodeSecurityCheckStep implements ExecutionStep {
         );
         for (String keyword : keywords.keySet()) {
             if (code.contains(keyword)) {
-                result.compilationSecurityFail(keywords.get(keyword));
+                result.compilationSecurityFail(String.format(keywords.get(keyword), keyword));
                 return false;
             }
         }
