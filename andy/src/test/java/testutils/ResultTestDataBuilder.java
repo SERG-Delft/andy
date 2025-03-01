@@ -110,6 +110,11 @@ public class ResultTestDataBuilder {
         return this;
     }
 
+    public ResultTestDataBuilder withWeights(GradeWeight gradeWeight) {
+        weights = gradeWeight;
+        return this;
+    }
+
     public ResultTestDataBuilder withTestResults(int testsFound, int testsRan, int testsSucceeded, List<TestFailureInfo> failures, String console) {
         testResults = UnitTestsResult.build(testsFound, testsRan, testsSucceeded, failures, console);
         return this;

@@ -153,6 +153,7 @@ public class StandardResultWriterTest {
 
         Result result = new ResultTestDataBuilder()
                 .withGenericFailureExceptionMessage(ex)
+                .withWeights(null)
                 .build();
 
         writer.write(ctx, result);
