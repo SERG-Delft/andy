@@ -1,4 +1,4 @@
-FROM maven:3-amazoncorretto-17-debian
+FROM maven:3-amazoncorretto-21-debian
 
 WORKDIR /home/
 
