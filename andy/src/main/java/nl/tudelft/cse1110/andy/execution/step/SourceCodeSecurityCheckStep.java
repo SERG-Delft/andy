@@ -38,19 +38,7 @@ public class SourceCodeSecurityCheckStep implements ExecutionStep {
             return;
         }
 
-        if (!checkPackageName(code, result)) return;
-
         if (!checkForKeywords(code, result)) return;
-    }
-
-    private boolean checkPackageName(String code, ResultBuilder result) {
-        Pattern pattern = Pattern.compile("^\\s*package\\s+delft\\s*;.*", Pattern.DOTALL);
-        if (!pattern.matcher(code).find()) {
-            result.compilationSecurityFail("The package name of your solution must be \"delft\"");
-            return false;
-        }
-
-        return true;
     }
 
     private boolean checkForKeywords(String code, ResultBuilder result) {

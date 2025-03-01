@@ -19,7 +19,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SecurityTest extends IntegrationTestBase {
     @ParameterizedTest
     @CsvSource({
-            "SecurityOtherPackageName,package name of your solution",
             "SecurityInstantiateConfiguration,It is not allowed to use",
             "SecurityUseReflection,It is not allowed to use"
     })
