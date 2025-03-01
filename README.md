@@ -473,12 +473,12 @@ Andy uses a multi-module Maven configuration. IntelliJ should recognize it right
 In the command-line, a great way to see if Andy is working is to install and run all the tests. Call it from the root directory of the project:
 
 ```
-mvn clean install -DexcludedGroups=selenium
+mvn clean install
 ```
 
 Other useful commands:
 
-* `mvn test -pl andy -DexcludedGroups=selenium` runs all tests, with the exception of tests you don't have credentials to run
+* `mvn test -pl andy` runs all tests
 * `mvn test -pl andy -DexcludedGroups=assignments` runs all fast tests in Andy's core
 * `mvn test -pl andy -Dgroups=assignments` ensures that all the solutions of our assignments are assessed to 100/100
 * `mvn -pl andy package -DskipTests` creates a package of Andy core
