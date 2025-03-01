@@ -95,7 +95,7 @@ public class ClassUtils {
      * @return package name
      */
     public static String extractPackageName(String content) {
-        Pattern p = Pattern.compile("(package (.*);)");
+        Pattern p = Pattern.compile("(package ([a-zA-Z0-9_$.]+);)");
         Matcher m = p.matcher(content);
 
         if(m.find()) {
