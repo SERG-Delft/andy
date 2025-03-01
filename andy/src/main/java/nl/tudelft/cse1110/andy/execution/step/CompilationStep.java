@@ -79,7 +79,7 @@ public class CompilationStep implements ExecutionStep {
         }
     }
 
-    @SupportedSourceVersion(SourceVersion.RELEASE_14)
+    @SupportedSourceVersion(SourceVersion.RELEASE_23)
     @SupportedAnnotationTypes("*")
     public class ClassNameProcessor extends AbstractProcessor {
         private final ClassNameScanner scanner;
