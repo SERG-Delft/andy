@@ -54,9 +54,7 @@ public class CompilationStep implements ExecutionStep {
         ClassNameScanner scanner = new ClassNameScanner();
         ClassNameProcessor processor = new ClassNameProcessor(scanner);
 
-        List<String> options = ctx.hasLibrariesToBeIncluded() ? Arrays.asList(
-                new String[] { "-cp", asClassPath(ctx.getLibrariesToBeIncludedInCompilation()) }) : null;
-        JavaCompiler.CompilationTask task = compiler.getTask(null, manager, diagnostics, options, null, sources);
+        JavaCompiler.CompilationTask task = compiler.getTask(null, manager, diagnostics, getOptions(ctx), null, sources);
         task.setProcessors(Arrays.asList(processor));
 
         /*
@@ -65,18 +63,31 @@ public class CompilationStep implements ExecutionStep {
         try {
             boolean compilationResult = task.call();
 
-            if(compilationResult) {
+            if (compilationResult) {
                 ctx.setNewClassNames(scanner.getFullClassNames());
                 result.compilationSuccess();
-            }
-            else {
+            } else {
                 result.compilationFail(diagnostics.getDiagnostics());
             }
 
             manager.close();
-        } catch(Exception e) {
+        } catch (Exception e) {
             result.genericFailure(this, e);
         }
+    }
+
+    private List<String> getOptions(Context ctx) {
+        List<String> options = new ArrayList<>();
+
+        if (ctx.hasLibrariesToBeIncluded()) {
+            options.add("-cp");
+            options.add(asClassPath(ctx.getLibrariesToBeIncludedInCompilation()));
+        }
+
+        options.add("-encoding");
+        options.add("UTF-8");
+
+        return options;
     }
 
     @SupportedSourceVersion(SourceVersion.RELEASE_14)
