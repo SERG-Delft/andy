@@ -46,7 +46,7 @@ public class CheckScript {
         parser.setBindingsRecovery(true);
 
         Map<String, String> options = JavaCore.getOptions();
-        JavaCore.setComplianceOptions(JavaCore.VERSION_17, options);
+        JavaCore.setComplianceOptions(JavaCore.VERSION_23, options);
         parser.setCompilerOptions(options);
 
         parser.setEnvironment(new String[0], new String[0], null, true);

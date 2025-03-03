@@ -1,0 +1,12 @@
+package delft;
+
+class Library {
+
+	private Library() {
+		// Empty constructor
+	}
+
+	public static int a() {
+		return 1;
+	}
+}
