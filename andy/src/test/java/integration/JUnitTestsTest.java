@@ -450,6 +450,18 @@ public class JUnitTestsTest {
                             "java.lang.IllegalArgumentException: There are 2 classes containing the substring \"Test\""));
         }
 
+        // Multiple class names contain the substring "Config" -> config discovery fails
+        @Test
+        void multipleConfigClassesDiscoveredShouldThrowException() {
+            Result result = run(Action.TESTS, "LibraryWithConfigClass", "EmptySolution", "EmptyConfiguration");
+
+            assertThat(result.hasFailed()).isTrue();
+            assertThat(result.hasGenericFailure()).isTrue();
+            assertThat(result.getGenericFailure().getExceptionMessage())
+                    .hasValueSatisfying(containsString(
+                            "java.lang.IllegalArgumentException: There are 2 classes containing the substring \"Config\""));
+        }
+
     }
 
     private static Condition<UnitTestsResult> failingTest(String nameOfTheTest) {

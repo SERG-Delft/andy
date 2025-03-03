@@ -64,33 +64,17 @@ public class ClassUtils {
      * @throws IllegalArgumentException if there is not exactly 1 test class
      */
     public static String getTestClass(List<String> listOfClasses) {
-        List<String> matchingClassNames = listOfClasses.stream()
-                .filter(c -> c.substring(c.lastIndexOf(".")).contains("Test"))
-                .collect(Collectors.toList());
-
-        if (matchingClassNames.size() != 1) {
-            throw new IllegalArgumentException(
-                    String.format("There are %d classes containing the substring \"Test\": %s. " +
-                                  "There must be only one such class, otherwise test class discovery is not possible.",
-                            matchingClassNames.size(),
-                            matchingClassNames)
-            );
-        }
-
-        return matchingClassNames.get(0);
+        return findClassBySubstring(listOfClasses, "Test", false);
     }
 
-    /**Finds the configuration class.
+    /**
+     * Finds the configuration class.
      *
      * @param listOfClasses - the list of classes to search in
      * @return - the name of the class
      */
     public static String getConfigurationClass(List<String> listOfClasses) {
-        String className = listOfClasses.stream().filter(c -> c.contains("Config"))
-                .findFirst()
-                .get();
-
-        return className;
+        return findClassBySubstring(listOfClasses, "Config", true);
     }
 
     /**
@@ -161,6 +145,28 @@ public class ClassUtils {
 
         finalName.append(".class");
         return finalName.toString();
+    }
+
+    private static String findClassBySubstring(List<String> listOfClasses, String substring, boolean allowZero) {
+        List<String> matchingClassNames = listOfClasses.stream()
+                .filter(c -> c.substring(c.lastIndexOf(".")).contains(substring))
+                .toList();
+
+        if (matchingClassNames.isEmpty() && allowZero) {
+            return null;
+        }
+
+        if (matchingClassNames.size() != 1) {
+            throw new IllegalArgumentException(
+                    String.format("There are %d classes containing the substring \"%s\": %s. " +
+                                    "There must be only one such class, otherwise test class discovery is not possible.",
+                            matchingClassNames.size(),
+                            substring,
+                            matchingClassNames)
+            );
+        }
+
+        return matchingClassNames.get(0);
     }
 
 }
