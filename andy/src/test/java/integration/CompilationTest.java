@@ -107,6 +107,13 @@ public class CompilationTest extends IntegrationTestBase {
         assertThat(result.getTests().wasExecuted()).isFalse();
     }
 
+    @Test
+    void packageDeclarationWithoutNewLine() {
+        Result result = run(Action.TESTS, "ListUtilsLibrary", "ListUtilsPackageDeclaration");
+        assertThat(result.getCompilation().successful()).isTrue();
+        assertThat(result.getGenericFailure().hasFailure()).isFalse();
+    }
+
 
     private static Condition<Result> compilationErrorInLine(int line) {
         return new Condition<>() {
