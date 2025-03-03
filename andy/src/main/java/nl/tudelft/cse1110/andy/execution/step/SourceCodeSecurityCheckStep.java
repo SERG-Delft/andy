@@ -43,7 +43,7 @@ public class SourceCodeSecurityCheckStep implements ExecutionStep {
 
     private boolean checkForKeywords(String code, ResultBuilder result) {
         String msg = "It is not allowed to use '%s' in your code";
-        String seleniumUnsupportedDriverMsg = "Please use CSE1110.createDriver() to instantiate a Selenium driver";
+        String seleniumUnsupportedDriverMsg = "Please use the provided method to instantiate a Selenium driver";
         var keywords = Map.ofEntries(
                 // Block attempts to access the RunConfiguration
                 Map.entry("Configuration", msg),
