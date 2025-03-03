@@ -349,9 +349,22 @@ public class JUnitTestsTest {
             assertThat(result.getTests())
                     .has(failingParameterizedTest("validInputs", 1))
                     .has(failingParameterizedTest("validInputs", 2))
-                    .has(failingParameterizedTest("invalidInputs", 1))
-                    .has(failingParameterizedTest("invalidInputs", 2))
-                    .has(failingParameterizedTest("invalidInputs", 3));
+                    .has(failingParameterizedTestWithMessage("invalidInputs", 1, "Solution.java:28"))
+                    .has(failingParameterizedTestWithMessage("invalidInputs", 2, "Solution.java:28"))
+                    .has(failingParameterizedTestWithMessage("invalidInputs", 3, "Solution.java:28"));
+        }
+
+        @Test
+        void exceptionThrownByTestArrayOutOfBounds() {
+
+            Result result = run(Action.TESTS, "EmptyLibrary", "TestThrowingArrayOutOfBoundsException");
+
+            assertThat(result.getTests().getTestsSucceeded()).isEqualTo(0);
+            assertThat(result.getTests().getTestsRan()).isEqualTo(1);
+            assertThat(result.getTests().hasTestsFailingOrFailures()).isTrue();
+            assertThat(result.getTests())
+                    .has(failingTestWithMessage("arrayOutOfBoundsTest()",
+                            "at delft.ArrayOutOfBoundsTest.arrayOutOfBoundsTest(Solution.java:12)"));
         }
 
         // @MethodSource method should be static -> test failure -> 2/2 pass (but in GitHub this is 0/2?)
@@ -466,6 +479,18 @@ public class JUnitTestsTest {
                 return
                         value.getFailures().stream()
                                 .anyMatch(t -> t.getTestCase().equals(String.format("%s (%d)", testName, number)));
+            }
+        };
+    }
+
+    private Condition<UnitTestsResult> failingParameterizedTestWithMessage(String testName, int number, String partOfTheMessage) {
+        return new Condition<>() {
+            @Override
+            public boolean matches(UnitTestsResult value) {
+                return
+                        value.getFailures().stream()
+                                .anyMatch(t -> t.getTestCase().equals(String.format("%s (%d)", testName, number)) &&
+                                        t.getMessage().contains(partOfTheMessage));
             }
         };
     }

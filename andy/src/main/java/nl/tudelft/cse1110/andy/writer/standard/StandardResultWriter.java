@@ -8,6 +8,7 @@ import nl.tudelft.cse1110.andy.result.*;
 import nl.tudelft.cse1110.andy.utils.ImportUtils;
 import nl.tudelft.cse1110.andy.utils.PropertyUtils;
 import nl.tudelft.cse1110.andy.writer.ResultWriter;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,7 +16,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static nl.tudelft.cse1110.andy.utils.ExceptionUtils.exceptionMessage;
 import static nl.tudelft.cse1110.andy.utils.FilesUtils.*;
 
 public class StandardResultWriter implements ResultWriter {
@@ -48,7 +48,7 @@ public class StandardResultWriter implements ResultWriter {
 
         errorMsg.append("\n\n*** ERROR ***\n");
         errorMsg.append("Something unexpected just happened. Please forward this message to the teacher.\n\n");
-        errorMsg.append(exceptionMessage(t));
+        errorMsg.append(ExceptionUtils.getStackTrace(t));
 
         File stdoutTxt = new File(concatenateDirectories(ctx.getDirectoryConfiguration().getOutputDir(), "stdout.txt"));
         writeToFile(stdoutTxt, errorMsg.toString());
