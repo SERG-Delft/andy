@@ -90,7 +90,7 @@ public class ResultTestDataBuilder {
     public ResultTestDataBuilder withMetaTestResults(List<MetaTestResult> list) {
         metaTestResults = MetaTestsResult.build(
                 (int) list.stream().filter(MetaTestResult::succeeded).count(),
-                list.size(),
+                list.stream().map(MetaTestResult::getWeight).reduce(0, Integer::sum),
                 list
         );
         return this;
@@ -99,7 +99,7 @@ public class ResultTestDataBuilder {
     public ResultTestDataBuilder withPenaltyMetaTestResults(List<MetaTestResult> list) {
         penaltyMetaTestResults = MetaTestsResult.build(
                 (int) list.stream().filter(MetaTestResult::succeeded).count(),
-                list.size(),
+                list.stream().map(MetaTestResult::getWeight).reduce(0, Integer::sum),
                 list
         );
         return this;
