@@ -43,6 +43,19 @@ public class CodeChecksTest extends IntegrationTestBase {
     }
 
     @Test
+    void zeroWeightCodeChecks() {
+        Result result = run( "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfigWithCodeChecksZeroWeight");
+
+        assertThat(result.hasGenericFailure()).isFalse();
+
+        assertThat(result)
+                .has(checksScore(0,0))
+                .has(codeCheck("Trip Repository should be mocked", true, 0))
+                .has(codeCheck("Trip should be mocked", false, 0)) // this check makes no sense, just for the check to fail
+                .has(codeCheck("getTripById should be set up", true, 0));
+    }
+
+    @Test
     void penaltyCodeChecksPass() {
         Result result = run( "SoftWhereLibrary", "SoftWhereTests", "SoftWhereConfigWithPenaltyCodeChecksPassingConfiguration");
 
