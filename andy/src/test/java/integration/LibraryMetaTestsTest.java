@@ -3,8 +3,11 @@ package integration;
 import nl.tudelft.cse1110.andy.execution.step.RunMetaTestsStep;
 import nl.tudelft.cse1110.andy.result.Result;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static unit.writer.standard.StandardResultTestAssertions.containsString;
 
 
 public class LibraryMetaTestsTest extends BaseMetaTestsTest {
@@ -86,6 +89,20 @@ public class LibraryMetaTestsTest extends BaseMetaTestsTest {
                 .isPresent()
                 .get()
                 .isEqualTo(RunMetaTestsStep.class.getSimpleName());
+        assertThat(result.getGenericFailure().getExceptionMessage())
+                .hasValueSatisfying(containsString("Meta test failed to find this text replacement"));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"NumberUtilsAddConfigurationWithMetaTestCompilationError", "NumberUtilsAddConfigurationWithPenaltyMetaTestCompilationError"})
+    void compilationErrorInMetaTest(String config) {
+        Result result = run("NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution", config);
+
+        assertThat(result.hasGenericFailure()).isTrue();
+        assertThat(result.getGenericFailure().getExceptionMessage())
+                .hasValueSatisfying(containsString("Meta test 'BadMetaTest' failed to compile"))
+                .hasValueSatisfying(containsString("- line 35: ';' expected"))
+                .hasValueSatisfying(containsString("--> Collections.reverse(reversedLeft)\n"));
     }
 
     @Test
