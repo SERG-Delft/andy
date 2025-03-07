@@ -54,6 +54,22 @@ public class LibraryMetaTestsTest extends BaseMetaTestsTest {
     }
 
     @Test
+    void zeroWeightMetaTests() {
+        Result result = run("NumberUtilsAddLibrary", "NumberUtilsAddAllTestsPass", "NumberUtilsAddConfigurationWithZeroWeight");
+
+        assertThat(result.hasGenericFailure()).isFalse();
+
+        assertThat(result.getMetaTests().getTotalTests()).isEqualTo(0);
+        assertThat(result.getMetaTests().getPassedMetaTests()).isEqualTo(0);
+
+        assertThat(result.getMetaTests())
+                .has(passedMetaTest("DoesNotCheckNumbersOutOfRange"))
+                .has(failedMetaTest("AppliesMultipleCarriesWrongly"))
+                .has(failedMetaTest("DoesNotApplyCarryAtAll"))
+                .has(failedMetaTest("DoesNotApplyLastCarry"));
+    }
+
+    @Test
     void testMetaWhenMultipleClassesInLibrary() {
         Result result = run("SoftWhereLibrary", "SoftWhereMissingTests", "SoftWhereConfiguration");
 
