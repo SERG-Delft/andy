@@ -255,8 +255,7 @@ public class StandardResultWriter implements ResultWriter {
             return;
 
         l("\n--- Meta tests");
-        l(String.format("%d/%d passed", metaTests.getPassedMetaTests() + penaltyMetaTests.getPassedMetaTests(),
-                metaTests.getTotalTests() + penaltyMetaTests.getTotalTests()));
+        l(String.format("%d/%d passed", metaTests.getPassedMetaTests(), metaTests.getTotalTests()));
 
         if (allHints) {
             for (MetaTestResult metaTestResult : metaTests.getMetaTestResults()) {
@@ -317,8 +316,7 @@ public class StandardResultWriter implements ResultWriter {
     }
 
     private void printCodeCheckOutput(CodeChecksResult codeChecks, CodeChecksResult penaltyCodeChecks, boolean allHints) {
-        l(String.format("%d/%d passed", codeChecks.getNumberOfPassedChecks() + penaltyCodeChecks.getNumberOfPassedChecks(false),
-                codeChecks.getTotalNumberOfChecks() + penaltyCodeChecks.getTotalNumberOfChecks(false)));
+        l(String.format("%d/%d passed", codeChecks.getNumberOfPassedChecks(), codeChecks.getTotalNumberOfChecks()));
 
         if(allHints) {
             for (CodeCheckResult result : codeChecks.getCheckResults()) {
