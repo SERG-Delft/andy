@@ -9,11 +9,16 @@ import nl.tudelft.cse1110.andy.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.execution.metatest.AbstractMetaTest;
 import nl.tudelft.cse1110.andy.execution.metatest.library.evaluators.MetaEvaluator;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
+import nl.tudelft.cse1110.andy.result.CompilationErrorInfo;
+import nl.tudelft.cse1110.andy.result.CompilationResult;
 import nl.tudelft.cse1110.andy.result.Result;
+import nl.tudelft.cse1110.andy.utils.CodeSnippetUtils;
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static nl.tudelft.cse1110.andy.utils.FilesUtils.*;
 
@@ -45,28 +50,68 @@ public class LibraryMetaTest extends AbstractMetaTest {
          *
          * We reuse our execution framework to run the code with the meta test.
          */
+        boolean passesTheMetaTest;
 
         /* Copy the library and replace the library by the meta test */
         File metaWorkingDir = createTemporaryDirectory("metaWorkplace").toFile();
-        copyFile(solutionFile, metaWorkingDir.getAbsolutePath());
-        String metaFileContent = generateMetaFileContent(originalLibraryContent);
-        createMetaTestFile(metaWorkingDir, metaFileContent);
+        try {
+            copyFile(solutionFile, metaWorkingDir.getAbsolutePath());
+            String metaFileContent = generateMetaFileContent(originalLibraryContent);
+            createMetaTestFile(metaWorkingDir, metaFileContent);
 
-        /* We then run the meta test, using our infrastructure */
-        Result metaResult = runMetaTest(ctx, dirCfg, metaWorkingDir);
+            /* We then run the meta test, using our infrastructure */
+            Result metaResult = runMetaTest(ctx, dirCfg, metaWorkingDir);
 
-        /* And check the result. If there's a failing test, the test suite is good! */
-        int testsRan = metaResult.getTests().getTestsRan();
-        int testsSucceeded = metaResult.getTests().getTestsSucceeded();
-        boolean passesTheMetaTest = testsSucceeded < testsRan;
+            verifyMetaTestExecution(metaResult, metaFileContent);
 
-        /* Clean up the directory */
-        deleteDirectory(metaWorkingDir);
+            /* And check the result. If there's a failing test, the test suite is good! */
+            int testsRan = metaResult.getTests().getTestsRan();
+            int testsSucceeded = metaResult.getTests().getTestsSucceeded();
+            passesTheMetaTest = testsSucceeded < testsRan;
+        } finally {
+            /* Clean up the directory */
+            deleteDirectory(metaWorkingDir);
 
-        /* Set the classloader back to the one with the student's original code */
-        Thread.currentThread().setContextClassLoader(ctx.getClassloaderWithStudentsCode());
-
+            /* Set the classloader back to the one with the student's original code */
+            Thread.currentThread().setContextClassLoader(ctx.getClassloaderWithStudentsCode());
+        }
         return passesTheMetaTest;
+    }
+
+    private void verifyMetaTestExecution(Result metaResult, String metaFileContent) {
+        if (!metaResult.getCompilation().wasExecuted() || !metaResult.getCompilation().successful()) {
+            String msg = generateCompilationErrorMessage(metaResult.getCompilation(), metaFileContent);
+            throw new RuntimeException(msg);
+        }
+
+        if (metaResult.hasGenericFailure()) {
+            throw new RuntimeException("Meta test '" + this.getName() + "' failed to run: " + metaResult.getGenericFailure().toString());
+        }
+
+        if (metaResult.getTests().getTestsRan() == 0) {
+            throw new RuntimeException("Meta test '" + this.getName() + "' failed to run any tests");
+        }
+    }
+
+    private String generateCompilationErrorMessage(CompilationResult compilationResult, String metaFileContent) {
+        StringBuilder messageBuilder = new StringBuilder();
+        messageBuilder.append("Meta test '").append(this.getName()).append("' failed to compile: ").append("\n");
+        List<CompilationErrorInfo> errors = compilationResult.getErrors();
+        for (int i = 0; i < errors.size(); i++) {
+            CompilationErrorInfo error = errors.get(i);
+            messageBuilder.append("- line ")
+                    .append(error.getLineNumber())
+                    .append(": ")
+                    .append(error.getMessage())
+                    .append("\n");
+            if (i == 0) {
+                messageBuilder.append(CodeSnippetUtils.generateCodeSnippet(
+                                metaFileContent.lines().collect(Collectors.toList()),
+                                (int) error.getLineNumber()))
+                        .append("\n");
+            }
+        }
+        return messageBuilder.toString();
     }
 
     private String generateMetaFileContent(String originalLibraryContent) {
