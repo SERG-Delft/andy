@@ -14,12 +14,12 @@
         <andy.version>1.2.0</andy.version>
         <junit.version>5.11.4</junit.version>
         <junit.platform.version>1.11.4</junit.platform.version>
-        <mockito.version>5.15.2</mockito.version>
+        <mockito.version>5.17.0</mockito.version>
         <jqwik.version>1.9.2</jqwik.version>
         <assertj.version>3.27.3</assertj.version>
-        <pitest.version>1.18.2</pitest.version>
-        <pitest.junit.version>1.2.1</pitest.junit.version>
-        <jacoco.version>0.8.12</jacoco.version>
+        <pitest.version>1.19.1</pitest.version>
+        <pitest.junit.version>1.2.2</pitest.junit.version>
+        <jacoco.version>0.8.13</jacoco.version>
 
         <maven.surefire.version>3.5.2</maven.surefire.version>
         <maven.jar.plugin.version>3.4.2</maven.jar.plugin.version>
