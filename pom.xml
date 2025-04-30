@@ -11,7 +11,7 @@
     <url>https://github.com/SERG-Delft/andy</url>
 
     <properties>
-        <andy.version>1.2.0</andy.version>
+        <andy.version>1.2.1</andy.version>
         <junit.version>5.11.4</junit.version>
         <junit.platform.version>1.11.4</junit.platform.version>
         <mockito.version>5.17.0</mockito.version>
