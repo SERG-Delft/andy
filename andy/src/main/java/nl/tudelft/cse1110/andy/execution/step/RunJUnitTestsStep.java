@@ -46,7 +46,7 @@ public class RunJUnitTestsStep implements ExecutionStep {
 
             /* Set jqwik configuration options */
             Properties jqwikProperties = new Properties();
-            jqwikProperties.setProperty("jqwik.tries.default", "100");
+            jqwikProperties.setProperty("jqwik.tries.default", "200");
             jqwikProperties.setProperty("jqwik.shrinking.default", "OFF");
             jqwikProperties.setProperty("jqwik.maxdiscardratio.default", "2");
             // This file is also used during Pitest execution
