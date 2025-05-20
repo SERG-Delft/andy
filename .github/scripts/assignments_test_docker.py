@@ -1,4 +1,4 @@
-import os, re, sys, random
+import os, re, sys
 
 def get_directories(basedir):
     return [os.path.join(basedir, dir) for dir in os.listdir(basedir) \
@@ -21,8 +21,7 @@ os.makedirs(test_dir)
 
 pipeline_failed = False
 for category_dir in get_directories(home_dir):
-    for assignment_dir in random.choices(get_directories(category_dir), k=4):
-        
+    for assignment_dir in get_directories(category_dir):
         # Remove the contents of the output directory.
         os.system(f'rm -r {output_dir}')
 
