@@ -56,6 +56,8 @@ public class RunJUnitTestsStep implements ExecutionStep {
             LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
                     .selectors(selectClass(clazz))
                     .configurationParameter("jqwik.reporting.usejunitplatform", "true")
+                    // Enable shrinking for non-Pitest test execution (this takes precedence over the properties file)
+                    .configurationParameter("jqwik.shrinking.default", "BOUNDED")
                     .configurationParameter("jqwik.database", FilesUtils.createTemporaryDirectory("jqwik").resolve("jqwik-db").toString())
                     .build();
             launcher.execute(request);
