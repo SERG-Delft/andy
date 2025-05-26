@@ -17,6 +17,10 @@ import org.junit.platform.launcher.listeners.TestExecutionSummary;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Properties;
 
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
@@ -40,12 +44,20 @@ public class RunJUnitTestsStep implements ExecutionStep {
             launcher.registerTestExecutionListeners(listener);
             launcher.registerTestExecutionListeners(additionalReportJUnitListener);
 
+            /* Set jqwik configuration options */
+            Properties jqwikProperties = new Properties();
+            jqwikProperties.setProperty("jqwik.tries.default", "500");
+            jqwikProperties.setProperty("jqwik.shrinking.default", "OFF");
+            jqwikProperties.setProperty("jqwik.maxdiscardratio.default", "2");
+            // This file is also used during Pitest execution
+            Path jqwikPropertiesFilePath = Paths.get(ctx.getDirectoryConfiguration().getWorkingDir(), "junit-platform.properties");
+            jqwikProperties.store(Files.newOutputStream(jqwikPropertiesFilePath), null);
+
             LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
                     .selectors(selectClass(clazz))
                     .configurationParameter("jqwik.reporting.usejunitplatform", "true")
-                    .configurationParameter("jqwik.tries.default", "100")
-                    .configurationParameter("jqwik.shrinking.default", "OFF")
-                    .configurationParameter("jqwik.maxdiscardratio.default", "2")
+                    // Enable shrinking for non-Pitest test execution (this takes precedence over the properties file)
+                    .configurationParameter("jqwik.shrinking.default", "BOUNDED")
                     .configurationParameter("jqwik.database", FilesUtils.createTemporaryDirectory("jqwik").resolve("jqwik-db").toString())
                     .build();
             launcher.execute(request);
