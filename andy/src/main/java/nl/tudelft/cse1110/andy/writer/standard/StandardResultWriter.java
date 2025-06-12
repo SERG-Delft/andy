@@ -414,7 +414,7 @@ public class StandardResultWriter implements ResultWriter {
 
             if(compilation.hasConfigurationError()) {
                 l("\n**WARNING:** There might be a problem with this exercise. "+
-                        "Please contact the teaching staff so they can fix this as quickly" +
+                        "Please contact the teaching staff so they can fix this as quickly " +
                         "as possible. Thank you for your help! :)");
             }
         }
