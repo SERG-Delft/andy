@@ -42,7 +42,7 @@ public class MockClass extends Check {
     @Override
     public boolean visit(FieldDeclaration fd) {
         // added this if-check to avoid overriding classWasMocked erroneously.
-        if(!classWasMocked) {
+        if (!classWasMocked) {
             boolean hasMockAnnotation = fd.modifiers().stream()
                     .anyMatch(m -> m instanceof Annotation &&
                             ((Annotation) m).getTypeName().getFullyQualifiedName().equals("Mock"));
@@ -63,20 +63,18 @@ public class MockClass extends Check {
      */
     @Override
     public boolean visit(Assignment a) {
-        if (!classWasMocked) {
-            if (a.getLeftHandSide() instanceof SimpleName s) {
-                var binding = s.resolveTypeBinding();
-                if (binding != null) {
-                    var className = binding.getName();
-                    if (className.equals(classToBeMocked)) {
-                        var right = a.getRightHandSide();
-                        if (isParameterlessMockMethodInvocation(right)) {
-                            classWasMocked = true;
-                        }
-                    }
-                }
+        if (classWasMocked) {
+            return super.visit(a);
+        }
+
+        if (a.getLeftHandSide() instanceof SimpleName s) {
+            var binding = s.resolveTypeBinding();
+            if (binding != null && binding.getName().equals(classToBeMocked)) {
+                var right = a.getRightHandSide();
+                classWasMocked = isParameterlessMockMethodInvocation(right);
             }
         }
+
         return super.visit(a);
     }
 
@@ -91,9 +89,7 @@ public class MockClass extends Check {
             String simpleName = className.substring(className.lastIndexOf('.') + 1);
             if (simpleName.equals(classToBeMocked)) {
                 var initializer = fragment.getInitializer();
-                if (isParameterlessMockMethodInvocation(initializer)) {
-                    classWasMocked = true;
-                }
+                classWasMocked = isParameterlessMockMethodInvocation(initializer);
             }
         }
         return super.visit(fragment);
