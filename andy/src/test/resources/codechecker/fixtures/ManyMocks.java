@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.Queue;
 import java.util.Deque;
 import java.util.SortedSet;
+import java.util.SortedMap;
 
 import static org.mockito.Mockito.mock;
 import org.mockito.MockitoAnnotations;
