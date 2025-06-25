@@ -5,6 +5,7 @@ import org.mockito.Mockito;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.Queue;
 import java.util.Deque;
@@ -36,6 +37,8 @@ public class ManyMocks {
     @Mock
     Deque<String> mockedDQ;
 
+    ArrayList arrayListT;
+
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
@@ -47,6 +50,10 @@ public class ManyMocks {
         List<String> mockedList = Mockito.mock(List.class);
         // with the static import
         Set<String> mockedSet = mock(Set.class);
+        // without specifying the class name (deriving from the type of the variable)
+        SortedMap<String, Integer> sortedMap = mock();
+        // without specifying the class name (deriving from the type of the variable), without an explicit type on the left
+        arrayListT = mock();
         // no mock
         HashMap<String, String> concreteHashMap = new HashMap<>();
     }

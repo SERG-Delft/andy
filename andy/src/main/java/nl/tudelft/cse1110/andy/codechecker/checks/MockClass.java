@@ -1,8 +1,6 @@
 package nl.tudelft.cse1110.andy.codechecker.checks;
 
-import org.eclipse.jdt.core.dom.MethodInvocation;
-import org.eclipse.jdt.core.dom.Annotation;
-import org.eclipse.jdt.core.dom.FieldDeclaration;
+import org.eclipse.jdt.core.dom.*;
 
 
 /**
@@ -59,6 +57,57 @@ public class MockClass extends Check {
         return super.visit(fd);
     }
 
+    /**
+     * Detects this pattern: arrayListT = mock();
+     * i.e. class attribute on the left, and parameterless mock() invocation on the right
+     */
+    @Override
+    public boolean visit(Assignment a) {
+        if (!classWasMocked) {
+            if (a.getLeftHandSide() instanceof SimpleName s) {
+                var binding = s.resolveTypeBinding();
+                if (binding != null) {
+                    var className = binding.getName();
+                    if (className.equals(classToBeMocked)) {
+                        var right = a.getRightHandSide();
+                        if (isParameterlessMockMethodInvocation(right)) {
+                            classWasMocked = true;
+                        }
+                    }
+                }
+            }
+        }
+        return super.visit(a);
+    }
+
+    /**
+     * Detects this pattern: SortedMap<String, Integer> sortedMap = mock();
+     * i.e. variable with type on the left, and parameterless mock() invocation on the right
+     */
+    @Override
+    public boolean visit(VariableDeclarationFragment fragment) {
+        if (!classWasMocked) {
+            String className = fragment.resolveBinding().getType().getBinaryName();
+            String simpleName = className.substring(className.lastIndexOf('.') + 1);
+            if (simpleName.equals(classToBeMocked)) {
+                var initializer = fragment.getInitializer();
+                if (isParameterlessMockMethodInvocation(initializer)) {
+                    classWasMocked = true;
+                }
+            }
+        }
+        return super.visit(fragment);
+    }
+
+    private boolean isParameterlessMockMethodInvocation(Expression expr) {
+        if (expr instanceof MethodInvocation mi) {
+            boolean mockMethodCalled = "mock".equals(mi.getName().toString());
+            boolean noParams = mi.arguments() != null && mi.arguments().isEmpty();
+            return mockMethodCalled && noParams;
+        }
+
+        return false;
+    }
 
     @Override
     public boolean result() {
