@@ -60,7 +60,6 @@
         <module>property-based-testing/connect-four</module>
         <module>property-based-testing/isLeapYear</module>
         <module>property-based-testing/isPalindrome</module>
-        <module>property-based-testing/isTriangle</module>
         <module>property-based-testing/search</module>
         <module>property-based-testing/space-signals</module>
         <module>property-based-testing/summer</module>
