@@ -50,6 +50,7 @@ public class ResultBuilder {
     private CoverageResult coverageResults = CoverageResult.empty();
     private MetaTestsResult metaTestResults = MetaTestsResult.empty();
     private MetaTestsResult penaltyMetaTestResults = MetaTestsResult.empty();
+    private QualityResult qualityResult = QualityResult.empty();
 
     public ResultBuilder(Context ctx, GradeCalculator gradeCalculator) {
         this.ctx = ctx;
@@ -247,6 +248,13 @@ public class ResultBuilder {
 
     public void logPenaltyMetaTests(int score, int totalTests, List<MetaTestResult> metaTestResults) {
         this.penaltyMetaTestResults.addResults(score, totalTests, metaTestResults);
+    }
+
+    /*
+     * Quality
+     */
+    public void logQuality() {
+        // dummy
     }
 
     /*
