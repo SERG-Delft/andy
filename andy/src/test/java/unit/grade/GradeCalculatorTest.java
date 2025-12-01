@@ -89,6 +89,35 @@ public class GradeCalculatorTest {
         );
     }
 
+    @ParameterizedTest
+    @MethodSource("withQualityCheck")
+    void withQualityCheck(int coveredBranches, int totalBranches,
+                         int detectedMutations, int totalMutations,
+                         int metaTestsPassed, int totalMetaTests,
+                         int checksPassed, int totalChecks, int qualityScore, int expectedGrade,
+                         float branchCoverageWeight, float mutationCoverageWeight,
+                         float metaTestsWeight, float codeChecksWeight, float qualityWeight) {
+
+        GradeWeight weights = new GradeWeight(branchCoverageWeight, mutationCoverageWeight, metaTestsWeight, codeChecksWeight, qualityWeight);
+
+        GradeValues grades = new GradeValues();
+        grades.setBranchGrade(coveredBranches, totalBranches);
+        grades.setMutationGrade(detectedMutations, totalMutations);
+        grades.setMetaGrade(metaTestsPassed, totalMetaTests);
+        grades.setCheckGrade(checksPassed, totalChecks);
+        grades.setQualityScore(qualityScore);
+
+        int finalGrade = new GradeCalculator().calculateFinalGrade(grades, weights);
+
+        assertThat(finalGrade).isEqualTo(expectedGrade);
+    }
+
+    private static Stream<Arguments> withQualityCheck() {
+        return Stream.of(
+                of(25, 25, 55, 55, 100, 100, 5, 5, 1, 100, 0.20f, 0.20f, 0.20f, 0.20f, 0.20f) // 0.20*1 + 0.20*1 + 0.20*1 +  0.20*1 + 0.20*1 = 1.0 --> 100
+        );
+    }
+
     /*
      * Test where the grade is between 99.5 and 100, should be rounded down to 99 and not
      * rounded up to 100, as 100 should only be achievable if everything

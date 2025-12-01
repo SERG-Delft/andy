@@ -18,8 +18,10 @@ public class GradeCalculator {
                 * weights.getMetaTestsWeight();
         float checkScore = codeChecksScore(gradeValues.getChecksPassed(), gradeValues.getTotalChecks())
                 * weights.getCodeChecksWeight();
+        float qualityScore = qualityScore(gradeValues.getQualityScore())
+                * weights.getQualityWeight();
 
-        float finalDecimalGrade = branchScore + mutationScore + metaScore + checkScore;
+        float finalDecimalGrade = branchScore + mutationScore + metaScore + checkScore + qualityScore;
 
         int finalGrade = Math.round(finalDecimalGrade * 100);
 
@@ -96,6 +98,16 @@ public class GradeCalculator {
             return 1f;   // full points assigned
         }
         return (float)checksPassed / totalChecks;
+    }
+
+    /**
+     * For now, just a dummy method...
+     * @param qualityScore - a dummy score
+     * @return the dummy score
+     */
+    private float qualityScore(int qualityScore) {
+        // dummy
+        return 1.0f;
     }
 
     /**

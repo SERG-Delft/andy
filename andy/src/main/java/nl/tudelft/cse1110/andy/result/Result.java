@@ -20,6 +20,7 @@ public class Result {
     private final double timeInSeconds;
     private final GradeWeight weights;
     private final String successMessage;
+    private final QualityResult qualityResult;
 
     public Result(CompilationResult compilation, UnitTestsResult tests, MutationTestingResult mutationTesting, CodeChecksResult codeChecks, CodeChecksResult penaltyCodeChecks, CoverageResult coverage, MetaTestsResult metaTests, MetaTestsResult penaltyMetaTests, int penalty, int finalGrade, GenericFailure genericFailure, double timeInSeconds, GradeWeight weights, String successMessage) {
         this.compilation = compilation;
@@ -36,6 +37,30 @@ public class Result {
         this.timeInSeconds = timeInSeconds;
         this.weights = weights;
         this.successMessage = successMessage;
+
+        this.qualityResult = QualityResult.empty();
+
+        if(finalGrade < 0 || finalGrade>100)
+            throw new RuntimeException("Invalid final grade");
+    }
+
+    public Result(CompilationResult compilation, UnitTestsResult tests, MutationTestingResult mutationTesting, CodeChecksResult codeChecks, CodeChecksResult penaltyCodeChecks, CoverageResult coverage, MetaTestsResult metaTests, MetaTestsResult penaltyMetaTests, int penalty, int finalGrade, GenericFailure genericFailure, double timeInSeconds, GradeWeight weights, String successMessage,
+                  QualityResult qualityResult) {
+        this.compilation = compilation;
+        this.tests = tests;
+        this.mutationTesting = mutationTesting;
+        this.codeChecks = codeChecks;
+        this.penaltyCodeChecks = penaltyCodeChecks;
+        this.coverage = coverage;
+        this.metaTests = metaTests;
+        this.penaltyMetaTests = penaltyMetaTests;
+        this.penalty = penalty;
+        this.finalGrade = finalGrade;
+        this.genericFailure = genericFailure;
+        this.timeInSeconds = timeInSeconds;
+        this.weights = weights;
+        this.successMessage = successMessage;
+        this.qualityResult = qualityResult;
 
         if(finalGrade < 0 || finalGrade>100)
             throw new RuntimeException("Invalid final grade");
@@ -100,6 +125,10 @@ public class Result {
         return genericFailure;
     }
 
+    public QualityResult getQualityResult() {
+        return qualityResult;
+    }
+
     public boolean hasFailed() {
         return !compilation.successful() || tests.hasTestsFailingOrFailures() || hasGenericFailure();
     }
@@ -122,6 +151,7 @@ public class Result {
                 ", timeInSeconds=" + timeInSeconds +
                 ", weights=" + weights +
                 ", successMessage=" + successMessage +
+                ", qualityResult=" + qualityResult +
                 '}';
     }
 
