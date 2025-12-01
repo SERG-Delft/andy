@@ -1,9 +1,6 @@
 package nl.tudelft.cse1110.andy.grade;
 
-import nl.tudelft.cse1110.andy.result.CodeChecksResult;
-import nl.tudelft.cse1110.andy.result.CoverageResult;
-import nl.tudelft.cse1110.andy.result.MetaTestsResult;
-import nl.tudelft.cse1110.andy.result.MutationTestingResult;
+import nl.tudelft.cse1110.andy.result.*;
 
 public class GradeValues {
 
@@ -20,6 +17,8 @@ public class GradeValues {
     private int totalChecks;
 
     private int penalty;
+
+    private int qualityScore;
 
     public int getCoveredBranches() {
         return coveredBranches;
@@ -86,12 +85,44 @@ public class GradeValues {
         return this;
     }
 
+    public int getQualityScore() {
+        return qualityScore;
+    }
+
+    public GradeValues setQualityScore(int qualityScore) {
+        this.qualityScore = qualityScore;
+        return this;
+    }
+
     public static GradeValues fromResults(CoverageResult coverageResults, CodeChecksResult codeCheckResults, MutationTestingResult mutationResults, MetaTestsResult metaTestResults, MetaTestsResult penaltyMetaTestResults, CodeChecksResult penaltyCodeCheckResults) {
         GradeValues grades = new GradeValues();
         grades.setBranchGrade(coverageResults.getCoveredBranches(), coverageResults.getTotalNumberOfBranches());
         grades.setCheckGrade(codeCheckResults.getNumberOfPassedChecks(), codeCheckResults.getTotalNumberOfChecks());
         grades.setMutationGrade(mutationResults.getKilledMutants(), mutationResults.getTotalNumberOfMutants());
         grades.setMetaGrade(metaTestResults.getPassedMetaTests(), metaTestResults.getTotalTests());
+        grades.setQualityScore(0); // use alternative constructor for quality check (backward compatibility)
+
+        // penalty is equal to the sum of the weights of all failed penalty code checks
+        grades.setPenalty(penaltyCodeCheckResults.getCheckResults().stream().mapToInt(check -> check.passed() ? 0 : check.getWeight()).sum()
+                + penaltyMetaTestResults.getMetaTestResults().stream().mapToInt(check -> check.succeeded() ? 0 : check.getWeight()).sum());
+
+        return grades;
+    }
+
+    /* Alternative constructor for assignments with quality score */
+    public static GradeValues fromResults(CoverageResult coverageResults,
+                                          CodeChecksResult codeCheckResults,
+                                          MutationTestingResult mutationResults,
+                                          MetaTestsResult metaTestResults,
+                                          MetaTestsResult penaltyMetaTestResults,
+                                          CodeChecksResult penaltyCodeCheckResults,
+                                          QualityResult qualityResult) {
+        GradeValues grades = new GradeValues();
+        grades.setBranchGrade(coverageResults.getCoveredBranches(), coverageResults.getTotalNumberOfBranches());
+        grades.setCheckGrade(codeCheckResults.getNumberOfPassedChecks(), codeCheckResults.getTotalNumberOfChecks());
+        grades.setMutationGrade(mutationResults.getKilledMutants(), mutationResults.getTotalNumberOfMutants());
+        grades.setMetaGrade(metaTestResults.getPassedMetaTests(), metaTestResults.getTotalTests());
+        grades.setQualityScore(qualityResult.getScore());
 
         // penalty is equal to the sum of the weights of all failed penalty code checks
         grades.setPenalty(penaltyCodeCheckResults.getCheckResults().stream().mapToInt(check -> check.passed() ? 0 : check.getWeight()).sum()
