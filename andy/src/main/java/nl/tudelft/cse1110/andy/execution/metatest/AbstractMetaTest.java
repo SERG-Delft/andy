@@ -31,7 +31,7 @@ public abstract class AbstractMetaTest implements MetaTest {
     }
 
     @Override
-    public abstract boolean execute(Context ctx, DirectoryConfiguration dirCfg, RunConfiguration runCfg)
+    public abstract MetaTestReport execute(Context ctx, DirectoryConfiguration dirCfg, RunConfiguration runCfg)
             throws Exception;
 
 }

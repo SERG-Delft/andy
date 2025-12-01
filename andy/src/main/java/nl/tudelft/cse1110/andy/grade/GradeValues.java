@@ -122,7 +122,7 @@ public class GradeValues {
         grades.setCheckGrade(codeCheckResults.getNumberOfPassedChecks(), codeCheckResults.getTotalNumberOfChecks());
         grades.setMutationGrade(mutationResults.getKilledMutants(), mutationResults.getTotalNumberOfMutants());
         grades.setMetaGrade(metaTestResults.getPassedMetaTests(), metaTestResults.getTotalTests());
-        grades.setQualityScore(qualityResult.getScore());
+        grades.setQualityScore(qualityResult.computeScore());
 
         // penalty is equal to the sum of the weights of all failed penalty code checks
         grades.setPenalty(penaltyCodeCheckResults.getCheckResults().stream().mapToInt(check -> check.passed() ? 0 : check.getWeight()).sum()

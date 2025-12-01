@@ -5,6 +5,7 @@ import nl.tudelft.cse1110.andy.codechecker.engine.CheckType;
 import nl.tudelft.cse1110.andy.execution.Context.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
+import nl.tudelft.cse1110.andy.execution.metatest.MetaTestReport;
 import nl.tudelft.cse1110.andy.grade.GradeCalculator;
 import nl.tudelft.cse1110.andy.grade.GradeValues;
 import nl.tudelft.cse1110.andy.grade.GradeWeight;
@@ -253,8 +254,8 @@ public class ResultBuilder {
     /*
      * Quality
      */
-    public void logQuality() {
-        // dummy
+    public void logQuality(MetaTestReport metaTestReport) {
+        this.qualityResult.considerMetaTest(metaTestReport);
     }
 
     /*
@@ -289,7 +290,7 @@ public class ResultBuilder {
             int finalGrade, penalty;
 
             if (ctx.getRunConfiguration() != null) {
-                GradeValues grades = GradeValues.fromResults(coverageResults, codeCheckResults, mutationResults, metaTestResults, penaltyMetaTestResults, penaltyCodeCheckResults);
+                GradeValues grades = GradeValues.fromResults(coverageResults, codeCheckResults, mutationResults, metaTestResults, penaltyMetaTestResults, penaltyCodeCheckResults, qualityResult);
                 weights = GradeWeight.fromConfig(ctx.getRunConfiguration().weights());
                 successMessage = ctx.getRunConfiguration().successMessage();
 
