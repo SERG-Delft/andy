@@ -319,7 +319,8 @@ public class ResultBuilder {
                     genericFailureObject,
                     timeInSeconds,
                     weights,
-                    successMessage);
+                    successMessage,
+                    qualityResult);
         }
     }
 

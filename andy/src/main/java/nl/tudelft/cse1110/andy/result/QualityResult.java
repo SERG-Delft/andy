@@ -27,6 +27,10 @@ public class QualityResult {
         return score;
     }
 
+    public LinkedList<MetaTestReport> getMetaTestReports() {
+        return metaTestReports;
+    }
+
     public void setScore(int score) {
         this.score = score;
     }
@@ -39,7 +43,7 @@ public class QualityResult {
     }
 
     public void considerMetaTest(MetaTestReport metaTestReport) {
-        metaTestReports.addFirst(metaTestReport);
+        this.metaTestReports.addFirst(metaTestReport);
     }
 
     public int computeScore() {
