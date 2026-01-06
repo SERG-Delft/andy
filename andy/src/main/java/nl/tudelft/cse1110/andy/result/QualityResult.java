@@ -12,6 +12,7 @@ public class QualityResult {
         // this.score = score;
         // dummy:
         this.score = 1;
+        metaTestReports  = new LinkedList<>();
     }
 
     public static QualityResult build(int score) {

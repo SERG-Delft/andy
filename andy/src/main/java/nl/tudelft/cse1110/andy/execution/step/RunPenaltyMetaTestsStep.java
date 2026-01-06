@@ -5,6 +5,7 @@ import nl.tudelft.cse1110.andy.config.MetaTest;
 import nl.tudelft.cse1110.andy.config.RunConfiguration;
 import nl.tudelft.cse1110.andy.execution.Context.Context;
 import nl.tudelft.cse1110.andy.execution.ExecutionStep;
+import nl.tudelft.cse1110.andy.execution.metatest.MetaTestReport;
 import nl.tudelft.cse1110.andy.result.MetaTestResult;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
 
@@ -30,7 +31,10 @@ public class RunPenaltyMetaTestsStep implements ExecutionStep {
 
             for (MetaTest metaTest : metaTests) {
 
-                boolean passesTheMetaTest = metaTest.execute(ctx, dirCfg, runCfg);
+                MetaTestReport report = metaTest.execute(ctx, dirCfg, runCfg);
+                result.logQuality(report);
+
+                boolean passesTheMetaTest = report.passesTheMetaTest();
 
                 if (passesTheMetaTest) {
                     score += metaTest.getWeight();
