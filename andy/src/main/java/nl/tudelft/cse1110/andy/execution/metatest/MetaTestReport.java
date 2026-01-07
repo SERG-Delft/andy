@@ -12,8 +12,19 @@ public class MetaTestReport {
         this.testsFound = testsFound;
     }
 
-
     public boolean passesTheMetaTest() {
         return testsSucceeded < testsRan;
+    }
+
+    public int getTestsRan() {
+        return testsRan;
+    }
+
+    public int getTestsFound() {
+        return testsFound;
+    }
+
+    public int getTestsSucceeded() {
+        return testsSucceeded;
     }
 }

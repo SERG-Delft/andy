@@ -47,8 +47,29 @@ public class QualityResult {
     }
 
     public int computeScore() {
-        // dummy
-        this.score = 1;
-        return this.score;
+
+        int limitedNumberMetaTestsScore = this.computeLimitedNumberMetaTestsScore();
+
+        this.score = limitedNumberMetaTestsScore;
+
+        return limitedNumberMetaTestsScore;
+    }
+
+    /**
+     * Measures how well tests are isolated.
+     * Lower scores indicate that individual tests trigger many meta-tests.
+     */
+    private int computeLimitedNumberMetaTestsScore() {
+        int tolerance = 2;
+        int penaltyPerExtraTest = 1;
+
+        double score = 100;
+        for (MetaTestReport r : metaTestReports) {
+            int triggered = r.getTestsRan() - r.getTestsSucceeded();
+            int excess = Math.max(0, triggered - tolerance);
+            score -= excess * penaltyPerExtraTest; // alternatives: quadratic or logarithmic penalties
+        }
+
+        return (int) Math.max(0, score);
     }
 }
