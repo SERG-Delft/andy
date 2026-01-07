@@ -7,6 +7,7 @@ import nl.tudelft.cse1110.andy.execution.Context.ContextBuilder;
 import nl.tudelft.cse1110.andy.execution.Context.ContextDirector;
 import nl.tudelft.cse1110.andy.execution.ExecutionFlow;
 import nl.tudelft.cse1110.andy.execution.metatest.AbstractMetaTest;
+import nl.tudelft.cse1110.andy.execution.metatest.MetaTestReport;
 import nl.tudelft.cse1110.andy.execution.metatest.library.evaluators.MetaEvaluator;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.result.CompilationErrorInfo;
@@ -35,7 +36,7 @@ public class LibraryMetaTest extends AbstractMetaTest {
     }
 
     @Override
-    public boolean execute(Context ctx, DirectoryConfiguration dirCfg, RunConfiguration runCfg) throws Exception {
+    public MetaTestReport execute(Context ctx, DirectoryConfiguration dirCfg, RunConfiguration runCfg) throws Exception {
         /* Get the student solution, which we will run for each meta test */
         String solutionFile = findSolution(dirCfg.getWorkingDir());
 
@@ -50,7 +51,8 @@ public class LibraryMetaTest extends AbstractMetaTest {
          *
          * We reuse our execution framework to run the code with the meta test.
          */
-        boolean passesTheMetaTest;
+        // boolean passesTheMetaTest;
+        MetaTestReport report;
 
         /* Copy the library and replace the library by the meta test */
         File metaWorkingDir = createTemporaryDirectory("metaWorkplace").toFile();
@@ -67,7 +69,9 @@ public class LibraryMetaTest extends AbstractMetaTest {
             /* And check the result. If there's a failing test, the test suite is good! */
             int testsRan = metaResult.getTests().getTestsRan();
             int testsSucceeded = metaResult.getTests().getTestsSucceeded();
-            passesTheMetaTest = testsSucceeded < testsRan;
+            int testsFound = metaResult.getTests().getTestsFound();
+            // passesTheMetaTest = testsSucceeded < testsRan;
+            report = new MetaTestReport(testsRan, testsSucceeded, testsFound);
         } finally {
             /* Clean up the directory */
             deleteDirectory(metaWorkingDir);
@@ -75,7 +79,7 @@ public class LibraryMetaTest extends AbstractMetaTest {
             /* Set the classloader back to the one with the student's original code */
             Thread.currentThread().setContextClassLoader(ctx.getClassloaderWithStudentsCode());
         }
-        return passesTheMetaTest;
+        return report;
     }
 
     private void verifyMetaTestExecution(Result metaResult, String metaFileContent) {

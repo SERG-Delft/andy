@@ -5,6 +5,7 @@ import nl.tudelft.cse1110.andy.config.RunConfiguration;
 import nl.tudelft.cse1110.andy.execution.Context.Context;
 import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
 import nl.tudelft.cse1110.andy.execution.metatest.AbstractMetaTest;
+import nl.tudelft.cse1110.andy.execution.metatest.MetaTestReport;
 import nl.tudelft.cse1110.andy.execution.step.RunJUnitTestsStep;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
 
@@ -28,7 +29,7 @@ public class ExternalProcessMetaTest extends AbstractMetaTest {
     }
 
     @Override
-    public boolean execute(Context ctx, DirectoryConfiguration dirCfg, RunConfiguration runCfg) throws Exception {
+    public MetaTestReport execute(Context ctx, DirectoryConfiguration dirCfg, RunConfiguration runCfg) throws Exception {
         /* Start the meta external process */
         this.startExternalProcess();
 
@@ -49,8 +50,10 @@ public class ExternalProcessMetaTest extends AbstractMetaTest {
         /* Check the result. If there's a failing test, the test suite is good! */
         int testsRan = metaResultBuilder.getTestResults().getTestsRan();
         int testsSucceeded = metaResultBuilder.getTestResults().getTestsSucceeded();
-        boolean passesTheMetaTest = testsSucceeded < testsRan;
+        int testsFound = metaResultBuilder.getTestResults().getTestsFound();
+        // boolean passesTheMetaTest = testsSucceeded < testsRan;
+        MetaTestReport report =  new MetaTestReport(testsRan, testsSucceeded, testsFound);
 
-        return passesTheMetaTest;
+        return report;
     }
 }

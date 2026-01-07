@@ -3,6 +3,7 @@ package nl.tudelft.cse1110.andy.config;
 import nl.tudelft.cse1110.andy.execution.Context.Context;
 import nl.tudelft.cse1110.andy.execution.externalprocess.ExternalProcess;
 import nl.tudelft.cse1110.andy.execution.metatest.AbstractMetaTestFactory;
+import nl.tudelft.cse1110.andy.execution.metatest.MetaTestReport;
 
 public interface MetaTest {
     String getName();
@@ -11,7 +12,7 @@ public interface MetaTest {
 
     String getNameAndWeight();
 
-    boolean execute(Context ctx, DirectoryConfiguration dirCfg, RunConfiguration runCfg) throws Exception;
+    MetaTestReport execute(Context ctx, DirectoryConfiguration dirCfg, RunConfiguration runCfg) throws Exception;
 
     static MetaTest withStringReplacement(int weight, String name, String old, String replacement) {
         return new AbstractMetaTestFactory().withStringReplacement(weight, name, old, replacement);

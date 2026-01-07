@@ -64,7 +64,8 @@ public class GradeWeight {
         float mutation   = weights.getOrDefault("mutation",   0.0f);
         float meta       = weights.getOrDefault("meta",       0.0f);
         float codechecks = weights.getOrDefault("codechecks", 0.0f);
+        float quality    = weights.getOrDefault("quality",    0.0f);
 
-        return new GradeWeight(coverage, mutation, meta, codechecks);
+        return new GradeWeight(coverage, mutation, meta, codechecks, quality);
     }
 }
