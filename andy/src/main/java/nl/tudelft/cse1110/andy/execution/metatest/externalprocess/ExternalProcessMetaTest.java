@@ -52,7 +52,10 @@ public class ExternalProcessMetaTest extends AbstractMetaTest {
         int testsSucceeded = metaResultBuilder.getTestResults().getTestsSucceeded();
         int testsFound = metaResultBuilder.getTestResults().getTestsFound();
         // boolean passesTheMetaTest = testsSucceeded < testsRan;
-        MetaTestReport report =  new MetaTestReport(testsRan, testsSucceeded, testsFound);
+
+        var testsFailed = metaResultBuilder.getTestResults().getFailures();
+
+        MetaTestReport report = new MetaTestReport(testsRan, testsSucceeded, testsFound, testsFailed);
 
         return report;
     }
