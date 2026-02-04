@@ -9,7 +9,10 @@ public class QualityResult {
     private int score; // between 0 and 1
     private int numUnitTests;
     private List<String> unitTests;
+
     private LinkedList<MetaTestReport> metaTestReports;
+    private Map<String, Set<Integer>> mutationsKilledPerTest;
+
     private Map<String, Set<Integer>> coveragePerTest;
 
     public QualityResult(int numUnitTests) {
@@ -61,6 +64,13 @@ public class QualityResult {
 
     public void setCoveragePerTest(Map<String, Set<Integer>> coveragePerTest) {
         this.coveragePerTest = coveragePerTest;
+    }
+
+    public Map<String, Set<Integer>> getMutationsKilledPerTest() {
+        return mutationsKilledPerTest;
+    }
+
+    public void setMutationsKilledPerTest(Map<String, Set<Integer>> mutationsKilledPerTest) {
     }
 
     @Override

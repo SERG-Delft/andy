@@ -268,6 +268,10 @@ public class ResultBuilder {
         this.qualityResult.setCoveragePerTest(coveragePerTest);
     }
 
+    public void logMutationsKilledPerTest(Map<String, Set<Integer>> mutationsKilledPerTest) {
+        this.qualityResult.setMutationsKilledPerTest(mutationsKilledPerTest);
+    }
+
     public void logMetaTest(MetaTestReport metaTestReport) {
         this.qualityResult.considerMetaTest(metaTestReport);
     }
