@@ -38,6 +38,7 @@ import static nl.tudelft.cse1110.andy.utils.FilesUtils.concatenateDirectories;
 
 public class CollectCoverageInformationStep implements ExecutionStep {
 
+    @SuppressWarnings("checkstyle:MethodLength") // in this case, it makes no sense to break down the method any farther
     @Override
     public void execute(Context ctx, ResultBuilder result) {
         // Skip step if disabled
@@ -86,12 +87,11 @@ public class CollectCoverageInformationStep implements ExecutionStep {
             /*
             Log the lines covered by each test by scanning the method line by line.
              */
-
             List<String> tests = result.getQualityResult().getUnitTests().stream()
                     .map(TestIdentifier::getDisplayName)
                     .toList();
 
-            Map<String, Map<String, Set<Integer>>> coveragePerTest = linesCoveredPerTest(ctx, tests);
+            Map<String, Set<Integer>> coveragePerTest = linesCoveredPerTest(ctx, testClass, tests);
 
             result.logCoveragePerTest(coveragePerTest);
 
@@ -103,12 +103,12 @@ public class CollectCoverageInformationStep implements ExecutionStep {
         }
     }
 
-    private Map<String, Map<String, Set<Integer>>> linesCoveredPerTest(Context ctx, List<String> tests) throws Exception {
+    private Map<String, Set<Integer>> linesCoveredPerTest(Context ctx, String testClass, List<String> tests) throws Exception {
 
         DirectoryConfiguration dirCfg = ctx.getDirectoryConfiguration();
         RunConfiguration runCfg = ctx.getRunConfiguration();
 
-        Map<String, Map<String, Set<Integer>>> coveragePerTest = new HashMap<>();
+        Map<String, Set<Integer>> coveragePerTest = new HashMap<>();
 
         for (String testName : tests) {
 
@@ -138,7 +138,7 @@ public class CollectCoverageInformationStep implements ExecutionStep {
             }
 
             // 5. Extract covered lines
-            Map<String, Set<Integer>> coveredLines = extractCoveredLines(coverageBuilder);
+            Set<Integer> coveredLines = extractCoveredLines(coverageBuilder, testClass);
 
             coveragePerTest.put(testName, coveredLines);
         }
@@ -155,22 +155,25 @@ public class CollectCoverageInformationStep implements ExecutionStep {
         launcher.execute(request);
     }
 
-    private Map<String, Set<Integer>> extractCoveredLines(
-            CoverageBuilder coverageBuilder) {
+    private Set<Integer> extractCoveredLines(
+            CoverageBuilder coverageBuilder,
+            String testClass) {
 
-        Map<String, Set<Integer>> result = new HashMap<>();
+        Set<Integer> result = new HashSet<>();
 
         for (IClassCoverage cc : coverageBuilder.getClasses()) {
             String className = cc.getName().replace('/', '.');
+
+            if (!className.equals(testClass)) {
+                continue;
+            }
 
             for (int line = cc.getFirstLine(); line <= cc.getLastLine(); line++) {
                 ILine l = cc.getLine(line);
                 if (l.getStatus() == ICounter.FULLY_COVERED ||
                         l.getStatus() == ICounter.PARTLY_COVERED) {
 
-                    result
-                            .computeIfAbsent(className, c -> new HashSet<>())
-                            .add(line);
+                    result.add(line);
                 }
             }
         }

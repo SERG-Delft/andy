@@ -264,7 +264,7 @@ public class ResultBuilder {
         this.qualityResult.setUnitTests(unitTests);
     }
 
-    public void logCoveragePerTest(Map<String, Map<String, Set<Integer>>> coveragePerTest) {
+    public void logCoveragePerTest(Map<String, Set<Integer>> coveragePerTest) {
         this.qualityResult.setCoveragePerTest(coveragePerTest);
     }
 

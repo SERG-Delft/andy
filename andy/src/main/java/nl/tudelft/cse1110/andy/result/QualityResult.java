@@ -10,7 +10,7 @@ public class QualityResult {
     private int numUnitTests;
     private List<TestIdentifier> unitTests;
     private LinkedList<MetaTestReport> metaTestReports;
-    private Map<String, Map<String, Set<Integer>>> coveragePerTest;
+    private Map<String, Set<Integer>> coveragePerTest;
 
     public QualityResult(int numUnitTests) {
         // dummy:
@@ -55,11 +55,11 @@ public class QualityResult {
         this.unitTests = unitTests;
     }
 
-    public Map<String, Map<String, Set<Integer>>> getCoveragePerTest() {
+    public Map<String, Set<Integer>> getCoveragePerTest() {
         return coveragePerTest;
     }
 
-    public void setCoveragePerTest(Map<String, Map<String, Set<Integer>>> coveragePerTest) {
+    public void setCoveragePerTest(Map<String, Set<Integer>> coveragePerTest) {
         this.coveragePerTest = coveragePerTest;
     }
 
