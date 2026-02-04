@@ -83,10 +83,17 @@ public class RunJUnitTestsStep implements ExecutionStep {
 
             List<String> unitTests = new ArrayList<>();
 
-            plan.getRoots().forEach(root ->
-                    plan.getDescendants(root).stream()
-                            .filter(TestIdentifier::isTest)
-                                    .forEach(ti -> unitTests.add(ti.getDisplayName())));
+            int s = plan.getRoots().size();
+            int d = plan.getDescendants(plan.getRoots().iterator().next()).size();
+
+//            plan.getRoots().forEach(root ->
+//                    plan.getDescendants(root).stream()
+//                            .filter(TestIdentifier::isTest)
+//                                    .forEach(ti -> unitTests.add(ti.getDisplayName())));
+
+            plan.getRoots().forEach(root -> {
+                unitTests.add(root.getDisplayName());
+            });
 
             result.logUnitTests(unitTests);
         } catch (Exception e) {

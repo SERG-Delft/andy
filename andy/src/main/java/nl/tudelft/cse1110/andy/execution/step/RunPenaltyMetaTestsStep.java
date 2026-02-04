@@ -32,7 +32,7 @@ public class RunPenaltyMetaTestsStep implements ExecutionStep {
             for (MetaTest metaTest : metaTests) {
 
                 MetaTestReport report = metaTest.execute(ctx, dirCfg, runCfg);
-                result.logMetaTest(report);
+                result.logMetaTest(metaTest.getName(), report);
 
                 boolean passesTheMetaTest = report.passesTheMetaTest();
 

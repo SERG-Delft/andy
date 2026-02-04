@@ -72,6 +72,7 @@ public class QualityResult {
     }
 
     public void setMutationsKilledPerTest(Map<String, Set<Integer>> mutationsKilledPerTest) {
+        this.mutationsKilledPerTest = mutationsKilledPerTest;
     }
 
     @Override
@@ -142,7 +143,7 @@ public class QualityResult {
      * 3) mutations killed
      * @return the number of such tests
      */
-    private long countMeaningfulTests() {
+    public long countMeaningfulTests() {
 
         Set<String> meaningfulTests = new HashSet<>();
 
@@ -161,15 +162,15 @@ public class QualityResult {
 
         for (String test : map.keySet()) {
 
-            Set<T> meaningfulLines = new HashSet<>(map.get(test));
+            Set<T> meaningfulContributions = new HashSet<>(map.get(test));
 
             for (String otherTest : map.keySet()) {
                 if (test.equals(otherTest)) continue;
-                Set<T> linesWithOtherTest = map.get(otherTest);
-                meaningfulLines.removeAll(linesWithOtherTest);
+                Set<T> contributionsByOtherTest = new HashSet<>(map.get(otherTest));
+                meaningfulContributions.removeAll(contributionsByOtherTest);
             }
 
-            if (!meaningfulLines.isEmpty() && !meaningfulTests.contains(test)) {
+            if (!meaningfulContributions.isEmpty()) {
                 meaningfulTests.add(test);
             }
         }
