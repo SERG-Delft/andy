@@ -87,9 +87,7 @@ public class CollectCoverageInformationStep implements ExecutionStep {
             /*
             Log the lines covered by each test by scanning the method line by line.
              */
-            List<String> tests = result.getQualityResult().getUnitTests().stream()
-                    .map(TestIdentifier::getDisplayName)
-                    .toList();
+            List<String> tests = result.getQualityResult().getUnitTests();
 
             Map<String, Set<Integer>> coveragePerTest = linesCoveredPerTest(ctx, testClass, tests);
 

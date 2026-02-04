@@ -8,7 +8,7 @@ import java.util.*;
 public class QualityResult {
     private int score; // between 0 and 1
     private int numUnitTests;
-    private List<TestIdentifier> unitTests;
+    private List<String> unitTests;
     private LinkedList<MetaTestReport> metaTestReports;
     private Map<String, Set<Integer>> coveragePerTest;
 
@@ -47,11 +47,11 @@ public class QualityResult {
         this.numUnitTests = numUnitTests;
     }
 
-    public List<TestIdentifier> getUnitTests() {
+    public List<String> getUnitTests() {
         return unitTests;
     }
 
-    public void setUnitTests(List<TestIdentifier> unitTests) {
+    public void setUnitTests(List<String> unitTests) {
         this.unitTests = unitTests;
     }
 
@@ -89,22 +89,18 @@ public class QualityResult {
      * @return the number of such tests
      */
     public long countCohesiveTests() {
-        Set<String> cohesiveTests = new HashSet<>(); // list with tests that were triggered once
-        Set<String> otherTests = new HashSet<>(); // list with tests that were triggered more than once
+
+        Map<String, Integer> numTriggers = new HashMap<>(); // list with tests that were triggered once
+        unitTests.forEach(ut -> numTriggers.put(ut, 0));
+
         for (MetaTestReport metaTestReport : metaTestReports) {
             for (TestFailureInfo testFailureInfo : metaTestReport.getTestsTriggered()) {
                 String testName = testFailureInfo.getTestCase();
-                if (otherTests.contains(testName)) {
-                    continue;
-                } else if (cohesiveTests.contains(testName)) {
-                    cohesiveTests.remove(testName);
-                    otherTests.add(testName);
-                } else {
-                    cohesiveTests.add(testName);
-                }
+                numTriggers.put(testName, numTriggers.get(testName) + 1);
             }
         }
-        return cohesiveTests.size();
+
+        return numTriggers.values().stream().filter(nt -> nt == 1).count();
     }
 
     /**
@@ -112,8 +108,11 @@ public class QualityResult {
      * @return the number of such tests
      */
     public long countIsolatedTests() {
+
         long count = countTests();
+
         Set<String> unisolatedTests = new HashSet<>();
+
         for (MetaTestReport metaTestReport : metaTestReports) {
             if (metaTestReport.getTestsTriggered().size() == 1) continue;
             for (TestFailureInfo testFailureInfo : metaTestReport.getTestsTriggered()) {
@@ -124,6 +123,7 @@ public class QualityResult {
                 }
             }
         }
+
         return count;
     }
 }

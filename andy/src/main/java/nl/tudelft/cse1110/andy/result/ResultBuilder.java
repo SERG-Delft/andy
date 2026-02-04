@@ -260,7 +260,7 @@ public class ResultBuilder {
         return qualityResult;
     }
 
-    public void logUnitTests(List<TestIdentifier> unitTests) {
+    public void logUnitTests(List<String> unitTests) {
         this.qualityResult.setUnitTests(unitTests);
     }
 

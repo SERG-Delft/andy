@@ -81,12 +81,12 @@ public class RunJUnitTestsStep implements ExecutionStep {
             launcher = LauncherFactory.create();
             TestPlan plan = launcher.discover(request);
 
-            List<TestIdentifier> unitTests = new ArrayList<>();
+            List<String> unitTests = new ArrayList<>();
 
             plan.getRoots().forEach(root ->
                     plan.getDescendants(root).stream()
                             .filter(TestIdentifier::isTest)
-                                    .forEach(unitTests::add));
+                                    .forEach(ti -> unitTests.add(ti.getDisplayName())));
 
             result.logUnitTests(unitTests);
         } catch (Exception e) {
