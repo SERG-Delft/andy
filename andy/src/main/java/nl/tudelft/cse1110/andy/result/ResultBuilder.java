@@ -104,6 +104,8 @@ public class ResultBuilder {
             failures.add(testFailureInfo);
         }
 
+        this.qualityResult.setNumUnitTests(testsFound);
+
         this.testResults = UnitTestsResult.build(testsFound, testsRan, testsSucceeded, failures, console);
     }
 

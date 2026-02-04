@@ -13,6 +13,7 @@ import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.result.CompilationErrorInfo;
 import nl.tudelft.cse1110.andy.result.CompilationResult;
 import nl.tudelft.cse1110.andy.result.Result;
+import nl.tudelft.cse1110.andy.result.TestFailureInfo;
 import nl.tudelft.cse1110.andy.utils.CodeSnippetUtils;
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
 
@@ -71,7 +72,10 @@ public class LibraryMetaTest extends AbstractMetaTest {
             int testsSucceeded = metaResult.getTests().getTestsSucceeded();
             int testsFound = metaResult.getTests().getTestsFound();
             // passesTheMetaTest = testsSucceeded < testsRan;
-            report = new MetaTestReport(testsRan, testsSucceeded, testsFound);
+
+            var testsFailed = metaResult.getTests().getFailures();
+
+            report = new MetaTestReport(testsRan, testsSucceeded, testsFound, testsFailed);
         } finally {
             /* Clean up the directory */
             deleteDirectory(metaWorkingDir);
