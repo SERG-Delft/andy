@@ -8,24 +8,30 @@ import nl.tudelft.cse1110.andy.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.utils.ClassUtils;
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
 import nl.tudelft.cse1110.andy.utils.FromBytesClassLoader;
-import org.jacoco.core.analysis.Analyzer;
-import org.jacoco.core.analysis.CoverageBuilder;
-import org.jacoco.core.analysis.IClassCoverage;
+import org.jacoco.core.analysis.*;
+import org.jacoco.core.data.ExecutionData;
 import org.jacoco.core.data.ExecutionDataStore;
 import org.jacoco.core.data.SessionInfoStore;
 import org.jacoco.core.instr.Instrumenter;
 import org.jacoco.core.runtime.IRuntime;
+import org.jacoco.core.runtime.LoggerRuntime;
 import org.jacoco.core.runtime.RuntimeData;
 import org.jacoco.report.DirectorySourceFileLocator;
 import org.jacoco.report.FileMultiReportOutput;
 import org.jacoco.report.IReportVisitor;
 import org.jacoco.report.html.HTMLFormatter;
+import org.junit.platform.engine.discovery.DiscoverySelectors;
+import org.junit.platform.launcher.Launcher;
+import org.junit.platform.launcher.LauncherDiscoveryRequest;
+import org.junit.platform.launcher.TestIdentifier;
+import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
+import org.junit.platform.launcher.core.LauncherFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collection;
+import java.util.*;
 
 import static nl.tudelft.cse1110.andy.utils.ClassUtils.clazzNameAsPath;
 import static nl.tudelft.cse1110.andy.utils.FilesUtils.concatenateDirectories;
@@ -76,12 +82,99 @@ public class CollectCoverageInformationStep implements ExecutionStep {
             /* Generate an HTML report.*/
             String testClass = ClassUtils.getTestClass(ctx.getNewClassNames());
             this.generateReport(dirCfg, testClass, coverageBuilder, executionData, sessionInfos);
-        } catch (IOException e) {
+
+            /*
+            Log the lines covered by each test by scanning the method line by line.
+             */
+
+            List<String> tests = result.getQualityResult().getUnitTests().stream()
+                    .map(TestIdentifier::getDisplayName)
+                    .toList();
+
+            Map<String, Map<String, Set<Integer>>> coveragePerTest = linesCoveredPerTest(ctx, tests);
+
+            result.logCoveragePerTest(coveragePerTest);
+
+        } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
             /* Restore the old class loader to get the non-instrumented classes back.*/
             Thread.currentThread().setContextClassLoader(ctx.getClassloaderWithStudentsCode());
         }
+    }
+
+    private Map<String, Map<String, Set<Integer>>> linesCoveredPerTest(Context ctx, List<String> tests) throws Exception {
+
+        DirectoryConfiguration dirCfg = ctx.getDirectoryConfiguration();
+        RunConfiguration runCfg = ctx.getRunConfiguration();
+
+        Map<String, Map<String, Set<Integer>>> coveragePerTest = new HashMap<>();
+
+        for (String testName : tests) {
+
+            // 1. Fresh JaCoCo data for this test
+            RuntimeData data = new RuntimeData();
+            LoggerRuntime runtime = new LoggerRuntime(); // or whatever runtime you use
+            runtime.startup(data);
+
+            // 2. Run exactly one test
+            runSingleTest(testName);
+
+            // 3. Collect execution data
+            ExecutionDataStore executionData = new ExecutionDataStore();
+            SessionInfoStore sessionInfos = new SessionInfoStore();
+            data.collect(executionData, sessionInfos, false);
+            runtime.shutdown();
+
+            // 4. Analyze coverage
+            CoverageBuilder coverageBuilder = new CoverageBuilder();
+            Analyzer analyzer = new Analyzer(executionData, coverageBuilder);
+
+            for (String classUnderTest : runCfg.classesUnderTest()) {
+                try (InputStream in =
+                             getClassAsInputStream(dirCfg.getWorkingDir(), classUnderTest)) {
+                    analyzer.analyzeClass(in, classUnderTest);
+                }
+            }
+
+            // 5. Extract covered lines
+            Map<String, Set<Integer>> coveredLines = extractCoveredLines(coverageBuilder);
+
+            coveragePerTest.put(testName, coveredLines);
+        }
+        return coveragePerTest;
+    }
+
+    private void runSingleTest(String testId) {
+        LauncherDiscoveryRequest request =
+                LauncherDiscoveryRequestBuilder.request()
+                        .selectors(DiscoverySelectors.selectUniqueId(testId))
+                        .build();
+
+        Launcher launcher = LauncherFactory.create();
+        launcher.execute(request);
+    }
+
+    private Map<String, Set<Integer>> extractCoveredLines(
+            CoverageBuilder coverageBuilder) {
+
+        Map<String, Set<Integer>> result = new HashMap<>();
+
+        for (IClassCoverage cc : coverageBuilder.getClasses()) {
+            String className = cc.getName().replace('/', '.');
+
+            for (int line = cc.getFirstLine(); line <= cc.getLastLine(); line++) {
+                ILine l = cc.getLine(line);
+                if (l.getStatus() == ICounter.FULLY_COVERED ||
+                        l.getStatus() == ICounter.PARTLY_COVERED) {
+
+                    result
+                            .computeIfAbsent(className, c -> new HashSet<>())
+                            .add(line);
+                }
+            }
+        }
+        return result;
     }
 
     /**Instrument all classes in a directory.*/

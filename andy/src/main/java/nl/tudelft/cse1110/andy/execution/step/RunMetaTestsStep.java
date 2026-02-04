@@ -32,7 +32,7 @@ public class RunMetaTestsStep implements ExecutionStep {
             for (MetaTest metaTest : metaTests) {
 
                 MetaTestReport report = metaTest.execute(ctx, dirCfg, runCfg);
-                result.logQuality(report);
+                result.logMetaTest(report);
 
                 boolean passesTheMetaTest = report.passesTheMetaTest();
 

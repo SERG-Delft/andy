@@ -256,7 +256,19 @@ public class ResultBuilder {
     /*
      * Quality
      */
-    public void logQuality(MetaTestReport metaTestReport) {
+    public QualityResult getQualityResult() {
+        return qualityResult;
+    }
+
+    public void logUnitTests(List<TestIdentifier> unitTests) {
+        this.qualityResult.setUnitTests(unitTests);
+    }
+
+    public void logCoveragePerTest(Map<String, Map<String, Set<Integer>>> coveragePerTest) {
+        this.qualityResult.setCoveragePerTest(coveragePerTest);
+    }
+
+    public void logMetaTest(MetaTestReport metaTestReport) {
         this.qualityResult.considerMetaTest(metaTestReport);
     }
 

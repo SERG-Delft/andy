@@ -1,15 +1,16 @@
 package nl.tudelft.cse1110.andy.result;
 
 import nl.tudelft.cse1110.andy.execution.metatest.MetaTestReport;
+import org.junit.platform.launcher.TestIdentifier;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Set;
+import java.util.*;
 
 public class QualityResult {
     private int score; // between 0 and 1
     private int numUnitTests;
+    private List<TestIdentifier> unitTests;
     private LinkedList<MetaTestReport> metaTestReports;
+    private Map<String, Map<String, Set<Integer>>> coveragePerTest;
 
     public QualityResult(int numUnitTests) {
         // dummy:
@@ -44,6 +45,22 @@ public class QualityResult {
 
     public void setNumUnitTests(int numUnitTests) {
         this.numUnitTests = numUnitTests;
+    }
+
+    public List<TestIdentifier> getUnitTests() {
+        return unitTests;
+    }
+
+    public void setUnitTests(List<TestIdentifier> unitTests) {
+        this.unitTests = unitTests;
+    }
+
+    public Map<String, Map<String, Set<Integer>>> getCoveragePerTest() {
+        return coveragePerTest;
+    }
+
+    public void setCoveragePerTest(Map<String, Map<String, Set<Integer>>> coveragePerTest) {
+        this.coveragePerTest = coveragePerTest;
     }
 
     @Override

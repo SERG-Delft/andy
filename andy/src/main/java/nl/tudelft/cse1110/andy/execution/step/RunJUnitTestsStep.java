@@ -5,11 +5,9 @@ import nl.tudelft.cse1110.andy.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.utils.ClassUtils;
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
+import org.junit.platform.engine.discovery.DiscoverySelectors;
 import org.junit.platform.engine.reporting.ReportEntry;
-import org.junit.platform.launcher.Launcher;
-import org.junit.platform.launcher.LauncherDiscoveryRequest;
-import org.junit.platform.launcher.TestExecutionListener;
-import org.junit.platform.launcher.TestIdentifier;
+import org.junit.platform.launcher.*;
 import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
 import org.junit.platform.launcher.core.LauncherFactory;
 import org.junit.platform.launcher.listeners.SummaryGeneratingListener;
@@ -20,6 +18,8 @@ import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
@@ -69,6 +69,26 @@ public class RunJUnitTestsStep implements ExecutionStep {
 
             /* Log the junit result */
             result.logJUnitRun(summary, output.toString());
+
+            /*
+            Log the unit tests available for the quality metrics
+             */
+            request =
+                    LauncherDiscoveryRequestBuilder.request()
+                            .selectors(DiscoverySelectors.selectPackage("org.example"))
+                            .build();
+
+            launcher = LauncherFactory.create();
+            TestPlan plan = launcher.discover(request);
+
+            List<TestIdentifier> unitTests = new ArrayList<>();
+
+            plan.getRoots().forEach(root ->
+                    plan.getDescendants(root).stream()
+                            .filter(TestIdentifier::isTest)
+                                    .forEach(unitTests::add));
+
+            result.logUnitTests(unitTests);
         } catch (Exception e) {
             result.genericFailure(this, e);
         }
