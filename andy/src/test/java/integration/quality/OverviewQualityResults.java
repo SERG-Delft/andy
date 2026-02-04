@@ -70,7 +70,7 @@ public class OverviewQualityResults extends BaseMetaTestsTest {
      * For an overview of the results. To be used in production only.
      */
     @ParameterizedTest
-    @MethodSource("testSuitesDST")
+    @MethodSource("testSuites")
     void metaTestQualityIsAcceptable(
             String libraryFile,
             String solutionFile,
@@ -85,9 +85,8 @@ public class OverviewQualityResults extends BaseMetaTestsTest {
         System.out.println(output);
     }
 
-    static Stream<Arguments> testSuitesDST() {
+    static Stream<Arguments> testSuites() {
         return Stream.of(
-                Arguments.of("NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution", "NumberUtilsAddConfiguration"),
                 Arguments.of("NumberUtilsAddLibrary", "NumberUtilsAddOfficialSolution", "NumberUtilsAddConfiguration")
         );
     }

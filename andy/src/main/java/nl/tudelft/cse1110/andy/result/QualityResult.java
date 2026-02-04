@@ -8,12 +8,13 @@ import java.util.Set;
 
 public class QualityResult {
     private int score; // between 0 and 1
+    private int numUnitTests;
     private LinkedList<MetaTestReport> metaTestReports;
 
-    public QualityResult(int score) {
-        // this.score = score;
+    public QualityResult(int numUnitTests) {
         // dummy:
-        this.score = 1;
+        this.score = 0;
+        this.numUnitTests = numUnitTests;
         metaTestReports  = new LinkedList<>();
     }
 
@@ -37,6 +38,14 @@ public class QualityResult {
         this.score = score;
     }
 
+    public int getNumUnitTests() {
+        return numUnitTests;
+    }
+
+    public void setNumUnitTests(int numUnitTests) {
+        this.numUnitTests = numUnitTests;
+    }
+
     @Override
     public String toString() {
         return "QualityResult{" +
@@ -50,11 +59,12 @@ public class QualityResult {
 
     public int computeScore() {
         // dummy:
+        this.score = 1;
         return this.score;
     }
 
     public long countTests() {
-        return metaTestReports.getFirst().getTestsFound();
+        return numUnitTests;
     }
 
     /**
