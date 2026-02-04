@@ -1,6 +1,7 @@
 package nl.tudelft.cse1110.andy.writer.standard;
 
 import nl.tudelft.cse1110.andy.execution.Context.Context;
+import nl.tudelft.cse1110.andy.execution.metatest.MetaTestReport;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.execution.mode.Mode;
 import nl.tudelft.cse1110.andy.execution.mode.ModeActionSelector;
@@ -66,6 +67,7 @@ public class StandardResultWriter implements ResultWriter {
             printMutationTestingResults(result.getMutationTesting());
             printCodeCheckResults(ctx, result.getCodeChecks(), result.getPenaltyCodeChecks());
             printMetaTestResults(ctx, result.getMetaTests(), result.getPenaltyMetaTests());
+            printQualityResults(ctx, result.getQualityResult());
             printFinalGrade(ctx, result);
             printModeAndTimeToRun(ctx, result.getTimeInSeconds());
         }
@@ -272,6 +274,24 @@ public class StandardResultWriter implements ResultWriter {
                     l(String.format("Meta test: %s (penalty: %d) FAILED", penaltyResult.getName(), penaltyResult.getWeight()));
                 }
             }
+        }
+
+    }
+
+    private void printQualityResults(Context ctx, QualityResult qualityResult) {
+
+        boolean allHints = modeActionSelector(ctx).shouldShowFullHints();
+        boolean onlyResult = modeActionSelector(ctx).shouldShowPartialHints();
+
+        if(!allHints && !onlyResult)
+            return;
+
+        l("\n--- Quality Results");
+        l(String.format("Score: %d", qualityResult.computeScore()));
+
+        if (allHints) {
+            l(String.format("Cohesive tests: %d/%d", qualityResult.countCohesiveTests(), qualityResult.countTests()));
+            l(String.format("Independent tests: %d/%d", qualityResult.countIsolatedTests(), qualityResult.countTests()));
         }
 
     }
