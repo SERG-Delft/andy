@@ -1,7 +1,6 @@
 package nl.tudelft.cse1110.andy.result;
 
 import nl.tudelft.cse1110.andy.execution.metatest.MetaTestReport;
-import org.junit.platform.launcher.TestIdentifier;
 
 import java.util.*;
 
@@ -11,15 +10,17 @@ public class QualityResult {
     private List<String> unitTests;
 
     private LinkedList<MetaTestReport> metaTestReports;
-    private Map<String, Set<Integer>> mutationsKilledPerTest;
+    private Map<String, Set<String>> testToMetaTests; // a useful mapping from the test cases to the meta-tests they cover
 
     private Map<String, Set<Integer>> coveragePerTest;
+    private Map<String, Set<Integer>> mutationsKilledPerTest;
 
     public QualityResult(int numUnitTests) {
         // dummy:
         this.score = 0;
         this.numUnitTests = numUnitTests;
         metaTestReports  = new LinkedList<>();
+        testToMetaTests  = new HashMap<>();
     }
 
     public static QualityResult build(int score) {
@@ -82,6 +83,14 @@ public class QualityResult {
 
     public void considerMetaTest(MetaTestReport metaTestReport) {
         this.metaTestReports.addFirst(metaTestReport);
+
+        for (TestFailureInfo failure : metaTestReport.getTestsTriggered()) {
+            String test = failure.getTestCase();
+            if (testToMetaTests.get(test) == null) {
+                testToMetaTests.put(test, new HashSet<>());
+            }
+            testToMetaTests.get(test).add(metaTestReport.getName());
+        }
     }
 
     public int computeScore() {
@@ -99,18 +108,7 @@ public class QualityResult {
      * @return the number of such tests
      */
     public long countCohesiveTests() {
-
-        Map<String, Integer> numTriggers = new HashMap<>(); // list with tests that were triggered once
-        unitTests.forEach(ut -> numTriggers.put(ut, 0));
-
-        for (MetaTestReport metaTestReport : metaTestReports) {
-            for (TestFailureInfo testFailureInfo : metaTestReport.getTestsTriggered()) {
-                String testName = testFailureInfo.getTestCase();
-                numTriggers.put(testName, numTriggers.get(testName) + 1);
-            }
-        }
-
-        return numTriggers.values().stream().filter(nt -> nt == 1).count();
+        return testToMetaTests.values().stream().filter(nt -> nt.size() == 1).count();
     }
 
     /**
@@ -135,5 +133,47 @@ public class QualityResult {
         }
 
         return count;
+    }
+
+    /**
+     * Count the number of tests that increase one of:
+     * 1) number of meta tests triggered
+     * 2) lines covered
+     * 3) mutations killed
+     * @return the number of such tests
+     */
+    private long countMeaningfulTests() {
+
+        Set<String> meaningfulTests = new HashSet<>();
+
+        meaningfulTests.addAll(meaningfulCoverage(testToMetaTests)); // 1)
+
+        meaningfulTests.addAll(meaningfulCoverage(coveragePerTest)); // 2)
+
+        meaningfulTests.addAll(meaningfulCoverage(mutationsKilledPerTest)); // 3)
+
+        return meaningfulTests.size();
+    }
+
+    private <T> Set<String> meaningfulCoverage(Map<String, Set<T>> map) {
+
+        Set<String> meaningfulTests = new HashSet<>();
+
+        for (String test : map.keySet()) {
+
+            Set<T> meaningfulLines = new HashSet<>(map.get(test));
+
+            for (String otherTest : map.keySet()) {
+                if (test.equals(otherTest)) continue;
+                Set<T> linesWithOtherTest = map.get(otherTest);
+                meaningfulLines.removeAll(linesWithOtherTest);
+            }
+
+            if (!meaningfulLines.isEmpty() && !meaningfulTests.contains(test)) {
+                meaningfulTests.add(test);
+            }
+        }
+
+        return meaningfulTests;
     }
 }

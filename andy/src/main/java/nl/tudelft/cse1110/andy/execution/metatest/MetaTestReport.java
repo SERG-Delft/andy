@@ -6,6 +6,8 @@ import java.util.List;
 
 public class MetaTestReport {
 
+    private String name;
+
     private int testsRan;
     private int testsFound;
     private int testsSucceeded;
@@ -17,6 +19,14 @@ public class MetaTestReport {
         this.testsSucceeded = testsSucceeded;
         this.testsFound = testsFound;
         this.testsTriggered = testsTriggered;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public boolean passesTheMetaTest() {

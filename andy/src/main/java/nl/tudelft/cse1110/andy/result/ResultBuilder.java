@@ -272,7 +272,8 @@ public class ResultBuilder {
         this.qualityResult.setMutationsKilledPerTest(mutationsKilledPerTest);
     }
 
-    public void logMetaTest(MetaTestReport metaTestReport) {
+    public void logMetaTest(String name, MetaTestReport metaTestReport) {
+        metaTestReport.setName(name);
         this.qualityResult.considerMetaTest(metaTestReport);
     }
 
