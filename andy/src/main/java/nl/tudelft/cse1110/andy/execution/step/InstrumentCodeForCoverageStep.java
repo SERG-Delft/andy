@@ -15,8 +15,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
-
 public class InstrumentCodeForCoverageStep implements ExecutionStep {
 
     @Override

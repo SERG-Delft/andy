@@ -6,7 +6,6 @@ import nl.tudelft.cse1110.andy.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.utils.ClassUtils;
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
 import org.junit.platform.engine.TestExecutionResult;
-import org.junit.platform.engine.discovery.DiscoverySelectors;
 import org.junit.platform.engine.reporting.ReportEntry;
 import org.junit.platform.launcher.*;
 import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
@@ -25,6 +24,7 @@ import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass
 
 public class RunJUnitTestsStep implements ExecutionStep {
 
+    @SuppressWarnings("checkstyle:MethodLength")
     @Override
     public void execute(Context ctx, ResultBuilder result) {
         try {
