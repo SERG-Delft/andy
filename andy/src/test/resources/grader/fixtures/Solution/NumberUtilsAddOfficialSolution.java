@@ -138,7 +138,8 @@ class NumberUtilsTests {
 
     static Stream<Arguments> digitsOutOfRange() {
         return Stream.of(Arguments.of(numbers(1, -1, 1), numbers(1, 1, 1)),
-                Arguments.of(numbers(1, 1, 1), numbers(1, -1, 1)), Arguments.of(numbers(1, 11, 1), numbers(1, 1, 1)),
+                Arguments.of(numbers(1, 1, 1), numbers(1, -1, 1)),
+                Arguments.of(numbers(1, 11, 1), numbers(1, 1, 1)),
                 Arguments.of(numbers(1, 1, 1), numbers(1, 11, 1)));
     }
 

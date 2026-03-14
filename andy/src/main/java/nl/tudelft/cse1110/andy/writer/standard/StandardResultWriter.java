@@ -1,7 +1,6 @@
 package nl.tudelft.cse1110.andy.writer.standard;
 
 import nl.tudelft.cse1110.andy.execution.Context.Context;
-import nl.tudelft.cse1110.andy.execution.metatest.MetaTestReport;
 import nl.tudelft.cse1110.andy.execution.mode.Action;
 import nl.tudelft.cse1110.andy.execution.mode.Mode;
 import nl.tudelft.cse1110.andy.execution.mode.ModeActionSelector;
@@ -290,8 +289,10 @@ public class StandardResultWriter implements ResultWriter {
         l(String.format("Score: %d", qualityResult.computeScore()));
 
         if (allHints) {
-            l(String.format("Cohesive tests: %d/%d", qualityResult.countCohesiveTests(), qualityResult.countTests()));
-            l(String.format("Independent tests: %d/%d", qualityResult.countIsolatedTests(), qualityResult.countTests()));
+            long allTests = qualityResult.countTests();
+            l(String.format("Cohesive tests: %d/%d", qualityResult.countCohesiveTests(), allTests));
+            l(String.format("Independent tests: %d/%d", qualityResult.countIsolatedTests(), allTests));
+            l(String.format("Contributing tests: %d/%d", qualityResult.countContributingTests(), allTests));
         }
 
     }

@@ -16,14 +16,18 @@ import org.pitest.mutationtest.tooling.AnalysisResult;
 import org.pitest.mutationtest.tooling.CombinedStatistics;
 import org.pitest.mutationtest.tooling.EntryPoint;
 import org.pitest.util.Unchecked;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -55,11 +59,91 @@ public class RunPitestStep implements ExecutionStep {
             // run!
             final CombinedStatistics stats = runReport(ctx, data, plugins);
 
+            String mutationsXml = null;
+            Path mutationsFile = Paths.get(outputPitestDir, "mutations.xml");
+            if (Files.exists(mutationsFile)) {
+                try {
+                    mutationsXml = Files.readString(mutationsFile);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
             System.setOut(console);
 
             result.logPitest(stats);
+
+            /*
+            Log the mutations killed by each test.
+            */
+            Map<String, String> tests = result.getQualityResult().getUnitTests();
+
+            Map<String, Set<Integer>> mutationsKilledPerTest = mutationsKilledPerTest(ctx, tests, mutationsXml);
+
+            result.logMutationsKilledPerTest(mutationsKilledPerTest);
         }
     }
+
+    private Map<String, Set<Integer>> mutationsKilledPerTest(Context ctx, Map<String, String> tests, String mutationsXml) {
+
+        Map<String, Set<Integer>> result = new HashMap<>();
+        for (String test : tests.keySet()) result.put(test, new HashSet<>());
+
+        Path mutationsFile = Paths.get(
+                ctx.getDirectoryConfiguration().getOutputDir(), "pitest", "mutations.xml"
+        );
+
+        if (!Files.exists(mutationsFile)) return result;
+
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            if (mutationsXml == null) return result;
+            Document doc = builder.parse(new InputSource(new StringReader(mutationsXml)));
+
+            NodeList mutationNodes = doc.getElementsByTagName("mutation");
+
+            for (int i = 0; i < mutationNodes.getLength(); i++) {
+
+                Element mutation = (Element) mutationNodes.item(i);
+                String status = mutation.getAttribute("status");
+
+                if (!"KILLED".equals(status)) continue;
+
+                int mutationId = Integer.parseInt(
+                        mutation.getElementsByTagName("index").item(0).getTextContent()
+                );
+
+                NodeList killingTests = mutation.getElementsByTagName("killingTest");
+
+                if (killingTests.getLength() == 0) continue;
+
+                String rawTestName = killingTests.item(0).getTextContent();
+
+                String testName = normalizeTestName(rawTestName);
+
+                for (String key : result.keySet()) {
+                    if (key.contains(testName)) {
+                        result.get(key).add(mutationId);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to parse mutations.xml", e);
+        }
+
+        return result;
+    }
+
+    private String normalizeTestName(String pitTestName) {
+        // PIT prepends "ClassName." before the JUnit unique ID - strip it
+        int bracketIndex = pitTestName.indexOf('[');
+        if (bracketIndex != -1) {
+            return pitTestName.substring(bracketIndex);
+        }
+        return pitTestName;
+    }
+
 
     private String createDirectoryForPitest(Context ctx) {
         String outputPitestDir = FilesUtils.concatenateDirectories(ctx.getDirectoryConfiguration().getOutputDir(), "pitest");
@@ -86,7 +170,6 @@ public class RunPitestStep implements ExecutionStep {
         args.add(dirCfg.getWorkingDir());
 
         args.add("--verbose");
-        args.add("false");
 
         args.add("--classPath");
         List<String> librariesToInclude = compiledClassesPlusLibraries(ctx, dirCfg);
@@ -94,6 +177,9 @@ public class RunPitestStep implements ExecutionStep {
 
         args.add("--mutators");
         args.add(commaSeparated(runCfg.listOfMutants()));
+
+        args.add("--outputFormats");
+        args.add("XML");
 
         return args.stream().toArray(String[]::new);
     }

@@ -5,11 +5,9 @@ import nl.tudelft.cse1110.andy.execution.ExecutionStep;
 import nl.tudelft.cse1110.andy.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.utils.ClassUtils;
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
+import org.junit.platform.engine.TestExecutionResult;
 import org.junit.platform.engine.reporting.ReportEntry;
-import org.junit.platform.launcher.Launcher;
-import org.junit.platform.launcher.LauncherDiscoveryRequest;
-import org.junit.platform.launcher.TestExecutionListener;
-import org.junit.platform.launcher.TestIdentifier;
+import org.junit.platform.launcher.*;
 import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
 import org.junit.platform.launcher.core.LauncherFactory;
 import org.junit.platform.launcher.listeners.SummaryGeneratingListener;
@@ -20,12 +18,13 @@ import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Properties;
+import java.util.*;
 
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
 public class RunJUnitTestsStep implements ExecutionStep {
 
+    @SuppressWarnings("checkstyle:MethodLength")
     @Override
     public void execute(Context ctx, ResultBuilder result) {
         try {
@@ -60,6 +59,27 @@ public class RunJUnitTestsStep implements ExecutionStep {
                     .configurationParameter("jqwik.shrinking.default", "BOUNDED")
                     .configurationParameter("jqwik.database", FilesUtils.createTemporaryDirectory("jqwik").resolve("jqwik-db").toString())
                     .build();
+
+            TestPlan plan = launcher.discover(request);
+
+            /*
+            Find the unit tests available for the quality metrics
+             */
+
+            Map<String, String> unitTests = new HashMap<>(); // uniqueId -> displayName
+
+            launcher.registerTestExecutionListeners(new TestExecutionListener() {
+                @Override
+                public void executionFinished(TestIdentifier testIdentifier, TestExecutionResult testExecutionResult) {
+                    if (testIdentifier.isTest()) {
+                        String displayName = plan.getParent(testIdentifier)
+                                .map(parent -> parent.getDisplayName() + " " + testIdentifier.getDisplayName())
+                                .orElse(testIdentifier.getDisplayName());
+                        unitTests.put(testIdentifier.getUniqueId(), displayName);
+                    }
+                }
+            });
+
             launcher.execute(request);
 
             TestExecutionSummary summary = listener.getSummary();
@@ -69,6 +89,9 @@ public class RunJUnitTestsStep implements ExecutionStep {
 
             /* Log the junit result */
             result.logJUnitRun(summary, output.toString());
+
+            /* Log the unit tests */
+            result.logUnitTests(unitTests);
         } catch (Exception e) {
             result.genericFailure(this, e);
         }

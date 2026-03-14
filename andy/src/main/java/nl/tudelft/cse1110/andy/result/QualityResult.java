@@ -2,20 +2,25 @@ package nl.tudelft.cse1110.andy.result;
 
 import nl.tudelft.cse1110.andy.execution.metatest.MetaTestReport;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Set;
+import java.util.*;
 
 public class QualityResult {
     private int score; // between 0 and 1
     private int numUnitTests;
+    private Map<String, String> unitTests; // uniqueId (testId below) -> displayName
+
     private LinkedList<MetaTestReport> metaTestReports;
+    private Map<String, Set<String>> testToMetaTests; // a useful mapping from the test cases to the meta-tests they cover
+
+    private Map<String, Set<Integer>> coveragePerTest; // testId -> linesCovered
+    private Map<String, Set<Integer>> mutationsKilledPerTest; // testId -> mutationId
 
     public QualityResult(int numUnitTests) {
         // dummy:
         this.score = 0;
         this.numUnitTests = numUnitTests;
         metaTestReports  = new LinkedList<>();
+        testToMetaTests  = new HashMap<>();
     }
 
     public static QualityResult build(int score) {
@@ -46,6 +51,30 @@ public class QualityResult {
         this.numUnitTests = numUnitTests;
     }
 
+    public Map<String, String> getUnitTests() {
+        return unitTests;
+    }
+
+    public void setUnitTests(Map<String, String> unitTests) {
+        this.unitTests = unitTests;
+    }
+
+    public Map<String, Set<Integer>> getCoveragePerTest() {
+        return coveragePerTest;
+    }
+
+    public void setCoveragePerTest(Map<String, Set<Integer>> coveragePerTest) {
+        this.coveragePerTest = coveragePerTest;
+    }
+
+    public Map<String, Set<Integer>> getMutationsKilledPerTest() {
+        return mutationsKilledPerTest;
+    }
+
+    public void setMutationsKilledPerTest(Map<String, Set<Integer>> mutationsKilledPerTest) {
+        this.mutationsKilledPerTest = mutationsKilledPerTest;
+    }
+
     @Override
     public String toString() {
         return "QualityResult{" +
@@ -55,6 +84,14 @@ public class QualityResult {
 
     public void considerMetaTest(MetaTestReport metaTestReport) {
         this.metaTestReports.addFirst(metaTestReport);
+
+        for (TestFailureInfo failure : metaTestReport.getTestsTriggered()) {
+            String test = failure.getTestCase();
+            if (testToMetaTests.get(test) == null) {
+                testToMetaTests.put(test, new HashSet<>());
+            }
+            testToMetaTests.get(test).add(metaTestReport.getName());
+        }
     }
 
     public int computeScore() {
@@ -72,22 +109,7 @@ public class QualityResult {
      * @return the number of such tests
      */
     public long countCohesiveTests() {
-        Set<String> cohesiveTests = new HashSet<>(); // list with tests that were triggered once
-        Set<String> otherTests = new HashSet<>(); // list with tests that were triggered more than once
-        for (MetaTestReport metaTestReport : metaTestReports) {
-            for (TestFailureInfo testFailureInfo : metaTestReport.getTestsTriggered()) {
-                String testName = testFailureInfo.getTestCase();
-                if (otherTests.contains(testName)) {
-                    continue;
-                } else if (cohesiveTests.contains(testName)) {
-                    cohesiveTests.remove(testName);
-                    otherTests.add(testName);
-                } else {
-                    cohesiveTests.add(testName);
-                }
-            }
-        }
-        return cohesiveTests.size();
+        return testToMetaTests.values().stream().filter(nt -> nt.size() == 1).count();
     }
 
     /**
@@ -95,8 +117,11 @@ public class QualityResult {
      * @return the number of such tests
      */
     public long countIsolatedTests() {
+
         long count = countTests();
+
         Set<String> unisolatedTests = new HashSet<>();
+
         for (MetaTestReport metaTestReport : metaTestReports) {
             if (metaTestReport.getTestsTriggered().size() == 1) continue;
             for (TestFailureInfo testFailureInfo : metaTestReport.getTestsTriggered()) {
@@ -107,6 +132,37 @@ public class QualityResult {
                 }
             }
         }
+
         return count;
+    }
+
+    /**
+     * Count the number of tests that increase one of:
+     * 1) number of meta tests triggered
+     * 2) lines covered
+     * 3) mutations killed
+     * @return the number of such tests
+     */
+    public long countContributingTests() {
+
+        Set<String> contributingTests = new HashSet<>();
+
+        contributingTests.addAll(contribution(testToMetaTests)); // 1)
+
+        contributingTests.addAll(contribution(coveragePerTest)); // 2)
+
+        contributingTests.addAll(contribution(mutationsKilledPerTest)); // 3)
+
+        return contributingTests.size();
+    }
+
+    private <T> Set<String> contribution(Map<String, Set<T>> map) {
+        Set<String> contributingTests = new HashSet<>();
+        for (String test : map.keySet()) {
+            if (!map.get(test).isEmpty()) {
+                contributingTests.add(test);
+            }
+        }
+        return contributingTests;
     }
 }

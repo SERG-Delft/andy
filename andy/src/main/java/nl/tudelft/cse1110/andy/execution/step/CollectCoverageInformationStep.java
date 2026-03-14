@@ -8,30 +8,35 @@ import nl.tudelft.cse1110.andy.result.ResultBuilder;
 import nl.tudelft.cse1110.andy.utils.ClassUtils;
 import nl.tudelft.cse1110.andy.utils.FilesUtils;
 import nl.tudelft.cse1110.andy.utils.FromBytesClassLoader;
-import org.jacoco.core.analysis.Analyzer;
-import org.jacoco.core.analysis.CoverageBuilder;
-import org.jacoco.core.analysis.IClassCoverage;
+import org.jacoco.core.analysis.*;
 import org.jacoco.core.data.ExecutionDataStore;
 import org.jacoco.core.data.SessionInfoStore;
 import org.jacoco.core.instr.Instrumenter;
 import org.jacoco.core.runtime.IRuntime;
+import org.jacoco.core.runtime.LoggerRuntime;
 import org.jacoco.core.runtime.RuntimeData;
 import org.jacoco.report.DirectorySourceFileLocator;
 import org.jacoco.report.FileMultiReportOutput;
 import org.jacoco.report.IReportVisitor;
 import org.jacoco.report.html.HTMLFormatter;
+import org.junit.platform.engine.discovery.DiscoverySelectors;
+import org.junit.platform.launcher.Launcher;
+import org.junit.platform.launcher.LauncherDiscoveryRequest;
+import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
+import org.junit.platform.launcher.core.LauncherFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collection;
+import java.util.*;
 
 import static nl.tudelft.cse1110.andy.utils.ClassUtils.clazzNameAsPath;
 import static nl.tudelft.cse1110.andy.utils.FilesUtils.concatenateDirectories;
 
 public class CollectCoverageInformationStep implements ExecutionStep {
 
+    @SuppressWarnings("checkstyle:MethodLength") // in this case, it makes no sense to break down the method any farther
     @Override
     public void execute(Context ctx, ResultBuilder result) {
         // Skip step if disabled
@@ -76,12 +81,106 @@ public class CollectCoverageInformationStep implements ExecutionStep {
             /* Generate an HTML report.*/
             String testClass = ClassUtils.getTestClass(ctx.getNewClassNames());
             this.generateReport(dirCfg, testClass, coverageBuilder, executionData, sessionInfos);
-        } catch (IOException e) {
+
+            /*
+            Log the lines covered by each test by scanning the method line by line.
+             */
+            Map<String, String> tests = result.getQualityResult().getUnitTests();
+
+            Map<String, Set<Integer>> coveragePerTest = linesCoveredPerTest(ctx, testClass, tests);
+
+            result.logCoveragePerTest(coveragePerTest);
+
+        } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
             /* Restore the old class loader to get the non-instrumented classes back.*/
             Thread.currentThread().setContextClassLoader(ctx.getClassloaderWithStudentsCode());
         }
+    }
+
+    private Map<String, Set<Integer>> linesCoveredPerTest(Context ctx, String testClass, Map<String, String> tests) throws Exception {
+        DirectoryConfiguration dirCfg = ctx.getDirectoryConfiguration();
+        RunConfiguration runCfg = ctx.getRunConfiguration();
+        Map<String, Set<Integer>> coveragePerTest = new HashMap<>();
+
+        for (Map.Entry<String, String> entry : tests.entrySet()) {
+            String uniqueId = entry.getKey();
+            String displayName = entry.getValue();
+
+            // 1. Fresh runtime + data for this test
+            IRuntime runtime = new LoggerRuntime();
+            RuntimeData data = new RuntimeData();
+            runtime.startup(data);
+
+            // 2. Re-instrument into a fresh classloader
+            Instrumenter instr = new Instrumenter(runtime);
+            ClassLoader current = Thread.currentThread().getContextClassLoader().getParent(); // use parent to avoid already-instrumented classes
+            FromBytesClassLoader freshLoader = new FromBytesClassLoader(current);
+            instrumentAllInDirectory(instr, new File(dirCfg.getWorkingDir()), freshLoader, "");
+
+            // 3. Swap in the fresh classloader and run just this one test
+            Thread.currentThread().setContextClassLoader(freshLoader);
+            runSingleTest(uniqueId);
+
+            // 4. Collect coverage
+            ExecutionDataStore executionData = new ExecutionDataStore();
+            SessionInfoStore sessionInfos = new SessionInfoStore();
+            data.collect(executionData, sessionInfos, false);
+            runtime.shutdown();
+
+            // 5. Analyze
+            CoverageBuilder coverageBuilder = new CoverageBuilder();
+            Analyzer analyzer = new Analyzer(executionData, coverageBuilder);
+            for (String classUnderTest : runCfg.classesUnderTest()) {
+                try (InputStream in = getClassAsInputStream(dirCfg.getWorkingDir(), classUnderTest)) {
+                    analyzer.analyzeClass(in, classUnderTest);
+                }
+            }
+
+            Set<Integer> coveredLines = extractCoveredLines(coverageBuilder, testClass);
+
+            coveragePerTest.put(displayName, coveredLines);
+        }
+
+        // Restore original instrumented classloader for the rest of the pipeline
+        Thread.currentThread().setContextClassLoader(ctx.getClassloaderWithStudentsCode());
+        return coveragePerTest;
+    }
+
+    private void runSingleTest(String testId) {
+        LauncherDiscoveryRequest request =
+                LauncherDiscoveryRequestBuilder.request()
+                        .selectors(DiscoverySelectors.selectUniqueId(testId))
+                        .build();
+
+        Launcher launcher = LauncherFactory.create();
+        launcher.execute(request);
+    }
+
+    private Set<Integer> extractCoveredLines(
+            CoverageBuilder coverageBuilder,
+            String testClass) {
+
+        Set<Integer> result = new HashSet<>();
+
+        for (IClassCoverage cc : coverageBuilder.getClasses()) {
+            String className = cc.getName().replace('/', '.').concat("Tests");
+
+            if (!className.equals(testClass)) {
+                continue;
+            }
+
+            for (int line = cc.getFirstLine(); line <= cc.getLastLine(); line++) {
+                ILine l = cc.getLine(line);
+                if (l.getStatus() == ICounter.FULLY_COVERED ||
+                        l.getStatus() == ICounter.PARTLY_COVERED) {
+
+                    result.add(line);
+                }
+            }
+        }
+        return result;
     }
 
     /**Instrument all classes in a directory.*/
