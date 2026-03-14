@@ -101,7 +101,7 @@ public class WebLabResultWriter extends StandardResultWriter {
         appendMetaScore(doc, metaElement, "Quality score", result.getQualityResult().computeScore());
         appendMetaScore(doc, metaElement, "Cohesive tests", (int) result.getQualityResult().countCohesiveTests());
         appendMetaScore(doc, metaElement, "Independent tests", (int) result.getQualityResult().countIsolatedTests());
-        appendMetaScore(doc, metaElement, "Meaningful tests", (int) result.getQualityResult().countMeaningfulTests());
+        appendMetaScore(doc, metaElement, "Contributing tests", (int) result.getQualityResult().countContributingTests());
 
         // Existing code checks and meta tests
         result.getCodeChecks().getCheckResults().forEach(check -> appendMetaScore(doc, metaElement, check.getDescription(), check.passed() ? 1 : 0));

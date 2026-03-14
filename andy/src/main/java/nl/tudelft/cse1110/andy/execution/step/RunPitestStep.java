@@ -22,19 +22,20 @@ import org.pitest.mutationtest.tooling.CombinedStatistics;
 import org.pitest.mutationtest.tooling.EntryPoint;
 import org.pitest.util.Unchecked;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.PrintStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class RunPitestStep implements ExecutionStep {
 
@@ -64,32 +65,38 @@ public class RunPitestStep implements ExecutionStep {
             // run!
             final CombinedStatistics stats = runReport(ctx, data, plugins);
 
+            String mutationsXml = null;
+            Path mutationsFile = Paths.get(outputPitestDir, "mutations.xml");
+            if (Files.exists(mutationsFile)) {
+                try {
+                    mutationsXml = Files.readString(mutationsFile);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
             System.setOut(console);
 
             result.logPitest(stats);
+
+            /*
+            Log the mutations killed by each test.
+            */
+            Map<String, String> tests = result.getQualityResult().getUnitTests();
+
+            Map<String, Set<Integer>> mutationsKilledPerTest = mutationsKilledPerTest(ctx, tests, mutationsXml);
+
+            result.logMutationsKilledPerTest(mutationsKilledPerTest);
         }
-
-        /*
-        Log the mutations killed by each test.
-         */
-        List<String> tests = result.getQualityResult().getUnitTests();
-
-        Map<String, Set<Integer>> mutationsKilledPerTest = mutationsKilledPerTest(ctx, tests);
-
-        result.logMutationsKilledPerTest(mutationsKilledPerTest);
     }
 
-    private Map<String, Set<Integer>> mutationsKilledPerTest(
-            Context ctx,
-            List<String> tests) {
+    private Map<String, Set<Integer>> mutationsKilledPerTest(Context ctx, Map<String, String> tests, String mutationsXml) {
 
         Map<String, Set<Integer>> result = new HashMap<>();
-        for (String test : tests) result.put(test, new HashSet<>());
+        for (String test : tests.keySet()) result.put(test, new HashSet<>());
 
         Path mutationsFile = Paths.get(
-                ctx.getDirectoryConfiguration().getWorkingDir(),
-                "pitest",
-                "mutations.xml"
+                ctx.getDirectoryConfiguration().getOutputDir(), "pitest", "mutations.xml"
         );
 
         if (!Files.exists(mutationsFile)) return result;
@@ -97,22 +104,20 @@ public class RunPitestStep implements ExecutionStep {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-            Document doc = builder.parse(mutationsFile.toFile());
+            if (mutationsXml == null) return result;
+            Document doc = builder.parse(new InputSource(new StringReader(mutationsXml)));
 
             NodeList mutationNodes = doc.getElementsByTagName("mutation");
 
             for (int i = 0; i < mutationNodes.getLength(); i++) {
-                ElementImpl mutation = (ElementImpl) mutationNodes.item(i);
 
+                Element mutation = (Element) mutationNodes.item(i);
                 String status = mutation.getAttribute("status");
-                if (!"KILLED".equals(status)) {
-                    continue;
-                }
+
+                if (!"KILLED".equals(status)) continue;
 
                 int mutationId = Integer.parseInt(
-                        mutation.getElementsByTagName("index")
-                                .item(0)
-                                .getTextContent()
+                        mutation.getElementsByTagName("index").item(0).getTextContent()
                 );
 
                 NodeList killingTests = mutation.getElementsByTagName("killingTest");
@@ -123,7 +128,11 @@ public class RunPitestStep implements ExecutionStep {
 
                 String testName = normalizeTestName(rawTestName);
 
-                result.computeIfAbsent(testName, t -> new HashSet<>()).add(mutationId);
+                for (String key : result.keySet()) {
+                    if (key.contains(testName)) {
+                        result.get(key).add(mutationId);
+                    }
+                }
             }
         } catch (Exception e) {
             throw new RuntimeException("Failed to parse mutations.xml", e);
@@ -133,11 +142,12 @@ public class RunPitestStep implements ExecutionStep {
     }
 
     private String normalizeTestName(String pitTestName) {
-        int paren = pitTestName.indexOf('(');
-        if (paren != -1) {
-            pitTestName = pitTestName.substring(0, paren);
+        // PIT prepends "ClassName." before the JUnit unique ID - strip it
+        int bracketIndex = pitTestName.indexOf('[');
+        if (bracketIndex != -1) {
+            return pitTestName.substring(bracketIndex);
         }
-        return pitTestName.replace('.', '#');
+        return pitTestName;
     }
 
 
@@ -166,7 +176,6 @@ public class RunPitestStep implements ExecutionStep {
         args.add(dirCfg.getWorkingDir());
 
         args.add("--verbose");
-        args.add("true"); // to allow detecting which mutations are covered by each test
 
         args.add("--classPath");
         List<String> librariesToInclude = compiledClassesPlusLibraries(ctx, dirCfg);
@@ -175,7 +184,8 @@ public class RunPitestStep implements ExecutionStep {
         args.add("--mutators");
         args.add(commaSeparated(runCfg.listOfMutants()));
 
-        args.add("--exportLineCoverage");
+        args.add("--outputFormats");
+        args.add("XML");
 
         return args.stream().toArray(String[]::new);
     }

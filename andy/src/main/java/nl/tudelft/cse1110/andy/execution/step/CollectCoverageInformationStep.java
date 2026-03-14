@@ -87,7 +87,7 @@ public class CollectCoverageInformationStep implements ExecutionStep {
             /*
             Log the lines covered by each test by scanning the method line by line.
              */
-            List<String> tests = result.getQualityResult().getUnitTests();
+            Map<String, String> tests = result.getQualityResult().getUnitTests();
 
             Map<String, Set<Integer>> coveragePerTest = linesCoveredPerTest(ctx, testClass, tests);
 
@@ -101,45 +101,52 @@ public class CollectCoverageInformationStep implements ExecutionStep {
         }
     }
 
-    private Map<String, Set<Integer>> linesCoveredPerTest(Context ctx, String testClass, List<String> tests) throws Exception {
-
+    private Map<String, Set<Integer>> linesCoveredPerTest(Context ctx, String testClass, Map<String, String> tests) throws Exception {
         DirectoryConfiguration dirCfg = ctx.getDirectoryConfiguration();
         RunConfiguration runCfg = ctx.getRunConfiguration();
-
         Map<String, Set<Integer>> coveragePerTest = new HashMap<>();
 
-        for (String testName : tests) {
+        for (Map.Entry<String, String> entry : tests.entrySet()) {
+            String uniqueId = entry.getKey();
+            String displayName = entry.getValue();
 
-            // 1. Fresh JaCoCo data for this test
+            // 1. Fresh runtime + data for this test
+            IRuntime runtime = new LoggerRuntime();
             RuntimeData data = new RuntimeData();
-            LoggerRuntime runtime = new LoggerRuntime(); // or whatever runtime you use
             runtime.startup(data);
 
-            // 2. Run exactly one test
-            runSingleTest(testName);
+            // 2. Re-instrument into a fresh classloader
+            Instrumenter instr = new Instrumenter(runtime);
+            ClassLoader current = Thread.currentThread().getContextClassLoader().getParent(); // use parent to avoid already-instrumented classes
+            FromBytesClassLoader freshLoader = new FromBytesClassLoader(current);
+            instrumentAllInDirectory(instr, new File(dirCfg.getWorkingDir()), freshLoader, "");
 
-            // 3. Collect execution data
+            // 3. Swap in the fresh classloader and run just this one test
+            Thread.currentThread().setContextClassLoader(freshLoader);
+            runSingleTest(uniqueId);
+
+            // 4. Collect coverage
             ExecutionDataStore executionData = new ExecutionDataStore();
             SessionInfoStore sessionInfos = new SessionInfoStore();
             data.collect(executionData, sessionInfos, false);
             runtime.shutdown();
 
-            // 4. Analyze coverage
+            // 5. Analyze
             CoverageBuilder coverageBuilder = new CoverageBuilder();
             Analyzer analyzer = new Analyzer(executionData, coverageBuilder);
-
             for (String classUnderTest : runCfg.classesUnderTest()) {
-                try (InputStream in =
-                             getClassAsInputStream(dirCfg.getWorkingDir(), classUnderTest)) {
+                try (InputStream in = getClassAsInputStream(dirCfg.getWorkingDir(), classUnderTest)) {
                     analyzer.analyzeClass(in, classUnderTest);
                 }
             }
 
-            // 5. Extract covered lines
             Set<Integer> coveredLines = extractCoveredLines(coverageBuilder, testClass);
 
-            coveragePerTest.put(testName, coveredLines);
+            coveragePerTest.put(displayName, coveredLines);
         }
+
+        // Restore original instrumented classloader for the rest of the pipeline
+        Thread.currentThread().setContextClassLoader(ctx.getClassloaderWithStudentsCode());
         return coveragePerTest;
     }
 
@@ -160,7 +167,7 @@ public class CollectCoverageInformationStep implements ExecutionStep {
         Set<Integer> result = new HashSet<>();
 
         for (IClassCoverage cc : coverageBuilder.getClasses()) {
-            String className = cc.getName().replace('/', '.');
+            String className = cc.getName().replace('/', '.').concat("Tests");
 
             if (!className.equals(testClass)) {
                 continue;

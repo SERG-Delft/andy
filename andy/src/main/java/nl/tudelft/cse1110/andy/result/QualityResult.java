@@ -7,13 +7,13 @@ import java.util.*;
 public class QualityResult {
     private int score; // between 0 and 1
     private int numUnitTests;
-    private List<String> unitTests;
+    private Map<String, String> unitTests; // uniqueId (testId below) -> displayName
 
     private LinkedList<MetaTestReport> metaTestReports;
     private Map<String, Set<String>> testToMetaTests; // a useful mapping from the test cases to the meta-tests they cover
 
-    private Map<String, Set<Integer>> coveragePerTest;
-    private Map<String, Set<Integer>> mutationsKilledPerTest;
+    private Map<String, Set<Integer>> coveragePerTest; // testId -> linesCovered
+    private Map<String, Set<Integer>> mutationsKilledPerTest; // testId -> mutationId
 
     public QualityResult(int numUnitTests) {
         // dummy:
@@ -51,11 +51,11 @@ public class QualityResult {
         this.numUnitTests = numUnitTests;
     }
 
-    public List<String> getUnitTests() {
+    public Map<String, String> getUnitTests() {
         return unitTests;
     }
 
-    public void setUnitTests(List<String> unitTests) {
+    public void setUnitTests(Map<String, String> unitTests) {
         this.unitTests = unitTests;
     }
 
@@ -143,38 +143,26 @@ public class QualityResult {
      * 3) mutations killed
      * @return the number of such tests
      */
-    public long countMeaningfulTests() {
+    public long countContributingTests() {
 
-        Set<String> meaningfulTests = new HashSet<>();
+        Set<String> contributingTests = new HashSet<>();
 
-        meaningfulTests.addAll(meaningfulCoverage(testToMetaTests)); // 1)
+        contributingTests.addAll(contribution(testToMetaTests)); // 1)
 
-        meaningfulTests.addAll(meaningfulCoverage(coveragePerTest)); // 2)
+        contributingTests.addAll(contribution(coveragePerTest)); // 2)
 
-        meaningfulTests.addAll(meaningfulCoverage(mutationsKilledPerTest)); // 3)
+        contributingTests.addAll(contribution(mutationsKilledPerTest)); // 3)
 
-        return meaningfulTests.size();
+        return contributingTests.size();
     }
 
-    private <T> Set<String> meaningfulCoverage(Map<String, Set<T>> map) {
-
-        Set<String> meaningfulTests = new HashSet<>();
-
+    private <T> Set<String> contribution(Map<String, Set<T>> map) {
+        Set<String> contributingTests = new HashSet<>();
         for (String test : map.keySet()) {
-
-            Set<T> meaningfulContributions = new HashSet<>(map.get(test));
-
-            for (String otherTest : map.keySet()) {
-                if (test.equals(otherTest)) continue;
-                Set<T> contributionsByOtherTest = new HashSet<>(map.get(otherTest));
-                meaningfulContributions.removeAll(contributionsByOtherTest);
-            }
-
-            if (!meaningfulContributions.isEmpty()) {
-                meaningfulTests.add(test);
+            if (!map.get(test).isEmpty()) {
+                contributingTests.add(test);
             }
         }
-
-        return meaningfulTests;
+        return contributingTests;
     }
 }
