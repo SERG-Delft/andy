@@ -261,24 +261,24 @@ public class ResultBuilder {
     }
 
     public void logUnitTests(Map<String, String> unitTests) {
-        this.qualityResult.setUnitTests(unitTests);
+        Map<String, String> unitTestsNormalized = new HashMap<>();
+        for (String uniqueId : unitTests.keySet()) {
+
+            String displayName = unitTests.get(uniqueId);
+
+            if (displayName.matches(".*\\(.*\\).*\\[\\d+\\].*")) {
+                String method = displayName.replaceAll("\\(.*", "").trim();
+                String invocation = displayName.replaceAll(".*?\\[(\\d+)\\].*", "($1)").trim();
+                displayName = method + " " + invocation;
+            }
+
+            unitTestsNormalized.put(uniqueId, displayName);
+        }
+        this.qualityResult.setUnitTests(unitTestsNormalized);
     }
 
     public void logCoveragePerTest(Map<String, Set<Integer>> coveragePerTest) {
-        Map<String, Set<Integer>> coveragePerTestNormalized = new HashMap<>();
-        for (String testName : coveragePerTest.keySet()) {
-            if (testName.contains("[test-template:")) {
-
-                Set<Integer> lines = coveragePerTest.get(testName);
-
-                String method = testName.replaceAll("\\(.*", "").trim();
-                String invocation = testName.replaceAll(".*\\[(\\d+)\\].*", "#$1").trim();
-                String normalizedName = method + " " + invocation;
-
-                coveragePerTestNormalized.put(normalizedName, lines);
-            }
-        }
-        this.qualityResult.setCoveragePerTest(coveragePerTestNormalized);
+        this.qualityResult.setCoveragePerTest(coveragePerTest);
     }
 
     public void logMutationsKilledPerTest(Map<String, Set<Integer>> mutationsKilledPerTest) {
@@ -289,7 +289,7 @@ public class ResultBuilder {
                 Set<Integer> mutations = mutationsKilledPerTest.get(testName);
 
                 String method = testName.replaceAll(".*\\[test-template:([^(]+).*", "$1").trim();
-                String invocation = testName.replaceAll(".*\\[test-template-invocation:#(\\d+)\\].*", "#$1").trim();
+                String invocation = testName.replaceAll(".*\\[test-template-invocation:#(\\d+)\\].*", "($1)").trim();
                 String normalizedName = method + " " + invocation;
 
                 mutationsKilledPerTestNormalized.put(normalizedName, mutations);

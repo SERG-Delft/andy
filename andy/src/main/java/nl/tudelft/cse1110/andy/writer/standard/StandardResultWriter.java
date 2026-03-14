@@ -286,13 +286,16 @@ public class StandardResultWriter implements ResultWriter {
             return;
 
         l("\n--- Quality Results");
-        l(String.format("Score: %d", qualityResult.computeScore()));
+        l(String.format("Score: %d\n", qualityResult.computeScore()));
 
         if (allHints) {
             long allTests = qualityResult.countTests();
             l(String.format("Cohesive tests: %d/%d", qualityResult.countCohesiveTests(), allTests));
+            l(qualityResult.listCohesiveTests());
             l(String.format("Independent tests: %d/%d", qualityResult.countIsolatedTests(), allTests));
+            l(qualityResult.listIsolatedTests());
             l(String.format("Contributing tests: %d/%d", qualityResult.countContributingTests(), allTests));
+            l(qualityResult.listContributingTests());
         }
 
     }
