@@ -12,7 +12,10 @@ import java.util.Deque;
 import java.util.SortedSet;
 import java.util.SortedMap;
 
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
 import org.mockito.MockitoAnnotations;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -57,6 +60,10 @@ public class ManyMocks {
         arrayListT = mock();
         // no mock
         HashMap<String, String> concreteHashMap = new HashMap<>();
+
+        // variable in lambda (no mock)
+        QuestionRepository questionRepository = mock(QuestionRepository.class);
+        verify(questionRepository).saveQuestion(argThat(q -> q.isArchived()));
     }
 
 }

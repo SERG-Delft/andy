@@ -85,11 +85,14 @@ public class MockClass extends Check {
     @Override
     public boolean visit(VariableDeclarationFragment fragment) {
         if (!classWasMocked) {
-            String className = fragment.resolveBinding().getType().getBinaryName();
-            String simpleName = className.substring(className.lastIndexOf('.') + 1);
-            if (simpleName.equals(classToBeMocked)) {
-                var initializer = fragment.getInitializer();
-                classWasMocked = isParameterlessMockMethodInvocation(initializer);
+            IVariableBinding binding = fragment.resolveBinding();
+            if (binding != null) {
+                String className = binding.getType().getBinaryName();
+                String simpleName = className.substring(className.lastIndexOf('.') + 1);
+                if (simpleName.equals(classToBeMocked)) {
+                    var initializer = fragment.getInitializer();
+                    classWasMocked = isParameterlessMockMethodInvocation(initializer);
+                }
             }
         }
         return super.visit(fragment);
